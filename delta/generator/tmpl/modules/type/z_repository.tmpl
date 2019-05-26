@@ -1,0 +1,242 @@
+// @generated
+{{- $Name := .Module.Name -}}
+{{- $name := .Module.Name | ToLowerCase }}
+{{- $name_module := .Module.Name | ToSnakeCase }}
+{{- $fields := .Module.Fields  }}
+
+package {{ $name }}
+
+import (
+	"context"
+	"database/sql"
+
+	sq "github.com/Masterminds/squirrel"
+	"github.com/tanphamhaiduong/go/delta/server/utils"
+	"github.com/tanphamhaiduong/go/delta/server/arguments"
+	"github.com/tanphamhaiduong/go/delta/server/models"
+)
+
+// getByID ...
+func (r {{ $name -}}Impl) getByID(ctx context.Context, params arguments.{{- $Name -}}GetByIDArgs) (models.{{ $Name }}, error) {
+	var (
+		{{ $name -}} = models.{{ $Name }}{}
+		selectBuilder = sq.Select("*").From("{{- $name_module -}}").Where(sq.Eq{"id": params.ID})
+	)
+	sql, args, err := selectBuilder.ToSql()
+	if err != nil {
+		return {{ $name -}}, err
+	}
+	stmt, err := r.db.PrepareContext(ctx, sql)
+	if err != nil {
+		return {{ $name -}}, err
+	}
+	row := stmt.QueryRowContext(ctx, args...)
+	row.Scan(
+	{{- range $field := $fields }}
+		&{{ $name -}}.{{- $field.Name }},
+	{{- end }}
+	)
+	return {{ $name -}}, nil
+}
+
+// setArgsToListSelectBuilder ...
+func setArgsToListSelectBuilder(selectBuilder sq.SelectBuilder, params arguments.{{- $Name -}}ListArgs) sq.SelectBuilder {
+	{{- range $field := $fields }}
+		if params.{{- $field.Name }} != {{- if $field.IsInt64 }}0{{- else -}}""{{- end }} {
+			selectBuilder = selectBuilder.Where(sq.{{- $field.QueryType -}}{"{{- $field.Name | ToSnakeCase -}}": params.{{- $field.Name -}}})
+		}
+	{{- end }}
+	if params.PageSize != 0 {
+		selectBuilder = selectBuilder.Limit(uint64(params.PageSize))
+	}
+	if params.Page != 0 {
+		offset := utils.CalculateOffsetForPage(params.Page, params.PageSize)
+		selectBuilder = selectBuilder.Offset(uint64(offset))
+	}
+	return selectBuilder
+}
+
+// list ...
+func (r {{ $name -}}Impl) list(ctx context.Context, params arguments.{{- $Name -}}ListArgs) ([]models.{{ $Name }}, error) {
+	var (
+		{{$name | ToPlural}}  = []models.{{ $Name }}{}
+		selectBuilder = sq.Select("*").From("{{- $name_module -}}")
+	)
+	selectBuilderWithArgs := setArgsToListSelectBuilder(selectBuilder, params)
+	sql, args, err := selectBuilderWithArgs.ToSql()
+	if err != nil {
+		return {{$name | ToPlural}}, err
+	}
+	stmt, err := r.db.PrepareContext(ctx, sql)
+	if err != nil {
+		return {{$name | ToPlural}}, err
+	}
+	rows, err := stmt.QueryContext(ctx, args...)
+	if err != nil {
+		return {{$name | ToPlural}}, err
+	}
+	for rows.Next() {
+		{{ $name -}} := models.{{ $Name }}{}
+		err := rows.Scan(
+			{{- range $field := $fields }}
+				&{{ $name -}}.{{- $field.Name }},
+			{{- end }}
+		)
+		if err != nil {
+			return {{$name | ToPlural}}, err
+		}
+		{{$name | ToPlural}} = append({{$name | ToPlural}}, {{ $name -}})
+	}
+	return {{$name | ToPlural}}, nil
+}
+
+// setArgsToCountSelectBuilder ...
+func setArgsToCountSelectBuilder(selectBuilder sq.SelectBuilder, params arguments.{{- $Name -}}CountArgs) sq.SelectBuilder {
+	{{- range $field := $fields }}
+		if params.{{- $field.Name }} != {{- if $field.IsInt64 }}0{{- else -}}""{{- end }} {
+			selectBuilder = selectBuilder.Where(sq.{{- $field.QueryType -}}{"{{- $field.Name | ToSnakeCase -}}": params.{{- $field.Name -}}})
+		}
+	{{- end }}
+	return selectBuilder
+}
+
+// count ...
+func (r {{ $name -}}Impl) count(ctx context.Context, params arguments.{{- $Name -}}CountArgs) (int64, error) {
+	var (
+		count         int64
+		selectBuilder = sq.Select("COUNT(id)").From("{{- $name_module -}}")
+	)
+	selectBuilderWithArgs := setArgsToCountSelectBuilder(selectBuilder, params)
+	sql, args, err := selectBuilderWithArgs.ToSql()
+	if err != nil {
+		return count, err
+	}
+	stmt, err := r.db.PrepareContext(ctx, sql)
+	if err != nil {
+		return count, err
+	}
+	row := stmt.QueryRowContext(ctx, args...)
+	err = row.Scan(&count)
+	if err != nil {
+		return count, err
+	}
+	return count, nil
+}
+
+// insert ...
+func (r {{ $name -}}Impl) insert(ctx context.Context, params arguments.{{- $Name -}}InsertArgs) (models.{{ $Name }}, error) {
+	var (
+		{{ $name -}}    = models.{{ $Name }}{}
+		insertBuilder = sq.Insert("{{- $name_module -}}").Columns(
+			{{- range $field := $fields -}}
+				{{- if $field.IsNotIDField }}
+					"{{- $field.Name | ToSnakeCase -}}",
+				{{- end }}
+			{{- end }}
+		).Values(
+			{{- range $field := $fields -}}
+				{{- if $field.IsNotIDField }}
+					params.{{ $field.Name }},
+				{{- end }}
+			{{- end }}
+		)
+	)
+	sql, args, err := insertBuilder.ToSql()
+	if err != nil {
+		return {{ $name -}}, err
+	}
+	stmt, err := r.db.PrepareContext(ctx, sql)
+	if err != nil {
+		return {{ $name -}}, err
+	}
+	row, err := stmt.ExecContext(ctx, args...)
+	if err != nil {
+		return {{ $name -}}, err
+	}
+	id, err := row.LastInsertId()
+	if err != nil {
+		return {{ $name -}}, err
+	}
+	{{ $name -}} = models.{{ $Name }}{
+		ID:        id,
+		{{- range $field := $fields }}
+			{{- if $field.IsNotIDField -}}
+				{{ $field.Name }}: params.{{ $field.Name }},
+			{{ end }}
+		{{- end }}
+	}
+	return {{ $name -}}, nil
+}
+
+// setArgsToUpdateBuilder ...
+func setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, params arguments.{{- $Name -}}UpdateArgs) sq.UpdateBuilder {
+	{{- range $field := $fields }}
+		{{- if $field.IsNotIDField -}}
+			if params.{{- $field.Name }} != {{- if $field.IsInt64 }}0{{- else -}}""{{- end }} {
+				updateBuilder = updateBuilder.Set("{{- $field.Name | ToSnakeCase -}}", params.{{- $field.Name }})
+			}
+		{{ end }}
+	{{- end }}
+	return updateBuilder
+}
+
+// update ...
+func (r {{ $name -}}Impl) update(ctx context.Context, params arguments.{{- $Name -}}UpdateArgs) (models.{{ $Name }}, error) {
+	var (
+		{{ $name -}}    = models.{{ $Name }}{}
+		updateBuilder = sq.Update("{{- $name_module -}}").Where(sq.Eq{"id": params.ID})
+	)
+	updateBuilderWithArgs := setArgsToUpdateBuilder(updateBuilder, params)
+
+	sql, args, err := updateBuilderWithArgs.ToSql()
+	if err != nil {
+		return {{ $name -}}, err
+	}
+	stmt, err := r.db.PrepareContext(ctx, sql)
+	if err != nil {
+		return {{ $name -}}, err
+	}
+		result, err := stmt.ExecContext(ctx, args...)
+	if err != nil {
+		return {{ $name -}}, err
+	}
+	rowAffected, err := result.RowsAffected()
+	if err != nil {
+		return {{ $name -}}, err
+	}
+	if rowAffected == 0 {
+		return {{ $name -}}, fmt.Errorf("not found record by id %d", params.ID)
+	}
+	{{ $name -}} = models.{{ $Name }}{
+		{{- range $field := $fields }}
+			{{ $field.Name }}: params.{{ $field.Name }},
+		{{- end }}
+	}
+	return {{ $name -}}, nil
+}
+
+// delete ...
+func (r {{ $name -}}Impl) delete(ctx context.Context, params arguments.{{- $Name -}}DeleteArgs) (int64, error) {
+	var (
+		id            int64
+		deleteBuilder = sq.Delete("{{- $name_module -}}").Where(sq.Eq{"id": params.ID})
+	)
+	sql, args, err := deleteBuilder.ToSql()
+	if err != nil {
+		return id, err
+	}
+	stmt, err := r.db.PrepareContext(ctx, sql)
+	if err != nil {
+		return id, err
+	}
+	result, err := stmt.ExecContext(ctx, args...)
+	if err != nil {
+		return id, err
+	}
+	rowAffected, err := result.RowsAffected()
+	if rowAffected == 0 {
+		return id, fmt.Errorf("not found record by id %d", params.ID)
+	}
+	return params.ID, nil
+}
+

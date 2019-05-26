@@ -1,0 +1,14 @@
+
+{{- $name := .Module.Name | ToLowerCase }}
+package {{ $name }}
+
+type {{ $name -}}Impl struct {
+	db *sql.DB
+}
+
+// newRepository ...
+func newRepository(db *sql.DB) {{ $name -}}Impl {
+	return {{ $name -}}Impl{
+		db: db,
+	}
+}

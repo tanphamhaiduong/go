@@ -1,0 +1,7 @@
+{{- $name := .Module.Name | ToLowerCase }}
+package {{ $name }}
+
+// IHandler ...
+type IHandler interface {
+	ICoreHandler
+}
