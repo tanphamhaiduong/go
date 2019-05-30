@@ -1,7 +1,6 @@
-{{- $Name := .Module.Name -}}
 // @generated
-
 package modules
+{{- $Name := .Module.Name }}
 
 import (
 	"context"
@@ -10,20 +9,20 @@ import (
 	"github.com/tanphamhaiduong/go/delta/server/models"
 )
 
-// ICore{{- $Name -}}Handler ...
-type ICore{{- $Name -}}Handler interface {
-  GetByID(ctx context.Context, params arguments.{{- $Name -}}GetByIDArgs) (models.{{- $Name -}}, error)
-	Count(ctx context.Context, params arguments.{{- $Name -}}CountArgs) (int64, error)
-	List(ctx context.Context, params arguments.{{- $Name -}}ListArgs) ([]models.{{- $Name -}}, error)
-	Insert(ctx context.Context, params arguments.{{- $Name -}}InsertArgs) (models.{{- $Name -}}, error)
-	Update(ctx context.Context, params arguments.{{- $Name -}}UpdateArgs) (models.{{- $Name -}}, error)
-	Delete(ctx context.Context, params arguments.{{- $Name -}}DeleteArgs) (int64, error)
+// ICore{{ $Name }}Handler ...
+type ICore{{ $Name }}Handler interface {
+  GetByID(ctx context.Context, params arguments.{{ $Name }}GetByIDArgs) (models.{{ $Name }}, error)
+	Count(ctx context.Context, params arguments.{{ $Name }}CountArgs) (int64, error)
+	List(ctx context.Context, params arguments.{{ $Name }}ListArgs) ([]models.{{ $Name }}, error)
+	Insert(ctx context.Context, params arguments.{{ $Name }}InsertArgs) (models.{{ $Name }}, error)
+	Update(ctx context.Context, params arguments.{{ $Name }}UpdateArgs) (models.{{ $Name }}, error)
+	Delete(ctx context.Context, params arguments.{{ $Name }}DeleteArgs) (int64, error)
 }
 
-// ICore{{- $Name -}}Resolver ...
-type ICore{{- $Name -}}Resolver interface {
+// ICore{{ $Name }}Resolver ...
+type ICore{{ $Name }}Resolver interface {
   IResolver
 }
 
-//go:generate mockery -name=I{{- $Name -}}Resolver -output=mocks -case=underscore
-//go:generate mockery -name=I{{- $Name -}}Handler -output=mocks -case=underscore
+//go:generate mockery -name=I{{ $Name }}Resolver -output=mocks -case=underscore
+//go:generate mockery -name=I{{ $Name }}Handler -output=mocks -case=underscore

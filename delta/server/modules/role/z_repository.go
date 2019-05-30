@@ -1,5 +1,4 @@
 // @generated
-
 package role
 
 import (
@@ -12,8 +11,8 @@ import (
 	"github.com/tanphamhaiduong/go/delta/server/utils"
 )
 
-// getByID ...
-func (r roleImpl) getByID(ctx context.Context, params arguments.RoleGetByIDArgs) (models.Role, error) {
+// GetByID ...
+func (r repositoryImpl) GetByID(ctx context.Context, params arguments.RoleGetByIDArgs) (models.Role, error) {
 	var (
 		role          = models.Role{}
 		selectBuilder = sq.Select("*").From("role").Where(sq.Eq{"id": params.ID})
@@ -36,6 +35,42 @@ func (r roleImpl) getByID(ctx context.Context, params arguments.RoleGetByIDArgs)
 		&role.UpdatedBy,
 	)
 	return role, nil
+}
+
+// GetByID ...
+func (r repositoryImpl) GetByIDs(ctx context.Context, params arguments.RoleGetByIDsArgs) ([]models.Role, error) {
+	var (
+		roles         = []models.Role{}
+		selectBuilder = sq.Select("*").From("role").Where(sq.Eq{"id": params.IDs})
+	)
+	sql, args, err := selectBuilder.ToSql()
+	if err != nil {
+		return roles, err
+	}
+	stmt, err := r.db.PrepareContext(ctx, sql)
+	if err != nil {
+		return roles, err
+	}
+	rows, err := stmt.QueryContext(ctx, args...)
+	if err != nil {
+		return roles, err
+	}
+	for rows.Next() {
+		role := models.Role{}
+		err := rows.Scan(
+			&role.ID,
+			&role.Name,
+			&role.CompanyID,
+			&role.Status,
+			&role.CreatedBy,
+			&role.UpdatedBy,
+		)
+		if err != nil {
+			return roles, err
+		}
+		roles = append(roles, role)
+	}
+	return roles, nil
 }
 
 // setArgsToListSelectBuilder ...
@@ -68,8 +103,8 @@ func setArgsToListSelectBuilder(selectBuilder sq.SelectBuilder, params arguments
 	return selectBuilder
 }
 
-// list ...
-func (r roleImpl) list(ctx context.Context, params arguments.RoleListArgs) ([]models.Role, error) {
+// List ...
+func (r repositoryImpl) List(ctx context.Context, params arguments.RoleListArgs) ([]models.Role, error) {
 	var (
 		roles         = []models.Role{}
 		selectBuilder = sq.Select("*").From("role")
@@ -128,8 +163,8 @@ func setArgsToCountSelectBuilder(selectBuilder sq.SelectBuilder, params argument
 	return selectBuilder
 }
 
-// count ...
-func (r roleImpl) count(ctx context.Context, params arguments.RoleCountArgs) (int64, error) {
+// Count ...
+func (r repositoryImpl) Count(ctx context.Context, params arguments.RoleCountArgs) (int64, error) {
 	var (
 		count         int64
 		selectBuilder = sq.Select("COUNT(id)").From("role")
@@ -151,8 +186,8 @@ func (r roleImpl) count(ctx context.Context, params arguments.RoleCountArgs) (in
 	return count, nil
 }
 
-// insert ...
-func (r roleImpl) insert(ctx context.Context, params arguments.RoleInsertArgs) (models.Role, error) {
+// Insert ...
+func (r repositoryImpl) Insert(ctx context.Context, params arguments.RoleInsertArgs) (models.Role, error) {
 	var (
 		role          = models.Role{}
 		insertBuilder = sq.Insert("role").Columns(
@@ -186,10 +221,15 @@ func (r roleImpl) insert(ctx context.Context, params arguments.RoleInsertArgs) (
 		return role, err
 	}
 	role = models.Role{
-		ID: id, Name: params.Name,
+		ID:   id,
+		Name: params.Name,
+
 		CompanyID: params.CompanyID,
-		Status:    params.Status,
+
+		Status: params.Status,
+
 		CreatedBy: params.CreatedBy,
+
 		UpdatedBy: params.UpdatedBy,
 	}
 	return role, nil
@@ -197,30 +237,34 @@ func (r roleImpl) insert(ctx context.Context, params arguments.RoleInsertArgs) (
 
 // setArgsToUpdateBuilder ...
 func setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, params arguments.RoleUpdateArgs) sq.UpdateBuilder {
-	if params.Name != "" {
-		updateBuilder = updateBuilder.Set("name", params.Name)
+	if params.Name != nil {
+		updateBuilder = updateBuilder.Set("name", *params.Name)
 	}
-	if params.CompanyID != 0 {
-		updateBuilder = updateBuilder.Set("company_id", params.CompanyID)
+
+	if params.CompanyID != nil {
+		updateBuilder = updateBuilder.Set("company_id", *params.CompanyID)
 	}
-	if params.Status != "" {
-		updateBuilder = updateBuilder.Set("status", params.Status)
+
+	if params.Status != nil {
+		updateBuilder = updateBuilder.Set("status", *params.Status)
 	}
-	if params.CreatedBy != "" {
-		updateBuilder = updateBuilder.Set("created_by", params.CreatedBy)
+
+	if params.CreatedBy != nil {
+		updateBuilder = updateBuilder.Set("created_by", *params.CreatedBy)
 	}
-	if params.UpdatedBy != "" {
-		updateBuilder = updateBuilder.Set("updated_by", params.UpdatedBy)
+
+	if params.UpdatedBy != nil {
+		updateBuilder = updateBuilder.Set("updated_by", *params.UpdatedBy)
 	}
 
 	return updateBuilder
 }
 
-// update ...
-func (r roleImpl) update(ctx context.Context, params arguments.RoleUpdateArgs) (models.Role, error) {
+// Update ...
+func (r repositoryImpl) Update(ctx context.Context, params arguments.RoleUpdateArgs) (models.Role, error) {
 	var (
 		role          = models.Role{}
-		updateBuilder = sq.Update("role").Where(sq.Eq{"id": params.ID})
+		updateBuilder = sq.Update("role").Where(sq.Eq{"id": *params.ID})
 	)
 	updateBuilderWithArgs := setArgsToUpdateBuilder(updateBuilder, params)
 
@@ -241,21 +285,21 @@ func (r roleImpl) update(ctx context.Context, params arguments.RoleUpdateArgs) (
 		return role, err
 	}
 	if rowAffected == 0 {
-		return role, fmt.Errorf("not found record by id %d", params.ID)
+		return role, fmt.Errorf("error when update record id %d", *params.ID)
 	}
 	role = models.Role{
-		ID:        params.ID,
-		Name:      params.Name,
-		CompanyID: params.CompanyID,
-		Status:    params.Status,
-		CreatedBy: params.CreatedBy,
-		UpdatedBy: params.UpdatedBy,
+		ID:        *params.ID,
+		Name:      *params.Name,
+		CompanyID: *params.CompanyID,
+		Status:    *params.Status,
+		CreatedBy: *params.CreatedBy,
+		UpdatedBy: *params.UpdatedBy,
 	}
 	return role, nil
 }
 
-// delete ...
-func (r roleImpl) delete(ctx context.Context, params arguments.RoleDeleteArgs) (int64, error) {
+// Delete ...
+func (r repositoryImpl) Delete(ctx context.Context, params arguments.RoleDeleteArgs) (int64, error) {
 	var (
 		id            int64
 		deleteBuilder = sq.Delete("role").Where(sq.Eq{"id": params.ID})
@@ -278,3 +322,5 @@ func (r roleImpl) delete(ctx context.Context, params arguments.RoleDeleteArgs) (
 	}
 	return params.ID, nil
 }
+
+//go:generate mockery -name=iDatabase -output=mocks -case=underscore

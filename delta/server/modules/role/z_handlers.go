@@ -1,5 +1,4 @@
 // @generated
-
 package role
 
 import (
@@ -12,24 +11,37 @@ import (
 
 // iCoreRepository ...
 type iCoreRepository interface {
-	getByID(ctx context.Context, params arguments.RoleGetByIDArgs) (models.Role, error)
-	list(ctx context.Context, params arguments.RoleListArgs) ([]models.Role, error)
-	count(ctx context.Context, params arguments.RoleCountArgs) (int64, error)
-	insert(ctx context.Context, params arguments.RoleInsertArgs) (models.Role, error)
-	update(ctx context.Context, params arguments.RoleUpdateArgs) (models.Role, error)
-	delete(ctx context.Context, params arguments.RoleDeleteArgs) (int64, error)
+	GetByID(ctx context.Context, params arguments.RoleGetByIDArgs) (models.Role, error)
+	GetByIDs(ctx context.Context, params arguments.RoleGetByIDsArgs) ([]models.Role, error)
+	List(ctx context.Context, params arguments.RoleListArgs) ([]models.Role, error)
+	Count(ctx context.Context, params arguments.RoleCountArgs) (int64, error)
+	Insert(ctx context.Context, params arguments.RoleInsertArgs) (models.Role, error)
+	Update(ctx context.Context, params arguments.RoleUpdateArgs) (models.Role, error)
+	Delete(ctx context.Context, params arguments.RoleDeleteArgs) (int64, error)
 }
 
 // GetByID ...
 func (h HandlerImpl) GetByID(ctx context.Context, params arguments.RoleGetByIDArgs) (models.Role, error) {
 	var (
-		repository = models.Role{}
+		role = models.Role{}
 	)
-	repository, err := h.iRepository.getByID(ctx, params)
+	role, err := h.role.GetByID(ctx, params)
 	if err != nil {
-		return repository, err
+		return role, err
 	}
-	return repository, nil
+	return role, nil
+}
+
+// GetByIDs ...
+func (h HandlerImpl) GetByIDs(ctx context.Context, params arguments.RoleGetByIDsArgs) ([]models.Role, error) {
+	var (
+		roles = []models.Role{}
+	)
+	roles, err := h.role.GetByIDs(ctx, params)
+	if err != nil {
+		return roles, err
+	}
+	return roles, nil
 }
 
 // Count ...
@@ -40,7 +52,7 @@ func (h HandlerImpl) Count(ctx context.Context, params arguments.RoleCountArgs) 
 	if err := validator.Struct(params); err != nil {
 		return count, err
 	}
-	count, err := h.iRepository.count(ctx, params)
+	count, err := h.role.Count(ctx, params)
 	if err != nil {
 		return count, err
 	}
@@ -50,46 +62,46 @@ func (h HandlerImpl) Count(ctx context.Context, params arguments.RoleCountArgs) 
 // List ...
 func (h HandlerImpl) List(ctx context.Context, params arguments.RoleListArgs) ([]models.Role, error) {
 	var (
-		repositories = []models.Role{}
+		roles = []models.Role{}
 	)
 	if err := validator.Struct(params); err != nil {
-		return repositories, err
+		return roles, err
 	}
-	repositories, err := h.iRepository.list(ctx, params)
+	roles, err := h.role.List(ctx, params)
 	if err != nil {
-		return repositories, err
+		return roles, err
 	}
-	return repositories, nil
+	return roles, nil
 }
 
 // Insert ...
 func (h HandlerImpl) Insert(ctx context.Context, params arguments.RoleInsertArgs) (models.Role, error) {
 	var (
-		repository = models.Role{}
+		role = models.Role{}
 	)
 	if err := validator.Struct(params); err != nil {
-		return repository, err
+		return role, err
 	}
-	repository, err := h.iRepository.insert(ctx, params)
+	role, err := h.role.Insert(ctx, params)
 	if err != nil {
-		return repository, err
+		return role, err
 	}
-	return repository, nil
+	return role, nil
 }
 
 // Update ...
 func (h HandlerImpl) Update(ctx context.Context, params arguments.RoleUpdateArgs) (models.Role, error) {
 	var (
-		repository = models.Role{}
+		role = models.Role{}
 	)
 	if err := validator.Struct(params); err != nil {
-		return repository, err
+		return role, err
 	}
-	repository, err := h.iRepository.update(ctx, params)
+	role, err := h.role.Update(ctx, params)
 	if err != nil {
-		return repository, err
+		return role, err
 	}
-	return repository, nil
+	return role, nil
 }
 
 // Delete ...
@@ -100,7 +112,7 @@ func (h HandlerImpl) Delete(ctx context.Context, params arguments.RoleDeleteArgs
 	if err := validator.Struct(params); err != nil {
 		return id, err
 	}
-	id, err := h.iRepository.delete(ctx, params)
+	id, err := h.role.Delete(ctx, params)
 	if err != nil {
 		return id, err
 	}

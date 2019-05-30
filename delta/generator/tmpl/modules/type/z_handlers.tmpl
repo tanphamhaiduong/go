@@ -2,7 +2,6 @@
 {{- $Name := .Module.Name }}
 {{- $name := .Module.Name | ToLowerCase }}
 {{- $fields := .Module.Fields  }}
-
 package {{ $name }}
 
 import (
@@ -15,35 +14,48 @@ import (
 
 // iCoreRepository ...
 type iCoreRepository interface {
-	getByID(ctx context.Context, params arguments.{{- $Name -}}GetByIDArgs) (models.{{- $Name -}}, error)
-	list(ctx context.Context, params arguments.{{- $Name -}}ListArgs) ([]models.{{- $Name -}}, error)
-	count(ctx context.Context, params arguments.{{- $Name -}}CountArgs) (int64, error)
-	insert(ctx context.Context, params arguments.{{- $Name -}}InsertArgs) (models.{{- $Name -}}, error)
-	update(ctx context.Context, params arguments.{{- $Name -}}UpdateArgs) (models.{{- $Name -}}, error)
-	delete(ctx context.Context, params arguments.{{- $Name -}}DeleteArgs) (int64, error)
+	GetByID(ctx context.Context, params arguments.{{ $Name }}GetByIDArgs) (models.{{ $Name }}, error)
+	GetByIDs(ctx context.Context, params arguments.{{ $Name }}GetByIDsArgs) ([]models.{{ $Name }}, error)
+	List(ctx context.Context, params arguments.{{ $Name }}ListArgs) ([]models.{{ $Name }}, error)
+	Count(ctx context.Context, params arguments.{{ $Name }}CountArgs) (int64, error)
+	Insert(ctx context.Context, params arguments.{{ $Name }}InsertArgs) (models.{{ $Name }}, error)
+	Update(ctx context.Context, params arguments.{{ $Name }}UpdateArgs) (models.{{ $Name }}, error)
+	Delete(ctx context.Context, params arguments.{{ $Name }}DeleteArgs) (int64, error)
 }
 
 // GetByID ...
-func (h HandlerImpl) GetByID(ctx context.Context, params arguments.{{- $Name -}}GetByIDArgs) (models.{{- $Name -}}, error) {
+func (h HandlerImpl) GetByID(ctx context.Context, params arguments.{{ $Name }}GetByIDArgs) (models.{{ $Name }}, error) {
 	var (
-		repository = models.{{- $Name -}}{}
+		{{ $name }} = models.{{ $Name }}{}
 	)
-	repository, err := h.iRepository.getByID(ctx, params)
+	{{ $name }}, err := h.{{ $name }}.GetByID(ctx, params)
 	if err != nil {
-		return repository, err
+		return {{ $name }}, err
 	}
-	return repository, nil
+	return {{ $name }}, nil
+}
+
+// GetByIDs ...
+func (h HandlerImpl) GetByIDs(ctx context.Context, params arguments.{{ $Name }}GetByIDsArgs) ([]models.{{ $Name }}, error) {
+	var (
+		{{ $name | ToPlural }} = []models.{{ $Name }}{}
+	)
+	{{ $name | ToPlural }}, err := h.{{ $name }}.GetByIDs(ctx, params)
+	if err != nil {
+		return {{ $name | ToPlural }}, err
+	}
+	return {{ $name | ToPlural }}, nil
 }
 
 // Count ...
-func (h HandlerImpl) Count(ctx context.Context, params arguments.{{- $Name -}}CountArgs) (int64, error) {
+func (h HandlerImpl) Count(ctx context.Context, params arguments.{{ $Name }}CountArgs) (int64, error) {
 	var (
 		count int64
 	)
 	if err := validator.Struct(params); err != nil {
 		return count, err
 	}
-	count, err := h.iRepository.count(ctx, params)
+	count, err := h.{{ $name }}.Count(ctx, params)
 	if err != nil {
 		return count, err
 	}
@@ -51,59 +63,59 @@ func (h HandlerImpl) Count(ctx context.Context, params arguments.{{- $Name -}}Co
 }
 
 // List ...
-func (h HandlerImpl) List(ctx context.Context, params arguments.{{- $Name -}}ListArgs) ([]models.{{- $Name -}}, error) {
+func (h HandlerImpl) List(ctx context.Context, params arguments.{{ $Name }}ListArgs) ([]models.{{ $Name }}, error) {
 	var (
-		repositories = []models.{{- $Name -}}{}
+		{{ $name | ToPlural }} = []models.{{ $Name }}{}
 	)
 	if err := validator.Struct(params); err != nil {
-		return repositories, err
+		return {{ $name | ToPlural }}, err
 	}
-	repositories, err := h.iRepository.list(ctx, params)
+	{{ $name | ToPlural }}, err := h.{{ $name }}.List(ctx, params)
 	if err != nil {
-		return repositories, err
+		return {{ $name | ToPlural }}, err
 	}
-	return repositories, nil
+	return {{ $name | ToPlural }}, nil
 }
 
 // Insert ...
-func (h HandlerImpl) Insert(ctx context.Context, params arguments.{{- $Name -}}InsertArgs) (models.{{- $Name -}}, error) {
+func (h HandlerImpl) Insert(ctx context.Context, params arguments.{{ $Name }}InsertArgs) (models.{{ $Name }}, error) {
 	var (
-		repository = models.{{- $Name -}}{}
+		{{ $name }} = models.{{ $Name }}{}
 	)
 	if err := validator.Struct(params); err != nil {
-		return repository, err
+		return {{ $name }}, err
 	}
-	repository, err := h.iRepository.insert(ctx, params)
+	{{ $name }}, err := h.{{ $name }}.Insert(ctx, params)
 	if err != nil {
-		return repository, err
+		return {{ $name }}, err
 	}
-	return repository, nil
+	return {{ $name }}, nil
 }
 
 // Update ...
-func (h HandlerImpl) Update(ctx context.Context, params arguments.{{- $Name -}}UpdateArgs) (models.{{- $Name -}}, error) {
+func (h HandlerImpl) Update(ctx context.Context, params arguments.{{ $Name }}UpdateArgs) (models.{{ $Name }}, error) {
 	var (
-		repository = models.{{- $Name -}}{}
+		{{ $name }} = models.{{ $Name }}{}
 	)
 	if err := validator.Struct(params); err != nil {
-		return repository, err
+		return {{ $name }}, err
 	}
-	repository, err := h.iRepository.update(ctx, params)
+	{{ $name }}, err := h.{{ $name }}.Update(ctx, params)
 	if err != nil {
-		return repository, err
+		return {{ $name }}, err
 	}
-	return repository, nil
+	return {{ $name }}, nil
 }
 
 // Delete ...
-func (h HandlerImpl) Delete(ctx context.Context, params arguments.{{- $Name -}}DeleteArgs) (int64, error) {
+func (h HandlerImpl) Delete(ctx context.Context, params arguments.{{ $Name }}DeleteArgs) (int64, error) {
 	var (
 		id int64
 	)
 	if err := validator.Struct(params); err != nil {
 		return id, err
 	}
-	id, err := h.iRepository.delete(ctx, params)
+	id, err := h.{{ $name }}.Delete(ctx, params)
 	if err != nil {
 		return id, err
 	}

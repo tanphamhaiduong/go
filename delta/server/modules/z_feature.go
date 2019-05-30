@@ -1,5 +1,4 @@
 // @generated
-
 package modules
 
 import (

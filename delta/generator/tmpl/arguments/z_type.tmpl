@@ -1,55 +1,59 @@
+// @generated
 {{- $Name := .Module.Name }}
 {{- $fields := .Module.Fields }}
-
-// @generated
-
 package arguments
 
 import (
 	"context"
 )
 
-// {{ $Name -}}GetByIDArgs ...
-type {{ $Name -}}GetByIDArgs struct {
+// {{ $Name }}GetByIDArgs ...
+type {{ $Name }}GetByIDArgs struct {
 	ID int64 `graphql:"id" validate:"required,min=1"`
 }
 
-// {{ $Name -}}CountArgs ...
-type {{ $Name -}}CountArgs struct {
+// {{ $Name }}GetByIDsArgs ...
+type {{ $Name }}GetByIDsArgs struct {
+	IDs []int64 `graphql:"ids"`
+}
+
+
+// {{ $Name }}CountArgs ...
+type {{ $Name }}CountArgs struct {
 	{{- range $field := $fields }}
-		{{ $field.Name }} {{ $field.GoType }} `graphql:"{{- $field.Name | ToLowerCamelCase -}}" {{ $field.Validate -}}`
+		{{ $field.Name }} {{ $field.GoType }} `graphql:"{{ $field.Name | ToLowerCamelCase }}" {{ $field.Validate }}`
 	{{- end }}
 }
 
-// {{ $Name -}}ListArgs ...
-type {{ $Name -}}ListArgs struct {
+// {{ $Name }}ListArgs ...
+type {{ $Name }}ListArgs struct {
 	ID int64 `graphql:"id" validate:"omitempty,min=1"`
 	{{ range $field := $fields }}
-		{{- if $field.IsNotIDField -}}
-			{{ $field.Name }} {{ $field.GoType }} `graphql:"{{- $field.Name | ToLowerCamelCase -}}" {{ $field.Validate -}}`
-		{{ end }}
-	{{- end -}}
+		{{- if $field.IsNotIDField }}
+			{{ $field.Name }} {{ $field.GoType }} `graphql:"{{ $field.Name | ToLowerCamelCase }}" {{ $field.Validate }}`
+		{{- end }}
+	{{- end }}
 	Page int64 `graphql:"page" validate:"required,min=1"`
 	PageSize int64 `graphql:"pageSize" validate:"required,min=1,max=40"`
 }
 
-// {{ $Name -}}InsertArgs ...
-type {{ $Name -}}InsertArgs struct {
+// {{ $Name }}InsertArgs ...
+type {{ $Name }}InsertArgs struct {
 	{{- range $field := $fields }}
-		{{- if $field.IsNotIDField -}}
-			{{ $field.Name }} {{ $field.GoType }} `graphql:"{{- $field.Name | ToLowerCamelCase -}}" {{ $field.Validate -}}`
-		{{ end }}
+		{{- if $field.IsNotIDField }}
+			{{ $field.Name }} {{ $field.GoType }} `graphql:"{{ $field.Name | ToLowerCamelCase }}" {{ $field.Validate }}`
+		{{- end }}
 	{{- end }}
 }
 
-// {{ $Name -}}UpdateArgs ...
-type {{ $Name -}}UpdateArgs struct {
+// {{ $Name }}UpdateArgs ...
+type {{ $Name }}UpdateArgs struct {
 	{{- range $field := $fields }}
-		{{ $field.Name }} {{ $field.GoType }} `graphql:"{{- $field.Name | ToLowerCamelCase -}}" {{ $field.Validate -}}`
+		{{ $field.Name }} *{{ $field.GoType }} `graphql:"{{ $field.Name | ToLowerCamelCase }}" {{ $field.Validate }}`
 	{{- end }}
 }
 
-// {{ $Name -}}DeleteArgs ...
-type {{ $Name -}}DeleteArgs struct {
+// {{ $Name }}DeleteArgs ...
+type {{ $Name }}DeleteArgs struct {
 	ID int64 `graphql:"id" validate:"required,min=1"`
 }

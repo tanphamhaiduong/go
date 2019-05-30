@@ -1,5 +1,4 @@
 // @generated
-
 package modules
 
 import (
@@ -8,6 +7,7 @@ import (
 	"github.com/graphql-go/graphql"
 	"github.com/tanphamhaiduong/go/delta/server/modules/company"
 	"github.com/tanphamhaiduong/go/delta/server/modules/feature"
+	"github.com/tanphamhaiduong/go/delta/server/modules/permission"
 	"github.com/tanphamhaiduong/go/delta/server/modules/role"
 	"github.com/tanphamhaiduong/go/delta/server/modules/rolefeature"
 	"github.com/tanphamhaiduong/go/delta/server/modules/user"
@@ -28,6 +28,7 @@ type IResolver interface {
 type Handler struct {
 	Company     ICompanyHandler
 	Feature     IFeatureHandler
+	Permission  IPermissionHandler
 	Role        IRoleHandler
 	RoleFeature IRoleFeatureHandler
 	User        IUserHandler
@@ -37,6 +38,7 @@ type Handler struct {
 type Resolver struct {
 	Company     ICompanyResolver
 	Feature     IFeatureResolver
+	Permission  IPermissionResolver
 	Role        IRoleResolver
 	RoleFeature IRoleFeatureResolver
 	User        IUserResolver
@@ -52,16 +54,16 @@ func addToSchema(resolver Resolver) {
 	rootQuery.AddFieldConfig("companies", &graphql.Field{
 		Type: graphql.NewObject(graphql.ObjectConfig{
 			Name:        "Companies",
-			Description: "This is typecompanies",
+			Description: "This is type companies",
 			Fields: graphql.Fields{
 				"records": &graphql.Field{
 					Type:        graphql.NewNonNull(graphql.NewList(company.Type)),
-					Description: "This is records ofcompanies",
+					Description: "This is records of companies",
 					Resolve:     resolver.Company.List,
 				},
 				"totalRecords": &graphql.Field{
 					Type:        graphql.NewNonNull(graphql.Int),
-					Description: "This is totalRecords ofcompaniesquery",
+					Description: "This is totalRecords of companies query",
 					Resolve:     resolver.Company.Count,
 				},
 			},
@@ -97,16 +99,16 @@ func addToSchema(resolver Resolver) {
 	rootQuery.AddFieldConfig("features", &graphql.Field{
 		Type: graphql.NewObject(graphql.ObjectConfig{
 			Name:        "Features",
-			Description: "This is typefeatures",
+			Description: "This is type features",
 			Fields: graphql.Fields{
 				"records": &graphql.Field{
 					Type:        graphql.NewNonNull(graphql.NewList(feature.Type)),
-					Description: "This is records offeatures",
+					Description: "This is records of features",
 					Resolve:     resolver.Feature.List,
 				},
 				"totalRecords": &graphql.Field{
 					Type:        graphql.NewNonNull(graphql.Int),
-					Description: "This is totalRecords offeaturesquery",
+					Description: "This is totalRecords of features query",
 					Resolve:     resolver.Feature.Count,
 				},
 			},
@@ -133,6 +135,51 @@ func addToSchema(resolver Resolver) {
 		Args:        feature.DeleteTypeArgs,
 		Resolve:     resolver.Feature.Delete,
 	})
+	rootQuery.AddFieldConfig("permission", &graphql.Field{
+		Type:        permission.Type,
+		Description: "This is GetByID for permission",
+		Args:        permission.GetByIDTypeArgs,
+		Resolve:     resolver.Permission.GetByID,
+	})
+	rootQuery.AddFieldConfig("permissions", &graphql.Field{
+		Type: graphql.NewObject(graphql.ObjectConfig{
+			Name:        "Permissions",
+			Description: "This is type permissions",
+			Fields: graphql.Fields{
+				"records": &graphql.Field{
+					Type:        graphql.NewNonNull(graphql.NewList(permission.Type)),
+					Description: "This is records of permissions",
+					Resolve:     resolver.Permission.List,
+				},
+				"totalRecords": &graphql.Field{
+					Type:        graphql.NewNonNull(graphql.Int),
+					Description: "This is totalRecords of permissions query",
+					Resolve:     resolver.Permission.Count,
+				},
+			},
+		}),
+		Description: "This is get list of permission query",
+		Args:        permission.ListTypeArgs,
+		Resolve:     resolver.Permission.ForwardParams,
+	})
+	rootMutation.AddFieldConfig("insertPermission", &graphql.Field{
+		Type:        permission.Type,
+		Description: "This is insert permission query",
+		Args:        permission.InsertTypeArgs,
+		Resolve:     resolver.Permission.Insert,
+	})
+	rootMutation.AddFieldConfig("updatePermission", &graphql.Field{
+		Type:        permission.Type,
+		Description: "This is update permission query",
+		Args:        permission.UpdateTypeArgs,
+		Resolve:     resolver.Permission.Update,
+	})
+	rootMutation.AddFieldConfig("deletePermission", &graphql.Field{
+		Type:        graphql.NewNonNull(graphql.Int),
+		Description: "This is delete permission query",
+		Args:        permission.DeleteTypeArgs,
+		Resolve:     resolver.Permission.Delete,
+	})
 	rootQuery.AddFieldConfig("role", &graphql.Field{
 		Type:        role.Type,
 		Description: "This is GetByID for role",
@@ -142,16 +189,16 @@ func addToSchema(resolver Resolver) {
 	rootQuery.AddFieldConfig("roles", &graphql.Field{
 		Type: graphql.NewObject(graphql.ObjectConfig{
 			Name:        "Roles",
-			Description: "This is typeroles",
+			Description: "This is type roles",
 			Fields: graphql.Fields{
 				"records": &graphql.Field{
 					Type:        graphql.NewNonNull(graphql.NewList(role.Type)),
-					Description: "This is records ofroles",
+					Description: "This is records of roles",
 					Resolve:     resolver.Role.List,
 				},
 				"totalRecords": &graphql.Field{
 					Type:        graphql.NewNonNull(graphql.Int),
-					Description: "This is totalRecords ofrolesquery",
+					Description: "This is totalRecords of roles query",
 					Resolve:     resolver.Role.Count,
 				},
 			},
@@ -187,16 +234,16 @@ func addToSchema(resolver Resolver) {
 	rootQuery.AddFieldConfig("roleFeatures", &graphql.Field{
 		Type: graphql.NewObject(graphql.ObjectConfig{
 			Name:        "RoleFeatures",
-			Description: "This is typeroleFeatures",
+			Description: "This is type roleFeatures",
 			Fields: graphql.Fields{
 				"records": &graphql.Field{
 					Type:        graphql.NewNonNull(graphql.NewList(rolefeature.Type)),
-					Description: "This is records ofroleFeatures",
+					Description: "This is records of roleFeatures",
 					Resolve:     resolver.RoleFeature.List,
 				},
 				"totalRecords": &graphql.Field{
 					Type:        graphql.NewNonNull(graphql.Int),
-					Description: "This is totalRecords ofroleFeaturesquery",
+					Description: "This is totalRecords of roleFeatures query",
 					Resolve:     resolver.RoleFeature.Count,
 				},
 			},
@@ -232,16 +279,16 @@ func addToSchema(resolver Resolver) {
 	rootQuery.AddFieldConfig("users", &graphql.Field{
 		Type: graphql.NewObject(graphql.ObjectConfig{
 			Name:        "Users",
-			Description: "This is typeusers",
+			Description: "This is type users",
 			Fields: graphql.Fields{
 				"records": &graphql.Field{
 					Type:        graphql.NewNonNull(graphql.NewList(user.Type)),
-					Description: "This is records ofusers",
+					Description: "This is records of users",
 					Resolve:     resolver.User.List,
 				},
 				"totalRecords": &graphql.Field{
 					Type:        graphql.NewNonNull(graphql.Int),
-					Description: "This is totalRecords ofusersquery",
+					Description: "This is totalRecords of users query",
 					Resolve:     resolver.User.Count,
 				},
 			},
@@ -275,6 +322,7 @@ func NewHandler(db *sql.DB) Handler {
 	return Handler{
 		Company:     company.NewHandler(db),
 		Feature:     feature.NewHandler(db),
+		Permission:  permission.NewHandler(db),
 		Role:        role.NewHandler(db),
 		RoleFeature: rolefeature.NewHandler(db),
 		User:        user.NewHandler(db),
@@ -286,6 +334,7 @@ func NewResolver(db *sql.DB) Resolver {
 	return Resolver{
 		Company:     company.NewResolver(db),
 		Feature:     feature.NewResolver(db),
+		Permission:  permission.NewResolver(db),
 		Role:        role.NewResolver(db),
 		RoleFeature: rolefeature.NewResolver(db),
 		User:        user.NewResolver(db),

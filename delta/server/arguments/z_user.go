@@ -1,5 +1,4 @@
 // @generated
-
 package arguments
 
 // UserGetByIDArgs ...
@@ -7,10 +6,16 @@ type UserGetByIDArgs struct {
 	ID int64 `graphql:"id" validate:"required,min=1"`
 }
 
+// UserGetByIDsArgs ...
+type UserGetByIDsArgs struct {
+	IDs []int64 `graphql:"ids"`
+}
+
 // UserCountArgs ...
 type UserCountArgs struct {
 	ID        int64  `graphql:"id" validate:"required,min=1"`
 	Email     string `graphql:"email" validate:"omitempty"`
+	Name      string `graphql:"name" validate:"omitempty"`
 	CompanyID int64  `graphql:"companyId" validate:"omitempty,min=1"`
 	Status    string `graphql:"status" validate:"omitempty,oneof=active inactive`
 	CreatedBy string `graphql:"createdBy" validate:"omitempty`
@@ -19,8 +24,10 @@ type UserCountArgs struct {
 
 // UserListArgs ...
 type UserListArgs struct {
-	ID        int64  `graphql:"id" validate:"omitempty,min=1"`
+	ID int64 `graphql:"id" validate:"omitempty,min=1"`
+
 	Email     string `graphql:"email" validate:"omitempty"`
+	Name      string `graphql:"name" validate:"omitempty"`
 	CompanyID int64  `graphql:"companyId" validate:"omitempty,min=1"`
 	Status    string `graphql:"status" validate:"omitempty,oneof=active inactive`
 	CreatedBy string `graphql:"createdBy" validate:"omitempty`
@@ -32,6 +39,7 @@ type UserListArgs struct {
 // UserInsertArgs ...
 type UserInsertArgs struct {
 	Email     string `graphql:"email" validate:"omitempty"`
+	Name      string `graphql:"name" validate:"omitempty"`
 	CompanyID int64  `graphql:"companyId" validate:"omitempty,min=1"`
 	Status    string `graphql:"status" validate:"omitempty,oneof=active inactive`
 	CreatedBy string `graphql:"createdBy" validate:"omitempty`
@@ -40,12 +48,13 @@ type UserInsertArgs struct {
 
 // UserUpdateArgs ...
 type UserUpdateArgs struct {
-	ID        int64  `graphql:"id" validate:"required,min=1"`
-	Email     string `graphql:"email" validate:"omitempty"`
-	CompanyID int64  `graphql:"companyId" validate:"omitempty,min=1"`
-	Status    string `graphql:"status" validate:"omitempty,oneof=active inactive`
-	CreatedBy string `graphql:"createdBy" validate:"omitempty`
-	UpdatedBy string `graphql:"updatedBy" validate:"omitempty`
+	ID        *int64  `graphql:"id" validate:"required,min=1"`
+	Email     *string `graphql:"email" validate:"omitempty"`
+	Name      *string `graphql:"name" validate:"omitempty"`
+	CompanyID *int64  `graphql:"companyId" validate:"omitempty,min=1"`
+	Status    *string `graphql:"status" validate:"omitempty,oneof=active inactive`
+	CreatedBy *string `graphql:"createdBy" validate:"omitempty`
+	UpdatedBy *string `graphql:"updatedBy" validate:"omitempty`
 }
 
 // UserDeleteArgs ...

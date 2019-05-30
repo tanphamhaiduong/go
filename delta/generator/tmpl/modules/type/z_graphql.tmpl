@@ -2,7 +2,6 @@
 {{- $Name := .Module.Name }}
 {{- $fields := .Module.Fields  }}
 {{- $name := .Module.Name | ToLowerCase }}
-
 package {{ $name }}
 
 import (
@@ -17,17 +16,17 @@ import (
 var (
 	// Type ...
 	Type = graphql.NewObject(graphql.ObjectConfig{
-		Name:        "{{- $Name -}}",
+		Name:        "{{ $Name }}",
 		Description: "This is type Feature",
     Fields: graphql.Fields{
       {{- range $field := $fields }}
-        "{{- $field.Name | ToLowerCamelCase -}}": &graphql.Field{
+        "{{ $field.Name | ToLowerCamelCase }}": &graphql.Field{
           {{- if $field.GraphQLRequired }}
-            Type:        graphql.NewNonNull({{- $field.GraphQLType -}}),
+            Type:        graphql.NewNonNull({{ $field.GraphQLType }}),
           {{- else }}
-            Type:        {{- $field.GraphQLType -}},
+            Type:        {{ $field.GraphQLType }},
           {{- end }}
-          Description: "{{- $field.GraphQLDescription -}}",
+          Description: "{{ $field.GraphQLDescription }}",
         },
       {{- end }}
     },
@@ -43,9 +42,9 @@ var (
 	// ListTypeArgs ...
 	ListTypeArgs = graphql.FieldConfigArgument{
 		{{- range $field := $fields }}
-			"{{- $field.Name | ToLowerCamelCase -}}": &graphql.ArgumentConfig{
-				Type:        {{- $field.GraphQLType -}},
-				Description: "{{- $field.GraphQLDescription -}}",
+			"{{ $field.Name | ToLowerCamelCase }}": &graphql.ArgumentConfig{
+				Type:        {{ $field.GraphQLType }},
+				Description: "{{ $field.GraphQLDescription }}",
 			},
 		{{- end }}
 		"page": &graphql.ArgumentConfig{
@@ -61,17 +60,17 @@ var (
 
 	// InsertTypeArgs ...
 	InsertTypeArgs = graphql.FieldConfigArgument{
-		{{ range $field := $fields -}}
-			{{- if $field.IsNotIDField -}}
-				"{{- $field.Name | ToLowerCamelCase -}}": &graphql.ArgumentConfig{
+		{{- range $field := $fields }}
+			{{- if $field.IsNotIDField }}
+				"{{ $field.Name | ToLowerCamelCase }}": &graphql.ArgumentConfig{
 					{{- if $field.GraphQLRequired }}
-            Type:        graphql.NewNonNull({{- $field.GraphQLType -}}),
+            Type:        graphql.NewNonNull({{ $field.GraphQLType }}),
           {{- else }}
-            Type:        {{- $field.GraphQLType -}},
+            Type:        {{ $field.GraphQLType }},
           {{- end }}
-					Description: "{{- $field.GraphQLDescription -}}",
+					Description: "{{ $field.GraphQLDescription }}",
 				},
-			{{ end  }}
+			{{- end  }}
 		{{- end }}
 	}
 
@@ -80,13 +79,13 @@ var (
 		"id": &graphql.ArgumentConfig{
 			Type: graphql.NewNonNull(graphql.Int),
 		},
-		{{ range $field := $fields -}}
-			{{- if $field.IsNotIDField -}}
-				"{{- $field.Name | ToLowerCamelCase -}}": &graphql.ArgumentConfig{
-					Type:        {{- $field.GraphQLType -}},
-					Description: "{{- $field.GraphQLDescription -}}",
+		{{- range $field := $fields }}
+			{{- if $field.IsNotIDField }}
+				"{{ $field.Name | ToLowerCamelCase }}": &graphql.ArgumentConfig{
+					Type:        {{ $field.GraphQLType }},
+					Description: "{{ $field.GraphQLDescription }}",
 				},
-			{{ end  }}
+			{{- end  }}
 		{{- end }}
 	}
 
@@ -100,26 +99,13 @@ var (
 
 // ICoreHandler ...
 type ICoreHandler interface {
-	GetByID(ctx context.Context, params arguments.{{- $Name -}}GetByIDArgs) (models.{{ $Name }}, error)
-	Count(ctx context.Context, params arguments.{{- $Name -}}CountArgs) (int64, error)
-	List(ctx context.Context, params arguments.{{- $Name -}}ListArgs) ([]models.{{ $Name }}, error)
-	Insert(ctx context.Context, params arguments.{{- $Name -}}InsertArgs) (models.{{ $Name }}, error)
-	Update(ctx context.Context, params arguments.{{- $Name -}}UpdateArgs) (models.{{ $Name }}, error)
-	Delete(ctx context.Context, params arguments.{{- $Name -}}DeleteArgs) (int64, error)
-}
-
-// ResolverImpl ...
-type ResolverImpl struct {
-	db      *sql.DB
-	handler IHandler
-}
-
-// NewResolver ...
-func NewResolver(db *sql.DB) ResolverImpl {
-	return ResolverImpl{
-		db:      db,
-		handler: NewHandler(db),
-	}
+	GetByID(ctx context.Context, params arguments.{{ $Name }}GetByIDArgs) (models.{{ $Name }}, error)
+	GetByIDs(ctx context.Context, params arguments.{{ $Name }}GetByIDsArgs) ([]models.{{ $Name }}, error)
+	Count(ctx context.Context, params arguments.{{ $Name }}CountArgs) (int64, error)
+	List(ctx context.Context, params arguments.{{ $Name }}ListArgs) ([]models.{{ $Name }}, error)
+	Insert(ctx context.Context, params arguments.{{ $Name }}InsertArgs) (models.{{ $Name }}, error)
+	Update(ctx context.Context, params arguments.{{ $Name }}UpdateArgs) (models.{{ $Name }}, error)
+	Delete(ctx context.Context, params arguments.{{ $Name }}DeleteArgs) (int64, error)
 }
 
 // ForwardParams ...
@@ -131,11 +117,11 @@ func (r ResolverImpl) ForwardParams(params graphql.ResolveParams) (interface{}, 
 // GetByID ...
 func (r ResolverImpl) GetByID(params graphql.ResolveParams) (interface{}, error) {
 	// parse params
-	args := arguments.{{- $Name -}}GetByIDArgs{}
+	args := arguments.{{ $Name }}GetByIDArgs{}
 	if err := utils.Parse(params.Args, &args); err != nil {
 		return nil, err
 	}
-	response, err := r.handler.GetByID(params.Context, args)
+	response, err := r.{{ $name }}.GetByID(params.Context, args)
 	if err != nil {
 		return nil, err
 	}
@@ -145,12 +131,12 @@ func (r ResolverImpl) GetByID(params graphql.ResolveParams) (interface{}, error)
 // Count ...
 func (r ResolverImpl) Count(params graphql.ResolveParams) (interface{}, error) {
 	// parse params
-	args := arguments.{{- $Name -}}CountArgs{}
+	args := arguments.{{ $Name }}CountArgs{}
 	err := utils.Parse(params.Source.(map[string]interface{}), &args)
 	if err != nil {
 		return nil, err
 	}
-	response, err := r.handler.Count(params.Context, args)
+	response, err := r.{{ $name }}.Count(params.Context, args)
 	if err != nil {
 		return nil, err
 	}
@@ -160,12 +146,12 @@ func (r ResolverImpl) Count(params graphql.ResolveParams) (interface{}, error) {
 // List ...
 func (r ResolverImpl) List(params graphql.ResolveParams) (interface{}, error) {
 	// parse params
-	args := arguments.{{- $Name -}}ListArgs{}
+	args := arguments.{{ $Name }}ListArgs{}
 	err := utils.Parse(params.Source.(map[string]interface{}), &args)
 	if err != nil {
 		return nil, err
 	}
-	response, err := r.handler.List(params.Context, args)
+	response, err := r.{{ $name }}.List(params.Context, args)
 	if err != nil {
 		return nil, err
 	}
@@ -175,12 +161,12 @@ func (r ResolverImpl) List(params graphql.ResolveParams) (interface{}, error) {
 // Insert ...
 func (r ResolverImpl) Insert(params graphql.ResolveParams) (interface{}, error) {
 	// parse params
-	args := arguments.{{- $Name -}}InsertArgs{}
+	args := arguments.{{ $Name }}InsertArgs{}
 	err := utils.Parse(params.Args, &args)
 	if err != nil {
 		return nil, err
 	}
-	response, err := r.handler.Insert(params.Context, args)
+	response, err := r.{{ $name }}.Insert(params.Context, args)
 	if err != nil {
 		return nil, err
 	}
@@ -190,12 +176,12 @@ func (r ResolverImpl) Insert(params graphql.ResolveParams) (interface{}, error) 
 // Update ...
 func (r ResolverImpl) Update(params graphql.ResolveParams) (interface{}, error) {
 	// parse params
-	args := arguments.{{- $Name -}}UpdateArgs{}
+	args := arguments.{{ $Name }}UpdateArgs{}
 	err := utils.Parse(params.Args, &args)
 	if err != nil {
 		return nil, err
 	}
-	response, err := r.handler.Update(params.Context, args)
+	response, err := r.{{ $name }}.Update(params.Context, args)
 	if err != nil {
 		return nil, err
 	}
@@ -205,12 +191,12 @@ func (r ResolverImpl) Update(params graphql.ResolveParams) (interface{}, error) 
 // Delete ...
 func (r ResolverImpl) Delete(params graphql.ResolveParams) (interface{}, error) {
 	// parse params
-	args := arguments.{{- $Name -}}DeleteArgs{}
+	args := arguments.{{ $Name }}DeleteArgs{}
 	err := utils.Parse(params.Args, &args)
 	if err != nil {
 		return nil, err
 	}
-	response, err := r.handler.Delete(params.Context, args)
+	response, err := r.{{ $name }}.Delete(params.Context, args)
 	if err != nil {
 		return nil, err
 	}

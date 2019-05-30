@@ -1,5 +1,4 @@
 // @generated
-
 package company
 
 import (
@@ -12,24 +11,37 @@ import (
 
 // iCoreRepository ...
 type iCoreRepository interface {
-	getByID(ctx context.Context, params arguments.CompanyGetByIDArgs) (models.Company, error)
-	list(ctx context.Context, params arguments.CompanyListArgs) ([]models.Company, error)
-	count(ctx context.Context, params arguments.CompanyCountArgs) (int64, error)
-	insert(ctx context.Context, params arguments.CompanyInsertArgs) (models.Company, error)
-	update(ctx context.Context, params arguments.CompanyUpdateArgs) (models.Company, error)
-	delete(ctx context.Context, params arguments.CompanyDeleteArgs) (int64, error)
+	GetByID(ctx context.Context, params arguments.CompanyGetByIDArgs) (models.Company, error)
+	GetByIDs(ctx context.Context, params arguments.CompanyGetByIDsArgs) ([]models.Company, error)
+	List(ctx context.Context, params arguments.CompanyListArgs) ([]models.Company, error)
+	Count(ctx context.Context, params arguments.CompanyCountArgs) (int64, error)
+	Insert(ctx context.Context, params arguments.CompanyInsertArgs) (models.Company, error)
+	Update(ctx context.Context, params arguments.CompanyUpdateArgs) (models.Company, error)
+	Delete(ctx context.Context, params arguments.CompanyDeleteArgs) (int64, error)
 }
 
 // GetByID ...
 func (h HandlerImpl) GetByID(ctx context.Context, params arguments.CompanyGetByIDArgs) (models.Company, error) {
 	var (
-		repository = models.Company{}
+		company = models.Company{}
 	)
-	repository, err := h.iRepository.getByID(ctx, params)
+	company, err := h.company.GetByID(ctx, params)
 	if err != nil {
-		return repository, err
+		return company, err
 	}
-	return repository, nil
+	return company, nil
+}
+
+// GetByIDs ...
+func (h HandlerImpl) GetByIDs(ctx context.Context, params arguments.CompanyGetByIDsArgs) ([]models.Company, error) {
+	var (
+		companies = []models.Company{}
+	)
+	companies, err := h.company.GetByIDs(ctx, params)
+	if err != nil {
+		return companies, err
+	}
+	return companies, nil
 }
 
 // Count ...
@@ -40,7 +52,7 @@ func (h HandlerImpl) Count(ctx context.Context, params arguments.CompanyCountArg
 	if err := validator.Struct(params); err != nil {
 		return count, err
 	}
-	count, err := h.iRepository.count(ctx, params)
+	count, err := h.company.Count(ctx, params)
 	if err != nil {
 		return count, err
 	}
@@ -50,46 +62,46 @@ func (h HandlerImpl) Count(ctx context.Context, params arguments.CompanyCountArg
 // List ...
 func (h HandlerImpl) List(ctx context.Context, params arguments.CompanyListArgs) ([]models.Company, error) {
 	var (
-		repositories = []models.Company{}
+		companies = []models.Company{}
 	)
 	if err := validator.Struct(params); err != nil {
-		return repositories, err
+		return companies, err
 	}
-	repositories, err := h.iRepository.list(ctx, params)
+	companies, err := h.company.List(ctx, params)
 	if err != nil {
-		return repositories, err
+		return companies, err
 	}
-	return repositories, nil
+	return companies, nil
 }
 
 // Insert ...
 func (h HandlerImpl) Insert(ctx context.Context, params arguments.CompanyInsertArgs) (models.Company, error) {
 	var (
-		repository = models.Company{}
+		company = models.Company{}
 	)
 	if err := validator.Struct(params); err != nil {
-		return repository, err
+		return company, err
 	}
-	repository, err := h.iRepository.insert(ctx, params)
+	company, err := h.company.Insert(ctx, params)
 	if err != nil {
-		return repository, err
+		return company, err
 	}
-	return repository, nil
+	return company, nil
 }
 
 // Update ...
 func (h HandlerImpl) Update(ctx context.Context, params arguments.CompanyUpdateArgs) (models.Company, error) {
 	var (
-		repository = models.Company{}
+		company = models.Company{}
 	)
 	if err := validator.Struct(params); err != nil {
-		return repository, err
+		return company, err
 	}
-	repository, err := h.iRepository.update(ctx, params)
+	company, err := h.company.Update(ctx, params)
 	if err != nil {
-		return repository, err
+		return company, err
 	}
-	return repository, nil
+	return company, nil
 }
 
 // Delete ...
@@ -100,7 +112,7 @@ func (h HandlerImpl) Delete(ctx context.Context, params arguments.CompanyDeleteA
 	if err := validator.Struct(params); err != nil {
 		return id, err
 	}
-	id, err := h.iRepository.delete(ctx, params)
+	id, err := h.company.Delete(ctx, params)
 	if err != nil {
 		return id, err
 	}

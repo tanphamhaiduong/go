@@ -1,10 +1,14 @@
 // @generated
-
 package arguments
 
 // CompanyGetByIDArgs ...
 type CompanyGetByIDArgs struct {
 	ID int64 `graphql:"id" validate:"required,min=1"`
+}
+
+// CompanyGetByIDsArgs ...
+type CompanyGetByIDsArgs struct {
+	IDs []int64 `graphql:"ids"`
 }
 
 // CompanyCountArgs ...
@@ -18,7 +22,8 @@ type CompanyCountArgs struct {
 
 // CompanyListArgs ...
 type CompanyListArgs struct {
-	ID        int64  `graphql:"id" validate:"omitempty,min=1"`
+	ID int64 `graphql:"id" validate:"omitempty,min=1"`
+
 	Name      string `graphql:"name" validate:"omitempty"`
 	Status    string `graphql:"status" validate:"omitempty,oneof=active inactive"`
 	CreatedBy string `graphql:"createdBy" validate:"omitempty"`
@@ -37,11 +42,11 @@ type CompanyInsertArgs struct {
 
 // CompanyUpdateArgs ...
 type CompanyUpdateArgs struct {
-	ID        int64  `graphql:"id" validate:"required,min=1"`
-	Name      string `graphql:"name" validate:"omitempty"`
-	Status    string `graphql:"status" validate:"omitempty,oneof=active inactive"`
-	CreatedBy string `graphql:"createdBy" validate:"omitempty"`
-	UpdatedBy string `graphql:"updatedBy" validate:"omitempty"`
+	ID        *int64  `graphql:"id" validate:"required,min=1"`
+	Name      *string `graphql:"name" validate:"omitempty"`
+	Status    *string `graphql:"status" validate:"omitempty,oneof=active inactive"`
+	CreatedBy *string `graphql:"createdBy" validate:"omitempty"`
+	UpdatedBy *string `graphql:"updatedBy" validate:"omitempty"`
 }
 
 // CompanyDeleteArgs ...

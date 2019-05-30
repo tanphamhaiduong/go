@@ -1,5 +1,4 @@
 // @generated
-
 package user
 
 import (
@@ -12,8 +11,8 @@ import (
 	"github.com/tanphamhaiduong/go/delta/server/utils"
 )
 
-// getByID ...
-func (r userImpl) getByID(ctx context.Context, params arguments.UserGetByIDArgs) (models.User, error) {
+// GetByID ...
+func (r repositoryImpl) GetByID(ctx context.Context, params arguments.UserGetByIDArgs) (models.User, error) {
 	var (
 		user          = models.User{}
 		selectBuilder = sq.Select("*").From("user").Where(sq.Eq{"id": params.ID})
@@ -30,12 +29,50 @@ func (r userImpl) getByID(ctx context.Context, params arguments.UserGetByIDArgs)
 	row.Scan(
 		&user.ID,
 		&user.Email,
+		&user.Name,
 		&user.CompanyID,
 		&user.Status,
 		&user.CreatedBy,
 		&user.UpdatedBy,
 	)
 	return user, nil
+}
+
+// GetByID ...
+func (r repositoryImpl) GetByIDs(ctx context.Context, params arguments.UserGetByIDsArgs) ([]models.User, error) {
+	var (
+		users         = []models.User{}
+		selectBuilder = sq.Select("*").From("user").Where(sq.Eq{"id": params.IDs})
+	)
+	sql, args, err := selectBuilder.ToSql()
+	if err != nil {
+		return users, err
+	}
+	stmt, err := r.db.PrepareContext(ctx, sql)
+	if err != nil {
+		return users, err
+	}
+	rows, err := stmt.QueryContext(ctx, args...)
+	if err != nil {
+		return users, err
+	}
+	for rows.Next() {
+		user := models.User{}
+		err := rows.Scan(
+			&user.ID,
+			&user.Email,
+			&user.Name,
+			&user.CompanyID,
+			&user.Status,
+			&user.CreatedBy,
+			&user.UpdatedBy,
+		)
+		if err != nil {
+			return users, err
+		}
+		users = append(users, user)
+	}
+	return users, nil
 }
 
 // setArgsToListSelectBuilder ...
@@ -45,6 +82,9 @@ func setArgsToListSelectBuilder(selectBuilder sq.SelectBuilder, params arguments
 	}
 	if params.Email != "" {
 		selectBuilder = selectBuilder.Where(sq.Eq{"email": params.Email})
+	}
+	if params.Name != "" {
+		selectBuilder = selectBuilder.Where(sq.Eq{"name": params.Name})
 	}
 	if params.CompanyID != 0 {
 		selectBuilder = selectBuilder.Where(sq.Eq{"company_id": params.CompanyID})
@@ -68,8 +108,8 @@ func setArgsToListSelectBuilder(selectBuilder sq.SelectBuilder, params arguments
 	return selectBuilder
 }
 
-// list ...
-func (r userImpl) list(ctx context.Context, params arguments.UserListArgs) ([]models.User, error) {
+// List ...
+func (r repositoryImpl) List(ctx context.Context, params arguments.UserListArgs) ([]models.User, error) {
 	var (
 		users         = []models.User{}
 		selectBuilder = sq.Select("*").From("user")
@@ -92,6 +132,7 @@ func (r userImpl) list(ctx context.Context, params arguments.UserListArgs) ([]mo
 		err := rows.Scan(
 			&user.ID,
 			&user.Email,
+			&user.Name,
 			&user.CompanyID,
 			&user.Status,
 			&user.CreatedBy,
@@ -113,6 +154,9 @@ func setArgsToCountSelectBuilder(selectBuilder sq.SelectBuilder, params argument
 	if params.Email != "" {
 		selectBuilder = selectBuilder.Where(sq.Eq{"email": params.Email})
 	}
+	if params.Name != "" {
+		selectBuilder = selectBuilder.Where(sq.Eq{"name": params.Name})
+	}
 	if params.CompanyID != 0 {
 		selectBuilder = selectBuilder.Where(sq.Eq{"company_id": params.CompanyID})
 	}
@@ -128,8 +172,8 @@ func setArgsToCountSelectBuilder(selectBuilder sq.SelectBuilder, params argument
 	return selectBuilder
 }
 
-// count ...
-func (r userImpl) count(ctx context.Context, params arguments.UserCountArgs) (int64, error) {
+// Count ...
+func (r repositoryImpl) Count(ctx context.Context, params arguments.UserCountArgs) (int64, error) {
 	var (
 		count         int64
 		selectBuilder = sq.Select("COUNT(id)").From("user")
@@ -151,18 +195,20 @@ func (r userImpl) count(ctx context.Context, params arguments.UserCountArgs) (in
 	return count, nil
 }
 
-// insert ...
-func (r userImpl) insert(ctx context.Context, params arguments.UserInsertArgs) (models.User, error) {
+// Insert ...
+func (r repositoryImpl) Insert(ctx context.Context, params arguments.UserInsertArgs) (models.User, error) {
 	var (
 		user          = models.User{}
 		insertBuilder = sq.Insert("user").Columns(
 			"email",
+			"name",
 			"company_id",
 			"status",
 			"created_by",
 			"updated_by",
 		).Values(
 			params.Email,
+			params.Name,
 			params.CompanyID,
 			params.Status,
 			params.CreatedBy,
@@ -186,10 +232,17 @@ func (r userImpl) insert(ctx context.Context, params arguments.UserInsertArgs) (
 		return user, err
 	}
 	user = models.User{
-		ID: id, Email: params.Email,
+		ID:    id,
+		Email: params.Email,
+
+		Name: params.Name,
+
 		CompanyID: params.CompanyID,
-		Status:    params.Status,
+
+		Status: params.Status,
+
 		CreatedBy: params.CreatedBy,
+
 		UpdatedBy: params.UpdatedBy,
 	}
 	return user, nil
@@ -197,30 +250,38 @@ func (r userImpl) insert(ctx context.Context, params arguments.UserInsertArgs) (
 
 // setArgsToUpdateBuilder ...
 func setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, params arguments.UserUpdateArgs) sq.UpdateBuilder {
-	if params.Email != "" {
-		updateBuilder = updateBuilder.Set("email", params.Email)
+	if params.Email != nil {
+		updateBuilder = updateBuilder.Set("email", *params.Email)
 	}
-	if params.CompanyID != 0 {
-		updateBuilder = updateBuilder.Set("company_id", params.CompanyID)
+
+	if params.Name != nil {
+		updateBuilder = updateBuilder.Set("name", *params.Name)
 	}
-	if params.Status != "" {
-		updateBuilder = updateBuilder.Set("status", params.Status)
+
+	if params.CompanyID != nil {
+		updateBuilder = updateBuilder.Set("company_id", *params.CompanyID)
 	}
-	if params.CreatedBy != "" {
-		updateBuilder = updateBuilder.Set("created_by", params.CreatedBy)
+
+	if params.Status != nil {
+		updateBuilder = updateBuilder.Set("status", *params.Status)
 	}
-	if params.UpdatedBy != "" {
-		updateBuilder = updateBuilder.Set("updated_by", params.UpdatedBy)
+
+	if params.CreatedBy != nil {
+		updateBuilder = updateBuilder.Set("created_by", *params.CreatedBy)
+	}
+
+	if params.UpdatedBy != nil {
+		updateBuilder = updateBuilder.Set("updated_by", *params.UpdatedBy)
 	}
 
 	return updateBuilder
 }
 
-// update ...
-func (r userImpl) update(ctx context.Context, params arguments.UserUpdateArgs) (models.User, error) {
+// Update ...
+func (r repositoryImpl) Update(ctx context.Context, params arguments.UserUpdateArgs) (models.User, error) {
 	var (
 		user          = models.User{}
-		updateBuilder = sq.Update("user").Where(sq.Eq{"id": params.ID})
+		updateBuilder = sq.Update("user").Where(sq.Eq{"id": *params.ID})
 	)
 	updateBuilderWithArgs := setArgsToUpdateBuilder(updateBuilder, params)
 
@@ -241,21 +302,22 @@ func (r userImpl) update(ctx context.Context, params arguments.UserUpdateArgs) (
 		return user, err
 	}
 	if rowAffected == 0 {
-		return user, fmt.Errorf("not found record by id %d", params.ID)
+		return user, fmt.Errorf("error when update record id %d", *params.ID)
 	}
 	user = models.User{
-		ID:        params.ID,
-		Email:     params.Email,
-		CompanyID: params.CompanyID,
-		Status:    params.Status,
-		CreatedBy: params.CreatedBy,
-		UpdatedBy: params.UpdatedBy,
+		ID:        *params.ID,
+		Email:     *params.Email,
+		Name:      *params.Name,
+		CompanyID: *params.CompanyID,
+		Status:    *params.Status,
+		CreatedBy: *params.CreatedBy,
+		UpdatedBy: *params.UpdatedBy,
 	}
 	return user, nil
 }
 
-// delete ...
-func (r userImpl) delete(ctx context.Context, params arguments.UserDeleteArgs) (int64, error) {
+// Delete ...
+func (r repositoryImpl) Delete(ctx context.Context, params arguments.UserDeleteArgs) (int64, error) {
 	var (
 		id            int64
 		deleteBuilder = sq.Delete("user").Where(sq.Eq{"id": params.ID})
@@ -278,3 +340,5 @@ func (r userImpl) delete(ctx context.Context, params arguments.UserDeleteArgs) (
 	}
 	return params.ID, nil
 }
+
+//go:generate mockery -name=iDatabase -output=mocks -case=underscore

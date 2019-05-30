@@ -1,12 +1,12 @@
 {{- $Module := .Module }}
 package modules
 
-// I{{- $Module.Name -}}Handler ...
-type I{{- $Module.Name -}}Handler interface {
-  ICore{{- $Module.Name -}}Handler
+// I{{ $Module.Name }}Handler ...
+type I{{ $Module.Name }}Handler interface {
+  ICore{{ $Module.Name }}Handler
 }
 
-// I{{- $Module.Name -}}Resolver ...
-type I{{- $Module.Name -}}Resolver interface {
-  ICore{{- $Module.Name -}}Resolver
+// I{{ $Module.Name }}Resolver ...
+type I{{ $Module.Name }}Resolver interface {
+  ICore{{ $Module.Name }}Resolver
 }

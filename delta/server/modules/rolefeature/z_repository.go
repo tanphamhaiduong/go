@@ -1,5 +1,4 @@
 // @generated
-
 package rolefeature
 
 import (
@@ -12,8 +11,8 @@ import (
 	"github.com/tanphamhaiduong/go/delta/server/utils"
 )
 
-// getByID ...
-func (r rolefeatureImpl) getByID(ctx context.Context, params arguments.RoleFeatureGetByIDArgs) (models.RoleFeature, error) {
+// GetByID ...
+func (r repositoryImpl) GetByID(ctx context.Context, params arguments.RoleFeatureGetByIDArgs) (models.RoleFeature, error) {
 	var (
 		rolefeature   = models.RoleFeature{}
 		selectBuilder = sq.Select("*").From("role_feature").Where(sq.Eq{"id": params.ID})
@@ -30,11 +29,46 @@ func (r rolefeatureImpl) getByID(ctx context.Context, params arguments.RoleFeatu
 	row.Scan(
 		&rolefeature.ID,
 		&rolefeature.RoleID,
-		&rolefeature.FeatureID,
+		&rolefeature.PermissionID,
 		&rolefeature.CreatedBy,
 		&rolefeature.UpdatedBy,
 	)
 	return rolefeature, nil
+}
+
+// GetByID ...
+func (r repositoryImpl) GetByIDs(ctx context.Context, params arguments.RoleFeatureGetByIDsArgs) ([]models.RoleFeature, error) {
+	var (
+		rolefeatures  = []models.RoleFeature{}
+		selectBuilder = sq.Select("*").From("role_feature").Where(sq.Eq{"id": params.IDs})
+	)
+	sql, args, err := selectBuilder.ToSql()
+	if err != nil {
+		return rolefeatures, err
+	}
+	stmt, err := r.db.PrepareContext(ctx, sql)
+	if err != nil {
+		return rolefeatures, err
+	}
+	rows, err := stmt.QueryContext(ctx, args...)
+	if err != nil {
+		return rolefeatures, err
+	}
+	for rows.Next() {
+		rolefeature := models.RoleFeature{}
+		err := rows.Scan(
+			&rolefeature.ID,
+			&rolefeature.RoleID,
+			&rolefeature.PermissionID,
+			&rolefeature.CreatedBy,
+			&rolefeature.UpdatedBy,
+		)
+		if err != nil {
+			return rolefeatures, err
+		}
+		rolefeatures = append(rolefeatures, rolefeature)
+	}
+	return rolefeatures, nil
 }
 
 // setArgsToListSelectBuilder ...
@@ -45,8 +79,8 @@ func setArgsToListSelectBuilder(selectBuilder sq.SelectBuilder, params arguments
 	if params.RoleID != 0 {
 		selectBuilder = selectBuilder.Where(sq.Eq{"role_id": params.RoleID})
 	}
-	if params.FeatureID != 0 {
-		selectBuilder = selectBuilder.Where(sq.Eq{"feature_id": params.FeatureID})
+	if params.PermissionID != 0 {
+		selectBuilder = selectBuilder.Where(sq.Eq{"permission_id": params.PermissionID})
 	}
 	if params.CreatedBy != "" {
 		selectBuilder = selectBuilder.Where(sq.Eq{"created_by": params.CreatedBy})
@@ -64,8 +98,8 @@ func setArgsToListSelectBuilder(selectBuilder sq.SelectBuilder, params arguments
 	return selectBuilder
 }
 
-// list ...
-func (r rolefeatureImpl) list(ctx context.Context, params arguments.RoleFeatureListArgs) ([]models.RoleFeature, error) {
+// List ...
+func (r repositoryImpl) List(ctx context.Context, params arguments.RoleFeatureListArgs) ([]models.RoleFeature, error) {
 	var (
 		rolefeatures  = []models.RoleFeature{}
 		selectBuilder = sq.Select("*").From("role_feature")
@@ -88,7 +122,7 @@ func (r rolefeatureImpl) list(ctx context.Context, params arguments.RoleFeatureL
 		err := rows.Scan(
 			&rolefeature.ID,
 			&rolefeature.RoleID,
-			&rolefeature.FeatureID,
+			&rolefeature.PermissionID,
 			&rolefeature.CreatedBy,
 			&rolefeature.UpdatedBy,
 		)
@@ -108,8 +142,8 @@ func setArgsToCountSelectBuilder(selectBuilder sq.SelectBuilder, params argument
 	if params.RoleID != 0 {
 		selectBuilder = selectBuilder.Where(sq.Eq{"role_id": params.RoleID})
 	}
-	if params.FeatureID != 0 {
-		selectBuilder = selectBuilder.Where(sq.Eq{"feature_id": params.FeatureID})
+	if params.PermissionID != 0 {
+		selectBuilder = selectBuilder.Where(sq.Eq{"permission_id": params.PermissionID})
 	}
 	if params.CreatedBy != "" {
 		selectBuilder = selectBuilder.Where(sq.Eq{"created_by": params.CreatedBy})
@@ -120,8 +154,8 @@ func setArgsToCountSelectBuilder(selectBuilder sq.SelectBuilder, params argument
 	return selectBuilder
 }
 
-// count ...
-func (r rolefeatureImpl) count(ctx context.Context, params arguments.RoleFeatureCountArgs) (int64, error) {
+// Count ...
+func (r repositoryImpl) Count(ctx context.Context, params arguments.RoleFeatureCountArgs) (int64, error) {
 	var (
 		count         int64
 		selectBuilder = sq.Select("COUNT(id)").From("role_feature")
@@ -143,18 +177,18 @@ func (r rolefeatureImpl) count(ctx context.Context, params arguments.RoleFeature
 	return count, nil
 }
 
-// insert ...
-func (r rolefeatureImpl) insert(ctx context.Context, params arguments.RoleFeatureInsertArgs) (models.RoleFeature, error) {
+// Insert ...
+func (r repositoryImpl) Insert(ctx context.Context, params arguments.RoleFeatureInsertArgs) (models.RoleFeature, error) {
 	var (
 		rolefeature   = models.RoleFeature{}
 		insertBuilder = sq.Insert("role_feature").Columns(
 			"role_id",
-			"feature_id",
+			"permission_id",
 			"created_by",
 			"updated_by",
 		).Values(
 			params.RoleID,
-			params.FeatureID,
+			params.PermissionID,
 			params.CreatedBy,
 			params.UpdatedBy,
 		)
@@ -176,9 +210,13 @@ func (r rolefeatureImpl) insert(ctx context.Context, params arguments.RoleFeatur
 		return rolefeature, err
 	}
 	rolefeature = models.RoleFeature{
-		ID: id, RoleID: params.RoleID,
-		FeatureID: params.FeatureID,
+		ID:     id,
+		RoleID: params.RoleID,
+
+		PermissionID: params.PermissionID,
+
 		CreatedBy: params.CreatedBy,
+
 		UpdatedBy: params.UpdatedBy,
 	}
 	return rolefeature, nil
@@ -186,27 +224,30 @@ func (r rolefeatureImpl) insert(ctx context.Context, params arguments.RoleFeatur
 
 // setArgsToUpdateBuilder ...
 func setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, params arguments.RoleFeatureUpdateArgs) sq.UpdateBuilder {
-	if params.RoleID != 0 {
-		updateBuilder = updateBuilder.Set("role_id", params.RoleID)
+	if params.RoleID != nil {
+		updateBuilder = updateBuilder.Set("role_id", *params.RoleID)
 	}
-	if params.FeatureID != 0 {
-		updateBuilder = updateBuilder.Set("feature_id", params.FeatureID)
+
+	if params.PermissionID != nil {
+		updateBuilder = updateBuilder.Set("permission_id", *params.PermissionID)
 	}
-	if params.CreatedBy != "" {
-		updateBuilder = updateBuilder.Set("created_by", params.CreatedBy)
+
+	if params.CreatedBy != nil {
+		updateBuilder = updateBuilder.Set("created_by", *params.CreatedBy)
 	}
-	if params.UpdatedBy != "" {
-		updateBuilder = updateBuilder.Set("updated_by", params.UpdatedBy)
+
+	if params.UpdatedBy != nil {
+		updateBuilder = updateBuilder.Set("updated_by", *params.UpdatedBy)
 	}
 
 	return updateBuilder
 }
 
-// update ...
-func (r rolefeatureImpl) update(ctx context.Context, params arguments.RoleFeatureUpdateArgs) (models.RoleFeature, error) {
+// Update ...
+func (r repositoryImpl) Update(ctx context.Context, params arguments.RoleFeatureUpdateArgs) (models.RoleFeature, error) {
 	var (
 		rolefeature   = models.RoleFeature{}
-		updateBuilder = sq.Update("role_feature").Where(sq.Eq{"id": params.ID})
+		updateBuilder = sq.Update("role_feature").Where(sq.Eq{"id": *params.ID})
 	)
 	updateBuilderWithArgs := setArgsToUpdateBuilder(updateBuilder, params)
 
@@ -227,20 +268,20 @@ func (r rolefeatureImpl) update(ctx context.Context, params arguments.RoleFeatur
 		return rolefeature, err
 	}
 	if rowAffected == 0 {
-		return rolefeature, fmt.Errorf("not found record by id %d", params.ID)
+		return rolefeature, fmt.Errorf("error when update record id %d", *params.ID)
 	}
 	rolefeature = models.RoleFeature{
-		ID:        params.ID,
-		RoleID:    params.RoleID,
-		FeatureID: params.FeatureID,
-		CreatedBy: params.CreatedBy,
-		UpdatedBy: params.UpdatedBy,
+		ID:           *params.ID,
+		RoleID:       *params.RoleID,
+		PermissionID: *params.PermissionID,
+		CreatedBy:    *params.CreatedBy,
+		UpdatedBy:    *params.UpdatedBy,
 	}
 	return rolefeature, nil
 }
 
-// delete ...
-func (r rolefeatureImpl) delete(ctx context.Context, params arguments.RoleFeatureDeleteArgs) (int64, error) {
+// Delete ...
+func (r repositoryImpl) Delete(ctx context.Context, params arguments.RoleFeatureDeleteArgs) (int64, error) {
 	var (
 		id            int64
 		deleteBuilder = sq.Delete("role_feature").Where(sq.Eq{"id": params.ID})
@@ -263,3 +304,5 @@ func (r rolefeatureImpl) delete(ctx context.Context, params arguments.RoleFeatur
 	}
 	return params.ID, nil
 }
+
+//go:generate mockery -name=iDatabase -output=mocks -case=underscore

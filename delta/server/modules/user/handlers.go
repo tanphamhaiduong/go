@@ -9,15 +9,13 @@ type iRepository interface {
 
 // HandlerImpl ...
 type HandlerImpl struct {
-	db          *sql.DB
-	iRepository iRepository
+	user iRepository
 }
 
 // NewHandler ...
 func NewHandler(db *sql.DB) HandlerImpl {
-	iRepository := newRepository(db)
+	user := newRepository(db)
 	return HandlerImpl{
-		db:          db,
-		iRepository: iRepository,
+		user: user,
 	}
 }

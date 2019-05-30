@@ -1,14 +1,21 @@
 package company
 
-import "database/sql"
+import (
+	"context"
+	"database/sql"
+)
 
-type companyImpl struct {
-	db *sql.DB
+type iDatabase interface {
+	PrepareContext(ctx context.Context, query string) (*sql.Stmt, error)
+}
+
+type repositoryImpl struct {
+	db iDatabase
 }
 
 // newRepository ...
-func newRepository(db *sql.DB) companyImpl {
-	return companyImpl{
+func newRepository(db *sql.DB) repositoryImpl {
+	return repositoryImpl{
 		db: db,
 	}
 }

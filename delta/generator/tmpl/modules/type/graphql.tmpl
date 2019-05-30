@@ -5,3 +5,16 @@ package {{ $name }}
 type IHandler interface {
 	ICoreHandler
 }
+
+// ResolverImpl ...
+type ResolverImpl struct {
+	{{ $name }} IHandler
+}
+
+// NewResolver ...
+func NewResolver(db *sql.DB) ResolverImpl {
+	{{ $name }} := NewHandler(db)
+	return ResolverImpl{
+		{{ $name }}: {{ $name }},
+	}
+}

@@ -1,5 +1,4 @@
 // @generated
-
 package rolefeature
 
 import (
@@ -12,24 +11,37 @@ import (
 
 // iCoreRepository ...
 type iCoreRepository interface {
-	getByID(ctx context.Context, params arguments.RoleFeatureGetByIDArgs) (models.RoleFeature, error)
-	list(ctx context.Context, params arguments.RoleFeatureListArgs) ([]models.RoleFeature, error)
-	count(ctx context.Context, params arguments.RoleFeatureCountArgs) (int64, error)
-	insert(ctx context.Context, params arguments.RoleFeatureInsertArgs) (models.RoleFeature, error)
-	update(ctx context.Context, params arguments.RoleFeatureUpdateArgs) (models.RoleFeature, error)
-	delete(ctx context.Context, params arguments.RoleFeatureDeleteArgs) (int64, error)
+	GetByID(ctx context.Context, params arguments.RoleFeatureGetByIDArgs) (models.RoleFeature, error)
+	GetByIDs(ctx context.Context, params arguments.RoleFeatureGetByIDsArgs) ([]models.RoleFeature, error)
+	List(ctx context.Context, params arguments.RoleFeatureListArgs) ([]models.RoleFeature, error)
+	Count(ctx context.Context, params arguments.RoleFeatureCountArgs) (int64, error)
+	Insert(ctx context.Context, params arguments.RoleFeatureInsertArgs) (models.RoleFeature, error)
+	Update(ctx context.Context, params arguments.RoleFeatureUpdateArgs) (models.RoleFeature, error)
+	Delete(ctx context.Context, params arguments.RoleFeatureDeleteArgs) (int64, error)
 }
 
 // GetByID ...
 func (h HandlerImpl) GetByID(ctx context.Context, params arguments.RoleFeatureGetByIDArgs) (models.RoleFeature, error) {
 	var (
-		repository = models.RoleFeature{}
+		rolefeature = models.RoleFeature{}
 	)
-	repository, err := h.iRepository.getByID(ctx, params)
+	rolefeature, err := h.rolefeature.GetByID(ctx, params)
 	if err != nil {
-		return repository, err
+		return rolefeature, err
 	}
-	return repository, nil
+	return rolefeature, nil
+}
+
+// GetByIDs ...
+func (h HandlerImpl) GetByIDs(ctx context.Context, params arguments.RoleFeatureGetByIDsArgs) ([]models.RoleFeature, error) {
+	var (
+		rolefeatures = []models.RoleFeature{}
+	)
+	rolefeatures, err := h.rolefeature.GetByIDs(ctx, params)
+	if err != nil {
+		return rolefeatures, err
+	}
+	return rolefeatures, nil
 }
 
 // Count ...
@@ -40,7 +52,7 @@ func (h HandlerImpl) Count(ctx context.Context, params arguments.RoleFeatureCoun
 	if err := validator.Struct(params); err != nil {
 		return count, err
 	}
-	count, err := h.iRepository.count(ctx, params)
+	count, err := h.rolefeature.Count(ctx, params)
 	if err != nil {
 		return count, err
 	}
@@ -50,46 +62,46 @@ func (h HandlerImpl) Count(ctx context.Context, params arguments.RoleFeatureCoun
 // List ...
 func (h HandlerImpl) List(ctx context.Context, params arguments.RoleFeatureListArgs) ([]models.RoleFeature, error) {
 	var (
-		repositories = []models.RoleFeature{}
+		rolefeatures = []models.RoleFeature{}
 	)
 	if err := validator.Struct(params); err != nil {
-		return repositories, err
+		return rolefeatures, err
 	}
-	repositories, err := h.iRepository.list(ctx, params)
+	rolefeatures, err := h.rolefeature.List(ctx, params)
 	if err != nil {
-		return repositories, err
+		return rolefeatures, err
 	}
-	return repositories, nil
+	return rolefeatures, nil
 }
 
 // Insert ...
 func (h HandlerImpl) Insert(ctx context.Context, params arguments.RoleFeatureInsertArgs) (models.RoleFeature, error) {
 	var (
-		repository = models.RoleFeature{}
+		rolefeature = models.RoleFeature{}
 	)
 	if err := validator.Struct(params); err != nil {
-		return repository, err
+		return rolefeature, err
 	}
-	repository, err := h.iRepository.insert(ctx, params)
+	rolefeature, err := h.rolefeature.Insert(ctx, params)
 	if err != nil {
-		return repository, err
+		return rolefeature, err
 	}
-	return repository, nil
+	return rolefeature, nil
 }
 
 // Update ...
 func (h HandlerImpl) Update(ctx context.Context, params arguments.RoleFeatureUpdateArgs) (models.RoleFeature, error) {
 	var (
-		repository = models.RoleFeature{}
+		rolefeature = models.RoleFeature{}
 	)
 	if err := validator.Struct(params); err != nil {
-		return repository, err
+		return rolefeature, err
 	}
-	repository, err := h.iRepository.update(ctx, params)
+	rolefeature, err := h.rolefeature.Update(ctx, params)
 	if err != nil {
-		return repository, err
+		return rolefeature, err
 	}
-	return repository, nil
+	return rolefeature, nil
 }
 
 // Delete ...
@@ -100,7 +112,7 @@ func (h HandlerImpl) Delete(ctx context.Context, params arguments.RoleFeatureDel
 	if err := validator.Struct(params); err != nil {
 		return id, err
 	}
-	id, err := h.iRepository.delete(ctx, params)
+	id, err := h.rolefeature.Delete(ctx, params)
 	if err != nil {
 		return id, err
 	}

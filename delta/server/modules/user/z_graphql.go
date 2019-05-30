@@ -1,10 +1,8 @@
 // @generated
-
 package user
 
 import (
 	"context"
-	"database/sql"
 
 	"github.com/graphql-go/graphql"
 	"github.com/tanphamhaiduong/go/delta/server/arguments"
@@ -20,27 +18,31 @@ var (
 		Fields: graphql.Fields{
 			"id": &graphql.Field{
 				Type:        graphql.NewNonNull(graphql.Int),
-				Description: "This is role id",
+				Description: "This is user's id",
 			},
 			"email": &graphql.Field{
 				Type:        graphql.NewNonNull(graphql.String),
-				Description: "This is role url",
+				Description: "This is user's email",
+			},
+			"name": &graphql.Field{
+				Type:        graphql.NewNonNull(graphql.String),
+				Description: "This is user's name",
 			},
 			"companyId": &graphql.Field{
 				Type:        graphql.NewNonNull(graphql.Int),
-				Description: "This is role companyId",
+				Description: "This is user's companyId",
 			},
 			"status": &graphql.Field{
 				Type:        graphql.NewNonNull(graphql.String),
-				Description: "This is role active",
+				Description: "This is user's status",
 			},
 			"createdBy": &graphql.Field{
 				Type:        graphql.String,
-				Description: "This is role createdBy",
+				Description: "This is user's createdBy",
 			},
 			"updatedBy": &graphql.Field{
 				Type:        graphql.String,
-				Description: "This is role updatedBy",
+				Description: "This is user's updatedBy",
 			},
 		},
 	})
@@ -56,27 +58,31 @@ var (
 	ListTypeArgs = graphql.FieldConfigArgument{
 		"id": &graphql.ArgumentConfig{
 			Type:        graphql.Int,
-			Description: "This is role id",
+			Description: "This is user's id",
 		},
 		"email": &graphql.ArgumentConfig{
 			Type:        graphql.String,
-			Description: "This is role url",
+			Description: "This is user's email",
+		},
+		"name": &graphql.ArgumentConfig{
+			Type:        graphql.String,
+			Description: "This is user's name",
 		},
 		"companyId": &graphql.ArgumentConfig{
 			Type:        graphql.Int,
-			Description: "This is role companyId",
+			Description: "This is user's companyId",
 		},
 		"status": &graphql.ArgumentConfig{
 			Type:        graphql.String,
-			Description: "This is role active",
+			Description: "This is user's status",
 		},
 		"createdBy": &graphql.ArgumentConfig{
 			Type:        graphql.String,
-			Description: "This is role createdBy",
+			Description: "This is user's createdBy",
 		},
 		"updatedBy": &graphql.ArgumentConfig{
 			Type:        graphql.String,
-			Description: "This is role updatedBy",
+			Description: "This is user's updatedBy",
 		},
 		"page": &graphql.ArgumentConfig{
 			Type:        graphql.NewNonNull(graphql.Int),
@@ -93,23 +99,27 @@ var (
 	InsertTypeArgs = graphql.FieldConfigArgument{
 		"email": &graphql.ArgumentConfig{
 			Type:        graphql.NewNonNull(graphql.String),
-			Description: "This is role url",
+			Description: "This is user's email",
+		},
+		"name": &graphql.ArgumentConfig{
+			Type:        graphql.NewNonNull(graphql.String),
+			Description: "This is user's name",
 		},
 		"companyId": &graphql.ArgumentConfig{
 			Type:        graphql.NewNonNull(graphql.Int),
-			Description: "This is role companyId",
+			Description: "This is user's companyId",
 		},
 		"status": &graphql.ArgumentConfig{
 			Type:        graphql.NewNonNull(graphql.String),
-			Description: "This is role active",
+			Description: "This is user's status",
 		},
 		"createdBy": &graphql.ArgumentConfig{
 			Type:        graphql.String,
-			Description: "This is role createdBy",
+			Description: "This is user's createdBy",
 		},
 		"updatedBy": &graphql.ArgumentConfig{
 			Type:        graphql.String,
-			Description: "This is role updatedBy",
+			Description: "This is user's updatedBy",
 		},
 	}
 
@@ -120,23 +130,27 @@ var (
 		},
 		"email": &graphql.ArgumentConfig{
 			Type:        graphql.String,
-			Description: "This is role url",
+			Description: "This is user's email",
+		},
+		"name": &graphql.ArgumentConfig{
+			Type:        graphql.String,
+			Description: "This is user's name",
 		},
 		"companyId": &graphql.ArgumentConfig{
 			Type:        graphql.Int,
-			Description: "This is role companyId",
+			Description: "This is user's companyId",
 		},
 		"status": &graphql.ArgumentConfig{
 			Type:        graphql.String,
-			Description: "This is role active",
+			Description: "This is user's status",
 		},
 		"createdBy": &graphql.ArgumentConfig{
 			Type:        graphql.String,
-			Description: "This is role createdBy",
+			Description: "This is user's createdBy",
 		},
 		"updatedBy": &graphql.ArgumentConfig{
 			Type:        graphql.String,
-			Description: "This is role updatedBy",
+			Description: "This is user's updatedBy",
 		},
 	}
 
@@ -151,25 +165,12 @@ var (
 // ICoreHandler ...
 type ICoreHandler interface {
 	GetByID(ctx context.Context, params arguments.UserGetByIDArgs) (models.User, error)
+	GetByIDs(ctx context.Context, params arguments.UserGetByIDsArgs) ([]models.User, error)
 	Count(ctx context.Context, params arguments.UserCountArgs) (int64, error)
 	List(ctx context.Context, params arguments.UserListArgs) ([]models.User, error)
 	Insert(ctx context.Context, params arguments.UserInsertArgs) (models.User, error)
 	Update(ctx context.Context, params arguments.UserUpdateArgs) (models.User, error)
 	Delete(ctx context.Context, params arguments.UserDeleteArgs) (int64, error)
-}
-
-// ResolverImpl ...
-type ResolverImpl struct {
-	db      *sql.DB
-	handler IHandler
-}
-
-// NewResolver ...
-func NewResolver(db *sql.DB) ResolverImpl {
-	return ResolverImpl{
-		db:      db,
-		handler: NewHandler(db),
-	}
 }
 
 // ForwardParams ...
@@ -184,7 +185,7 @@ func (r ResolverImpl) GetByID(params graphql.ResolveParams) (interface{}, error)
 	if err := utils.Parse(params.Args, &args); err != nil {
 		return nil, err
 	}
-	response, err := r.handler.GetByID(params.Context, args)
+	response, err := r.user.GetByID(params.Context, args)
 	if err != nil {
 		return nil, err
 	}
@@ -199,7 +200,7 @@ func (r ResolverImpl) Count(params graphql.ResolveParams) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	response, err := r.handler.Count(params.Context, args)
+	response, err := r.user.Count(params.Context, args)
 	if err != nil {
 		return nil, err
 	}
@@ -214,7 +215,7 @@ func (r ResolverImpl) List(params graphql.ResolveParams) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	response, err := r.handler.List(params.Context, args)
+	response, err := r.user.List(params.Context, args)
 	if err != nil {
 		return nil, err
 	}
@@ -229,7 +230,7 @@ func (r ResolverImpl) Insert(params graphql.ResolveParams) (interface{}, error) 
 	if err != nil {
 		return nil, err
 	}
-	response, err := r.handler.Insert(params.Context, args)
+	response, err := r.user.Insert(params.Context, args)
 	if err != nil {
 		return nil, err
 	}
@@ -244,7 +245,7 @@ func (r ResolverImpl) Update(params graphql.ResolveParams) (interface{}, error) 
 	if err != nil {
 		return nil, err
 	}
-	response, err := r.handler.Update(params.Context, args)
+	response, err := r.user.Update(params.Context, args)
 	if err != nil {
 		return nil, err
 	}
@@ -259,7 +260,7 @@ func (r ResolverImpl) Delete(params graphql.ResolveParams) (interface{}, error) 
 	if err != nil {
 		return nil, err
 	}
-	response, err := r.handler.Delete(params.Context, args)
+	response, err := r.user.Delete(params.Context, args)
 	if err != nil {
 		return nil, err
 	}

@@ -1,10 +1,8 @@
 // @generated
-
 package feature
 
 import (
 	"context"
-	"database/sql"
 
 	"github.com/graphql-go/graphql"
 	"github.com/tanphamhaiduong/go/delta/server/arguments"
@@ -20,31 +18,31 @@ var (
 		Fields: graphql.Fields{
 			"id": &graphql.Field{
 				Type:        graphql.NewNonNull(graphql.Int),
-				Description: "This is feature id",
+				Description: "This is feature's id",
 			},
 			"url": &graphql.Field{
 				Type:        graphql.NewNonNull(graphql.String),
-				Description: "This is feature url",
+				Description: "This is feature's url",
 			},
 			"meta": &graphql.Field{
 				Type:        graphql.NewNonNull(graphql.String),
-				Description: "This is feature meta",
+				Description: "This is feature's meta",
 			},
 			"companyId": &graphql.Field{
 				Type:        graphql.NewNonNull(graphql.Int),
-				Description: "This is feature companyId",
+				Description: "This is feature's companyId",
 			},
 			"status": &graphql.Field{
 				Type:        graphql.NewNonNull(graphql.String),
-				Description: "This is feature active",
+				Description: "This is feature's active",
 			},
 			"createdBy": &graphql.Field{
 				Type:        graphql.String,
-				Description: "This is feature createdBy",
+				Description: "This is feature's createdBy",
 			},
 			"updatedBy": &graphql.Field{
 				Type:        graphql.String,
-				Description: "This is feature updatedBy",
+				Description: "This is feature's updatedBy",
 			},
 		},
 	})
@@ -60,31 +58,31 @@ var (
 	ListTypeArgs = graphql.FieldConfigArgument{
 		"id": &graphql.ArgumentConfig{
 			Type:        graphql.Int,
-			Description: "This is feature id",
+			Description: "This is feature's id",
 		},
 		"url": &graphql.ArgumentConfig{
 			Type:        graphql.String,
-			Description: "This is feature url",
+			Description: "This is feature's url",
 		},
 		"meta": &graphql.ArgumentConfig{
 			Type:        graphql.String,
-			Description: "This is feature meta",
+			Description: "This is feature's meta",
 		},
 		"companyId": &graphql.ArgumentConfig{
 			Type:        graphql.Int,
-			Description: "This is feature companyId",
+			Description: "This is feature's companyId",
 		},
 		"status": &graphql.ArgumentConfig{
 			Type:        graphql.String,
-			Description: "This is feature active",
+			Description: "This is feature's active",
 		},
 		"createdBy": &graphql.ArgumentConfig{
 			Type:        graphql.String,
-			Description: "This is feature createdBy",
+			Description: "This is feature's createdBy",
 		},
 		"updatedBy": &graphql.ArgumentConfig{
 			Type:        graphql.String,
-			Description: "This is feature updatedBy",
+			Description: "This is feature's updatedBy",
 		},
 		"page": &graphql.ArgumentConfig{
 			Type:        graphql.NewNonNull(graphql.Int),
@@ -101,27 +99,27 @@ var (
 	InsertTypeArgs = graphql.FieldConfigArgument{
 		"url": &graphql.ArgumentConfig{
 			Type:        graphql.NewNonNull(graphql.String),
-			Description: "This is feature url",
+			Description: "This is feature's url",
 		},
 		"meta": &graphql.ArgumentConfig{
 			Type:        graphql.NewNonNull(graphql.String),
-			Description: "This is feature meta",
+			Description: "This is feature's meta",
 		},
 		"companyId": &graphql.ArgumentConfig{
 			Type:        graphql.NewNonNull(graphql.Int),
-			Description: "This is feature companyId",
+			Description: "This is feature's companyId",
 		},
 		"status": &graphql.ArgumentConfig{
 			Type:        graphql.NewNonNull(graphql.String),
-			Description: "This is feature active",
+			Description: "This is feature's active",
 		},
 		"createdBy": &graphql.ArgumentConfig{
 			Type:        graphql.String,
-			Description: "This is feature createdBy",
+			Description: "This is feature's createdBy",
 		},
 		"updatedBy": &graphql.ArgumentConfig{
 			Type:        graphql.String,
-			Description: "This is feature updatedBy",
+			Description: "This is feature's updatedBy",
 		},
 	}
 
@@ -132,27 +130,27 @@ var (
 		},
 		"url": &graphql.ArgumentConfig{
 			Type:        graphql.String,
-			Description: "This is feature url",
+			Description: "This is feature's url",
 		},
 		"meta": &graphql.ArgumentConfig{
 			Type:        graphql.String,
-			Description: "This is feature meta",
+			Description: "This is feature's meta",
 		},
 		"companyId": &graphql.ArgumentConfig{
 			Type:        graphql.Int,
-			Description: "This is feature companyId",
+			Description: "This is feature's companyId",
 		},
 		"status": &graphql.ArgumentConfig{
 			Type:        graphql.String,
-			Description: "This is feature active",
+			Description: "This is feature's active",
 		},
 		"createdBy": &graphql.ArgumentConfig{
 			Type:        graphql.String,
-			Description: "This is feature createdBy",
+			Description: "This is feature's createdBy",
 		},
 		"updatedBy": &graphql.ArgumentConfig{
 			Type:        graphql.String,
-			Description: "This is feature updatedBy",
+			Description: "This is feature's updatedBy",
 		},
 	}
 
@@ -167,25 +165,12 @@ var (
 // ICoreHandler ...
 type ICoreHandler interface {
 	GetByID(ctx context.Context, params arguments.FeatureGetByIDArgs) (models.Feature, error)
+	GetByIDs(ctx context.Context, params arguments.FeatureGetByIDsArgs) ([]models.Feature, error)
 	Count(ctx context.Context, params arguments.FeatureCountArgs) (int64, error)
 	List(ctx context.Context, params arguments.FeatureListArgs) ([]models.Feature, error)
 	Insert(ctx context.Context, params arguments.FeatureInsertArgs) (models.Feature, error)
 	Update(ctx context.Context, params arguments.FeatureUpdateArgs) (models.Feature, error)
 	Delete(ctx context.Context, params arguments.FeatureDeleteArgs) (int64, error)
-}
-
-// ResolverImpl ...
-type ResolverImpl struct {
-	db      *sql.DB
-	handler IHandler
-}
-
-// NewResolver ...
-func NewResolver(db *sql.DB) ResolverImpl {
-	return ResolverImpl{
-		db:      db,
-		handler: NewHandler(db),
-	}
 }
 
 // ForwardParams ...
@@ -200,7 +185,7 @@ func (r ResolverImpl) GetByID(params graphql.ResolveParams) (interface{}, error)
 	if err := utils.Parse(params.Args, &args); err != nil {
 		return nil, err
 	}
-	response, err := r.handler.GetByID(params.Context, args)
+	response, err := r.feature.GetByID(params.Context, args)
 	if err != nil {
 		return nil, err
 	}
@@ -215,7 +200,7 @@ func (r ResolverImpl) Count(params graphql.ResolveParams) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	response, err := r.handler.Count(params.Context, args)
+	response, err := r.feature.Count(params.Context, args)
 	if err != nil {
 		return nil, err
 	}
@@ -230,7 +215,7 @@ func (r ResolverImpl) List(params graphql.ResolveParams) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	response, err := r.handler.List(params.Context, args)
+	response, err := r.feature.List(params.Context, args)
 	if err != nil {
 		return nil, err
 	}
@@ -245,7 +230,7 @@ func (r ResolverImpl) Insert(params graphql.ResolveParams) (interface{}, error) 
 	if err != nil {
 		return nil, err
 	}
-	response, err := r.handler.Insert(params.Context, args)
+	response, err := r.feature.Insert(params.Context, args)
 	if err != nil {
 		return nil, err
 	}
@@ -260,7 +245,7 @@ func (r ResolverImpl) Update(params graphql.ResolveParams) (interface{}, error) 
 	if err != nil {
 		return nil, err
 	}
-	response, err := r.handler.Update(params.Context, args)
+	response, err := r.feature.Update(params.Context, args)
 	if err != nil {
 		return nil, err
 	}
@@ -275,7 +260,7 @@ func (r ResolverImpl) Delete(params graphql.ResolveParams) (interface{}, error) 
 	if err != nil {
 		return nil, err
 	}
-	response, err := r.handler.Delete(params.Context, args)
+	response, err := r.feature.Delete(params.Context, args)
 	if err != nil {
 		return nil, err
 	}

@@ -1,5 +1,4 @@
 // @generated
-
 package feature
 
 import (
@@ -12,8 +11,8 @@ import (
 	"github.com/tanphamhaiduong/go/delta/server/utils"
 )
 
-// getByID ...
-func (r featureImpl) getByID(ctx context.Context, params arguments.FeatureGetByIDArgs) (models.Feature, error) {
+// GetByID ...
+func (r repositoryImpl) GetByID(ctx context.Context, params arguments.FeatureGetByIDArgs) (models.Feature, error) {
 	var (
 		feature       = models.Feature{}
 		selectBuilder = sq.Select("*").From("feature").Where(sq.Eq{"id": params.ID})
@@ -37,6 +36,43 @@ func (r featureImpl) getByID(ctx context.Context, params arguments.FeatureGetByI
 		&feature.UpdatedBy,
 	)
 	return feature, nil
+}
+
+// GetByID ...
+func (r repositoryImpl) GetByIDs(ctx context.Context, params arguments.FeatureGetByIDsArgs) ([]models.Feature, error) {
+	var (
+		features      = []models.Feature{}
+		selectBuilder = sq.Select("*").From("feature").Where(sq.Eq{"id": params.IDs})
+	)
+	sql, args, err := selectBuilder.ToSql()
+	if err != nil {
+		return features, err
+	}
+	stmt, err := r.db.PrepareContext(ctx, sql)
+	if err != nil {
+		return features, err
+	}
+	rows, err := stmt.QueryContext(ctx, args...)
+	if err != nil {
+		return features, err
+	}
+	for rows.Next() {
+		feature := models.Feature{}
+		err := rows.Scan(
+			&feature.ID,
+			&feature.URL,
+			&feature.Meta,
+			&feature.CompanyID,
+			&feature.Status,
+			&feature.CreatedBy,
+			&feature.UpdatedBy,
+		)
+		if err != nil {
+			return features, err
+		}
+		features = append(features, feature)
+	}
+	return features, nil
 }
 
 // setArgsToListSelectBuilder ...
@@ -72,8 +108,8 @@ func setArgsToListSelectBuilder(selectBuilder sq.SelectBuilder, params arguments
 	return selectBuilder
 }
 
-// list ...
-func (r featureImpl) list(ctx context.Context, params arguments.FeatureListArgs) ([]models.Feature, error) {
+// List ...
+func (r repositoryImpl) List(ctx context.Context, params arguments.FeatureListArgs) ([]models.Feature, error) {
 	var (
 		features      = []models.Feature{}
 		selectBuilder = sq.Select("*").From("feature")
@@ -136,8 +172,8 @@ func setArgsToCountSelectBuilder(selectBuilder sq.SelectBuilder, params argument
 	return selectBuilder
 }
 
-// count ...
-func (r featureImpl) count(ctx context.Context, params arguments.FeatureCountArgs) (int64, error) {
+// Count ...
+func (r repositoryImpl) Count(ctx context.Context, params arguments.FeatureCountArgs) (int64, error) {
 	var (
 		count         int64
 		selectBuilder = sq.Select("COUNT(id)").From("feature")
@@ -159,8 +195,8 @@ func (r featureImpl) count(ctx context.Context, params arguments.FeatureCountArg
 	return count, nil
 }
 
-// insert ...
-func (r featureImpl) insert(ctx context.Context, params arguments.FeatureInsertArgs) (models.Feature, error) {
+// Insert ...
+func (r repositoryImpl) Insert(ctx context.Context, params arguments.FeatureInsertArgs) (models.Feature, error) {
 	var (
 		feature       = models.Feature{}
 		insertBuilder = sq.Insert("feature").Columns(
@@ -196,11 +232,17 @@ func (r featureImpl) insert(ctx context.Context, params arguments.FeatureInsertA
 		return feature, err
 	}
 	feature = models.Feature{
-		ID: id, URL: params.URL,
-		Meta:      params.Meta,
+		ID:  id,
+		URL: params.URL,
+
+		Meta: params.Meta,
+
 		CompanyID: params.CompanyID,
-		Status:    params.Status,
+
+		Status: params.Status,
+
 		CreatedBy: params.CreatedBy,
+
 		UpdatedBy: params.UpdatedBy,
 	}
 	return feature, nil
@@ -208,33 +250,38 @@ func (r featureImpl) insert(ctx context.Context, params arguments.FeatureInsertA
 
 // setArgsToUpdateBuilder ...
 func setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, params arguments.FeatureUpdateArgs) sq.UpdateBuilder {
-	if params.URL != "" {
-		updateBuilder = updateBuilder.Set("url", params.URL)
+	if params.URL != nil {
+		updateBuilder = updateBuilder.Set("url", *params.URL)
 	}
-	if params.Meta != "" {
-		updateBuilder = updateBuilder.Set("meta", params.Meta)
+
+	if params.Meta != nil {
+		updateBuilder = updateBuilder.Set("meta", *params.Meta)
 	}
-	if params.CompanyID != 0 {
-		updateBuilder = updateBuilder.Set("company_id", params.CompanyID)
+
+	if params.CompanyID != nil {
+		updateBuilder = updateBuilder.Set("company_id", *params.CompanyID)
 	}
-	if params.Status != "" {
-		updateBuilder = updateBuilder.Set("status", params.Status)
+
+	if params.Status != nil {
+		updateBuilder = updateBuilder.Set("status", *params.Status)
 	}
-	if params.CreatedBy != "" {
-		updateBuilder = updateBuilder.Set("created_by", params.CreatedBy)
+
+	if params.CreatedBy != nil {
+		updateBuilder = updateBuilder.Set("created_by", *params.CreatedBy)
 	}
-	if params.UpdatedBy != "" {
-		updateBuilder = updateBuilder.Set("updated_by", params.UpdatedBy)
+
+	if params.UpdatedBy != nil {
+		updateBuilder = updateBuilder.Set("updated_by", *params.UpdatedBy)
 	}
 
 	return updateBuilder
 }
 
-// update ...
-func (r featureImpl) update(ctx context.Context, params arguments.FeatureUpdateArgs) (models.Feature, error) {
+// Update ...
+func (r repositoryImpl) Update(ctx context.Context, params arguments.FeatureUpdateArgs) (models.Feature, error) {
 	var (
 		feature       = models.Feature{}
-		updateBuilder = sq.Update("feature").Where(sq.Eq{"id": params.ID})
+		updateBuilder = sq.Update("feature").Where(sq.Eq{"id": *params.ID})
 	)
 	updateBuilderWithArgs := setArgsToUpdateBuilder(updateBuilder, params)
 
@@ -255,22 +302,22 @@ func (r featureImpl) update(ctx context.Context, params arguments.FeatureUpdateA
 		return feature, err
 	}
 	if rowAffected == 0 {
-		return feature, fmt.Errorf("not found record by id %d", params.ID)
+		return feature, fmt.Errorf("error when update record id %d", *params.ID)
 	}
 	feature = models.Feature{
-		ID:        params.ID,
-		URL:       params.URL,
-		Meta:      params.Meta,
-		CompanyID: params.CompanyID,
-		Status:    params.Status,
-		CreatedBy: params.CreatedBy,
-		UpdatedBy: params.UpdatedBy,
+		ID:        *params.ID,
+		URL:       *params.URL,
+		Meta:      *params.Meta,
+		CompanyID: *params.CompanyID,
+		Status:    *params.Status,
+		CreatedBy: *params.CreatedBy,
+		UpdatedBy: *params.UpdatedBy,
 	}
 	return feature, nil
 }
 
-// delete ...
-func (r featureImpl) delete(ctx context.Context, params arguments.FeatureDeleteArgs) (int64, error) {
+// Delete ...
+func (r repositoryImpl) Delete(ctx context.Context, params arguments.FeatureDeleteArgs) (int64, error) {
 	var (
 		id            int64
 		deleteBuilder = sq.Delete("feature").Where(sq.Eq{"id": params.ID})
@@ -293,3 +340,5 @@ func (r featureImpl) delete(ctx context.Context, params arguments.FeatureDeleteA
 	}
 	return params.ID, nil
 }
+
+//go:generate mockery -name=iDatabase -output=mocks -case=underscore
