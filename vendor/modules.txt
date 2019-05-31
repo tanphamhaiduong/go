@@ -1,3 +1,7 @@
+# github.com/Masterminds/squirrel v1.1.0
+github.com/Masterminds/squirrel
+# github.com/davecgh/go-spew v1.1.1
+github.com/davecgh/go-spew/spew
 # github.com/go-playground/locales v0.12.1
 github.com/go-playground/locales
 github.com/go-playground/locales/currency
@@ -5,6 +9,8 @@ github.com/go-playground/locales/currency
 github.com/go-playground/universal-translator
 # github.com/go-sql-driver/mysql v1.4.1
 github.com/go-sql-driver/mysql
+# github.com/gorilla/mux v1.7.2
+github.com/gorilla/mux
 # github.com/graphql-go/graphql v0.7.8
 github.com/graphql-go/graphql
 github.com/graphql-go/graphql/gqlerrors
@@ -23,10 +29,21 @@ github.com/graphql-go/handler
 github.com/iancoleman/strcase
 # github.com/jinzhu/inflection v0.0.0-20180308033659-04140366298a
 github.com/jinzhu/inflection
+# github.com/lann/builder v0.0.0-20180802200727-47ae307949d0
+github.com/lann/builder
+# github.com/lann/ps v0.0.0-20150810152359-62de8c46ede0
+github.com/lann/ps
 # github.com/leodido/go-urn v1.1.0
 github.com/leodido/go-urn
 # github.com/mitchellh/mapstructure v1.1.2
 github.com/mitchellh/mapstructure
+# github.com/pmezard/go-difflib v1.0.0
+github.com/pmezard/go-difflib/difflib
+# github.com/stretchr/objx v0.2.0
+github.com/stretchr/objx
+# github.com/stretchr/testify v1.3.0
+github.com/stretchr/testify/mock
+github.com/stretchr/testify/assert
 # google.golang.org/appengine v1.6.0
 google.golang.org/appengine/cloudsql
 # gopkg.in/go-playground/validator.v9 v9.29.0
