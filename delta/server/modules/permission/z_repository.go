@@ -51,6 +51,7 @@ func (r repositoryImpl) GetByIDs(ctx context.Context, params arguments.Permissio
 		return permissions, err
 	}
 	rows, err := stmt.QueryContext(ctx, args...)
+	defer rows.Close()
 	if err != nil {
 		return permissions, err
 	}
@@ -114,6 +115,7 @@ func (r repositoryImpl) List(ctx context.Context, params arguments.PermissionLis
 		return permissions, err
 	}
 	rows, err := stmt.QueryContext(ctx, args...)
+	defer rows.Close()
 	if err != nil {
 		return permissions, err
 	}

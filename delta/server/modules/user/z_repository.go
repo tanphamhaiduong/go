@@ -53,6 +53,7 @@ func (r repositoryImpl) GetByIDs(ctx context.Context, params arguments.UserGetBy
 		return users, err
 	}
 	rows, err := stmt.QueryContext(ctx, args...)
+	defer rows.Close()
 	if err != nil {
 		return users, err
 	}
@@ -124,6 +125,7 @@ func (r repositoryImpl) List(ctx context.Context, params arguments.UserListArgs)
 		return users, err
 	}
 	rows, err := stmt.QueryContext(ctx, args...)
+	defer rows.Close()
 	if err != nil {
 		return users, err
 	}

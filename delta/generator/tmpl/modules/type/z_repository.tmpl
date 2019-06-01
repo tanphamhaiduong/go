@@ -53,6 +53,7 @@ func (r repositoryImpl) GetByIDs(ctx context.Context, params arguments.{{ $Name 
 		return {{ $name | ToPlural }}, err
 	}
 	rows, err := stmt.QueryContext(ctx, args...)
+	defer rows.Close()
 	if err != nil {
 		return {{ $name | ToPlural }}, err
 	}
@@ -104,6 +105,7 @@ func (r repositoryImpl) List(ctx context.Context, params arguments.{{- $Name }}L
 		return {{ $name | ToPlural }}, err
 	}
 	rows, err := stmt.QueryContext(ctx, args...)
+	defer rows.Close()
 	if err != nil {
 		return {{ $name | ToPlural }}, err
 	}

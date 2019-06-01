@@ -52,6 +52,7 @@ func (r repositoryImpl) GetByIDs(ctx context.Context, params arguments.RoleGetBy
 		return roles, err
 	}
 	rows, err := stmt.QueryContext(ctx, args...)
+	defer rows.Close()
 	if err != nil {
 		return roles, err
 	}
@@ -119,6 +120,7 @@ func (r repositoryImpl) List(ctx context.Context, params arguments.RoleListArgs)
 		return roles, err
 	}
 	rows, err := stmt.QueryContext(ctx, args...)
+	defer rows.Close()
 	if err != nil {
 		return roles, err
 	}

@@ -53,6 +53,7 @@ func (r repositoryImpl) GetByIDs(ctx context.Context, params arguments.FeatureGe
 		return features, err
 	}
 	rows, err := stmt.QueryContext(ctx, args...)
+	defer rows.Close()
 	if err != nil {
 		return features, err
 	}
@@ -124,6 +125,7 @@ func (r repositoryImpl) List(ctx context.Context, params arguments.FeatureListAr
 		return features, err
 	}
 	rows, err := stmt.QueryContext(ctx, args...)
+	defer rows.Close()
 	if err != nil {
 		return features, err
 	}

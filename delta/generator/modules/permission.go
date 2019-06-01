@@ -39,7 +39,7 @@ var (
 				GraphQLType:        graphqltype.String,
 				GraphQLDescription: "This is permission's active",
 				GraphQLRequired:    true,
-				Validate:           `validate:"omitempty,oneof=active inactive`,
+				Validate:           `validate:"omitempty,oneof=active inactive"`,
 			},
 			{
 				Name:               "CreatedBy",

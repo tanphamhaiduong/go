@@ -57,7 +57,7 @@ var (
 				GraphQLType:        graphqltype.String,
 				GraphQLDescription: "This is user's status",
 				GraphQLRequired:    true,
-				Validate:           `validate:"omitempty,oneof=active inactive`,
+				Validate:           `validate:"omitempty,oneof=active inactive"`,
 			},
 			{
 				Name:               "CreatedBy",
