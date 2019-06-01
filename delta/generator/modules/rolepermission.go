@@ -12,7 +12,7 @@ func init() {
 
 var (
 	rolePermissionModule = Module{
-		Name: "RoleFeature",
+		Name: "RolePermission",
 		Fields: []Field{
 			{
 				Name:               "ID",

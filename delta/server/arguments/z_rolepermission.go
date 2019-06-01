@@ -1,18 +1,18 @@
 // @generated
 package arguments
 
-// RoleFeatureGetByIDArgs ...
-type RoleFeatureGetByIDArgs struct {
+// RolePermissionGetByIDArgs ...
+type RolePermissionGetByIDArgs struct {
 	ID int64 `graphql:"id" validate:"required,min=1"`
 }
 
-// RoleFeatureGetByIDsArgs ...
-type RoleFeatureGetByIDsArgs struct {
+// RolePermissionGetByIDsArgs ...
+type RolePermissionGetByIDsArgs struct {
 	IDs []int64 `graphql:"ids"`
 }
 
-// RoleFeatureCountArgs ...
-type RoleFeatureCountArgs struct {
+// RolePermissionCountArgs ...
+type RolePermissionCountArgs struct {
 	ID           int64  `graphql:"id" validate:"required,min=1"`
 	RoleID       int64  `graphql:"roleId" validate:"required,min=1"`
 	PermissionID int64  `graphql:"permissionId" validate:"required,min=1"`
@@ -20,8 +20,8 @@ type RoleFeatureCountArgs struct {
 	UpdatedBy    string `graphql:"updatedBy" validate:"omitempty`
 }
 
-// RoleFeatureListArgs ...
-type RoleFeatureListArgs struct {
+// RolePermissionListArgs ...
+type RolePermissionListArgs struct {
 	ID int64 `graphql:"id" validate:"omitempty,min=1"`
 
 	RoleID       int64  `graphql:"roleId" validate:"required,min=1"`
@@ -32,16 +32,16 @@ type RoleFeatureListArgs struct {
 	PageSize     int64  `graphql:"pageSize" validate:"required,min=1,max=40"`
 }
 
-// RoleFeatureInsertArgs ...
-type RoleFeatureInsertArgs struct {
+// RolePermissionInsertArgs ...
+type RolePermissionInsertArgs struct {
 	RoleID       int64  `graphql:"roleId" validate:"required,min=1"`
 	PermissionID int64  `graphql:"permissionId" validate:"required,min=1"`
 	CreatedBy    string `graphql:"createdBy" validate:"omitempty`
 	UpdatedBy    string `graphql:"updatedBy" validate:"omitempty`
 }
 
-// RoleFeatureUpdateArgs ...
-type RoleFeatureUpdateArgs struct {
+// RolePermissionUpdateArgs ...
+type RolePermissionUpdateArgs struct {
 	ID           *int64  `graphql:"id" validate:"required,min=1"`
 	RoleID       *int64  `graphql:"roleId" validate:"required,min=1"`
 	PermissionID *int64  `graphql:"permissionId" validate:"required,min=1"`
@@ -49,7 +49,7 @@ type RoleFeatureUpdateArgs struct {
 	UpdatedBy    *string `graphql:"updatedBy" validate:"omitempty`
 }
 
-// RoleFeatureDeleteArgs ...
-type RoleFeatureDeleteArgs struct {
+// RolePermissionDeleteArgs ...
+type RolePermissionDeleteArgs struct {
 	ID int64 `graphql:"id" validate:"required,min=1"`
 }

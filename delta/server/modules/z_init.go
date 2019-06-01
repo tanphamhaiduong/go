@@ -9,7 +9,7 @@ import (
 	"github.com/tanphamhaiduong/go/delta/server/modules/feature"
 	"github.com/tanphamhaiduong/go/delta/server/modules/permission"
 	"github.com/tanphamhaiduong/go/delta/server/modules/role"
-	"github.com/tanphamhaiduong/go/delta/server/modules/rolefeature"
+	"github.com/tanphamhaiduong/go/delta/server/modules/rolepermission"
 	"github.com/tanphamhaiduong/go/delta/server/modules/user"
 )
 
@@ -26,22 +26,22 @@ type IResolver interface {
 
 // Handler ...
 type Handler struct {
-	Company     ICompanyHandler
-	Feature     IFeatureHandler
-	Permission  IPermissionHandler
-	Role        IRoleHandler
-	RoleFeature IRoleFeatureHandler
-	User        IUserHandler
+	Company        ICompanyHandler
+	Feature        IFeatureHandler
+	Permission     IPermissionHandler
+	Role           IRoleHandler
+	RolePermission IRolePermissionHandler
+	User           IUserHandler
 }
 
 // Resolver ...
 type Resolver struct {
-	Company     ICompanyResolver
-	Feature     IFeatureResolver
-	Permission  IPermissionResolver
-	Role        IRoleResolver
-	RoleFeature IRoleFeatureResolver
-	User        IUserResolver
+	Company        ICompanyResolver
+	Feature        IFeatureResolver
+	Permission     IPermissionResolver
+	Role           IRoleResolver
+	RolePermission IRolePermissionResolver
+	User           IUserResolver
 }
 
 func addToSchema(resolver Resolver) {
@@ -225,50 +225,50 @@ func addToSchema(resolver Resolver) {
 		Args:        role.DeleteTypeArgs,
 		Resolve:     resolver.Role.Delete,
 	})
-	rootQuery.AddFieldConfig("roleFeature", &graphql.Field{
-		Type:        rolefeature.Type,
-		Description: "This is GetByID for roleFeature",
-		Args:        rolefeature.GetByIDTypeArgs,
-		Resolve:     resolver.RoleFeature.GetByID,
+	rootQuery.AddFieldConfig("rolePermission", &graphql.Field{
+		Type:        rolepermission.Type,
+		Description: "This is GetByID for rolePermission",
+		Args:        rolepermission.GetByIDTypeArgs,
+		Resolve:     resolver.RolePermission.GetByID,
 	})
-	rootQuery.AddFieldConfig("roleFeatures", &graphql.Field{
+	rootQuery.AddFieldConfig("rolePermissions", &graphql.Field{
 		Type: graphql.NewObject(graphql.ObjectConfig{
-			Name:        "RoleFeatures",
-			Description: "This is type roleFeatures",
+			Name:        "RolePermissions",
+			Description: "This is type rolePermissions",
 			Fields: graphql.Fields{
 				"records": &graphql.Field{
-					Type:        graphql.NewNonNull(graphql.NewList(rolefeature.Type)),
-					Description: "This is records of roleFeatures",
-					Resolve:     resolver.RoleFeature.List,
+					Type:        graphql.NewNonNull(graphql.NewList(rolepermission.Type)),
+					Description: "This is records of rolePermissions",
+					Resolve:     resolver.RolePermission.List,
 				},
 				"totalRecords": &graphql.Field{
 					Type:        graphql.NewNonNull(graphql.Int),
-					Description: "This is totalRecords of roleFeatures query",
-					Resolve:     resolver.RoleFeature.Count,
+					Description: "This is totalRecords of rolePermissions query",
+					Resolve:     resolver.RolePermission.Count,
 				},
 			},
 		}),
-		Description: "This is get list of roleFeature query",
-		Args:        rolefeature.ListTypeArgs,
-		Resolve:     resolver.RoleFeature.ForwardParams,
+		Description: "This is get list of rolePermission query",
+		Args:        rolepermission.ListTypeArgs,
+		Resolve:     resolver.RolePermission.ForwardParams,
 	})
-	rootMutation.AddFieldConfig("insertRoleFeature", &graphql.Field{
-		Type:        rolefeature.Type,
-		Description: "This is insert roleFeature query",
-		Args:        rolefeature.InsertTypeArgs,
-		Resolve:     resolver.RoleFeature.Insert,
+	rootMutation.AddFieldConfig("insertRolePermission", &graphql.Field{
+		Type:        rolepermission.Type,
+		Description: "This is insert rolePermission query",
+		Args:        rolepermission.InsertTypeArgs,
+		Resolve:     resolver.RolePermission.Insert,
 	})
-	rootMutation.AddFieldConfig("updateRoleFeature", &graphql.Field{
-		Type:        rolefeature.Type,
-		Description: "This is update roleFeature query",
-		Args:        rolefeature.UpdateTypeArgs,
-		Resolve:     resolver.RoleFeature.Update,
+	rootMutation.AddFieldConfig("updateRolePermission", &graphql.Field{
+		Type:        rolepermission.Type,
+		Description: "This is update rolePermission query",
+		Args:        rolepermission.UpdateTypeArgs,
+		Resolve:     resolver.RolePermission.Update,
 	})
-	rootMutation.AddFieldConfig("deleteRoleFeature", &graphql.Field{
+	rootMutation.AddFieldConfig("deleteRolePermission", &graphql.Field{
 		Type:        graphql.NewNonNull(graphql.Int),
-		Description: "This is delete roleFeature query",
-		Args:        rolefeature.DeleteTypeArgs,
-		Resolve:     resolver.RoleFeature.Delete,
+		Description: "This is delete rolePermission query",
+		Args:        rolepermission.DeleteTypeArgs,
+		Resolve:     resolver.RolePermission.Delete,
 	})
 	rootQuery.AddFieldConfig("user", &graphql.Field{
 		Type:        user.Type,
@@ -320,23 +320,23 @@ func addToSchema(resolver Resolver) {
 // NewHandler ...
 func NewHandler(db *sql.DB) Handler {
 	return Handler{
-		Company:     company.NewHandler(db),
-		Feature:     feature.NewHandler(db),
-		Permission:  permission.NewHandler(db),
-		Role:        role.NewHandler(db),
-		RoleFeature: rolefeature.NewHandler(db),
-		User:        user.NewHandler(db),
+		Company:        company.NewHandler(db),
+		Feature:        feature.NewHandler(db),
+		Permission:     permission.NewHandler(db),
+		Role:           role.NewHandler(db),
+		RolePermission: rolepermission.NewHandler(db),
+		User:           user.NewHandler(db),
 	}
 }
 
 // NewResolver ...
 func NewResolver(db *sql.DB) Resolver {
 	return Resolver{
-		Company:     company.NewResolver(db),
-		Feature:     feature.NewResolver(db),
-		Permission:  permission.NewResolver(db),
-		Role:        role.NewResolver(db),
-		RoleFeature: rolefeature.NewResolver(db),
-		User:        user.NewResolver(db),
+		Company:        company.NewResolver(db),
+		Feature:        feature.NewResolver(db),
+		Permission:     permission.NewResolver(db),
+		Role:           role.NewResolver(db),
+		RolePermission: rolepermission.NewResolver(db),
+		User:           user.NewResolver(db),
 	}
 }

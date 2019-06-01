@@ -1,4 +1,4 @@
-package rolefeature
+package rolepermission
 
 import "database/sql"
 
@@ -9,13 +9,13 @@ type iRepository interface {
 
 // HandlerImpl ...
 type HandlerImpl struct {
-	rolefeature iRepository
+	rolepermission iRepository
 }
 
 // NewHandler ...
 func NewHandler(db *sql.DB) HandlerImpl {
-	rolefeature := newRepository(db)
+	rolepermission := newRepository(db)
 	return HandlerImpl{
-		rolefeature: rolefeature,
+		rolepermission: rolepermission,
 	}
 }

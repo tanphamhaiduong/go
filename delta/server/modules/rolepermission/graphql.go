@@ -1,4 +1,4 @@
-package rolefeature
+package rolepermission
 
 import "database/sql"
 
@@ -9,13 +9,13 @@ type IHandler interface {
 
 // ResolverImpl ...
 type ResolverImpl struct {
-	rolefeature IHandler
+	rolepermission IHandler
 }
 
 // NewResolver ...
 func NewResolver(db *sql.DB) ResolverImpl {
-	rolefeature := NewHandler(db)
+	rolepermission := NewHandler(db)
 	return ResolverImpl{
-		rolefeature: rolefeature,
+		rolepermission: rolepermission,
 	}
 }

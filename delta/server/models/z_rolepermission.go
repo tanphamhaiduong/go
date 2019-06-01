@@ -1,8 +1,8 @@
 // @generated
 package models
 
-// RoleFeature ...
-type RoleFeature struct {
+// RolePermission ...
+type RolePermission struct {
 	ID           int64
 	RoleID       int64
 	PermissionID int64

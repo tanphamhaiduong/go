@@ -1,4 +1,4 @@
-package rolefeature
+package rolepermission
 
 import (
 	"context"

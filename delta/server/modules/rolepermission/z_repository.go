@@ -1,5 +1,5 @@
 // @generated
-package rolefeature
+package rolepermission
 
 import (
 	"context"
@@ -12,68 +12,68 @@ import (
 )
 
 // GetByID ...
-func (r repositoryImpl) GetByID(ctx context.Context, params arguments.RoleFeatureGetByIDArgs) (models.RoleFeature, error) {
+func (r repositoryImpl) GetByID(ctx context.Context, params arguments.RolePermissionGetByIDArgs) (models.RolePermission, error) {
 	var (
-		rolefeature   = models.RoleFeature{}
-		selectBuilder = sq.Select("*").From("role_feature").Where(sq.Eq{"id": params.ID})
+		rolepermission = models.RolePermission{}
+		selectBuilder  = sq.Select("*").From("role_permission").Where(sq.Eq{"id": params.ID})
 	)
 	sql, args, err := selectBuilder.ToSql()
 	if err != nil {
-		return rolefeature, err
+		return rolepermission, err
 	}
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
-		return rolefeature, err
+		return rolepermission, err
 	}
 	row := stmt.QueryRowContext(ctx, args...)
 	row.Scan(
-		&rolefeature.ID,
-		&rolefeature.RoleID,
-		&rolefeature.PermissionID,
-		&rolefeature.CreatedBy,
-		&rolefeature.UpdatedBy,
+		&rolepermission.ID,
+		&rolepermission.RoleID,
+		&rolepermission.PermissionID,
+		&rolepermission.CreatedBy,
+		&rolepermission.UpdatedBy,
 	)
-	return rolefeature, nil
+	return rolepermission, nil
 }
 
 // GetByID ...
-func (r repositoryImpl) GetByIDs(ctx context.Context, params arguments.RoleFeatureGetByIDsArgs) ([]models.RoleFeature, error) {
+func (r repositoryImpl) GetByIDs(ctx context.Context, params arguments.RolePermissionGetByIDsArgs) ([]models.RolePermission, error) {
 	var (
-		rolefeatures  = []models.RoleFeature{}
-		selectBuilder = sq.Select("*").From("role_feature").Where(sq.Eq{"id": params.IDs})
+		rolepermissions = []models.RolePermission{}
+		selectBuilder   = sq.Select("*").From("role_permission").Where(sq.Eq{"id": params.IDs})
 	)
 	sql, args, err := selectBuilder.ToSql()
 	if err != nil {
-		return rolefeatures, err
+		return rolepermissions, err
 	}
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
-		return rolefeatures, err
+		return rolepermissions, err
 	}
 	rows, err := stmt.QueryContext(ctx, args...)
 	defer rows.Close()
 	if err != nil {
-		return rolefeatures, err
+		return rolepermissions, err
 	}
 	for rows.Next() {
-		rolefeature := models.RoleFeature{}
+		rolepermission := models.RolePermission{}
 		err := rows.Scan(
-			&rolefeature.ID,
-			&rolefeature.RoleID,
-			&rolefeature.PermissionID,
-			&rolefeature.CreatedBy,
-			&rolefeature.UpdatedBy,
+			&rolepermission.ID,
+			&rolepermission.RoleID,
+			&rolepermission.PermissionID,
+			&rolepermission.CreatedBy,
+			&rolepermission.UpdatedBy,
 		)
 		if err != nil {
-			return rolefeatures, err
+			return rolepermissions, err
 		}
-		rolefeatures = append(rolefeatures, rolefeature)
+		rolepermissions = append(rolepermissions, rolepermission)
 	}
-	return rolefeatures, nil
+	return rolepermissions, nil
 }
 
 // setArgsToListSelectBuilder ...
-func setArgsToListSelectBuilder(selectBuilder sq.SelectBuilder, params arguments.RoleFeatureListArgs) sq.SelectBuilder {
+func setArgsToListSelectBuilder(selectBuilder sq.SelectBuilder, params arguments.RolePermissionListArgs) sq.SelectBuilder {
 	if params.ID != 0 {
 		selectBuilder = selectBuilder.Where(sq.Eq{"id": params.ID})
 	}
@@ -100,44 +100,44 @@ func setArgsToListSelectBuilder(selectBuilder sq.SelectBuilder, params arguments
 }
 
 // List ...
-func (r repositoryImpl) List(ctx context.Context, params arguments.RoleFeatureListArgs) ([]models.RoleFeature, error) {
+func (r repositoryImpl) List(ctx context.Context, params arguments.RolePermissionListArgs) ([]models.RolePermission, error) {
 	var (
-		rolefeatures  = []models.RoleFeature{}
-		selectBuilder = sq.Select("*").From("role_feature")
+		rolepermissions = []models.RolePermission{}
+		selectBuilder   = sq.Select("*").From("role_permission")
 	)
 	selectBuilderWithArgs := setArgsToListSelectBuilder(selectBuilder, params)
 	sql, args, err := selectBuilderWithArgs.ToSql()
 	if err != nil {
-		return rolefeatures, err
+		return rolepermissions, err
 	}
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
-		return rolefeatures, err
+		return rolepermissions, err
 	}
 	rows, err := stmt.QueryContext(ctx, args...)
 	defer rows.Close()
 	if err != nil {
-		return rolefeatures, err
+		return rolepermissions, err
 	}
 	for rows.Next() {
-		rolefeature := models.RoleFeature{}
+		rolepermission := models.RolePermission{}
 		err := rows.Scan(
-			&rolefeature.ID,
-			&rolefeature.RoleID,
-			&rolefeature.PermissionID,
-			&rolefeature.CreatedBy,
-			&rolefeature.UpdatedBy,
+			&rolepermission.ID,
+			&rolepermission.RoleID,
+			&rolepermission.PermissionID,
+			&rolepermission.CreatedBy,
+			&rolepermission.UpdatedBy,
 		)
 		if err != nil {
-			return rolefeatures, err
+			return rolepermissions, err
 		}
-		rolefeatures = append(rolefeatures, rolefeature)
+		rolepermissions = append(rolepermissions, rolepermission)
 	}
-	return rolefeatures, nil
+	return rolepermissions, nil
 }
 
 // setArgsToCountSelectBuilder ...
-func setArgsToCountSelectBuilder(selectBuilder sq.SelectBuilder, params arguments.RoleFeatureCountArgs) sq.SelectBuilder {
+func setArgsToCountSelectBuilder(selectBuilder sq.SelectBuilder, params arguments.RolePermissionCountArgs) sq.SelectBuilder {
 	if params.ID != 0 {
 		selectBuilder = selectBuilder.Where(sq.Eq{"id": params.ID})
 	}
@@ -157,10 +157,10 @@ func setArgsToCountSelectBuilder(selectBuilder sq.SelectBuilder, params argument
 }
 
 // Count ...
-func (r repositoryImpl) Count(ctx context.Context, params arguments.RoleFeatureCountArgs) (int64, error) {
+func (r repositoryImpl) Count(ctx context.Context, params arguments.RolePermissionCountArgs) (int64, error) {
 	var (
 		count         int64
-		selectBuilder = sq.Select("COUNT(id)").From("role_feature")
+		selectBuilder = sq.Select("COUNT(id)").From("role_permission")
 	)
 	selectBuilderWithArgs := setArgsToCountSelectBuilder(selectBuilder, params)
 	sql, args, err := selectBuilderWithArgs.ToSql()
@@ -180,10 +180,10 @@ func (r repositoryImpl) Count(ctx context.Context, params arguments.RoleFeatureC
 }
 
 // Insert ...
-func (r repositoryImpl) Insert(ctx context.Context, params arguments.RoleFeatureInsertArgs) (models.RoleFeature, error) {
+func (r repositoryImpl) Insert(ctx context.Context, params arguments.RolePermissionInsertArgs) (models.RolePermission, error) {
 	var (
-		rolefeature   = models.RoleFeature{}
-		insertBuilder = sq.Insert("role_feature").Columns(
+		rolepermission = models.RolePermission{}
+		insertBuilder  = sq.Insert("role_permission").Columns(
 			"role_id",
 			"permission_id",
 			"created_by",
@@ -197,21 +197,21 @@ func (r repositoryImpl) Insert(ctx context.Context, params arguments.RoleFeature
 	)
 	sql, args, err := insertBuilder.ToSql()
 	if err != nil {
-		return rolefeature, err
+		return rolepermission, err
 	}
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
-		return rolefeature, err
+		return rolepermission, err
 	}
 	row, err := stmt.ExecContext(ctx, args...)
 	if err != nil {
-		return rolefeature, err
+		return rolepermission, err
 	}
 	id, err := row.LastInsertId()
 	if err != nil {
-		return rolefeature, err
+		return rolepermission, err
 	}
-	rolefeature = models.RoleFeature{
+	rolepermission = models.RolePermission{
 		ID:     id,
 		RoleID: params.RoleID,
 
@@ -221,11 +221,11 @@ func (r repositoryImpl) Insert(ctx context.Context, params arguments.RoleFeature
 
 		UpdatedBy: params.UpdatedBy,
 	}
-	return rolefeature, nil
+	return rolepermission, nil
 }
 
 // setArgsToUpdateBuilder ...
-func setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, params arguments.RoleFeatureUpdateArgs) sq.UpdateBuilder {
+func setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, params arguments.RolePermissionUpdateArgs) sq.UpdateBuilder {
 	if params.RoleID != nil {
 		updateBuilder = updateBuilder.Set("role_id", *params.RoleID)
 	}
@@ -246,47 +246,47 @@ func setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, params arguments.Rol
 }
 
 // Update ...
-func (r repositoryImpl) Update(ctx context.Context, params arguments.RoleFeatureUpdateArgs) (models.RoleFeature, error) {
+func (r repositoryImpl) Update(ctx context.Context, params arguments.RolePermissionUpdateArgs) (models.RolePermission, error) {
 	var (
-		rolefeature   = models.RoleFeature{}
-		updateBuilder = sq.Update("role_feature").Where(sq.Eq{"id": *params.ID})
+		rolepermission = models.RolePermission{}
+		updateBuilder  = sq.Update("role_permission").Where(sq.Eq{"id": *params.ID})
 	)
 	updateBuilderWithArgs := setArgsToUpdateBuilder(updateBuilder, params)
 
 	sql, args, err := updateBuilderWithArgs.ToSql()
 	if err != nil {
-		return rolefeature, err
+		return rolepermission, err
 	}
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
-		return rolefeature, err
+		return rolepermission, err
 	}
 	result, err := stmt.ExecContext(ctx, args...)
 	if err != nil {
-		return rolefeature, err
+		return rolepermission, err
 	}
 	rowAffected, err := result.RowsAffected()
 	if err != nil {
-		return rolefeature, err
+		return rolepermission, err
 	}
 	if rowAffected == 0 {
-		return rolefeature, fmt.Errorf("error when update record id %d", *params.ID)
+		return rolepermission, fmt.Errorf("error when update record id %d", *params.ID)
 	}
-	rolefeature = models.RoleFeature{
+	rolepermission = models.RolePermission{
 		ID:           *params.ID,
 		RoleID:       *params.RoleID,
 		PermissionID: *params.PermissionID,
 		CreatedBy:    *params.CreatedBy,
 		UpdatedBy:    *params.UpdatedBy,
 	}
-	return rolefeature, nil
+	return rolepermission, nil
 }
 
 // Delete ...
-func (r repositoryImpl) Delete(ctx context.Context, params arguments.RoleFeatureDeleteArgs) (int64, error) {
+func (r repositoryImpl) Delete(ctx context.Context, params arguments.RolePermissionDeleteArgs) (int64, error) {
 	var (
 		id            int64
-		deleteBuilder = sq.Delete("role_feature").Where(sq.Eq{"id": params.ID})
+		deleteBuilder = sq.Delete("role_permission").Where(sq.Eq{"id": params.ID})
 	)
 	sql, args, err := deleteBuilder.ToSql()
 	if err != nil {
