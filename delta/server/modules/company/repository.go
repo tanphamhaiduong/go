@@ -2,19 +2,21 @@ package company
 
 import (
 	"context"
-	"database/sql"
+
+	"github.com/tanphamhaiduong/go/delta/server/database"
 )
 
-type iDatabase interface {
-	PrepareContext(ctx context.Context, query string) (*sql.Stmt, error)
+// IDatabase ...
+type IDatabase interface {
+	PrepareContext(ctx context.Context, query string) (database.IStmt, error)
 }
 
 type repositoryImpl struct {
-	db iDatabase
+	db IDatabase
 }
 
 // newRepository ...
-func newRepository(db *sql.DB) repositoryImpl {
+func newRepository(db database.IDB) repositoryImpl {
 	return repositoryImpl{
 		db: db,
 	}

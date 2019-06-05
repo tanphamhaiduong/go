@@ -2,15 +2,9 @@
 package modules
 
 import (
-	"database/sql"
-
 	"github.com/graphql-go/graphql"
+	"github.com/tanphamhaiduong/go/delta/server/database"
 	"github.com/tanphamhaiduong/go/delta/server/modules/company"
-	"github.com/tanphamhaiduong/go/delta/server/modules/feature"
-	"github.com/tanphamhaiduong/go/delta/server/modules/permission"
-	"github.com/tanphamhaiduong/go/delta/server/modules/role"
-	"github.com/tanphamhaiduong/go/delta/server/modules/rolepermission"
-	"github.com/tanphamhaiduong/go/delta/server/modules/user"
 )
 
 // ICoreResolver ...
@@ -26,22 +20,12 @@ type IResolver interface {
 
 // Handler ...
 type Handler struct {
-	Company        ICompanyHandler
-	Feature        IFeatureHandler
-	Permission     IPermissionHandler
-	Role           IRoleHandler
-	RolePermission IRolePermissionHandler
-	User           IUserHandler
+	Company ICompanyHandler
 }
 
 // Resolver ...
 type Resolver struct {
-	Company        ICompanyResolver
-	Feature        IFeatureResolver
-	Permission     IPermissionResolver
-	Role           IRoleResolver
-	RolePermission IRolePermissionResolver
-	User           IUserResolver
+	Company ICompanyResolver
 }
 
 func addToSchema(resolver Resolver) {
@@ -90,253 +74,18 @@ func addToSchema(resolver Resolver) {
 		Args:        company.DeleteTypeArgs,
 		Resolve:     resolver.Company.Delete,
 	})
-	rootQuery.AddFieldConfig("feature", &graphql.Field{
-		Type:        feature.Type,
-		Description: "This is GetByID for feature",
-		Args:        feature.GetByIDTypeArgs,
-		Resolve:     resolver.Feature.GetByID,
-	})
-	rootQuery.AddFieldConfig("features", &graphql.Field{
-		Type: graphql.NewObject(graphql.ObjectConfig{
-			Name:        "Features",
-			Description: "This is type features",
-			Fields: graphql.Fields{
-				"records": &graphql.Field{
-					Type:        graphql.NewNonNull(graphql.NewList(feature.Type)),
-					Description: "This is records of features",
-					Resolve:     resolver.Feature.List,
-				},
-				"totalRecords": &graphql.Field{
-					Type:        graphql.NewNonNull(graphql.Int),
-					Description: "This is totalRecords of features query",
-					Resolve:     resolver.Feature.Count,
-				},
-			},
-		}),
-		Description: "This is get list of feature query",
-		Args:        feature.ListTypeArgs,
-		Resolve:     resolver.Feature.ForwardParams,
-	})
-	rootMutation.AddFieldConfig("insertFeature", &graphql.Field{
-		Type:        feature.Type,
-		Description: "This is insert feature query",
-		Args:        feature.InsertTypeArgs,
-		Resolve:     resolver.Feature.Insert,
-	})
-	rootMutation.AddFieldConfig("updateFeature", &graphql.Field{
-		Type:        feature.Type,
-		Description: "This is update feature query",
-		Args:        feature.UpdateTypeArgs,
-		Resolve:     resolver.Feature.Update,
-	})
-	rootMutation.AddFieldConfig("deleteFeature", &graphql.Field{
-		Type:        graphql.NewNonNull(graphql.Int),
-		Description: "This is delete feature query",
-		Args:        feature.DeleteTypeArgs,
-		Resolve:     resolver.Feature.Delete,
-	})
-	rootQuery.AddFieldConfig("permission", &graphql.Field{
-		Type:        permission.Type,
-		Description: "This is GetByID for permission",
-		Args:        permission.GetByIDTypeArgs,
-		Resolve:     resolver.Permission.GetByID,
-	})
-	rootQuery.AddFieldConfig("permissions", &graphql.Field{
-		Type: graphql.NewObject(graphql.ObjectConfig{
-			Name:        "Permissions",
-			Description: "This is type permissions",
-			Fields: graphql.Fields{
-				"records": &graphql.Field{
-					Type:        graphql.NewNonNull(graphql.NewList(permission.Type)),
-					Description: "This is records of permissions",
-					Resolve:     resolver.Permission.List,
-				},
-				"totalRecords": &graphql.Field{
-					Type:        graphql.NewNonNull(graphql.Int),
-					Description: "This is totalRecords of permissions query",
-					Resolve:     resolver.Permission.Count,
-				},
-			},
-		}),
-		Description: "This is get list of permission query",
-		Args:        permission.ListTypeArgs,
-		Resolve:     resolver.Permission.ForwardParams,
-	})
-	rootMutation.AddFieldConfig("insertPermission", &graphql.Field{
-		Type:        permission.Type,
-		Description: "This is insert permission query",
-		Args:        permission.InsertTypeArgs,
-		Resolve:     resolver.Permission.Insert,
-	})
-	rootMutation.AddFieldConfig("updatePermission", &graphql.Field{
-		Type:        permission.Type,
-		Description: "This is update permission query",
-		Args:        permission.UpdateTypeArgs,
-		Resolve:     resolver.Permission.Update,
-	})
-	rootMutation.AddFieldConfig("deletePermission", &graphql.Field{
-		Type:        graphql.NewNonNull(graphql.Int),
-		Description: "This is delete permission query",
-		Args:        permission.DeleteTypeArgs,
-		Resolve:     resolver.Permission.Delete,
-	})
-	rootQuery.AddFieldConfig("role", &graphql.Field{
-		Type:        role.Type,
-		Description: "This is GetByID for role",
-		Args:        role.GetByIDTypeArgs,
-		Resolve:     resolver.Role.GetByID,
-	})
-	rootQuery.AddFieldConfig("roles", &graphql.Field{
-		Type: graphql.NewObject(graphql.ObjectConfig{
-			Name:        "Roles",
-			Description: "This is type roles",
-			Fields: graphql.Fields{
-				"records": &graphql.Field{
-					Type:        graphql.NewNonNull(graphql.NewList(role.Type)),
-					Description: "This is records of roles",
-					Resolve:     resolver.Role.List,
-				},
-				"totalRecords": &graphql.Field{
-					Type:        graphql.NewNonNull(graphql.Int),
-					Description: "This is totalRecords of roles query",
-					Resolve:     resolver.Role.Count,
-				},
-			},
-		}),
-		Description: "This is get list of role query",
-		Args:        role.ListTypeArgs,
-		Resolve:     resolver.Role.ForwardParams,
-	})
-	rootMutation.AddFieldConfig("insertRole", &graphql.Field{
-		Type:        role.Type,
-		Description: "This is insert role query",
-		Args:        role.InsertTypeArgs,
-		Resolve:     resolver.Role.Insert,
-	})
-	rootMutation.AddFieldConfig("updateRole", &graphql.Field{
-		Type:        role.Type,
-		Description: "This is update role query",
-		Args:        role.UpdateTypeArgs,
-		Resolve:     resolver.Role.Update,
-	})
-	rootMutation.AddFieldConfig("deleteRole", &graphql.Field{
-		Type:        graphql.NewNonNull(graphql.Int),
-		Description: "This is delete role query",
-		Args:        role.DeleteTypeArgs,
-		Resolve:     resolver.Role.Delete,
-	})
-	rootQuery.AddFieldConfig("rolePermission", &graphql.Field{
-		Type:        rolepermission.Type,
-		Description: "This is GetByID for rolePermission",
-		Args:        rolepermission.GetByIDTypeArgs,
-		Resolve:     resolver.RolePermission.GetByID,
-	})
-	rootQuery.AddFieldConfig("rolePermissions", &graphql.Field{
-		Type: graphql.NewObject(graphql.ObjectConfig{
-			Name:        "RolePermissions",
-			Description: "This is type rolePermissions",
-			Fields: graphql.Fields{
-				"records": &graphql.Field{
-					Type:        graphql.NewNonNull(graphql.NewList(rolepermission.Type)),
-					Description: "This is records of rolePermissions",
-					Resolve:     resolver.RolePermission.List,
-				},
-				"totalRecords": &graphql.Field{
-					Type:        graphql.NewNonNull(graphql.Int),
-					Description: "This is totalRecords of rolePermissions query",
-					Resolve:     resolver.RolePermission.Count,
-				},
-			},
-		}),
-		Description: "This is get list of rolePermission query",
-		Args:        rolepermission.ListTypeArgs,
-		Resolve:     resolver.RolePermission.ForwardParams,
-	})
-	rootMutation.AddFieldConfig("insertRolePermission", &graphql.Field{
-		Type:        rolepermission.Type,
-		Description: "This is insert rolePermission query",
-		Args:        rolepermission.InsertTypeArgs,
-		Resolve:     resolver.RolePermission.Insert,
-	})
-	rootMutation.AddFieldConfig("updateRolePermission", &graphql.Field{
-		Type:        rolepermission.Type,
-		Description: "This is update rolePermission query",
-		Args:        rolepermission.UpdateTypeArgs,
-		Resolve:     resolver.RolePermission.Update,
-	})
-	rootMutation.AddFieldConfig("deleteRolePermission", &graphql.Field{
-		Type:        graphql.NewNonNull(graphql.Int),
-		Description: "This is delete rolePermission query",
-		Args:        rolepermission.DeleteTypeArgs,
-		Resolve:     resolver.RolePermission.Delete,
-	})
-	rootQuery.AddFieldConfig("user", &graphql.Field{
-		Type:        user.Type,
-		Description: "This is GetByID for user",
-		Args:        user.GetByIDTypeArgs,
-		Resolve:     resolver.User.GetByID,
-	})
-	rootQuery.AddFieldConfig("users", &graphql.Field{
-		Type: graphql.NewObject(graphql.ObjectConfig{
-			Name:        "Users",
-			Description: "This is type users",
-			Fields: graphql.Fields{
-				"records": &graphql.Field{
-					Type:        graphql.NewNonNull(graphql.NewList(user.Type)),
-					Description: "This is records of users",
-					Resolve:     resolver.User.List,
-				},
-				"totalRecords": &graphql.Field{
-					Type:        graphql.NewNonNull(graphql.Int),
-					Description: "This is totalRecords of users query",
-					Resolve:     resolver.User.Count,
-				},
-			},
-		}),
-		Description: "This is get list of user query",
-		Args:        user.ListTypeArgs,
-		Resolve:     resolver.User.ForwardParams,
-	})
-	rootMutation.AddFieldConfig("insertUser", &graphql.Field{
-		Type:        user.Type,
-		Description: "This is insert user query",
-		Args:        user.InsertTypeArgs,
-		Resolve:     resolver.User.Insert,
-	})
-	rootMutation.AddFieldConfig("updateUser", &graphql.Field{
-		Type:        user.Type,
-		Description: "This is update user query",
-		Args:        user.UpdateTypeArgs,
-		Resolve:     resolver.User.Update,
-	})
-	rootMutation.AddFieldConfig("deleteUser", &graphql.Field{
-		Type:        graphql.NewNonNull(graphql.Int),
-		Description: "This is delete user query",
-		Args:        user.DeleteTypeArgs,
-		Resolve:     resolver.User.Delete,
-	})
 }
 
 // NewHandler ...
-func NewHandler(db *sql.DB) Handler {
+func NewHandler(db database.IDB) Handler {
 	return Handler{
-		Company:        company.NewHandler(db),
-		Feature:        feature.NewHandler(db),
-		Permission:     permission.NewHandler(db),
-		Role:           role.NewHandler(db),
-		RolePermission: rolepermission.NewHandler(db),
-		User:           user.NewHandler(db),
+		Company: company.NewHandler(db),
 	}
 }
 
 // NewResolver ...
-func NewResolver(db *sql.DB) Resolver {
+func NewResolver(db database.IDB) Resolver {
 	return Resolver{
-		Company:        company.NewResolver(db),
-		Feature:        feature.NewResolver(db),
-		Permission:     permission.NewResolver(db),
-		Role:           role.NewResolver(db),
-		RolePermission: rolepermission.NewResolver(db),
-		User:           user.NewResolver(db),
+		Company: company.NewResolver(db),
 	}
 }

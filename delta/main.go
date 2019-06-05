@@ -12,13 +12,14 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
 	"github.com/graphql-go/handler"
+	"github.com/tanphamhaiduong/go/delta/server/database"
 	"github.com/tanphamhaiduong/go/delta/server/modules"
 )
 
 func main() {
 	var (
 		wait      time.Duration
-		db        = initDBConnection()
+		db        = database.InitDBConnection()
 		resolvers = modules.NewResolver(db)
 	)
 	flag.DurationVar(&wait, "graceful-timeout", time.Minute*1, "the duration for which the server gracefully wait for existing connections to finish - e.g. 15s or 1m")

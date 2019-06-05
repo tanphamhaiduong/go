@@ -4,6 +4,8 @@ package modules
 
 import (
 	"database/sql"
+
+	"github.com/tanphamhaiduong/go/delta/server/database"
 	{{- range $Module := $Modules }}
 		"github.com/tanphamhaiduong/go/delta/server/modules/{{ $Module.Name | ToLowerCase }}"
 	{{- end }}
@@ -85,7 +87,7 @@ func addToSchema(resolver Resolver){
 }
 
 // NewHandler ...
-func NewHandler(db *sql.DB) Handler {
+func NewHandler(db database.IDB) Handler {
 	return Handler{
     {{- range $Module := $Modules }}
 		  {{ $Module.Name }}: {{ $Module.Name | ToLowerCase }}.NewHandler(db),
@@ -94,7 +96,7 @@ func NewHandler(db *sql.DB) Handler {
 }
 
 // NewResolver ...
-func NewResolver(db *sql.DB) Resolver {
+func NewResolver(db database.IDB) Resolver {
 	return Resolver{
 		{{- range $Module := $Modules }}
 		  {{ $Module.Name }}: {{ $Module.Name | ToLowerCase }}.NewResolver(db),

@@ -2,16 +2,21 @@
 {{- $name := .Module.Name | ToLowerCase }}
 package {{ $name }}
 
-type iDatabase interface {
-	PrepareContext(ctx context.Context, query string) (*sql.Stmt, error)
+import (
+	"github.com/tanphamhaiduong/go/delta/server/database"
+)
+
+// IDatabase ...
+type IDatabase interface {
+	PrepareContext(ctx context.Context, query string) (database.IStmt, error)
 }
 
 type repositoryImpl struct {
-	db iDatabase
+	db IDatabase
 }
 
 // newRepository ...
-func newRepository(db *sql.DB) repositoryImpl {
+func newRepository(db database.IDB) repositoryImpl {
 	return repositoryImpl{
 		db: db,
 	}

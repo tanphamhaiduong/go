@@ -1,19 +1,21 @@
 package company
 
-import "database/sql"
+import (
+	"github.com/tanphamhaiduong/go/delta/server/database"
+)
 
-// iRepository ...
-type iRepository interface {
-	iCoreRepository
+// IRepository ...
+type IRepository interface {
+	ICoreRepository
 }
 
 // HandlerImpl ...
 type HandlerImpl struct {
-	company iRepository
+	company IRepository
 }
 
 // NewHandler ...
-func NewHandler(db *sql.DB) HandlerImpl {
+func NewHandler(db database.IDB) HandlerImpl {
 	company := newRepository(db)
 	return HandlerImpl{
 		company: company,

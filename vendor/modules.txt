@@ -43,7 +43,9 @@ github.com/pmezard/go-difflib/difflib
 github.com/stretchr/objx
 # github.com/stretchr/testify v1.3.0
 github.com/stretchr/testify/mock
+github.com/stretchr/testify/suite
 github.com/stretchr/testify/assert
+github.com/stretchr/testify/require
 # google.golang.org/appengine v1.6.0
 google.golang.org/appengine/cloudsql
 # gopkg.in/go-playground/validator.v9 v9.29.0

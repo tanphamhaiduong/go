@@ -30,11 +30,14 @@ func (r repositoryImpl) GetByID(ctx context.Context, params arguments.{{ $Name }
 		return {{ $name }}, err
 	}
 	row := stmt.QueryRowContext(ctx, args...)
-	row.Scan(
+	err = row.Scan(
 	{{- range $field := $fields }}
 		&{{ $name }}.{{ $field.Name }},
 	{{- end }}
 	)
+	if err != nil {
+		return {{ $name }}, err
+	}
 	return {{ $name }}, nil
 }
 
@@ -53,10 +56,10 @@ func (r repositoryImpl) GetByIDs(ctx context.Context, params arguments.{{ $Name 
 		return {{ $name | ToPlural }}, err
 	}
 	rows, err := stmt.QueryContext(ctx, args...)
-	defer rows.Close()
 	if err != nil {
 		return {{ $name | ToPlural }}, err
 	}
+	defer rows.Close()
 	for rows.Next() {
 		{{ $name }} := models.{{ $Name }}{}
 		err := rows.Scan(
@@ -105,10 +108,10 @@ func (r repositoryImpl) List(ctx context.Context, params arguments.{{- $Name }}L
 		return {{ $name | ToPlural }}, err
 	}
 	rows, err := stmt.QueryContext(ctx, args...)
-	defer rows.Close()
 	if err != nil {
 		return {{ $name | ToPlural }}, err
 	}
+	defer rows.Close()
 	for rows.Next() {
 		{{ $name }} := models.{{ $Name }}{}
 		err := rows.Scan(
@@ -196,7 +199,7 @@ func (r repositoryImpl) Insert(ctx context.Context, params arguments.{{ $Name }}
 		{{- range $field := $fields }}
 			{{- if $field.IsNotIDField }}
 				{{ $field.Name }}: params.{{ $field.Name }},
-			{{ end }}
+			{{- end }}
 		{{- end }}
 	}
 	return {{ $name }}, nil
@@ -274,4 +277,3 @@ func (r repositoryImpl) Delete(ctx context.Context, params arguments.{{ $Name }}
 	return params.ID, nil
 }
 
-//go:generate mockery -name=iDatabase -output=mocks -case=underscore

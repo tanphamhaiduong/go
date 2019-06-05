@@ -9,8 +9,8 @@ import (
 	"github.com/tanphamhaiduong/go/delta/server/validator"
 )
 
-// iCoreRepository ...
-type iCoreRepository interface {
+// ICoreRepository ...
+type ICoreRepository interface {
 	GetByID(ctx context.Context, params arguments.CompanyGetByIDArgs) (models.Company, error)
 	GetByIDs(ctx context.Context, params arguments.CompanyGetByIDsArgs) ([]models.Company, error)
 	List(ctx context.Context, params arguments.CompanyListArgs) ([]models.Company, error)
@@ -119,4 +119,4 @@ func (h HandlerImpl) Delete(ctx context.Context, params arguments.CompanyDeleteA
 	return id, nil
 }
 
-//go:generate mockery -name=iRepository -output=mocks -case=underscore
+//go:generate mockery -name=IRepository -output=mocks -case=underscore

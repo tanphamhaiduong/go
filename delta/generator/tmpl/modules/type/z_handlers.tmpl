@@ -12,8 +12,8 @@ import (
 	"github.com/tanphamhaiduong/go/delta/server/models"
 )
 
-// iCoreRepository ...
-type iCoreRepository interface {
+// ICoreRepository ...
+type ICoreRepository interface {
 	GetByID(ctx context.Context, params arguments.{{ $Name }}GetByIDArgs) (models.{{ $Name }}, error)
 	GetByIDs(ctx context.Context, params arguments.{{ $Name }}GetByIDsArgs) ([]models.{{ $Name }}, error)
 	List(ctx context.Context, params arguments.{{ $Name }}ListArgs) ([]models.{{ $Name }}, error)
@@ -122,4 +122,4 @@ func (h HandlerImpl) Delete(ctx context.Context, params arguments.{{ $Name }}Del
 	return id, nil
 }
 
-//go:generate mockery -name=iRepository -output=mocks -case=underscore
+//go:generate mockery -name=IRepository -output=mocks -case=underscore

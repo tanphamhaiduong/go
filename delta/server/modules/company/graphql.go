@@ -1,6 +1,8 @@
 package company
 
-import "database/sql"
+import (
+	"github.com/tanphamhaiduong/go/delta/server/database"
+)
 
 // IHandler ...
 type IHandler interface {
@@ -13,7 +15,7 @@ type ResolverImpl struct {
 }
 
 // NewResolver ...
-func NewResolver(db *sql.DB) ResolverImpl {
+func NewResolver(db database.IDB) ResolverImpl {
 	company := NewHandler(db)
 	return ResolverImpl{
 		company: company,

@@ -26,13 +26,16 @@ func (r repositoryImpl) GetByID(ctx context.Context, params arguments.CompanyGet
 		return company, err
 	}
 	row := stmt.QueryRowContext(ctx, args...)
-	row.Scan(
+	err = row.Scan(
 		&company.ID,
 		&company.Name,
 		&company.Status,
 		&company.CreatedBy,
 		&company.UpdatedBy,
 	)
+	if err != nil {
+		return company, err
+	}
 	return company, nil
 }
 
@@ -51,10 +54,10 @@ func (r repositoryImpl) GetByIDs(ctx context.Context, params arguments.CompanyGe
 		return companies, err
 	}
 	rows, err := stmt.QueryContext(ctx, args...)
-	defer rows.Close()
 	if err != nil {
 		return companies, err
 	}
+	defer rows.Close()
 	for rows.Next() {
 		company := models.Company{}
 		err := rows.Scan(
@@ -73,7 +76,7 @@ func (r repositoryImpl) GetByIDs(ctx context.Context, params arguments.CompanyGe
 }
 
 // setArgsToListSelectBuilder ...
-func setArgsToListSelectBuilder(selectBuilder sq.SelectBuilder, params arguments.CompanyListArgs) sq.SelectBuilder {
+func (r repositoryImpl) setArgsToListSelectBuilder(selectBuilder sq.SelectBuilder, params arguments.CompanyListArgs) sq.SelectBuilder {
 	if params.ID != 0 {
 		selectBuilder = selectBuilder.Where(sq.Eq{"id": params.ID})
 	}
@@ -105,7 +108,7 @@ func (r repositoryImpl) List(ctx context.Context, params arguments.CompanyListAr
 		companies     = []models.Company{}
 		selectBuilder = sq.Select("*").From("company")
 	)
-	selectBuilderWithArgs := setArgsToListSelectBuilder(selectBuilder, params)
+	selectBuilderWithArgs := r.setArgsToListSelectBuilder(selectBuilder, params)
 	sql, args, err := selectBuilderWithArgs.ToSql()
 	if err != nil {
 		return companies, err
@@ -115,10 +118,10 @@ func (r repositoryImpl) List(ctx context.Context, params arguments.CompanyListAr
 		return companies, err
 	}
 	rows, err := stmt.QueryContext(ctx, args...)
-	defer rows.Close()
 	if err != nil {
 		return companies, err
 	}
+	defer rows.Close()
 	for rows.Next() {
 		company := models.Company{}
 		err := rows.Scan(
@@ -137,7 +140,7 @@ func (r repositoryImpl) List(ctx context.Context, params arguments.CompanyListAr
 }
 
 // setArgsToCountSelectBuilder ...
-func setArgsToCountSelectBuilder(selectBuilder sq.SelectBuilder, params arguments.CompanyCountArgs) sq.SelectBuilder {
+func (r repositoryImpl) setArgsToCountSelectBuilder(selectBuilder sq.SelectBuilder, params arguments.CompanyCountArgs) sq.SelectBuilder {
 	if params.ID != 0 {
 		selectBuilder = selectBuilder.Where(sq.Eq{"id": params.ID})
 	}
@@ -162,7 +165,7 @@ func (r repositoryImpl) Count(ctx context.Context, params arguments.CompanyCount
 		count         int64
 		selectBuilder = sq.Select("COUNT(id)").From("company")
 	)
-	selectBuilderWithArgs := setArgsToCountSelectBuilder(selectBuilder, params)
+	selectBuilderWithArgs := r.setArgsToCountSelectBuilder(selectBuilder, params)
 	sql, args, err := selectBuilderWithArgs.ToSql()
 	if err != nil {
 		return count, err
@@ -225,7 +228,7 @@ func (r repositoryImpl) Insert(ctx context.Context, params arguments.CompanyInse
 }
 
 // setArgsToUpdateBuilder ...
-func setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, params arguments.CompanyUpdateArgs) sq.UpdateBuilder {
+func (r repositoryImpl) setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, params arguments.CompanyUpdateArgs) sq.UpdateBuilder {
 	if params.Name != nil {
 		updateBuilder = updateBuilder.Set("name", *params.Name)
 	}
@@ -251,7 +254,7 @@ func (r repositoryImpl) Update(ctx context.Context, params arguments.CompanyUpda
 		company       = models.Company{}
 		updateBuilder = sq.Update("company").Where(sq.Eq{"id": *params.ID})
 	)
-	updateBuilderWithArgs := setArgsToUpdateBuilder(updateBuilder, params)
+	updateBuilderWithArgs := r.setArgsToUpdateBuilder(updateBuilder, params)
 
 	sql, args, err := updateBuilderWithArgs.ToSql()
 	if err != nil {
@@ -306,5 +309,3 @@ func (r repositoryImpl) Delete(ctx context.Context, params arguments.CompanyDele
 	}
 	return params.ID, nil
 }
-
-//go:generate mockery -name=iDatabase -output=mocks -case=underscore
