@@ -8,7 +8,9 @@ import (
 
 // IDatabase ...
 type IDatabase interface {
-	PrepareContext(ctx context.Context, query string) (database.IStmt, error)
+	Ping() error
+    Close() error
+    PrepareContext(ctx context.Context, query string) (database.IStmt, error)
 }
 
 type repositoryImpl struct {

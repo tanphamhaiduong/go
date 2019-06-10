@@ -14,7 +14,7 @@ import (
 // GetByID ...
 func (r repositoryImpl) GetByID(ctx context.Context, params arguments.CompanyGetByIDArgs) (models.Company, error) {
 	var (
-		company       = models.Company{}
+		company       models.Company
 		selectBuilder = sq.Select("*").From("company").Where(sq.Eq{"id": params.ID})
 	)
 	sql, args, err := selectBuilder.ToSql()
@@ -39,10 +39,10 @@ func (r repositoryImpl) GetByID(ctx context.Context, params arguments.CompanyGet
 	return company, nil
 }
 
-// GetByID ...
+// GetByIDs ...
 func (r repositoryImpl) GetByIDs(ctx context.Context, params arguments.CompanyGetByIDsArgs) ([]models.Company, error) {
 	var (
-		companies     = []models.Company{}
+		companies     []models.Company
 		selectBuilder = sq.Select("*").From("company").Where(sq.Eq{"id": params.IDs})
 	)
 	sql, args, err := selectBuilder.ToSql()
@@ -105,7 +105,7 @@ func (r repositoryImpl) setArgsToListSelectBuilder(selectBuilder sq.SelectBuilde
 // List ...
 func (r repositoryImpl) List(ctx context.Context, params arguments.CompanyListArgs) ([]models.Company, error) {
 	var (
-		companies     = []models.Company{}
+		companies     []models.Company
 		selectBuilder = sq.Select("*").From("company")
 	)
 	selectBuilderWithArgs := r.setArgsToListSelectBuilder(selectBuilder, params)
@@ -185,7 +185,7 @@ func (r repositoryImpl) Count(ctx context.Context, params arguments.CompanyCount
 // Insert ...
 func (r repositoryImpl) Insert(ctx context.Context, params arguments.CompanyInsertArgs) (models.Company, error) {
 	var (
-		company       = models.Company{}
+		company       models.Company
 		insertBuilder = sq.Insert("company").Columns(
 			"name",
 			"status",
@@ -214,17 +214,11 @@ func (r repositoryImpl) Insert(ctx context.Context, params arguments.CompanyInse
 	if err != nil {
 		return company, err
 	}
-	company = models.Company{
-		ID:   id,
-		Name: params.Name,
-
-		Status: params.Status,
-
-		CreatedBy: params.CreatedBy,
-
-		UpdatedBy: params.UpdatedBy,
+	newCompany, err := r.GetByID(ctx, arguments.CompanyGetByIDArgs{ID: id})
+	if err != nil {
+		return company, err
 	}
-	return company, nil
+	return newCompany, nil
 }
 
 // setArgsToUpdateBuilder ...
@@ -251,7 +245,7 @@ func (r repositoryImpl) setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, p
 // Update ...
 func (r repositoryImpl) Update(ctx context.Context, params arguments.CompanyUpdateArgs) (models.Company, error) {
 	var (
-		company       = models.Company{}
+		company       models.Company
 		updateBuilder = sq.Update("company").Where(sq.Eq{"id": *params.ID})
 	)
 	updateBuilderWithArgs := r.setArgsToUpdateBuilder(updateBuilder, params)
@@ -275,14 +269,11 @@ func (r repositoryImpl) Update(ctx context.Context, params arguments.CompanyUpda
 	if rowAffected == 0 {
 		return company, fmt.Errorf("error when update record id %d", *params.ID)
 	}
-	company = models.Company{
-		ID:        *params.ID,
-		Name:      *params.Name,
-		Status:    *params.Status,
-		CreatedBy: *params.CreatedBy,
-		UpdatedBy: *params.UpdatedBy,
+	newCompany, err := r.GetByID(ctx, arguments.CompanyGetByIDArgs{ID: *params.ID})
+	if err != nil {
+		return company, err
 	}
-	return company, nil
+	return newCompany, nil
 }
 
 // Delete ...
@@ -309,3 +300,5 @@ func (r repositoryImpl) Delete(ctx context.Context, params arguments.CompanyDele
 	}
 	return params.ID, nil
 }
+
+//go:generate mockery -name=IDatabase -output=mocks -case=underscore

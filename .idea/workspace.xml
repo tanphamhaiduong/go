@@ -2,68 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d38f2e3f-0d78-43d2-b4cc-b6375dac9114" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/generator/tmpl/modules/type/graphql.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/delta/generator/tmpl/modules/type/graphql.tmpl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/generator/tmpl/modules/type/handlers.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/delta/generator/tmpl/modules/type/handlers.tmpl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/delta/generator/modules/company.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/generator/modules/company.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/delta/generator/modules/modules.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/generator/modules/modules.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/delta/generator/tmpl/arguments/z_type.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/delta/generator/tmpl/arguments/z_type.tmpl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/delta/generator/tmpl/models/z_type.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/delta/generator/tmpl/models/z_type.tmpl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/delta/generator/tmpl/modules/type/repository.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/delta/generator/tmpl/modules/type/repository.tmpl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/generator/tmpl/modules/type/z_handlers.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/delta/generator/tmpl/modules/type/z_handlers.tmpl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/delta/generator/tmpl/modules/type/z_repository.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/delta/generator/tmpl/modules/type/z_repository.tmpl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/delta/server/arguments/z_company.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/server/arguments/z_company.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/delta/server/models/z_company.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/server/models/z_company.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/delta/server/modules/company/handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/server/modules/company/handlers.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/company/mocks/i_database.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/server/modules/company/mocks/i_database.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/company/mocks/i_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/server/modules/company/mocks/i_repository.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/delta/server/modules/company/repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/server/modules/company/repository.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/delta/server/modules/company/z_handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/server/modules/company/z_handlers.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/delta/server/modules/company/z_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/server/modules/company/z_repository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/feature/handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/server/modules/feature/handlers.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/feature/mocks/i_database.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/feature/mocks/i_handler.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/feature/mocks/i_repository.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/feature/repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/server/modules/feature/repository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/feature/z_handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/server/modules/feature/z_handlers.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/feature/z_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/server/modules/feature/z_repository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/mocks/i_company_handler.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/mocks/i_company_resolver.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/mocks/i_feature_handler.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/mocks/i_feature_resolver.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/mocks/i_permission_handler.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/mocks/i_permission_resolver.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/mocks/i_role_feature_handler.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/mocks/i_role_feature_resolver.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/mocks/i_role_handler.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/mocks/i_role_permission_handler.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/mocks/i_role_permission_resolver.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/mocks/i_role_resolver.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/mocks/i_user_handler.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/mocks/i_user_resolver.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/permission/handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/server/modules/permission/handlers.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/permission/mocks/i_database.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/permission/mocks/i_handler.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/permission/mocks/i_repository.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/permission/repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/server/modules/permission/repository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/permission/z_handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/server/modules/permission/z_handlers.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/permission/z_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/server/modules/permission/z_repository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/role/handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/server/modules/role/handlers.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/role/mocks/i_database.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/role/mocks/i_handler.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/role/mocks/i_repository.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/role/repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/server/modules/role/repository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/role/z_handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/server/modules/role/z_handlers.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/role/z_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/server/modules/role/z_repository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/rolepermission/handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/server/modules/rolepermission/handlers.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/rolepermission/mocks/i_database.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/rolepermission/mocks/i_handler.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/rolepermission/mocks/i_repository.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/rolepermission/repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/server/modules/rolepermission/repository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/rolepermission/z_handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/server/modules/rolepermission/z_handlers.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/rolepermission/z_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/server/modules/rolepermission/z_repository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/user/handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/server/modules/user/handlers.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/user/mocks/i_database.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/user/mocks/i_handler.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/user/mocks/i_repository.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/user/repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/server/modules/user/repository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/user/z_handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/server/modules/user/z_handlers.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/delta/server/modules/user/z_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/server/modules/user/z_repository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/delta/server/modules/company/z_repository_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/server/modules/company/z_repository_test.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vendor/modules.txt" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/modules.txt" afterDir="false" />
@@ -75,7 +27,37 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/delta/server/modules/company/graphql_test.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <folding>
+                <element signature="e#17#213#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/delta/server/modules/company/handler_test.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="399">
+              <caret line="25" column="32" selection-start-line="25" selection-start-column="9" selection-end-line="25" selection-end-column="32" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/delta/server/modules/company/z_graphql_test.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="147">
+              <caret line="7" selection-start-line="7" selection-end-line="7" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -89,6 +71,11 @@
       <find>777</find>
       <find>rows</find>
       <find>row</find>
+      <find>IDB</find>
+      <find>faker.FakeData(&amp;params)</find>
+      <find>TestCount_Success</find>
+      <find>TestList_Success</find>
+      <find>faker</find>
     </findStrings>
   </component>
   <component name="GOROOT" path="/usr/local/Cellar/go/1.12.5/libexec" />
@@ -101,20 +88,24 @@
         <option value="$PROJECT_DIR$/delta/generator/utils/utils.go" />
         <option value="$PROJECT_DIR$/delta/generator/path.go" />
         <option value="$PROJECT_DIR$/delta/generator/main.go" />
-        <option value="$PROJECT_DIR$/delta/generator/tmpl/modules/type/z_repository.tmpl" />
-        <option value="$PROJECT_DIR$/delta/server/modules/company/z_repository_test.go" />
-        <option value="$PROJECT_DIR$/delta/server/modules/company/repository.go" />
-        <option value="$PROJECT_DIR$/delta/server/modules/company/handlers.go" />
         <option value="$PROJECT_DIR$/delta/server/modules/company/z_handlers.go" />
-        <option value="$PROJECT_DIR$/delta/server/modules/company/z_handler_test.go" />
-        <option value="$PROJECT_DIR$/delta/server/modules/company/z_repository.go" />
         <option value="$PROJECT_DIR$/delta/server/modules/company/z_handlers_test.go" />
+        <option value="$PROJECT_DIR$/delta/server/modules/company/handlers.go" />
+        <option value="$PROJECT_DIR$/delta/server/modules/company/repository.go" />
+        <option value="$PROJECT_DIR$/delta/generator/tmpl/modules/type/repository.tmpl" />
+        <option value="$PROJECT_DIR$/delta/generator/tmpl/modules/type/z_repository.tmpl" />
+        <option value="$PROJECT_DIR$/delta/server/modules/company/z_repository.go" />
+        <option value="$PROJECT_DIR$/delta/server/modules/company/handler_test.go" />
+        <option value="$PROJECT_DIR$/delta/server/modules/company/z_repository_test.go" />
+        <option value="$PROJECT_DIR$/delta/server/modules/company/z_graphql_test.go" />
+        <option value="$PROJECT_DIR$/delta/server/modules/company/z_handler_test.go" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" fullScreen="true">
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="y" value="413" />
     <option name="width" value="1680" />
-    <option name="height" value="1050" />
+    <option name="height" value="961" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -145,7 +136,46 @@
               <item name="go" type="b2602c69:ProjectViewProjectNode" />
               <item name="go" type="462c0819:PsiDirectoryNode" />
               <item name="delta" type="462c0819:PsiDirectoryNode" />
+              <item name="generator" type="462c0819:PsiDirectoryNode" />
+              <item name="tmpl" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="go" type="b2602c69:ProjectViewProjectNode" />
+              <item name="go" type="462c0819:PsiDirectoryNode" />
+              <item name="delta" type="462c0819:PsiDirectoryNode" />
+              <item name="generator" type="462c0819:PsiDirectoryNode" />
+              <item name="tmpl" type="462c0819:PsiDirectoryNode" />
+              <item name="modules" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="go" type="b2602c69:ProjectViewProjectNode" />
+              <item name="go" type="462c0819:PsiDirectoryNode" />
+              <item name="delta" type="462c0819:PsiDirectoryNode" />
+              <item name="generator" type="462c0819:PsiDirectoryNode" />
+              <item name="tmpl" type="462c0819:PsiDirectoryNode" />
+              <item name="modules" type="462c0819:PsiDirectoryNode" />
+              <item name="type" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="go" type="b2602c69:ProjectViewProjectNode" />
+              <item name="go" type="462c0819:PsiDirectoryNode" />
+              <item name="delta" type="462c0819:PsiDirectoryNode" />
               <item name="server" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="go" type="b2602c69:ProjectViewProjectNode" />
+              <item name="go" type="462c0819:PsiDirectoryNode" />
+              <item name="delta" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+              <item name="database" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="go" type="b2602c69:ProjectViewProjectNode" />
+              <item name="go" type="462c0819:PsiDirectoryNode" />
+              <item name="delta" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+              <item name="database" type="462c0819:PsiDirectoryNode" />
+              <item name="mocks" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="go" type="b2602c69:ProjectViewProjectNode" />
@@ -192,15 +222,84 @@
       </list>
     </option>
   </component>
+  <component name="RunManager" selected="Go Test.TestUpdate_Success in github.com/tanphamhaiduong/go/delta/server/modules/company">
+    <configuration name="TestCompanyResolverTestSuite in github.com/tanphamhaiduong/go/delta/server/modules/company" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="go" />
+      <working_directory value="$PROJECT_DIR$/delta/server/modules/company" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="github.com/tanphamhaiduong/go/delta/server/modules/company" />
+      <directory value="$PROJECT_DIR$/" />
+      <filePath value="$PROJECT_DIR$/" />
+      <pattern value="^TestCompanyResolverTestSuite$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestDelete_Fail in github.com/tanphamhaiduong/go/delta/server/modules/company" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="go" />
+      <working_directory value="$PROJECT_DIR$/delta/server/modules/company" />
+      <parameters value=" -testify.m ^TestDelete_Fail$" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="github.com/tanphamhaiduong/go/delta/server/modules/company" />
+      <directory value="$PROJECT_DIR$/" />
+      <filePath value="$PROJECT_DIR$/" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestList_Fail in github.com/tanphamhaiduong/go/delta/server/modules/company" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="go" />
+      <working_directory value="$PROJECT_DIR$/delta/server/modules/company" />
+      <parameters value=" -testify.m ^TestList_Fail$" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="github.com/tanphamhaiduong/go/delta/server/modules/company" />
+      <directory value="$PROJECT_DIR$/" />
+      <filePath value="$PROJECT_DIR$/" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestUpdate_Success in github.com/tanphamhaiduong/go/delta/server/modules/company" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="go" />
+      <working_directory value="$PROJECT_DIR$/delta/server/modules/company" />
+      <parameters value=" -testify.m ^TestUpdate_Success$" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="github.com/tanphamhaiduong/go/delta/server/modules/company" />
+      <directory value="$PROJECT_DIR$/" />
+      <filePath value="$PROJECT_DIR$/" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go Test.TestUpdate_Success in github.com/tanphamhaiduong/go/delta/server/modules/company" />
+        <item itemvalue="Go Test.TestCompanyResolverTestSuite in github.com/tanphamhaiduong/go/delta/server/modules/company" />
+        <item itemvalue="Go Test.TestDelete_Fail in github.com/tanphamhaiduong/go/delta/server/modules/company" />
+        <item itemvalue="Go Test.TestList_Fail in github.com/tanphamhaiduong/go/delta/server/modules/company" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="TestHistory">
+    <history-entry file="TestList_Fail_in_github_com_tanphamhaiduong_go_delta_server_modules_company - 2019.06.06 at 22h 30m 04s.xml">
+      <configuration name="TestList_Fail in github.com/tanphamhaiduong/go/delta/server/modules/company" configurationId="GoTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="TestDelete_Fail_in_github_com_tanphamhaiduong_go_delta_server_modules_company - 2019.06.06 at 22h 31m 38s.xml">
+      <configuration name="TestDelete_Fail in github.com/tanphamhaiduong/go/delta/server/modules/company" configurationId="GoTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="TestCompanyResolverTestSuite_in_github_com_tanphamhaiduong_go_delta_server_modules_company - 2019.06.06 at 22h 32m 44s.xml">
+      <configuration name="TestCompanyResolverTestSuite in github.com/tanphamhaiduong/go/delta/server/modules/company" configurationId="GoTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="TestUpdate_Success_in_github_com_tanphamhaiduong_go_delta_server_modules_company - 2019.06.06 at 22h 34m 39s.xml">
+      <configuration name="TestUpdate_Success in github.com/tanphamhaiduong/go/delta/server/modules/company" configurationId="GoTestRunConfiguration" />
+    </history-entry>
+  </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
+    <frame x="0" y="23" width="2560" height="1351" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25885227" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.41421762" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32942554" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -280,13 +379,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/delta/generator/tmpl/modules/type/z_repository.tmpl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="205">
-          <caret line="110" column="22" selection-start-line="110" selection-start-column="22" selection-end-line="110" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../../DATA-DOG/go-sqlmock/expectations.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-524">
@@ -298,47 +390,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="296">
           <caret line="41" column="48" selection-start-line="41" selection-start-column="35" selection-end-line="41" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/delta/server/modules/company/z_repository_test.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="779">
-          <caret line="47" lean-forward="true" selection-start-line="47" selection-end-line="47" />
-          <folding>
-            <element signature="e#17#128#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/delta/server/modules/company/z_handler_test.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="438">
-          <caret line="23" column="20" selection-start-line="23" selection-start-column="20" selection-end-line="23" selection-end-column="20" />
-          <folding>
-            <element signature="e#17#265#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/delta/server/modules/company/repository.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="19" column="9" selection-start-line="19" selection-start-column="9" selection-end-line="19" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/delta/server/modules/company/z_repository.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="758">
-          <caret line="312" column="37" selection-start-line="312" selection-start-column="37" selection-end-line="312" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/delta/server/modules/company/handlers.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="16" column="19" selection-start-line="16" selection-start-column="19" selection-end-line="16" selection-end-column="19" />
         </state>
       </provider>
     </entry>
@@ -363,20 +414,135 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/delta/server/modules/company/z_handlers_test.go">
+    <entry file="file://$PROJECT_DIR$/delta/server/modules/company/z_handlers_test.go" />
+    <entry file="file://$PROJECT_DIR$/delta/server/database/mocks/idb.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="617">
-          <caret line="33" column="10" selection-start-line="33" selection-start-column="10" selection-end-line="33" selection-end-column="10" />
-          <folding>
-            <element signature="e#17#265#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="88">
+          <caret line="9" column="5" selection-start-line="9" selection-start-column="5" selection-end-line="9" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/delta/server/database/database.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="506">
+          <caret line="89" column="66" selection-start-line="87" selection-start-column="2" selection-end-line="89" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/delta/generator/tmpl/arguments/type.tmpl">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/delta/generator/tmpl/modules/type/repository.tmpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="525">
+          <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/delta/generator/tmpl/modules/type/z_handlers.tmpl">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/delta/generator/tmpl/modules/type/z_graphql.tmpl">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/delta/generator/tmpl/modules/type/z_repository.tmpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1211">
+          <caret line="280" selection-start-line="280" selection-end-line="280" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/delta/generator/tmpl/modules/type/handlers.tmpl">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/delta/server/modules/company/handlers.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="273">
+          <caret line="13" column="28" selection-start-line="13" selection-start-column="19" selection-end-line="13" selection-end-column="28" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/delta/server/modules/company/z_handlers.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="758">
-          <caret line="121" column="29" selection-start-line="121" selection-end-line="122" />
+        <state relative-caret-position="546">
+          <caret line="32" column="1" lean-forward="true" selection-start-line="32" selection-start-column="1" selection-end-line="32" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/delta/server/modules/company/z_handler_test.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1616">
+          <caret line="14" column="32" selection-start-line="14" selection-start-column="32" selection-end-line="14" selection-end-column="32" />
+          <caret line="31" column="32" selection-start-line="31" selection-start-column="32" selection-end-line="31" selection-end-column="32" />
+          <caret line="48" column="32" selection-start-line="48" selection-start-column="32" selection-end-line="48" selection-end-column="32" />
+          <caret line="67" column="32" selection-start-line="67" selection-start-column="32" selection-end-line="67" selection-end-column="32" />
+          <caret line="86" column="32" selection-start-line="86" selection-start-column="32" selection-end-line="86" selection-end-column="32" />
+          <caret line="110" column="32" selection-start-line="110" selection-start-column="32" selection-end-line="110" selection-end-column="32" />
+          <caret line="134" column="32" selection-start-line="134" selection-start-column="32" selection-end-line="134" selection-end-column="32" />
+          <caret line="156" column="32" selection-start-line="156" selection-start-column="32" selection-end-line="156" selection-end-column="32" />
+          <caret line="177" column="32" selection-start-line="177" selection-start-column="32" selection-end-line="177" selection-end-column="32" />
+          <caret line="204" column="32" selection-start-line="204" selection-start-column="32" selection-end-line="204" selection-end-column="32" />
+          <caret line="229" column="32" selection-start-line="229" selection-start-column="32" selection-end-line="229" selection-end-column="32" />
+          <caret line="256" column="32" selection-start-line="256" selection-start-column="32" selection-end-line="256" selection-end-column="32" />
+          <caret line="283" column="32" selection-start-line="283" selection-start-column="32" selection-end-line="283" selection-end-column="32" />
+          <caret line="302" column="32" selection-start-line="302" selection-start-column="32" selection-end-line="302" selection-end-column="32" />
+          <folding>
+            <element signature="e#31#250#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/delta/server/modules/company/repository.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="10" column="2" selection-start-line="10" selection-start-column="2" selection-end-line="12" selection-end-column="75" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/delta/server/modules/company/repository_test.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="471">
+          <caret line="26" column="2" selection-start-line="26" selection-start-column="2" selection-end-line="32" selection-end-column="39" />
+          <folding>
+            <element signature="e#17#213#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/delta/server/modules/company/z_repository_test.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="78">
+          <caret line="297" column="1" lean-forward="true" selection-start-line="297" selection-start-column="1" selection-end-line="297" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/delta/server/modules/company/z_repository.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="752">
+          <caret line="195" column="20" selection-start-line="195" selection-start-column="20" selection-end-line="195" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/delta/server/modules/company/graphql_test.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#17#213#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/delta/server/modules/company/handler_test.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="399">
+          <caret line="25" column="32" selection-start-line="25" selection-start-column="9" selection-end-line="25" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/delta/server/modules/company/z_graphql_test.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="147">
+          <caret line="7" selection-start-line="7" selection-end-line="7" />
         </state>
       </provider>
     </entry>

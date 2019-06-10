@@ -3,9 +3,9 @@ package models
 
 // Company ...
 type Company struct {
-	ID        int64
-	Name      string
-	Status    string
-	CreatedBy string
-	UpdatedBy string
+	ID        int64  `faker:"unix_time"`
+	Name      string `faker:"name"`
+	Status    string `faker:"word"`
+	CreatedBy string `faker:"email"`
+	UpdatedBy string `faker:"email"`
 }

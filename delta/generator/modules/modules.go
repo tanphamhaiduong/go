@@ -10,6 +10,7 @@ type Field struct {
 	GoType             string
 	QueryType          string
 	Validate           string
+	FakerTag           string
 	GraphQLType        string
 	GraphQLDescription string
 	GraphQLRequired    bool

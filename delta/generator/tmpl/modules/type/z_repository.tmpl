@@ -18,7 +18,7 @@ import (
 // GetByID ...
 func (r repositoryImpl) GetByID(ctx context.Context, params arguments.{{ $Name }}GetByIDArgs) (models.{{ $Name }}, error) {
 	var (
-		{{ $name }} = models.{{ $Name }}{}
+		{{ $name }} models.{{ $Name }}
 		selectBuilder = sq.Select("*").From("{{ $name_module }}").Where(sq.Eq{"id": params.ID})
 	)
 	sql, args, err := selectBuilder.ToSql()
@@ -41,10 +41,10 @@ func (r repositoryImpl) GetByID(ctx context.Context, params arguments.{{ $Name }
 	return {{ $name }}, nil
 }
 
-// GetByID ...
+// GetByIDs ...
 func (r repositoryImpl) GetByIDs(ctx context.Context, params arguments.{{ $Name }}GetByIDsArgs) ([]models.{{- $Name -}}, error) {
 	var (
-		{{ $name | ToPlural }}     = []models.{{- $Name }}{}
+		{{ $name | ToPlural }} []models.{{- $Name }}
 		selectBuilder = sq.Select("*").From("{{- $name_module }}").Where(sq.Eq{"id": params.IDs})
 	)
 	sql, args, err := selectBuilder.ToSql()
@@ -76,7 +76,7 @@ func (r repositoryImpl) GetByIDs(ctx context.Context, params arguments.{{ $Name 
 }
 
 // setArgsToListSelectBuilder ...
-func setArgsToListSelectBuilder(selectBuilder sq.SelectBuilder, params arguments.{{ $Name }}ListArgs) sq.SelectBuilder {
+func (r repositoryImpl) setArgsToListSelectBuilder(selectBuilder sq.SelectBuilder, params arguments.{{ $Name }}ListArgs) sq.SelectBuilder {
 	{{- range $field := $fields }}
 		if params.{{- $field.Name }} != {{- if $field.IsInt64 }}0{{ else }}""{{ end }} {
 			selectBuilder = selectBuilder.Where(sq.{{ $field.QueryType }}{"{{ $field.Name | ToSnakeCase }}": params.{{ $field.Name }}})
@@ -95,10 +95,10 @@ func setArgsToListSelectBuilder(selectBuilder sq.SelectBuilder, params arguments
 // List ...
 func (r repositoryImpl) List(ctx context.Context, params arguments.{{- $Name }}ListArgs) ([]models.{{ $Name }}, error) {
 	var (
-		{{ $name | ToPlural }}  = []models.{{ $Name }}{}
+		{{ $name | ToPlural }} []models.{{ $Name }}
 		selectBuilder = sq.Select("*").From("{{- $name_module }}")
 	)
-	selectBuilderWithArgs := setArgsToListSelectBuilder(selectBuilder, params)
+	selectBuilderWithArgs := r.setArgsToListSelectBuilder(selectBuilder, params)
 	sql, args, err := selectBuilderWithArgs.ToSql()
 	if err != nil {
 		return {{ $name | ToPlural }}, err
@@ -128,7 +128,7 @@ func (r repositoryImpl) List(ctx context.Context, params arguments.{{- $Name }}L
 }
 
 // setArgsToCountSelectBuilder ...
-func setArgsToCountSelectBuilder(selectBuilder sq.SelectBuilder, params arguments.{{ $Name }}CountArgs) sq.SelectBuilder {
+func (r repositoryImpl) setArgsToCountSelectBuilder(selectBuilder sq.SelectBuilder, params arguments.{{ $Name }}CountArgs) sq.SelectBuilder {
 	{{- range $field := $fields }}
 		if params.{{ $field.Name }} != {{ if $field.IsInt64 }}0{{ else }}""{{- end }} {
 			selectBuilder = selectBuilder.Where(sq.{{ $field.QueryType }}{"{{- $field.Name | ToSnakeCase }}": params.{{ $field.Name }}})
@@ -143,7 +143,7 @@ func (r repositoryImpl) Count(ctx context.Context, params arguments.{{- $Name }}
 		count         int64
 		selectBuilder = sq.Select("COUNT(id)").From("{{- $name_module }}")
 	)
-	selectBuilderWithArgs := setArgsToCountSelectBuilder(selectBuilder, params)
+	selectBuilderWithArgs := r.setArgsToCountSelectBuilder(selectBuilder, params)
 	sql, args, err := selectBuilderWithArgs.ToSql()
 	if err != nil {
 		return count, err
@@ -163,7 +163,7 @@ func (r repositoryImpl) Count(ctx context.Context, params arguments.{{- $Name }}
 // Insert ...
 func (r repositoryImpl) Insert(ctx context.Context, params arguments.{{ $Name }}InsertArgs) (models.{{ $Name }}, error) {
 	var (
-		{{ $name }}    = models.{{ $Name }}{}
+		{{ $name }} models.{{ $Name }}
 		insertBuilder = sq.Insert("{{- $name_module }}").Columns(
 			{{- range $field := $fields }}
 				{{- if $field.IsNotIDField }}
@@ -194,19 +194,15 @@ func (r repositoryImpl) Insert(ctx context.Context, params arguments.{{ $Name }}
 	if err != nil {
 		return {{ $name }}, err
 	}
-	{{ $name }} = models.{{ $Name }}{
-		ID:        id,
-		{{- range $field := $fields }}
-			{{- if $field.IsNotIDField }}
-				{{ $field.Name }}: params.{{ $field.Name }},
-			{{- end }}
-		{{- end }}
+	new{{ $Name }}, err := r.GetByID(ctx, arguments.{{ $Name }}GetByIDArgs{ID: id})
+	if err != nil {
+		return {{ $name }}, err
 	}
-	return {{ $name }}, nil
+	return new{{ $Name }}, nil
 }
 
 // setArgsToUpdateBuilder ...
-func setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, params arguments.{{ $Name }}UpdateArgs) sq.UpdateBuilder {
+func (r repositoryImpl) setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, params arguments.{{ $Name }}UpdateArgs) sq.UpdateBuilder {
 	{{- range $field := $fields }}
 		{{- if $field.IsNotIDField }}
 			if params.{{- $field.Name }} != nil {
@@ -220,10 +216,10 @@ func setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, params arguments.{{ 
 // Update ...
 func (r repositoryImpl) Update(ctx context.Context, params arguments.{{ $Name }}UpdateArgs) (models.{{ $Name }}, error) {
 	var (
-		{{ $name }}    = models.{{ $Name }}{}
+		{{ $name }}    models.{{ $Name }}
 		updateBuilder = sq.Update("{{- $name_module }}").Where(sq.Eq{"id": *params.ID})
 	)
-	updateBuilderWithArgs := setArgsToUpdateBuilder(updateBuilder, params)
+	updateBuilderWithArgs := r.setArgsToUpdateBuilder(updateBuilder, params)
 
 	sql, args, err := updateBuilderWithArgs.ToSql()
 	if err != nil {
@@ -244,12 +240,11 @@ func (r repositoryImpl) Update(ctx context.Context, params arguments.{{ $Name }}
 	if rowAffected == 0 {
 		return {{ $name }}, fmt.Errorf("error when update record id %d", *params.ID)
 	}
-	{{ $name }} = models.{{ $Name }}{
-		{{- range $field := $fields }}
-			{{ $field.Name }}: *params.{{ $field.Name }},
-		{{- end }}
+	new{{ $Name }}, err := r.GetByID(ctx, arguments.{{ $Name }}GetByIDArgs{ID: *params.ID})
+	if err != nil {
+		return {{ $name }}, err
 	}
-	return {{ $name }}, nil
+	return new{{ $Name }}, nil
 }
 
 // Delete ...
@@ -277,3 +272,4 @@ func (r repositoryImpl) Delete(ctx context.Context, params arguments.{{ $Name }}
 	return params.ID, nil
 }
 
+//go:generate mockery -name=IDatabase -output=mocks -case=underscore

@@ -23,7 +23,7 @@ type ICoreRepository interface {
 // GetByID ...
 func (h HandlerImpl) GetByID(ctx context.Context, params arguments.CompanyGetByIDArgs) (models.Company, error) {
 	var (
-		company = models.Company{}
+		company models.Company
 	)
 	company, err := h.company.GetByID(ctx, params)
 	if err != nil {
@@ -35,7 +35,7 @@ func (h HandlerImpl) GetByID(ctx context.Context, params arguments.CompanyGetByI
 // GetByIDs ...
 func (h HandlerImpl) GetByIDs(ctx context.Context, params arguments.CompanyGetByIDsArgs) ([]models.Company, error) {
 	var (
-		companies = []models.Company{}
+		companies []models.Company
 	)
 	companies, err := h.company.GetByIDs(ctx, params)
 	if err != nil {
@@ -62,7 +62,7 @@ func (h HandlerImpl) Count(ctx context.Context, params arguments.CompanyCountArg
 // List ...
 func (h HandlerImpl) List(ctx context.Context, params arguments.CompanyListArgs) ([]models.Company, error) {
 	var (
-		companies = []models.Company{}
+		companies []models.Company
 	)
 	if err := validator.Struct(params); err != nil {
 		return companies, err
@@ -77,7 +77,7 @@ func (h HandlerImpl) List(ctx context.Context, params arguments.CompanyListArgs)
 // Insert ...
 func (h HandlerImpl) Insert(ctx context.Context, params arguments.CompanyInsertArgs) (models.Company, error) {
 	var (
-		company = models.Company{}
+		company models.Company
 	)
 	if err := validator.Struct(params); err != nil {
 		return company, err
@@ -92,7 +92,7 @@ func (h HandlerImpl) Insert(ctx context.Context, params arguments.CompanyInsertA
 // Update ...
 func (h HandlerImpl) Update(ctx context.Context, params arguments.CompanyUpdateArgs) (models.Company, error) {
 	var (
-		company = models.Company{}
+		company models.Company
 	)
 	if err := validator.Struct(params); err != nil {
 		return company, err

@@ -26,7 +26,7 @@ type ICoreRepository interface {
 // GetByID ...
 func (h HandlerImpl) GetByID(ctx context.Context, params arguments.{{ $Name }}GetByIDArgs) (models.{{ $Name }}, error) {
 	var (
-		{{ $name }} = models.{{ $Name }}{}
+		{{ $name }} models.{{ $Name }}
 	)
 	{{ $name }}, err := h.{{ $name }}.GetByID(ctx, params)
 	if err != nil {
@@ -38,7 +38,7 @@ func (h HandlerImpl) GetByID(ctx context.Context, params arguments.{{ $Name }}Ge
 // GetByIDs ...
 func (h HandlerImpl) GetByIDs(ctx context.Context, params arguments.{{ $Name }}GetByIDsArgs) ([]models.{{ $Name }}, error) {
 	var (
-		{{ $name | ToPlural }} = []models.{{ $Name }}{}
+		{{ $name | ToPlural }} []models.{{ $Name }}
 	)
 	{{ $name | ToPlural }}, err := h.{{ $name }}.GetByIDs(ctx, params)
 	if err != nil {
@@ -65,7 +65,7 @@ func (h HandlerImpl) Count(ctx context.Context, params arguments.{{ $Name }}Coun
 // List ...
 func (h HandlerImpl) List(ctx context.Context, params arguments.{{ $Name }}ListArgs) ([]models.{{ $Name }}, error) {
 	var (
-		{{ $name | ToPlural }} = []models.{{ $Name }}{}
+		{{ $name | ToPlural }} []models.{{ $Name }}
 	)
 	if err := validator.Struct(params); err != nil {
 		return {{ $name | ToPlural }}, err
@@ -80,7 +80,7 @@ func (h HandlerImpl) List(ctx context.Context, params arguments.{{ $Name }}ListA
 // Insert ...
 func (h HandlerImpl) Insert(ctx context.Context, params arguments.{{ $Name }}InsertArgs) (models.{{ $Name }}, error) {
 	var (
-		{{ $name }} = models.{{ $Name }}{}
+		{{ $name }} models.{{ $Name }}
 	)
 	if err := validator.Struct(params); err != nil {
 		return {{ $name }}, err
@@ -95,7 +95,7 @@ func (h HandlerImpl) Insert(ctx context.Context, params arguments.{{ $Name }}Ins
 // Update ...
 func (h HandlerImpl) Update(ctx context.Context, params arguments.{{ $Name }}UpdateArgs) (models.{{ $Name }}, error) {
 	var (
-		{{ $name }} = models.{{ $Name }}{}
+		{{ $name }} models.{{ $Name }}
 	)
 	if err := validator.Struct(params); err != nil {
 		return {{ $name }}, err

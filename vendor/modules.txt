@@ -1,5 +1,8 @@
 # github.com/Masterminds/squirrel v1.1.0
 github.com/Masterminds/squirrel
+# github.com/bxcodec/faker v2.0.1+incompatible
+github.com/bxcodec/faker
+github.com/bxcodec/faker/support/slice
 # github.com/davecgh/go-spew v1.1.1
 github.com/davecgh/go-spew/spew
 # github.com/go-playground/locales v0.12.1
@@ -43,8 +46,8 @@ github.com/pmezard/go-difflib/difflib
 github.com/stretchr/objx
 # github.com/stretchr/testify v1.3.0
 github.com/stretchr/testify/mock
-github.com/stretchr/testify/suite
 github.com/stretchr/testify/assert
+github.com/stretchr/testify/suite
 github.com/stretchr/testify/require
 # google.golang.org/appengine v1.6.0
 google.golang.org/appengine/cloudsql

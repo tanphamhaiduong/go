@@ -8,6 +8,8 @@ import (
 
 // IDatabase ...
 type IDatabase interface {
+	Ping() error
+	Close() error
 	PrepareContext(ctx context.Context, query string) (database.IStmt, error)
 }
 
