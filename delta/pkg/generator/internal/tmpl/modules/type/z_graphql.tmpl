@@ -1,0 +1,206 @@
+// @generated
+{{- $Name := .Module.Name }}
+{{- $fields := .Module.Fields  }}
+{{- $name := .Module.Name | ToLowerCase }}
+package {{ $name }}
+
+import (
+	"database/sql"
+
+	"github.com/graphql-go/graphql"
+	"github.com/tanphamhaiduong/go/delta/internal/utils"
+	"github.com/tanphamhaiduong/go/delta/internal/arguments"
+	"github.com/tanphamhaiduong/go/delta/internal/models"
+)
+
+var (
+	// Type ...
+	Type = graphql.NewObject(graphql.ObjectConfig{
+		Name:        "{{ $Name }}",
+		Description: "This is type Feature",
+    Fields: graphql.Fields{
+      {{- range $field := $fields }}
+        "{{ $field.Name | ToLowerCamelCase }}": &graphql.Field{
+          {{- if $field.GraphQLRequired }}
+            Type:        graphql.NewNonNull({{ $field.GraphQLType }}),
+          {{- else }}
+            Type:        {{ $field.GraphQLType }},
+          {{- end }}
+          Description: "{{ $field.GraphQLDescription }}",
+        },
+      {{- end }}
+    },
+	})
+
+	// GetByIDTypeArgs ...
+	GetByIDTypeArgs = graphql.FieldConfigArgument{
+		"id": &graphql.ArgumentConfig{
+			Type: graphql.NewNonNull(graphql.Int),
+		},
+	}
+
+	// ListTypeArgs ...
+	ListTypeArgs = graphql.FieldConfigArgument{
+		{{- range $field := $fields }}
+			"{{ $field.Name | ToLowerCamelCase }}": &graphql.ArgumentConfig{
+				Type:        {{ $field.GraphQLType }},
+				Description: "{{ $field.GraphQLDescription }}",
+			},
+		{{- end }}
+		"page": &graphql.ArgumentConfig{
+			Type:        graphql.NewNonNull(graphql.Int),
+			Description: "This is feature page",
+		},
+		"pageSize": &graphql.ArgumentConfig{
+			Type:         graphql.Int,
+			Description:  "This is feature pageSize",
+			DefaultValue: 10,
+		},
+	}
+
+	// InsertTypeArgs ...
+	InsertTypeArgs = graphql.FieldConfigArgument{
+		{{- range $field := $fields }}
+			{{- if $field.IsNotIDField }}
+				"{{ $field.Name | ToLowerCamelCase }}": &graphql.ArgumentConfig{
+					{{- if $field.GraphQLRequired }}
+            Type:        graphql.NewNonNull({{ $field.GraphQLType }}),
+          {{- else }}
+            Type:        {{ $field.GraphQLType }},
+          {{- end }}
+					Description: "{{ $field.GraphQLDescription }}",
+				},
+			{{- end  }}
+		{{- end }}
+	}
+
+	// UpdateTypeArgs ...
+	UpdateTypeArgs = graphql.FieldConfigArgument{
+		"id": &graphql.ArgumentConfig{
+			Type: graphql.NewNonNull(graphql.Int),
+		},
+		{{- range $field := $fields }}
+			{{- if $field.IsNotIDField }}
+				"{{ $field.Name | ToLowerCamelCase }}": &graphql.ArgumentConfig{
+					Type:        {{ $field.GraphQLType }},
+					Description: "{{ $field.GraphQLDescription }}",
+				},
+			{{- end  }}
+		{{- end }}
+	}
+
+	// DeleteTypeArgs ...
+	DeleteTypeArgs = graphql.FieldConfigArgument{
+		"id": &graphql.ArgumentConfig{
+			Type: graphql.NewNonNull(graphql.Int),
+		},
+	}
+)
+
+// ICoreHandler ...
+type ICoreHandler interface {
+	GetByID(ctx context.Context, params arguments.{{ $Name }}GetByIDArgs) (models.{{ $Name }}, error)
+	GetByIDs(ctx context.Context, params arguments.{{ $Name }}GetByIDsArgs) ([]models.{{ $Name }}, error)
+	Count(ctx context.Context, params arguments.{{ $Name }}CountArgs) (int64, error)
+	List(ctx context.Context, params arguments.{{ $Name }}ListArgs) ([]models.{{ $Name }}, error)
+	Insert(ctx context.Context, params arguments.{{ $Name }}InsertArgs) (models.{{ $Name }}, error)
+	Update(ctx context.Context, params arguments.{{ $Name }}UpdateArgs) (models.{{ $Name }}, error)
+	Delete(ctx context.Context, params arguments.{{ $Name }}DeleteArgs) (int64, error)
+}
+
+// ForwardParams ...
+func (r *ResolverImpl) ForwardParams(params graphql.ResolveParams) (interface{}, error) {
+	return params.Args, nil
+}
+
+
+// GetByID ...
+func (r *ResolverImpl) GetByID(params graphql.ResolveParams) (interface{}, error) {
+	// parse params
+	args := arguments.{{ $Name }}GetByIDArgs{}
+	if err := utils.Parse(params.Args, &args); err != nil {
+		return nil, err
+	}
+	response, err := r.{{ $name }}.GetByID(params.Context, args)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// Count ...
+func (r *ResolverImpl) Count(params graphql.ResolveParams) (interface{}, error) {
+	// parse params
+	args := arguments.{{ $Name }}CountArgs{}
+	err := utils.Parse(params.Source.(map[string]interface{}), &args)
+	if err != nil {
+		return nil, err
+	}
+	response, err := r.{{ $name }}.Count(params.Context, args)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// List ...
+func (r *ResolverImpl) List(params graphql.ResolveParams) (interface{}, error) {
+	// parse params
+	args := arguments.{{ $Name }}ListArgs{}
+	err := utils.Parse(params.Source.(map[string]interface{}), &args)
+	if err != nil {
+		return nil, err
+	}
+	response, err := r.{{ $name }}.List(params.Context, args)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// Insert ...
+func (r *ResolverImpl) Insert(params graphql.ResolveParams) (interface{}, error) {
+	// parse params
+	args := arguments.{{ $Name }}InsertArgs{}
+	err := utils.Parse(params.Args, &args)
+	if err != nil {
+		return nil, err
+	}
+	response, err := r.{{ $name }}.Insert(params.Context, args)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// Update ...
+func (r *ResolverImpl) Update(params graphql.ResolveParams) (interface{}, error) {
+	// parse params
+	args := arguments.{{ $Name }}UpdateArgs{}
+	err := utils.Parse(params.Args, &args)
+	if err != nil {
+		return nil, err
+	}
+	response, err := r.{{ $name }}.Update(params.Context, args)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// Delete ...
+func (r *ResolverImpl) Delete(params graphql.ResolveParams) (interface{}, error) {
+	// parse params
+	args := arguments.{{ $Name }}DeleteArgs{}
+	err := utils.Parse(params.Args, &args)
+	if err != nil {
+		return nil, err
+	}
+	response, err := r.{{ $name }}.Delete(params.Context, args)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+//go:generate mockery -name=IHandler -output=mocks -case=underscore

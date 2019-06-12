@@ -14,7 +14,7 @@ require (
 	github.com/golang/mock v1.3.1 // indirect
 	github.com/google/btree v1.0.0 // indirect
 	github.com/google/pprof v0.0.0-20190515194954-54271f7e092f // indirect
-	github.com/gorilla/mux v1.7.2
+	github.com/gorilla/mux v1.7.2 // indirect
 	github.com/graphql-go/graphql v0.7.8
 	github.com/graphql-go/handler v0.2.3
 	github.com/iancoleman/strcase v0.0.0-20190422225806-e506e3ef7365
@@ -27,10 +27,12 @@ require (
 	github.com/pkg/errors v0.8.1 // indirect
 	github.com/pressly/goose v2.6.0+incompatible // indirect
 	github.com/reiver/go-cast v0.0.0-20170210005224-b977979c1903 // indirect
+	github.com/sirupsen/logrus v1.4.2
 	github.com/stretchr/objx v0.2.0 // indirect
 	github.com/stretchr/testify v1.3.0
 	github.com/ziutek/mymysql v1.5.4 // indirect
 	go.opencensus.io v0.22.0 // indirect
+	go.uber.org/dig v1.7.0 // indirect
 	golang.org/x/crypto v0.0.0-20190530122614-20be4c3c3ed5 // indirect
 	golang.org/x/exp v0.0.0-20190510132918-efd6b22b2522 // indirect
 	golang.org/x/image v0.0.0-20190523035834-f03afa92d3ff // indirect

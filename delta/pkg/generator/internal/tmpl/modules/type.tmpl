@@ -1,0 +1,7 @@
+{{- $Module := .Module }}
+package modules
+
+// I{{ $Module.Name }}Resolver ...
+type I{{ $Module.Name }}Resolver interface {
+  ICore{{ $Module.Name }}Resolver
+}

@@ -1,0 +1,26 @@
+{{- $Name := .Module.Name }}
+{{- $name := .Module.Name | ToLowerCase }}
+package {{ $name }}
+
+import (
+	"testing"
+
+	"github.com/stretchr/testify/suite"
+	"github.com/tanphamhaiduong/go/delta/internal/modules/{{ $name }}/mocks"
+)
+
+type {{ $Name }}HandlerTestSuite struct {
+	suite.Suite
+	MockI{{ $Name }} *mocks.IRepository
+	{{ $Name }}      HandlerImpl
+}
+
+func Test{{ $Name }}HandlerTestSuite(t *testing.T) {
+	suite.Run(t, new({{ $Name }}HandlerTestSuite))
+}
+
+func (s *{{ $Name }}HandlerTestSuite) SetupTest() {
+	s.MockI{{ $Name }} = &mocks.IRepository{}
+	s.{{ $Name }} = NewHandler(s.MockI{{ $Name }})
+	s.{{ $Name }}.{{ $name }} = s.MockI{{ $Name }}
+}

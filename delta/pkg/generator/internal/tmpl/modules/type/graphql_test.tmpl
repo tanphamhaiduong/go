@@ -1,0 +1,27 @@
+{{- $Name := .Module.Name }}
+{{- $name := .Module.Name | ToLowerCase }}
+package {{ $name }}
+
+import (
+	"testing"
+
+	"github.com/stretchr/testify/suite"
+	mocksDB "github.com/tanphamhaiduong/go/delta/internal/database/mocks"
+	"github.com/tanphamhaiduong/go/delta/internal/modules/{{ $name }}/mocks"
+)
+
+type {{ $Name }}ResolverTestSuite struct {
+	suite.Suite
+	MockI{{ $Name }}    *mocks.IHandler
+	{{ $Name }}                ResolverImpl
+}
+
+func Test{{ $Name }}ResolverTestSuite(t *testing.T) {
+	suite.Run(t, new({{ $Name }}ResolverTestSuite))
+}
+
+func (s *{{ $Name }}ResolverTestSuite) SetupTest() {
+	s.MockI{{ $Name }} = &mocks.IHandler{}
+	s.{{ $Name }} = NewResolver(s.MockI{{ $Name }})
+	s.{{ $Name }}.{{ $name }} = s.MockI{{ $Name }}
+}

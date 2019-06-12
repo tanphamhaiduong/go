@@ -1,0 +1,216 @@
+{{- $Name := .Module.Name }}
+{{- $name := .Module.Name | ToLowerCase }}
+{{- $names := $name | ToPlural }}
+// @generated
+package {{ $name }}
+
+import (
+	"context"
+	"errors"
+
+	"github.com/graphql-go/graphql"
+	"github.com/stretchr/testify/mock"
+
+	"github.com/tanphamhaiduong/go/delta/internal/models"
+)
+
+func (s *{{ $Name }}ResolverTestSuite) TestGetByID_Success() {
+	var (
+		ctx           = context.Background()
+		sampleID    int64 = 1
+		params        = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
+		{{ $name }} models.{{ $Name }}
+    args = arguments.{{ $Name }}GetByIDArgs{
+		  ID: 1,
+		}
+	)
+	s.MockI{{ $Name }}.On("GetByID", ctx, args).Return({{ $name }}, nil)
+	actual, err := s.{{ $Name }}.GetByID(params)
+	s.Nil(err)
+	s.Equal({{ $name }}, actual)
+}
+
+func (s *{{ $Name }}ResolverTestSuite) TestGetByID_Fail() {
+	var (
+		ctx           = context.Background()
+		sampleID    int64 = 1
+		params        = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
+		{{ $name }} models.{{ $Name }}
+		args = arguments.{{ $Name }}GetByIDArgs{
+		 ID: 1,
+		}
+	)
+	s.MockI{{ $Name }}.On("GetByID", ctx, args).Return({{ $name }}, errors.New("some errors"))
+	actual, err := s.{{ $Name }}.GetByID(params)
+	s.Nil(actual)
+	s.NotNil(err)
+}
+
+func (s *{{ $Name }}ResolverTestSuite) TestList_Success() {
+	var (
+		ctx       = context.Background()
+		params    = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
+		{{ $names }} []models.{{ $Name }}
+		args = arguments.{{ $Name }}ListArgs{
+		  Page: 1,
+      PageSize: 10,
+		}
+	)
+	s.MockI{{ $Name }}.On("List", ctx, args).Return({{ $names }}, nil)
+	actual, err := s.{{ $Name }}.List(params)
+	s.Nil(err)
+	s.Equal({{ $names }}, actual)
+}
+
+func (s *{{ $Name }}ResolverTestSuite) TestList_Fail() {
+	var (
+		ctx       = context.Background()
+		params    = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
+		{{ $names }} []models.{{ $Name }}
+		args = arguments.{{ $Name }}ListArgs{
+		  Page: 1,
+		  PageSize: 10,
+		}
+	)
+	s.MockI{{ $Name }}.On("List", ctx, args).Return({{ $names }}, errors.New("some errors"))
+	actual, err := s.{{ $Name }}.List(params)
+	s.Nil(actual)
+	s.NotNil(err)
+}
+
+func (s *{{ $Name }}ResolverTestSuite) TestCount_Success() {
+	var (
+		ctx    = context.Background()
+		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
+		args = arguments.{{ $Name }}CountArgs{}
+		count  int64
+	)
+	s.MockI{{ $Name }}.On("Count", ctx, args).Return(count, nil)
+	actual, err := s.{{ $Name }}.Count(params)
+	s.Nil(err)
+	s.Equal(count, actual)
+}
+
+func (s *{{ $Name }}ResolverTestSuite) TestCount_Fail() {
+	var (
+		ctx    = context.Background()
+		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
+		args = arguments.{{ $Name }}CountArgs{}
+		count  int64
+	)
+	s.MockI{{ $Name }}.On("Count", ctx, args).Return(count, errors.New("some errors"))
+	actual, err := s.{{ $Name }}.Count(params)
+	s.Nil(actual)
+	s.NotNil(err)
+}
+
+func (s *{{ $Name }}ResolverTestSuite) TestInsert_Success() {
+	var (
+		ctx            = context.Background()
+		params         = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
+		args = arguments.{{ $Name }}InsertArgs{}
+		{{ $name }}  models.{{ $Name }}
+	)
+	// Mock Insert
+	s.MockI{{ $Name }}.On("Insert", ctx, args).Return({{ $name }}, nil)
+	// Mock GetByID
+	s.MockI{{ $Name }}.On("GetByID", ctx, params).Return({{ $name }}, nil)
+
+	actual, err := s.{{ $Name }}.Insert(params)
+	s.Nil(err)
+	s.Equal({{ $name }}, actual)
+}
+
+func (s *{{ $Name }}ResolverTestSuite) TestInsert_Fail() {
+	var (
+		ctx            = context.Background()
+		params         = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
+		args = arguments.{{ $Name }}InsertArgs{}
+		{{ $name }}  models.{{ $Name }}
+	)
+	s.MockI{{ $Name }}.On("Insert", ctx, args).Return({{ $name }}, errors.New("some errors"))
+	actual, err := s.{{ $Name }}.Insert(params)
+	s.Nil(actual)
+	s.NotNil(err)
+}
+
+func (s *{{ $Name }}ResolverTestSuite) TestUpdate_Success() {
+	var (
+		ctx          = context.Background()
+		sampleID int64 = 1
+		params       = graphql.ResolveParams{
+			Context: context.Background(),
+			Source:  map[string]interface{}{},
+			Args:    map[string]interface{}{"id": 1},
+		}
+		args = arguments.{{ $Name }}UpdateArgs{
+      ID: &sampleID,
+    }
+		{{ $name }}  =   models.{{ $Name }} {}
+	)
+	// Mock for Update
+	s.MockI{{ $Name }}.On("Update", ctx, args).Return({{ $name }}, nil)
+	// Mock for LoadByID
+	s.MockI{{ $Name }}.On("GetByID", ctx, args).Return({{ $name }}, nil)
+	actual, err := s.{{ $Name }}.Update(params)
+	s.Nil(err)
+	s.Equal({{ $name }}, actual)
+}
+
+func (s *{{ $Name }}ResolverTestSuite) TestUpdate_Fail() {
+	var (
+		ctx    = context.Background()
+		sampleID int64 = 1
+		params = graphql.ResolveParams{
+			Context: context.Background(),
+			Source:  map[string]interface{}{},
+			Args:    map[string]interface{}{"id": 1},
+		}
+		args = arguments.{{ $Name }}UpdateArgs{
+		 ID: &sampleID,
+		}
+		{{ $name }} models.{{ $Name }}
+	)
+	s.MockI{{ $Name }}.On("Update", ctx, args).Return({{ $name }}, errors.New("some errors"))
+	actual, err := s.{{ $Name }}.Update(params)
+	s.Nil(actual)
+	s.NotNil(err)
+}
+
+func (s *{{ $Name }}ResolverTestSuite) TestDelete_Success() {
+	var (
+		ctx    = context.Background()
+		params = graphql.ResolveParams{
+			Context: context.Background(),
+			Source:  map[string]interface{}{},
+			Args:    map[string]interface{}{"id": 1},
+		}
+		args = arguments.{{ $Name }}DeleteArgs{
+		  ID: 1,
+		}
+		sampleID  int64 = 1
+	)
+	s.MockI{{ $Name }}.On("Delete", ctx, args).Return(sampleID, nil)
+	actual, err := s.{{ $Name }}.Delete(params)
+	s.Nil(err)
+	s.Equal(sampleID, actual)
+}
+
+func (s *{{ $Name }}ResolverTestSuite) TestDelete_Fail() {
+	var (
+		ctx    = context.Background()
+		params = graphql.ResolveParams{
+			Context: context.Background(),
+			Source:  map[string]interface{}{},
+			Args:    map[string]interface{}{"id": 1},
+		}
+	  args = arguments.{{ $Name }}DeleteArgs{
+	    ID: 1,
+	  }
+		sampleID int64
+	)
+	s.MockI{{ $Name }}.On("Delete", ctx, args).Return(sampleID, errors.New("some errors"))
+	actual, err := s.{{ $Name }}.Delete(params)
+	s.Nil(actual)
+	s.NotNil(err)
+}

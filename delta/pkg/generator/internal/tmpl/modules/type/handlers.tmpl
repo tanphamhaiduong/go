@@ -1,0 +1,23 @@
+{{- $name := .Module.Name | ToLowerCase }}
+package {{ $name }}
+
+import (
+	"github.com/tanphamhaiduong/go/delta/internal/database"
+)
+
+// IRepository ...
+type IRepository interface {
+	ICoreRepository
+}
+
+// HandlerImpl ...
+type HandlerImpl struct {
+	{{ $name }} IRepository
+}
+
+// NewHandler ...
+func NewHandler({{ $name }} IRepository) *HandlerImpl {
+	return &HandlerImpl{
+		{{ $name }}: {{ $name }},
+	}
+}

@@ -12,8 +12,6 @@ github.com/go-playground/locales/currency
 github.com/go-playground/universal-translator
 # github.com/go-sql-driver/mysql v1.4.1
 github.com/go-sql-driver/mysql
-# github.com/gorilla/mux v1.7.2
-github.com/gorilla/mux
 # github.com/graphql-go/graphql v0.7.8
 github.com/graphql-go/graphql
 github.com/graphql-go/graphql/gqlerrors
@@ -32,6 +30,8 @@ github.com/graphql-go/handler
 github.com/iancoleman/strcase
 # github.com/jinzhu/inflection v0.0.0-20180308033659-04140366298a
 github.com/jinzhu/inflection
+# github.com/konsorten/go-windows-terminal-sequences v1.0.1
+github.com/konsorten/go-windows-terminal-sequences
 # github.com/lann/builder v0.0.0-20180802200727-47ae307949d0
 github.com/lann/builder
 # github.com/lann/ps v0.0.0-20150810152359-62de8c46ede0
@@ -42,6 +42,8 @@ github.com/leodido/go-urn
 github.com/mitchellh/mapstructure
 # github.com/pmezard/go-difflib v1.0.0
 github.com/pmezard/go-difflib/difflib
+# github.com/sirupsen/logrus v1.4.2
+github.com/sirupsen/logrus
 # github.com/stretchr/objx v0.2.0
 github.com/stretchr/objx
 # github.com/stretchr/testify v1.3.0
@@ -49,6 +51,8 @@ github.com/stretchr/testify/mock
 github.com/stretchr/testify/assert
 github.com/stretchr/testify/suite
 github.com/stretchr/testify/require
+# golang.org/x/sys v0.0.0-20190529164535-6a60838ec259
+golang.org/x/sys/unix
 # google.golang.org/appengine v1.6.0
 google.golang.org/appengine/cloudsql
 # gopkg.in/go-playground/validator.v9 v9.29.0

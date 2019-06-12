@@ -1,0 +1,275 @@
+{{- $Name := .Module.Name }}
+{{- $name := .Module.Name | ToLowerCase }}
+{{- $names := $name | ToPlural }}
+{{- $fields := .Module.Fields  }}
+// @generated
+package {{ $name }}
+
+import (
+	"context"
+	"errors"
+	"log"
+
+	"github.com/bxcodec/faker"
+	"github.com/stretchr/testify/mock"
+
+	"github.com/tanphamhaiduong/go/delta/internal/arguments"
+	"github.com/tanphamhaiduong/go/delta/internal/models"
+)
+
+func (s *{{ $Name }}HandlerTestSuite) TestGetByID_Success() {
+	var (
+		ctx    = context.Background()
+		params = arguments.{{ $Name }}GetByIDArgs{
+			ID: 1,
+		}
+		{{ $name }} = models.{{ $Name }}{}
+	)
+	s.MockI{{ $Name }}.On("GetByID", ctx, params).Return({{ $name }}, nil)
+	actual, err := s.{{ $Name }}.GetByID(ctx, params)
+	s.Nil(err)
+	s.Equal({{ $name }}, actual)
+}
+
+func (s *{{ $Name }}HandlerTestSuite) TestGetByID_Fail() {
+	var (
+		ctx    = context.Background()
+		params = arguments.{{ $Name }}GetByIDArgs{
+			ID: 1,
+		}
+		{{ $name }} = models.{{ $Name }}{}
+	)
+	s.MockI{{ $Name }}.On("GetByID", ctx, params).Return({{ $name }}, errors.New("some errors"))
+	actual, err := s.{{ $Name }}.GetByID(ctx, params)
+	s.Equal({{ $name }}, actual)
+	s.NotNil(err)
+}
+
+func (s *{{ $Name }}HandlerTestSuite) TestGetByIDs_Success() {
+	var (
+		ctx    = context.Background()
+		params = arguments.{{ $Name }}GetByIDsArgs{
+			IDs: []int64{1, 2},
+		}
+		{{ $names }} []models.{{ $Name }}
+	)
+	s.MockI{{ $Name }}.On("GetByIDs", ctx, params).Return({{ $names }}, nil)
+	actual, err := s.{{ $Name }}.GetByIDs(ctx, params)
+	s.Nil(err)
+	s.Equal({{ $names }}, actual)
+}
+
+func (s *{{ $Name }}HandlerTestSuite) TestGetByIDs_Fail() {
+	var (
+		ctx    = context.Background()
+		params = arguments.{{ $Name }}GetByIDsArgs{
+			IDs: []int64{1, 2},
+		}
+		{{ $names }} []models.{{ $Name }}
+	)
+	s.MockI{{ $Name }}.On("GetByIDs", ctx, params).Return({{ $names }}, errors.New("some errors"))
+	actual, err := s.{{ $Name }}.GetByIDs(ctx, params)
+	s.Equal({{ $names }}, actual)
+	s.NotNil(err)
+}
+
+func (s *{{ $Name }}HandlerTestSuite) TestList_Success() {
+	var (
+		ctx       = context.Background()
+		params    = arguments.{{ $Name }}ListArgs{}
+		{{ $names }} []models.{{ $Name }}
+	)
+	err := faker.FakeData(&params)
+	if err != nil {
+		log.Fatal(err)
+	}
+	params.Status = "active"
+	params.Page = 1
+	params.PageSize = 10
+	s.MockI{{ $Name }}.On("List", ctx, params).Return({{ $names }}, nil)
+	actual, err := s.{{ $Name }}.List(ctx, params)
+	s.Nil(err)
+	s.Equal({{ $names }}, actual)
+}
+
+func (s *{{ $Name }}HandlerTestSuite) TestList_Fail() {
+	var (
+		ctx    = context.Background()
+		params = arguments.{{ $Name }}ListArgs{
+			Page:     1,
+			PageSize: 10,
+		}
+		{{ $names }} []models.{{ $Name }}
+	)
+	err := faker.FakeData(&params)
+	if err != nil {
+		log.Fatal(err)
+	}
+	s.MockI{{ $Name }}.On("List", ctx, params).Return({{ $names }}, errors.New("some errors"))
+	actual, err := s.{{ $Name }}.List(ctx, params)
+	s.Equal({{ $names }}, actual)
+	s.NotNil(err)
+}
+
+func (s *{{ $Name }}HandlerTestSuite) TestCount_Success() {
+	var (
+		ctx    = context.Background()
+		params = arguments.{{ $Name }}CountArgs{}
+		count  int64
+	)
+	err := faker.FakeData(&params)
+	if err != nil {
+		log.Fatal(err)
+	}
+	params.Status = "active"
+	s.MockI{{ $Name }}.On("Count", ctx, params).Return(count, nil)
+	actual, err := s.{{ $Name }}.Count(ctx, params)
+	s.Nil(err)
+	s.Equal(count, actual)
+}
+
+func (s *{{ $Name }}HandlerTestSuite) TestCount_Fail() {
+	var (
+		ctx    = context.Background()
+		params = arguments.{{ $Name }}CountArgs{}
+		count  int64
+	)
+	err := faker.FakeData(&params)
+	if err != nil {
+		log.Fatal(err)
+	}
+	s.MockI{{ $Name }}.On("Count", ctx, params).Return(count, errors.New("some errors"))
+	actual, err := s.{{ $Name }}.Count(ctx, params)
+	s.Equal(count, actual)
+	s.NotNil(err)
+}
+
+func (s *{{ $Name }}HandlerTestSuite) TestInsert_Success() {
+	var (
+		ctx            = context.Background()
+		sampleID int64 = 1
+		params         = arguments.{{ $Name }}InsertArgs{}
+	)
+	err := faker.FakeData(&params)
+	if err != nil {
+		log.Fatal(err)
+	}
+	params.Status = "active"
+	{{ $name }} := models.{{ $Name }}{
+		ID: sampleID,
+		{{- range $field := $fields }}
+			{{- if $field.IsNotIDField }}
+				{{ $field.Name }}: params.{{ $field.Name }},
+			{{- end }}
+		{{- end }}
+	}
+	// Mock Insert
+	s.MockI{{ $Name }}.On("Insert", ctx, params).Return({{ $name }}, nil)
+	// Mock GetByID
+	s.MockI{{ $Name }}.On("GetByID", ctx, params).Return({{ $name }}, nil)
+
+	actual, err := s.{{ $Name }}.Insert(ctx, params)
+	s.Nil(err)
+	s.Equal({{ $name }}, actual)
+}
+
+func (s *{{ $Name }}HandlerTestSuite) TestInsert_Fail() {
+	var (
+		ctx            = context.Background()
+		params         = arguments.{{ $Name }}InsertArgs{
+			{{- range $field := $fields }}
+				{{- if $field.IsNotIDField }}
+					{{ $field.Name }}: {{ if $field.IsInt64 }}0{{ else }}"mockString"{{ end }},
+				{{- end }}
+			{{- end }}
+		}
+		{{ $name }} = models.{{ $Name }}{}
+	)
+	err := faker.FakeData(&params)
+	if err != nil {
+		log.Fatal(err)
+	}
+	s.MockI{{ $Name }}.On("Insert", ctx, params).Return({{ $name }}, errors.New("some errors"))
+	actual, err := s.{{ $Name }}.Insert(ctx, params)
+	s.Equal({{ $name }}, actual)
+	s.NotNil(err)
+}
+
+func (s *{{ $Name }}HandlerTestSuite) TestUpdate_Success() {
+	var (
+		ctx      = context.Background()
+		params   = arguments.{{ $Name }}UpdateArgs{}
+		status = "active"
+	)
+	err := faker.FakeData(&params)
+	if err != nil {
+		log.Fatal(err)
+	}
+	params.Status = &status
+	{{ $name }} := models.{{ $Name }}{
+		{{- range $field := $fields }}
+			{{ $field.Name }}: *params.{{ $field.Name }},
+		{{- end }}
+	}
+	// Mock Insert
+	s.MockI{{ $Name }}.On("Update", ctx, params).Return({{ $name }}, nil)
+	// Mock GetByID
+	s.MockI{{ $Name }}.On("GetByID", ctx, params).Return({{ $name }}, nil)
+
+	actual, err := s.{{ $Name }}.Update(ctx, params)
+	s.Nil(err)
+	s.Equal({{ $name }}, actual)
+}
+
+func (s *{{ $Name }}HandlerTestSuite) TestUpdate_Fail() {
+	var (
+		ctx              = context.Background()
+		sampleID   int64 = 1
+		mockString       = "mockString"
+		params           = arguments.{{ $Name }}UpdateArgs{
+			{{- range $field := $fields }}
+				{{ $field.Name }}: {{ if $field.IsInt64 }}&sampleID{{ else }}&mockString{{ end }},
+			{{- end }}
+		}
+		{{ $name }} = models.{{ $Name }}{}
+	)
+	err := faker.FakeData(&params)
+	if err != nil {
+		log.Fatal(err)
+	}
+	s.MockI{{ $Name }}.On("Update", ctx, params).Return({{ $name }}, errors.New("some errors"))
+	actual, err := s.{{ $Name }}.Update(ctx, params)
+	s.Equal({{ $name }}, actual)
+	s.NotNil(err)
+}
+
+func (s *{{ $Name }}HandlerTestSuite) TestDelete_Success() {
+	var (
+		ctx               = context.Background()
+		params            = arguments.{{ $Name }}DeleteArgs{}
+	)
+	err := faker.FakeData(&params)
+	if err != nil {
+		log.Fatal(err)
+	}
+	s.MockI{{ $Name }}.On("Delete", ctx, params).Return(params.ID, nil)
+	actual, err := s.{{ $Name }}.Delete(ctx, params)
+	s.Nil(err)
+	s.Equal(params.ID, actual)
+}
+
+func (s *{{ $Name }}HandlerTestSuite) TestDelete_Fail() {
+	var (
+		ctx         = context.Background()
+		params      = arguments.{{ $Name }}DeleteArgs{}
+		rowEffected int64
+	)
+	err := faker.FakeData(&params)
+	if err != nil {
+		log.Fatal(err)
+	}
+	s.MockI{{ $Name }}.On("Delete", ctx, params).Return(rowEffected, errors.New("some errors"))
+	actual, err := s.{{ $Name }}.Delete(ctx, params)
+	s.Equal(rowEffected, actual)
+	s.NotNil(err)
+}

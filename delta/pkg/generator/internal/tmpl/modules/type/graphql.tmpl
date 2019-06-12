@@ -1,0 +1,25 @@
+{{- $Name := .Module.Name }}
+{{- $name := .Module.Name | ToLowerCase }}
+package {{ $name }}
+
+import (
+	"github.com/tanphamhaiduong/go/delta/internal/modules"
+	"github.com/tanphamhaiduong/go/delta/internal/database"
+)
+
+// IHandler ...
+type IHandler interface {
+	ICoreHandler
+}
+
+// ResolverImpl ...
+type ResolverImpl struct {
+	{{ $name }} IHandler
+}
+
+// NewResolver ...
+func NewResolver({{ $name }} IHandler) *ResolverImpl {
+	return &ResolverImpl{
+		{{ $name }}: {{ $name }},
+	}
+}
