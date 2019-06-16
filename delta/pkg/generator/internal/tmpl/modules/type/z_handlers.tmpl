@@ -7,8 +7,8 @@ package {{ $name }}
 
 import (
 	"context"
-	"database/sql"
 
+	log "github.com/sirupsen/logrus"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
 )
@@ -26,11 +26,17 @@ type ICoreRepository interface {
 
 // GetByID ...
 func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.{{ $Name }}GetByIDArgs) (models.{{ $Name }}, error) {
+  log.WithField("params", params).Info("{{ $name }} of Handler GetByID")
 	var (
 		{{ $name }} models.{{ $Name }}
 	)
+	if err := validator.Struct(params); err != nil {
+		log.WithField("Error", err).Error("{{ $name }} of Handler GetByID validator.Struct error")
+    return {{ $name }}, err
+  }
 	{{ $name }}, err := h.{{ $name }}.GetByID(ctx, params)
 	if err != nil {
+		log.WithField("Error", err).Error("{{ $name }} of Handler GetByID h.{{ $name }}.GetByID error")
 		return {{ $name }}, err
 	}
 	return {{ $name }}, nil
@@ -38,11 +44,17 @@ func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.{{ $Name }}G
 
 // GetByIDs ...
 func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.{{ $Name }}GetByIDsArgs) ([]models.{{ $Name }}, error) {
+  log.WithField("params", params).Info("{{ $name }} of Handler GetByIDs")
 	var (
 		{{ $names }} []models.{{ $Name }}
 	)
+	if err := validator.Struct(params); err != nil {
+		log.WithField("Error", err).Error("{{ $name }} of Handler GetByIDs validator.Struct error")
+  	return {{ $names }}, err
+  }
 	{{ $names }}, err := h.{{ $name }}.GetByIDs(ctx, params)
 	if err != nil {
+		log.WithField("Error", err).Error("{{ $name }} of Handler GetByIDs h.{{ $name }}.GetByIDs error")
 		return {{ $names }}, err
 	}
 	return {{ $names }}, nil
@@ -50,14 +62,17 @@ func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.{{ $Name }}
 
 // Count ...
 func (h *HandlerImpl) Count(ctx context.Context, params arguments.{{ $Name }}CountArgs) (int64, error) {
+  log.WithField("params", params).Info("{{ $name }} of Handler Count")
 	var (
 		count int64
 	)
 	if err := validator.Struct(params); err != nil {
+		log.WithField("Error", err).Error("{{ $name }} of Handler Count validator.Struct error")
 		return count, err
 	}
 	count, err := h.{{ $name }}.Count(ctx, params)
 	if err != nil {
+		log.WithField("Error", err).Error("{{ $name }} of Handler Count h.{{ $name }}.Count error")
 		return count, err
 	}
 	return count, nil
@@ -65,14 +80,17 @@ func (h *HandlerImpl) Count(ctx context.Context, params arguments.{{ $Name }}Cou
 
 // List ...
 func (h *HandlerImpl) List(ctx context.Context, params arguments.{{ $Name }}ListArgs) ([]models.{{ $Name }}, error) {
+  log.WithField("params", params).Info("{{ $name }} of Handler List")
 	var (
 		{{ $names }} []models.{{ $Name }}
 	)
 	if err := validator.Struct(params); err != nil {
+		log.WithField("Error", err).Error("{{ $name }} of Handler List validator.Struct error")
 		return {{ $names }}, err
 	}
 	{{ $names }}, err := h.{{ $name }}.List(ctx, params)
 	if err != nil {
+		log.WithField("Error", err).Error("{{ $name }} of Handler List h.{{ $name }}.List error")
 		return {{ $names }}, err
 	}
 	return {{ $names }}, nil
@@ -80,14 +98,17 @@ func (h *HandlerImpl) List(ctx context.Context, params arguments.{{ $Name }}List
 
 // Insert ...
 func (h *HandlerImpl) Insert(ctx context.Context, params arguments.{{ $Name }}InsertArgs) (models.{{ $Name }}, error) {
+  log.WithField("params", params).Info("{{ $name }} of Handler Insert")
 	var (
 		{{ $name }} models.{{ $Name }}
 	)
 	if err := validator.Struct(params); err != nil {
+		log.WithField("Error", err).Error("{{ $name }} of Handler Insert validator.Struct error")
 		return {{ $name }}, err
 	}
 	{{ $name }}, err := h.{{ $name }}.Insert(ctx, params)
 	if err != nil {
+		log.WithField("Error", err).Error("{{ $name }} of Handler Insert h.{{ $name }}.Insert error")
 		return {{ $name }}, err
 	}
 	return {{ $name }}, nil
@@ -95,14 +116,17 @@ func (h *HandlerImpl) Insert(ctx context.Context, params arguments.{{ $Name }}In
 
 // Update ...
 func (h *HandlerImpl) Update(ctx context.Context, params arguments.{{ $Name }}UpdateArgs) (models.{{ $Name }}, error) {
+  log.WithField("params", params).Info("{{ $name }} of Handler Update")
 	var (
 		{{ $name }} models.{{ $Name }}
 	)
 	if err := validator.Struct(params); err != nil {
+		log.WithField("Error", err).Error("{{ $name }} of Handler Update validator.Struct error")
 		return {{ $name }}, err
 	}
 	{{ $name }}, err := h.{{ $name }}.Update(ctx, params)
 	if err != nil {
+		log.WithField("Error", err).Error("{{ $name }} of Handler Update h.{{ $name }}.Update error")
 		return {{ $name }}, err
 	}
 	return {{ $name }}, nil
@@ -110,14 +134,17 @@ func (h *HandlerImpl) Update(ctx context.Context, params arguments.{{ $Name }}Up
 
 // Delete ...
 func (h *HandlerImpl) Delete(ctx context.Context, params arguments.{{ $Name }}DeleteArgs) (int64, error) {
+  log.WithField("params", params).Info("{{ $name }} of Handler Delete")
 	var (
 		id int64
 	)
 	if err := validator.Struct(params); err != nil {
+		log.WithField("Error", err).Error("{{ $name }} of Handler Delete validator.Struct error")
 		return id, err
 	}
 	id, err := h.{{ $name }}.Delete(ctx, params)
 	if err != nil {
+		log.WithField("Error", err).Error("{{ $name }} of Handler Delete h.{{ $name }}.Delete error")
 		return id, err
 	}
 	return id, nil

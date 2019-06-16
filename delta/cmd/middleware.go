@@ -27,7 +27,7 @@ func chainMiddleware(mw ...middleware) middleware {
 	}
 }
 
-func withLogging(next http.HandlerFunc) http.HandlerFunc {
+func withLogging(next http.Handler) http.Handler {
 	// Log as JSON instead of the default ASCII formatter.
 	log.SetFormatter(&log.JSONFormatter{})
 
@@ -37,7 +37,7 @@ func withLogging(next http.HandlerFunc) http.HandlerFunc {
 
 	// Only log the warning severity or above.
 	log.SetLevel(log.TraceLevel)
-	return func(w http.ResponseWriter, r *http.Request) {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log.WithFields(log.Fields{
 			"Method":     r.Method,
 			"Host":       r.Host,
@@ -47,13 +47,13 @@ func withLogging(next http.HandlerFunc) http.HandlerFunc {
 			"URL":        r.URL,
 		}).Info(fmt.Sprintf("Logged connection from %s", r.RemoteAddr))
 		next.ServeHTTP(w, r)
-	}
+	})
 }
 
-func withAuth(next http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
+func withAuth(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Implement Get User and inject to request to here
 		log.Info("With Auth")
 		next.ServeHTTP(w, r)
-	}
+	})
 }

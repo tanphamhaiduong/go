@@ -11,6 +11,7 @@ import (
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/gorilla/mux"
 	"github.com/graphql-go/handler"
 	"github.com/tanphamhaiduong/go/delta/internal/database"
 	"github.com/tanphamhaiduong/go/delta/internal/modules"
@@ -65,7 +66,9 @@ func NewServer(config *Config, resolvers modules.Resolver) *Server {
 
 // Handler ...
 func (s *Server) Handler() http.Handler {
-	mux := http.NewServeMux()
+	r := mux.NewRouter()
+	r.Use(withLogging)
+	r.Use(withAuth)
 	schema, err := modules.MakeSchema(s.resolvers)
 	if err != nil {
 		log.Fatal(err)
@@ -76,9 +79,10 @@ func (s *Server) Handler() http.Handler {
 		GraphiQL: true,
 	})
 	// Add your routes as needed
-	mux.HandleFunc("/graphql", withLogging(withAuth(h.ServeHTTP)))
+	r.HandleFunc("/graphql", h.ServeHTTP).Methods("POST")
+	r.HandleFunc("/graphql", h.ServeHTTP).Methods("GET")
 
-	return mux
+	return r
 }
 
 // Run ...

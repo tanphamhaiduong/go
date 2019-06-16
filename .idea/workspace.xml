@@ -3,9 +3,19 @@
   <component name="ChangeListManager">
     <list default="true" id="d38f2e3f-0d78-43d2-b4cc-b6375dac9114" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/delta/cmd/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/cmd/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/delta/cmd/middleware.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/cmd/middleware.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/delta/internal/modules/company/z_graphql.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/internal/modules/company/z_graphql.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/delta/internal/modules/company/z_handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/internal/modules/company/z_handlers.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/delta/internal/modules/company/z_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/internal/modules/company/z_repository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/delta/internal/modules/feature/z_graphql.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/internal/modules/feature/z_graphql.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/delta/internal/modules/feature/z_handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/internal/modules/feature/z_handlers.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/delta/internal/modules/feature/z_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/internal/modules/feature/z_repository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/delta/internal/modules/user/z_graphql.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/internal/modules/user/z_graphql.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/delta/internal/modules/user/z_handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/internal/modules/user/z_handlers.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/delta/internal/modules/user/z_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/delta/internal/modules/user/z_repository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/delta/pkg/generator/internal/tmpl/modules/type/z_graphql.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/delta/pkg/generator/internal/tmpl/modules/type/z_graphql.tmpl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/delta/pkg/generator/internal/tmpl/modules/type/z_handlers.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/delta/pkg/generator/internal/tmpl/modules/type/z_handlers.tmpl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/delta/pkg/generator/internal/tmpl/modules/type/z_repository.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/delta/pkg/generator/internal/tmpl/modules/type/z_repository.tmpl" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,19 +27,28 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/delta/internal/modules/company/z_repository.go">
+        <entry file="file://$PROJECT_DIR$/delta/pkg/generator/internal/tmpl/modules/type/z_handlers.tmpl">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="228">
-              <caret line="226" column="44" selection-start-line="226" selection-start-column="44" selection-end-line="226" selection-end-column="44" />
+            <state relative-caret-position="430">
+              <caret line="52" column="23" selection-start-line="52" selection-start-column="23" selection-end-line="52" selection-end-column="23" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/delta/pkg/generator/internal/tmpl/modules/type/z_repository.tmpl">
+        <entry file="file://$PROJECT_DIR$/delta/internal/modules/company/z_handlers.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="248">
-              <caret line="56" column="4" selection-start-line="56" selection-start-column="4" selection-end-line="56" selection-end-column="4" />
+            <state relative-caret-position="-1600">
+              <caret line="42" column="30" selection-start-line="42" selection-start-column="22" selection-end-line="42" selection-end-column="30" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/delta/pkg/generator/internal/tmpl/modules/type/z_graphql.tmpl">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1202">
+              <caret line="178" column="90" selection-start-line="178" selection-start-column="90" selection-end-line="178" selection-end-column="90" />
             </state>
           </provider>
         </entry>
@@ -47,7 +66,6 @@
     <findStrings>
       <find>777</find>
       <find>rows</find>
-      <find>row</find>
       <find>IDB</find>
       <find>faker.FakeData(&amp;params)</find>
       <find>TestList_Success</find>
@@ -64,13 +82,17 @@
       <find>TestInsert_Success</find>
       <find>TestInsert_Fail</find>
       <find>TestDelete_Success</find>
-      <find>Count</find>
       <find>TestCount_Fail</find>
       <find>TestCount_Success</find>
       <find>Count_Fail</find>
       <find>TestUpdate_Fail</find>
       <find>TestUpdate_Success</find>
       <find>stmt</find>
+      <find>gorila</find>
+      <find>row</find>
+      <find>err))</find>
+      <find>Count</find>
+      <find>Update</find>
       <find>GetByIDs</find>
     </findStrings>
   </component>
@@ -81,8 +103,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/delta/server/modules/company/handlers.go" />
-        <option value="$PROJECT_DIR$/delta/server/modules/company/handler_test.go" />
         <option value="$PROJECT_DIR$/delta/server/modules/company/z_handler_test.go" />
         <option value="$PROJECT_DIR$/delta/main.go" />
         <option value="$PROJECT_DIR$/delta/server/modules/company.go" />
@@ -116,12 +136,9 @@
         <option value="$PROJECT_DIR$/delta/internal/modules/company/repository.go" />
         <option value="$PROJECT_DIR$/delta/internal/modules/company/handlers.go" />
         <option value="$PROJECT_DIR$/delta/internal/modules/company/graphql.go" />
-        <option value="$PROJECT_DIR$/delta/cmd/main.go" />
         <option value="$PROJECT_DIR$/delta/pkg/generator/internal/tmpl/modules/type/graphql.tmpl" />
         <option value="$PROJECT_DIR$/delta/pkg/generator/internal/tmpl/modules/type/handlers.tmpl" />
         <option value="$PROJECT_DIR$/delta/pkg/generator/internal/tmpl/modules/type/repository.tmpl" />
-        <option value="$PROJECT_DIR$/delta/pkg/generator/internal/tmpl/modules/type/z_handlers.tmpl" />
-        <option value="$PROJECT_DIR$/delta/pkg/generator/internal/tmpl/modules/type/z_graphql.tmpl" />
         <option value="$PROJECT_DIR$/delta/internal/modules/feature/graphql.go" />
         <option value="$PROJECT_DIR$/delta/internal/modules/feature/handlers.go" />
         <option value="$PROJECT_DIR$/delta/internal/modules/feature/repository.go" />
@@ -130,8 +147,13 @@
         <option value="$PROJECT_DIR$/delta/internal/modules/user/repository.go" />
         <option value="$PROJECT_DIR$/delta/pkg/generator/cmd/main.go" />
         <option value="$PROJECT_DIR$/delta/cmd/middleware.go" />
-        <option value="$PROJECT_DIR$/delta/pkg/generator/internal/tmpl/modules/type/z_repository.tmpl" />
+        <option value="$PROJECT_DIR$/delta/cmd/main.go" />
+        <option value="$PROJECT_DIR$/delta/pkg/generator/internal/tmpl/modules/type/z_repository_test.tmpl" />
+        <option value="$PROJECT_DIR$/delta/internal/modules/user/z_repository.go" />
         <option value="$PROJECT_DIR$/delta/internal/modules/company/z_repository.go" />
+        <option value="$PROJECT_DIR$/delta/pkg/generator/internal/tmpl/modules/type/z_repository.tmpl" />
+        <option value="$PROJECT_DIR$/delta/pkg/generator/internal/tmpl/modules/type/z_graphql.tmpl" />
+        <option value="$PROJECT_DIR$/delta/pkg/generator/internal/tmpl/modules/type/z_handlers.tmpl" />
       </list>
     </option>
   </component>
@@ -162,6 +184,27 @@
               <item name="go" type="b2602c69:ProjectViewProjectNode" />
               <item name="go" type="462c0819:PsiDirectoryNode" />
               <item name="delta" type="462c0819:PsiDirectoryNode" />
+              <item name="internal" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="go" type="b2602c69:ProjectViewProjectNode" />
+              <item name="go" type="462c0819:PsiDirectoryNode" />
+              <item name="delta" type="462c0819:PsiDirectoryNode" />
+              <item name="internal" type="462c0819:PsiDirectoryNode" />
+              <item name="modules" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="go" type="b2602c69:ProjectViewProjectNode" />
+              <item name="go" type="462c0819:PsiDirectoryNode" />
+              <item name="delta" type="462c0819:PsiDirectoryNode" />
+              <item name="internal" type="462c0819:PsiDirectoryNode" />
+              <item name="modules" type="462c0819:PsiDirectoryNode" />
+              <item name="company" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="go" type="b2602c69:ProjectViewProjectNode" />
+              <item name="go" type="462c0819:PsiDirectoryNode" />
+              <item name="delta" type="462c0819:PsiDirectoryNode" />
               <item name="pkg" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -187,26 +230,6 @@
               <item name="generator" type="462c0819:PsiDirectoryNode" />
               <item name="internal" type="462c0819:PsiDirectoryNode" />
               <item name="tmpl" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="go" type="b2602c69:ProjectViewProjectNode" />
-              <item name="go" type="462c0819:PsiDirectoryNode" />
-              <item name="delta" type="462c0819:PsiDirectoryNode" />
-              <item name="pkg" type="462c0819:PsiDirectoryNode" />
-              <item name="generator" type="462c0819:PsiDirectoryNode" />
-              <item name="internal" type="462c0819:PsiDirectoryNode" />
-              <item name="tmpl" type="462c0819:PsiDirectoryNode" />
-              <item name="arguments" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="go" type="b2602c69:ProjectViewProjectNode" />
-              <item name="go" type="462c0819:PsiDirectoryNode" />
-              <item name="delta" type="462c0819:PsiDirectoryNode" />
-              <item name="pkg" type="462c0819:PsiDirectoryNode" />
-              <item name="generator" type="462c0819:PsiDirectoryNode" />
-              <item name="internal" type="462c0819:PsiDirectoryNode" />
-              <item name="tmpl" type="462c0819:PsiDirectoryNode" />
-              <item name="models" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="go" type="b2602c69:ProjectViewProjectNode" />
@@ -379,20 +402,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/delta/server/modules/company/z_handlers.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
-          <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/delta/server/modules/company/z_repository.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="56" column="65" selection-start-line="56" selection-start-column="65" selection-end-line="56" selection-end-column="65" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/delta/generator/tmpl/modules/type/handlers.tmpl">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="303">
@@ -543,19 +552,6 @@
     <entry file="file://$PROJECT_DIR$/delta/internal/modules/company/repository_test.go">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/delta/internal/modules/company/z_handlers.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="752">
-          <caret line="23" column="9" selection-start-line="23" selection-start-column="9" selection-end-line="23" selection-end-column="9" />
-          <caret line="35" column="9" selection-start-line="35" selection-start-column="9" selection-end-line="35" selection-end-column="9" />
-          <caret line="47" column="9" selection-start-line="47" selection-start-column="9" selection-end-line="47" selection-end-column="9" />
-          <caret line="62" column="9" selection-start-line="62" selection-start-column="9" selection-end-line="62" selection-end-column="9" />
-          <caret line="77" column="9" selection-start-line="77" selection-start-column="9" selection-end-line="77" selection-end-column="9" />
-          <caret line="92" column="9" selection-start-line="92" selection-start-column="9" selection-end-line="92" selection-end-column="9" />
-          <caret line="107" column="9" selection-start-line="107" selection-start-column="9" selection-end-line="107" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/delta/internal/modules/company/z_graphql.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="353">
@@ -622,49 +618,6 @@
         <state relative-caret-position="-32" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/delta/pkg/generator/internal/tmpl/modules/type/z_handlers.tmpl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="773">
-          <caret line="27" column="9" selection-start-line="27" selection-start-column="9" selection-end-line="27" selection-end-column="9" />
-          <caret line="39" column="9" selection-start-line="39" selection-start-column="9" selection-end-line="39" selection-end-column="9" />
-          <caret line="51" column="9" selection-start-line="51" selection-start-column="9" selection-end-line="51" selection-end-column="9" />
-          <caret line="66" column="9" selection-start-line="66" selection-start-column="9" selection-end-line="66" selection-end-column="9" />
-          <caret line="81" column="9" selection-start-line="81" selection-start-column="9" selection-end-line="81" selection-end-column="9" />
-          <caret line="96" column="9" selection-start-line="96" selection-start-column="9" selection-end-line="96" selection-end-column="9" />
-          <caret line="111" column="9" selection-start-line="111" selection-start-column="9" selection-end-line="111" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/delta/pkg/generator/internal/tmpl/modules/type/z_graphql.tmpl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="147">
-          <caret line="131" column="9" selection-start-line="131" selection-start-column="9" selection-end-line="131" selection-end-column="9" />
-          <caret line="146" column="9" selection-start-line="146" selection-start-column="9" selection-end-line="146" selection-end-column="9" />
-          <caret line="161" column="9" selection-start-line="161" selection-start-column="9" selection-end-line="161" selection-end-column="9" />
-          <caret line="176" column="9" selection-start-line="176" selection-start-column="9" selection-end-line="176" selection-end-column="9" />
-          <caret line="191" column="9" selection-start-line="191" selection-start-column="9" selection-end-line="191" selection-end-column="9" />
-          <caret line="111" column="9" selection-start-line="111" selection-start-column="9" selection-end-line="111" selection-end-column="9" />
-          <caret line="117" column="9" selection-start-line="117" selection-start-column="9" selection-end-line="117" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/delta/cmd/middleware.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="290">
-          <caret line="41" column="29" lean-forward="true" selection-start-line="41" selection-start-column="29" selection-end-line="41" selection-end-column="29" />
-          <folding>
-            <element signature="e#14#84#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/delta/cmd/main.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-133">
-          <caret line="18" column="61" selection-start-line="18" selection-start-column="61" selection-end-line="18" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/delta/pkg/generator/cmd/main.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="609">
@@ -722,20 +675,79 @@
         <state relative-caret-position="-4855" />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../../gorilla/mux/middleware.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="147">
+          <caret line="10" column="19" selection-start-line="10" selection-start-column="5" selection-end-line="10" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/delta/cmd/main.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-210">
+          <caret line="67" column="17" selection-start-line="67" selection-start-column="17" selection-end-line="67" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/delta/pkg/generator/internal/tmpl/modules/type/z_repository_test.tmpl">
-      <provider selected="true" editor-type-id="text-editor" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="12" column="38" lean-forward="true" selection-start-line="12" selection-start-column="38" selection-end-line="12" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/delta/cmd/middleware.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="455">
+          <caret line="47" column="67" lean-forward="true" selection-start-line="40" selection-start-column="4" selection-end-line="47" selection-end-column="67" />
+          <folding>
+            <element signature="e#14#84#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/delta/internal/modules/user/z_repository.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="346">
+          <caret line="416" column="3" lean-forward="true" selection-start-line="416" selection-start-column="3" selection-end-line="416" selection-end-column="3" />
+          <folding>
+            <element signature="e#28#296#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/delta/pkg/generator/internal/tmpl/modules/type/z_repository.tmpl">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="248">
-          <caret line="56" column="4" selection-start-line="56" selection-start-column="4" selection-end-line="56" selection-end-column="4" />
+        <state relative-caret-position="279">
+          <caret line="35" column="72" selection-start-line="35" selection-start-column="65" selection-end-line="35" selection-end-column="72" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/delta/internal/modules/company/z_repository.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="226" column="44" selection-start-line="226" selection-start-column="44" selection-end-line="226" selection-end-column="44" />
+        <state relative-caret-position="3287">
+          <caret line="311" column="31" selection-start-line="311" selection-start-column="31" selection-end-line="311" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/delta/pkg/generator/internal/tmpl/modules/type/z_graphql.tmpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1202">
+          <caret line="178" column="90" selection-start-line="178" selection-start-column="90" selection-end-line="178" selection-end-column="90" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/delta/internal/modules/company/z_handlers.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1600">
+          <caret line="42" column="30" selection-start-line="42" selection-start-column="22" selection-end-line="42" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/delta/pkg/generator/internal/tmpl/modules/type/z_handlers.tmpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="430">
+          <caret line="52" column="23" selection-start-line="52" selection-start-column="23" selection-end-line="52" selection-end-column="23" />
         </state>
       </provider>
     </entry>
