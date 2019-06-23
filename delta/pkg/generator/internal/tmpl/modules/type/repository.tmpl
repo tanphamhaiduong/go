@@ -13,6 +13,7 @@ type IDatabase interface {
     PrepareContext(ctx context.Context, query string) (database.IStmt, error)
 }
 
+// RepositoryImpl ...
 type RepositoryImpl struct {
 	db IDatabase
 }

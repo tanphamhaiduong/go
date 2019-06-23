@@ -14,7 +14,7 @@ require (
 	github.com/golang/mock v1.3.1 // indirect
 	github.com/google/btree v1.0.0 // indirect
 	github.com/google/pprof v0.0.0-20190515194954-54271f7e092f // indirect
-	github.com/gorilla/mux v1.7.2 // indirect
+	github.com/gorilla/mux v1.7.2
 	github.com/graphql-go/graphql v0.7.8
 	github.com/graphql-go/handler v0.2.3
 	github.com/iancoleman/strcase v0.0.0-20190422225806-e506e3ef7365
