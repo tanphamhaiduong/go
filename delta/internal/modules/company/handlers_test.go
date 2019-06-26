@@ -19,6 +19,7 @@ func TestCompanyHandlerTestSuite(t *testing.T) {
 
 func (s *CompanyHandlerTestSuite) SetupTest() {
 	s.MockICompany = &mocks.IRepository{}
-	s.Company = NewHandler(s.MockICompany)
+	handler := NewHandler(s.MockICompany)
+	s.Company = *handler
 	s.Company.company = s.MockICompany
 }

@@ -19,6 +19,7 @@ func TestCompanyResolverTestSuite(t *testing.T) {
 
 func (s *CompanyResolverTestSuite) SetupTest() {
 	s.MockICompany = &mocks.IHandler{}
-	s.Company = NewResolver(s.MockICompany)
+	resolver := NewResolver(s.MockICompany)
+	s.Company = *resolver
 	s.Company.company = s.MockICompany
 }

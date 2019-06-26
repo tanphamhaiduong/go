@@ -4,6 +4,13 @@ For every project need CRUD, we need to build crud for many entities in your pro
 
 ## How to use
 
+### Step 1
+```
+cd delta
+```
+### Step 2
+
+
 ## Dependencies
 [Squirrel]:https://github.com/Masterminds/squirrel
 [GraphQL]: github.com/graphql-go/graphql

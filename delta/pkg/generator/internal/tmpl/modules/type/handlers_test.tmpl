@@ -21,6 +21,7 @@ func Test{{ $Name }}HandlerTestSuite(t *testing.T) {
 
 func (s *{{ $Name }}HandlerTestSuite) SetupTest() {
 	s.MockI{{ $Name }} = &mocks.IRepository{}
-	s.{{ $Name }} = NewHandler(s.MockI{{ $Name }})
+	handler := NewHandler(s.MockI{{ $Name }})
+	s.{{ $Name }} = *handler
 	s.{{ $Name }}.{{ $name }} = s.MockI{{ $Name }}
 }

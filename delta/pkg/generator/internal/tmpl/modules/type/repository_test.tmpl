@@ -33,5 +33,6 @@ func (s *{{ $Name }}RepositoryTestSuite) SetupTest() {
 	s.MockIRows = &mocksDB.IRows{}
 	s.MockIResult = &mocksDB.IResult{}
 	s.MockI{{ $Name }} = &mocks.IRepository{}
-	s.Repository = NewRepository(mockIDB)
+	repository := NewRepository(mockIDB)
+	s.Repository = *repository
 }

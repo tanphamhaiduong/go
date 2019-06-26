@@ -22,6 +22,7 @@ func Test{{ $Name }}ResolverTestSuite(t *testing.T) {
 
 func (s *{{ $Name }}ResolverTestSuite) SetupTest() {
 	s.MockI{{ $Name }} = &mocks.IHandler{}
-	s.{{ $Name }} = NewResolver(s.MockI{{ $Name }})
+	resolver := NewResolver(s.MockI{{ $Name }})
+	s.{{ $Name }} = *resolver
 	s.{{ $Name }}.{{ $name }} = s.MockI{{ $Name }}
 }
