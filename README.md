@@ -5,10 +5,14 @@ For every project need CRUD, we need to build crud for many entities in your pro
 ## How to use
 
 ### Step 1
-```
-cd delta
-```
+`cd delta`
 ### Step 2
+`make install`
+### Step 3
+`cd database`
+### Step 4: Migrate database
+`goose mysql root:root@/delta up`
+### Step 5: 
 
 
 ## Dependencies
