@@ -19,6 +19,7 @@ func TestFeatureHandlerTestSuite(t *testing.T) {
 
 func (s *FeatureHandlerTestSuite) SetupTest() {
 	s.MockIFeature = &mocks.IRepository{}
-	s.Feature = NewHandler(s.MockIFeature)
+	handler := NewHandler(s.MockIFeature)
+	s.Feature = *handler
 	s.Feature.feature = s.MockIFeature
 }

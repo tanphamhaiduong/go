@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS `feature` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `url` varchar(255) NOT NULL DEFAULT '',
   `meta` json NOT NULL,
-  `company_id` bigint(20) NOT NULL DEFAULT '0',
+  `company_id` bigint(20) NOT NULL DEFAULT 0,
   `status` varchar(32) NOT NULL DEFAULT 'active',
   `created_by` varchar(128) NOT NULL DEFAULT '',
   `updated_by` varchar(128) NOT NULL DEFAULT '',

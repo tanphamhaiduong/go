@@ -14,7 +14,7 @@ import (
 
 // GetByID ...
 func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.FeatureGetByIDArgs) (models.Feature, error) {
-	log.WithField("params", params).Info("feature of Repository GetByID")
+	log.WithField("params", params).Info("Repository GetByID of feature")
 	var (
 		feature       models.Feature
 		selectBuilder = sq.Select(
@@ -31,14 +31,14 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.FeatureGe
 	log.WithFields(log.Fields{
 		"SQL":  sql,
 		"Args": args,
-	}).Info("feature of Repository GetByID build sql string")
+	}).Info("Repository GetByID build sql string of feature")
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Repository GetByID selectBuilder error")
+		log.WithField("Error", err).Error("Repository GetByID selectBuilder error of feature")
 		return feature, err
 	}
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Repository GetByID PrepareContext error")
+		log.WithField("Error", err).Error("Repository GetByID PrepareContext error of feature")
 		return feature, err
 	}
 	row := stmt.QueryRowContext(ctx, args...)
@@ -52,7 +52,7 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.FeatureGe
 		&feature.UpdatedBy,
 	)
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Repository GetByID Scan error")
+		log.WithField("Error", err).Error("Repository GetByID Scan error of feature")
 		return feature, err
 	}
 	return feature, nil
@@ -60,7 +60,7 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.FeatureGe
 
 // GetByIDs ...
 func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.FeatureGetByIDsArgs) ([]models.Feature, error) {
-	log.WithField("params", params).Info("feature of Repository GetByIDs")
+	log.WithField("params", params).Info("Repository GetByIDs of feature")
 	var (
 		features      []models.Feature
 		selectBuilder = sq.Select(
@@ -77,20 +77,20 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.FeatureG
 	log.WithFields(log.Fields{
 		"SQL":  sql,
 		"Args": args,
-	}).Info("feature of Repository GetByIDs build sql string")
+	}).Info("Repository GetByIDs build sql string of feature")
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Repository GetByIDs selectBuilder error")
+		log.WithField("Error", err).Error("Repository GetByIDs selectBuilder error of feature")
 		return features, err
 	}
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Repository GetByIDs PrepareContext error")
+		log.WithField("Error", err).Error("Repository GetByIDs PrepareContext error of feature")
 		return features, err
 	}
 	rows, err := stmt.QueryContext(ctx, args...)
 	defer rows.Close()
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Repository GetByIDs QueryContext error")
+		log.WithField("Error", err).Error("Repository GetByIDs QueryContext error of feature")
 		return features, err
 	}
 	for rows.Next() {
@@ -105,7 +105,7 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.FeatureG
 			&feature.UpdatedBy,
 		)
 		if err != nil {
-			log.WithField("Error", err).Error("feature of Repository GetByIDs Scan error")
+			log.WithField("Error", err).Error("Repository GetByIDs Scan error of feature")
 			return features, err
 		}
 		features = append(features, feature)
@@ -115,7 +115,7 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.FeatureG
 
 // setArgsToListSelectBuilder ...
 func (r *RepositoryImpl) setArgsToListSelectBuilder(selectBuilder sq.SelectBuilder, params arguments.FeatureListArgs) sq.SelectBuilder {
-	log.WithField("params", params).Info("feature of Repository setArgsToListSelectBuilder")
+	log.WithField("params", params).Info("Repository setArgsToListSelectBuilder of feature")
 	if params.ID != 0 {
 		selectBuilder = selectBuilder.Where(sq.Eq{"id": params.ID})
 	}
@@ -149,7 +149,7 @@ func (r *RepositoryImpl) setArgsToListSelectBuilder(selectBuilder sq.SelectBuild
 
 // List ...
 func (r *RepositoryImpl) List(ctx context.Context, params arguments.FeatureListArgs) ([]models.Feature, error) {
-	log.WithField("params", params).Info("feature of Repository List")
+	log.WithField("params", params).Info("Repository List of feature")
 	var (
 		features      []models.Feature
 		selectBuilder = sq.Select(
@@ -167,19 +167,19 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.FeatureListA
 	log.WithFields(log.Fields{
 		"SQL":  sql,
 		"Args": args,
-	}).Info("feature of Repository List build sql string")
+	}).Info("Repository List build sql string of feature")
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Repository List selectBuilderWithArgs error")
+		log.WithField("Error", err).Error("Repository List selectBuilderWithArgs error of feature")
 		return features, err
 	}
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Repository List PrepareContext error")
+		log.WithField("Error", err).Error("Repository List PrepareContext error of feature")
 		return features, err
 	}
 	rows, err := stmt.QueryContext(ctx, args...)
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Repository List QueryContext error")
+		log.WithField("Error", err).Error("Repository List QueryContext error of feature")
 		return features, err
 	}
 	defer rows.Close()
@@ -195,7 +195,7 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.FeatureListA
 			&feature.UpdatedBy,
 		)
 		if err != nil {
-			log.WithField("Error", err).Error("feature of Repository List Scan error")
+			log.WithField("Error", err).Error("Repository List Scan error of feature")
 			return features, err
 		}
 		features = append(features, feature)
@@ -205,7 +205,7 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.FeatureListA
 
 // setArgsToCountSelectBuilder ...
 func (r *RepositoryImpl) setArgsToCountSelectBuilder(selectBuilder sq.SelectBuilder, params arguments.FeatureCountArgs) sq.SelectBuilder {
-	log.WithField("params", params).Info("feature of Repository setArgsToCountSelectBuilder")
+	log.WithField("params", params).Info("Repository setArgsToCountSelectBuilder of feature")
 	if params.ID != 0 {
 		selectBuilder = selectBuilder.Where(sq.Eq{"id": params.ID})
 	}
@@ -232,7 +232,7 @@ func (r *RepositoryImpl) setArgsToCountSelectBuilder(selectBuilder sq.SelectBuil
 
 // Count ...
 func (r *RepositoryImpl) Count(ctx context.Context, params arguments.FeatureCountArgs) (int64, error) {
-	log.WithField("params", params).Info("feature of Repository Count")
+	log.WithField("params", params).Info("Repository Count of feature")
 	var (
 		count         int64
 		selectBuilder = sq.Select("COUNT(id)").From("feature")
@@ -242,20 +242,20 @@ func (r *RepositoryImpl) Count(ctx context.Context, params arguments.FeatureCoun
 	log.WithFields(log.Fields{
 		"SQL":  sql,
 		"Args": args,
-	}).Info("feature of Repository Count build sql string")
+	}).Info("Repository Count build sql string of feature")
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Repository Count selectBuilderWithArgs error")
+		log.WithField("Error", err).Error("Repository Count selectBuilderWithArgs error of feature")
 		return count, err
 	}
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Repository Count PrepareContext error")
+		log.WithField("Error", err).Error("Repository Count PrepareContext error of feature")
 		return count, err
 	}
 	row := stmt.QueryRowContext(ctx, args...)
 	err = row.Scan(&count)
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Repository Count Scan error")
+		log.WithField("Error", err).Error("Repository Count Scan error of feature")
 		return count, err
 	}
 	return count, nil
@@ -263,7 +263,7 @@ func (r *RepositoryImpl) Count(ctx context.Context, params arguments.FeatureCoun
 
 // Insert ...
 func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.FeatureInsertArgs) (models.Feature, error) {
-	log.WithField("params", params).Info("feature of Repository Insert")
+	log.WithField("params", params).Info("Repository Insert of feature")
 	var (
 		feature       models.Feature
 		insertBuilder = sq.Insert("feature").Columns(
@@ -286,29 +286,29 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.FeatureIns
 	log.WithFields(log.Fields{
 		"SQL":  sql,
 		"Args": args,
-	}).Info("feature of Repository Insert build sql string")
+	}).Info("Repository Insert build sql string of feature")
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Repository Insert insertBuilder error")
+		log.WithField("Error", err).Error("Repository Insert insertBuilder error of feature")
 		return feature, err
 	}
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Repository Insert PrepareContext error")
+		log.WithField("Error", err).Error("Repository Insert PrepareContext error of feature")
 		return feature, err
 	}
 	row, err := stmt.ExecContext(ctx, args...)
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Repository Insert ExecContext error")
+		log.WithField("Error", err).Error("Repository Insert ExecContext error of feature")
 		return feature, err
 	}
 	id, err := row.LastInsertId()
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Repository Insert LastInsertId error")
+		log.WithField("Error", err).Error("Repository Insert LastInsertId error of feature")
 		return feature, err
 	}
 	newFeature, err := r.GetByID(ctx, arguments.FeatureGetByIDArgs{ID: id})
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Repository Insert GetByID error")
+		log.WithField("Error", err).Error("Repository Insert GetByID error of feature")
 		return feature, err
 	}
 	return newFeature, nil
@@ -316,7 +316,7 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.FeatureIns
 
 // setArgsToUpdateBuilder ...
 func (r *RepositoryImpl) setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, params arguments.FeatureUpdateArgs) sq.UpdateBuilder {
-	log.WithField("params", params).Info("feature of Repository setArgsToUpdateBuilder")
+	log.WithField("params", params).Info("Repository setArgsToUpdateBuilder of feature")
 	if params.URL != nil {
 		updateBuilder = updateBuilder.Set("url", *params.URL)
 	}
@@ -346,7 +346,7 @@ func (r *RepositoryImpl) setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, 
 
 // Update ...
 func (r *RepositoryImpl) Update(ctx context.Context, params arguments.FeatureUpdateArgs) (models.Feature, error) {
-	log.WithField("params", params).Info("feature of Repository Update")
+	log.WithField("params", params).Info("Repository Update of feature")
 	var (
 		feature       models.Feature
 		updateBuilder = sq.Update("feature").Where(sq.Eq{"id": *params.ID})
@@ -357,33 +357,33 @@ func (r *RepositoryImpl) Update(ctx context.Context, params arguments.FeatureUpd
 	log.WithFields(log.Fields{
 		"SQL":  sql,
 		"Args": args,
-	}).Info("feature of Repository Update build sql string")
+	}).Info("Repository Update build sql string of feature")
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Repository Update updateBuilderWithArgs error")
+		log.WithField("Error", err).Error("Repository Update updateBuilderWithArgs error of feature")
 		return feature, err
 	}
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Repository Update PrepareContext error")
+		log.WithField("Error", err).Error("Repository Update PrepareContext error of feature")
 		return feature, err
 	}
 	result, err := stmt.ExecContext(ctx, args...)
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Repository Update ExecContext error")
+		log.WithField("Error", err).Error("Repository Update ExecContext error of feature")
 		return feature, err
 	}
 	rowAffected, err := result.RowsAffected()
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Repository Update RowsAffected error")
+		log.WithField("Error", err).Error("Repository Update RowsAffected error of feature")
 		return feature, err
 	}
 	if rowAffected <= 0 {
-		log.WithField("Error", fmt.Errorf("error when update record id %d", *params.ID)).Error("feature of Repository Update rowAffected <= 0")
+		log.WithField("Error", fmt.Errorf("error when update record id %d", *params.ID)).Error("Repository Update rowAffected <= 0 of feature")
 		return feature, fmt.Errorf("error when update record id %d", *params.ID)
 	}
 	newFeature, err := r.GetByID(ctx, arguments.FeatureGetByIDArgs{ID: *params.ID})
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Repository Update GetByID error")
+		log.WithField("Error", err).Error("Repository Update GetByID error of feature")
 		return feature, err
 	}
 	return newFeature, nil
@@ -391,7 +391,7 @@ func (r *RepositoryImpl) Update(ctx context.Context, params arguments.FeatureUpd
 
 // Delete ...
 func (r *RepositoryImpl) Delete(ctx context.Context, params arguments.FeatureDeleteArgs) (int64, error) {
-	log.WithField("params", params).Info("feature of Repository Delete")
+	log.WithField("params", params).Info("Repository Delete of feature")
 	var (
 		id            int64
 		deleteBuilder = sq.Delete("feature").Where(sq.Eq{"id": params.ID})
@@ -400,28 +400,28 @@ func (r *RepositoryImpl) Delete(ctx context.Context, params arguments.FeatureDel
 	log.WithFields(log.Fields{
 		"SQL":  sql,
 		"Args": args,
-	}).Info("feature of Repository Delete build sql string")
+	}).Info("Repository Delete build sql string of feature")
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Repository Delete deleteBuilder error")
+		log.WithField("Error", err).Error("Repository Delete deleteBuilder error of feature")
 		return id, err
 	}
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Repository Delete PrepareContext error")
+		log.WithField("Error", err).Error("Repository Delete PrepareContext error of feature")
 		return id, err
 	}
 	result, err := stmt.ExecContext(ctx, args...)
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Repository Delete ExecContext error")
+		log.WithField("Error", err).Error("Repository Delete ExecContext error of feature")
 		return id, err
 	}
 	rowAffected, err := result.RowsAffected()
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Repository Delete RowsAffected error")
+		log.WithField("Error", err).Error("Repository Delete RowsAffected error of feature")
 		return id, err
 	}
 	if rowAffected <= 0 {
-		log.WithField("Error", fmt.Errorf("not found record by id %d", params.ID)).Error("feature of Repository Update rowAffected <= 0")
+		log.WithField("Error", fmt.Errorf("not found record by id %d", params.ID)).Error("Repository Update rowAffected <= 0 of feature")
 		return id, fmt.Errorf("not found record by id %d", params.ID)
 	}
 	return params.ID, nil

@@ -22,6 +22,7 @@ var (
 				GraphQLDescription: "This is feature's id",
 				GraphQLRequired:    true,
 				Validate:           `validate:"required,min=1"`,
+				FakerTag:           `faker:"unix_time"`,
 			},
 			{
 				Name:               "URL",
@@ -31,6 +32,7 @@ var (
 				GraphQLDescription: "This is feature's url",
 				GraphQLRequired:    true,
 				Validate:           `validate:"omitempty"`,
+				FakerTag:           `faker:"name"`,
 			},
 			{
 				Name:               "Meta",
@@ -40,6 +42,7 @@ var (
 				GraphQLDescription: "This is feature's meta",
 				GraphQLRequired:    true,
 				Validate:           `validate:"omitempty"`,
+				FakerTag:           `faker:"name"`,
 			},
 			{
 				Name:               "CompanyID",
@@ -49,6 +52,7 @@ var (
 				GraphQLDescription: "This is feature's companyId",
 				GraphQLRequired:    true,
 				Validate:           `validate:"omitempty,min=1"`,
+				FakerTag:           `faker:"unix_time"`,
 			},
 			{
 				Name:               "Status",
@@ -58,6 +62,7 @@ var (
 				GraphQLDescription: "This is feature's active",
 				GraphQLRequired:    true,
 				Validate:           `validate:"omitempty,oneof=active inactive"`,
+				FakerTag:           `faker:"name"`,
 			},
 			{
 				Name:               "CreatedBy",
@@ -67,6 +72,7 @@ var (
 				GraphQLDescription: "This is feature's createdBy",
 				GraphQLRequired:    false,
 				Validate:           `validate:"omitempty"`,
+				FakerTag:           `faker:"email"`,
 			},
 			{
 				Name:               "UpdatedBy",
@@ -76,6 +82,7 @@ var (
 				GraphQLDescription: "This is feature's updatedBy",
 				GraphQLRequired:    false,
 				Validate:           `validate:"omitempty"`,
+				FakerTag:           `faker:"email"`,
 			},
 		},
 	}

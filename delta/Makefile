@@ -1,5 +1,6 @@
 install:
 	@go get -u github.com/pressly/goose/cmd/goose
+	@go get -u github.com/vektra/mockery/.../
 	@GO111MODULE=on go mod vendor
 start:
 	@go run cmd/*.go

@@ -17,6 +17,9 @@ import (
 	"github.com/tanphamhaiduong/go/delta/internal/modules"
 	"github.com/tanphamhaiduong/go/delta/internal/modules/company"
 	"github.com/tanphamhaiduong/go/delta/internal/modules/feature"
+	"github.com/tanphamhaiduong/go/delta/internal/modules/permission"
+	"github.com/tanphamhaiduong/go/delta/internal/modules/role"
+	"github.com/tanphamhaiduong/go/delta/internal/modules/rolepermission"
 	"github.com/tanphamhaiduong/go/delta/internal/modules/user"
 )
 
@@ -146,12 +149,31 @@ func main() {
 	featureRepository := feature.NewRepository(db)
 	featureHandler := feature.NewHandler(featureRepository)
 	featureResolver := feature.NewResolver(featureHandler)
+	// Permission
+	permissionRepository := permission.NewRepository(db)
+	permissionHandler := permission.NewHandler(permissionRepository)
+	permissionResolver := permission.NewResolver(permissionHandler)
+	// Role
+	roleRepository := role.NewRepository(db)
+	roleHandler := role.NewHandler(roleRepository)
+	roleResolver := role.NewResolver(roleHandler)
+	// RolePermission
+	rolepermissionRepository := rolepermission.NewRepository(db)
+	rolepermissionHandler := rolepermission.NewHandler(rolepermissionRepository)
+	rolepermissionResolver := rolepermission.NewResolver(rolepermissionHandler)
 	// User
 	userRepository := user.NewRepository(db)
 	userHandler := user.NewHandler(userRepository)
 	userResolver := user.NewResolver(userHandler)
 	// Init Resolvers
-	resolvers := modules.NewResolver(companyResolver, featureResolver, userResolver)
+	resolvers := modules.NewResolver(
+		companyResolver,
+		featureResolver,
+		permissionResolver,
+		roleResolver,
+		rolepermissionResolver,
+		userResolver,
+	)
 	server := NewServer(config, resolvers)
 
 	server.Run()

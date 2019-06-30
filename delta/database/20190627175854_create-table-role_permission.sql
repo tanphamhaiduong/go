@@ -2,8 +2,9 @@
 -- SQL in this section is executed when the migration is applied.
 CREATE TABLE IF NOT EXISTS `role_permission` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `role_id` bigint(20) NOT NULL DEFAULT '0',
-  `permission_id` bigint(20) NOT NULL DEFAULT '0',
+  `role_id` bigint(20) NOT NULL DEFAULT 0,
+  `permission_id` bigint(20) NOT NULL DEFAULT 0,
+  `status` varchar(32) NOT NULL DEFAULT 'active',
   `created_by` varchar(64) NOT NULL DEFAULT '',
   `updated_by` varchar(64) NOT NULL DEFAULT '',
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,

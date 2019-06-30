@@ -3,7 +3,7 @@
 CREATE TABLE IF NOT EXISTS `role` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(128) NOT NULL DEFAULT '',
-  `company_id` bigint(20) NOT NULL DEFAULT '0',
+  `company_id` bigint(20) NOT NULL DEFAULT 0,
   `status` varchar(32) NOT NULL DEFAULT 'active',
   `created_by` varchar(64) NOT NULL DEFAULT '',
   `updated_by` varchar(64) NOT NULL DEFAULT '',

@@ -31,5 +31,6 @@ func (s *FeatureRepositoryTestSuite) SetupTest() {
 	s.MockIRows = &mocksDB.IRows{}
 	s.MockIResult = &mocksDB.IResult{}
 	s.MockIFeature = &mocks.IRepository{}
-	s.Repository = NewRepository(mockIDB)
+	repository := NewRepository(mockIDB)
+	s.Repository = *repository
 }

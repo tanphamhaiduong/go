@@ -176,13 +176,13 @@ type ICoreHandler interface {
 
 // ForwardParams ...
 func (r *ResolverImpl) ForwardParams(params graphql.ResolveParams) (interface{}, error) {
-	log.WithField("params", params).Info("feature of Resolver ForwardParams")
+	log.WithField("params", params).Info("Resolver ForwardParams of feature")
 	return params.Args, nil
 }
 
 // GetByID ...
 func (r *ResolverImpl) GetByID(params graphql.ResolveParams) (interface{}, error) {
-	log.WithField("params", params).Info("feature of Resolver GetByID")
+	log.WithField("params", params).Info("Resolver GetByID of feature")
 	// parse params
 	args := arguments.FeatureGetByIDArgs{}
 	if err := utils.Parse(params.Args, &args); err != nil {
@@ -197,7 +197,7 @@ func (r *ResolverImpl) GetByID(params graphql.ResolveParams) (interface{}, error
 
 // Count ...
 func (r *ResolverImpl) Count(params graphql.ResolveParams) (interface{}, error) {
-	log.WithField("params", params).Info("feature of Resolver Count")
+	log.WithField("params", params).Info("Resolver Count of feature")
 	// parse params
 	args := arguments.FeatureCountArgs{}
 	err := utils.Parse(params.Source.(map[string]interface{}), &args)
@@ -213,17 +213,17 @@ func (r *ResolverImpl) Count(params graphql.ResolveParams) (interface{}, error) 
 
 // List ...
 func (r *ResolverImpl) List(params graphql.ResolveParams) (interface{}, error) {
-	log.WithField("params", params).Info("feature of Resolver List")
+	log.WithField("params", params).Info("Resolver List of feature")
 	// parse params
 	args := arguments.FeatureListArgs{}
 	err := utils.Parse(params.Source.(map[string]interface{}), &args)
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Resolver List utils.Parse")
+		log.WithField("Error", err).Error("Resolver List utils.Parse feature")
 		return nil, err
 	}
 	response, err := r.feature.List(params.Context, args)
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Resolver List r.feature.List")
+		log.WithField("Error", err).Error("Resolver List r.feature.List feature")
 		return nil, err
 	}
 	return response, nil
@@ -231,17 +231,17 @@ func (r *ResolverImpl) List(params graphql.ResolveParams) (interface{}, error) {
 
 // Insert ...
 func (r *ResolverImpl) Insert(params graphql.ResolveParams) (interface{}, error) {
-	log.WithField("params", params).Info("feature of Resolver Insert")
+	log.WithField("params", params).Info("Resolver Insert of feature")
 	// parse params
 	args := arguments.FeatureInsertArgs{}
 	err := utils.Parse(params.Args, &args)
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Resolver Insert utils.Parse")
+		log.WithField("Error", err).Error("Resolver Insert utils.Parse feature")
 		return nil, err
 	}
 	response, err := r.feature.Insert(params.Context, args)
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Resolver Insert r.feature.Insert")
+		log.WithField("Error", err).Error("Resolver Insert r.feature.Insert feature")
 		return nil, err
 	}
 	return response, nil
@@ -249,17 +249,17 @@ func (r *ResolverImpl) Insert(params graphql.ResolveParams) (interface{}, error)
 
 // Update ...
 func (r *ResolverImpl) Update(params graphql.ResolveParams) (interface{}, error) {
-	log.WithField("params", params).Info("feature of Resolver Update")
+	log.WithField("params", params).Info("Resolver Update of feature")
 	// parse params
 	args := arguments.FeatureUpdateArgs{}
 	err := utils.Parse(params.Args, &args)
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Resolver Update utils.Parse")
+		log.WithField("Error", err).Error("Resolver Update utils.Parse feature")
 		return nil, err
 	}
 	response, err := r.feature.Update(params.Context, args)
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Resolver Update r.feature.Update")
+		log.WithField("Error", err).Error("Resolver Update r.feature.Update feature")
 		return nil, err
 	}
 	return response, nil
@@ -267,17 +267,17 @@ func (r *ResolverImpl) Update(params graphql.ResolveParams) (interface{}, error)
 
 // Delete ...
 func (r *ResolverImpl) Delete(params graphql.ResolveParams) (interface{}, error) {
-	log.WithField("params", params).Info("feature of Resolver Delete")
+	log.WithField("params", params).Info("Resolver Delete of feature")
 	// parse params
 	args := arguments.FeatureDeleteArgs{}
 	err := utils.Parse(params.Args, &args)
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Resolver Delete utils.Parse")
+		log.WithField("Error", err).Error("Resolver Delete utils.Parse feature")
 		return nil, err
 	}
 	response, err := r.feature.Delete(params.Context, args)
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Resolver Delete r.feature.Delete")
+		log.WithField("Error", err).Error("Resolver Delete r.feature.Delete feature")
 		return nil, err
 	}
 	return response, nil

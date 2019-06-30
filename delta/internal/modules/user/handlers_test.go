@@ -19,6 +19,7 @@ func TestUserHandlerTestSuite(t *testing.T) {
 
 func (s *UserHandlerTestSuite) SetupTest() {
 	s.MockIUser = &mocks.IRepository{}
-	s.User = NewHandler(s.MockIUser)
+	handler := NewHandler(s.MockIUser)
+	s.User = *handler
 	s.User.user = s.MockIUser
 }

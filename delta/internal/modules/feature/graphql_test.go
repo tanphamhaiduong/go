@@ -19,6 +19,7 @@ func TestFeatureResolverTestSuite(t *testing.T) {
 
 func (s *FeatureResolverTestSuite) SetupTest() {
 	s.MockIFeature = &mocks.IHandler{}
-	s.Feature = NewResolver(s.MockIFeature)
+	resolver := NewResolver(s.MockIFeature)
+	s.Feature = *resolver
 	s.Feature.feature = s.MockIFeature
 }

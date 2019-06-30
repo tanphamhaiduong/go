@@ -23,17 +23,17 @@ type ICoreRepository interface {
 
 // GetByID ...
 func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.FeatureGetByIDArgs) (models.Feature, error) {
-	log.WithField("params", params).Info("feature of Handler GetByID")
+	log.WithField("params", params).Info("Handler GetByID of feature")
 	var (
 		feature models.Feature
 	)
 	if err := validator.Struct(params); err != nil {
-		log.WithField("Error", err).Error("feature of Handler GetByID validator.Struct error")
+		log.WithField("Error", err).Error("Handler GetByID validator.Struct error of feature")
 		return feature, err
 	}
 	feature, err := h.feature.GetByID(ctx, params)
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Handler GetByID h.feature.GetByID error")
+		log.WithField("Error", err).Error("Handler GetByID h.feature.GetByID error of feature")
 		return feature, err
 	}
 	return feature, nil
@@ -41,17 +41,17 @@ func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.FeatureGetBy
 
 // GetByIDs ...
 func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.FeatureGetByIDsArgs) ([]models.Feature, error) {
-	log.WithField("params", params).Info("feature of Handler GetByIDs")
+	log.WithField("params", params).Info("Handler GetByIDs of feature")
 	var (
 		features []models.Feature
 	)
 	if err := validator.Struct(params); err != nil {
-		log.WithField("Error", err).Error("feature of Handler GetByIDs validator.Struct error")
+		log.WithField("Error", err).Error("Handler GetByIDs validator.Struct error of feature")
 		return features, err
 	}
 	features, err := h.feature.GetByIDs(ctx, params)
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Handler GetByIDs h.feature.GetByIDs error")
+		log.WithField("Error", err).Error("Handler GetByIDs h.feature.GetByIDs error of feature")
 		return features, err
 	}
 	return features, nil
@@ -59,17 +59,17 @@ func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.FeatureGetB
 
 // Count ...
 func (h *HandlerImpl) Count(ctx context.Context, params arguments.FeatureCountArgs) (int64, error) {
-	log.WithField("params", params).Info("feature of Handler Count")
+	log.WithField("params", params).Info("Handler Count of feature")
 	var (
 		count int64
 	)
 	if err := validator.Struct(params); err != nil {
-		log.WithField("Error", err).Error("feature of Handler Count validator.Struct error")
+		log.WithField("Error", err).Error("Handler Count validator.Struct error of feature")
 		return count, err
 	}
 	count, err := h.feature.Count(ctx, params)
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Handler Count h.feature.Count error")
+		log.WithField("Error", err).Error("Handler Count h.feature.Count error of feature")
 		return count, err
 	}
 	return count, nil
@@ -77,17 +77,17 @@ func (h *HandlerImpl) Count(ctx context.Context, params arguments.FeatureCountAr
 
 // List ...
 func (h *HandlerImpl) List(ctx context.Context, params arguments.FeatureListArgs) ([]models.Feature, error) {
-	log.WithField("params", params).Info("feature of Handler List")
+	log.WithField("params", params).Info("Handler List of feature")
 	var (
 		features []models.Feature
 	)
 	if err := validator.Struct(params); err != nil {
-		log.WithField("Error", err).Error("feature of Handler List validator.Struct error")
+		log.WithField("Error", err).Error("Handler List validator.Struct error of feature")
 		return features, err
 	}
 	features, err := h.feature.List(ctx, params)
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Handler List h.feature.List error")
+		log.WithField("Error", err).Error("Handler List h.feature.List error of feature")
 		return features, err
 	}
 	return features, nil
@@ -95,17 +95,17 @@ func (h *HandlerImpl) List(ctx context.Context, params arguments.FeatureListArgs
 
 // Insert ...
 func (h *HandlerImpl) Insert(ctx context.Context, params arguments.FeatureInsertArgs) (models.Feature, error) {
-	log.WithField("params", params).Info("feature of Handler Insert")
+	log.WithField("params", params).Info("Handler Insert of feature")
 	var (
 		feature models.Feature
 	)
 	if err := validator.Struct(params); err != nil {
-		log.WithField("Error", err).Error("feature of Handler Insert validator.Struct error")
+		log.WithField("Error", err).Error("Handler Insert validator.Struct error of feature")
 		return feature, err
 	}
 	feature, err := h.feature.Insert(ctx, params)
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Handler Insert h.feature.Insert error")
+		log.WithField("Error", err).Error("Handler Insert h.feature.Insert error of feature")
 		return feature, err
 	}
 	return feature, nil
@@ -113,17 +113,17 @@ func (h *HandlerImpl) Insert(ctx context.Context, params arguments.FeatureInsert
 
 // Update ...
 func (h *HandlerImpl) Update(ctx context.Context, params arguments.FeatureUpdateArgs) (models.Feature, error) {
-	log.WithField("params", params).Info("feature of Handler Update")
+	log.WithField("params", params).Info("Handler Update of feature")
 	var (
 		feature models.Feature
 	)
 	if err := validator.Struct(params); err != nil {
-		log.WithField("Error", err).Error("feature of Handler Update validator.Struct error")
+		log.WithField("Error", err).Error("Handler Update validator.Struct error of feature")
 		return feature, err
 	}
 	feature, err := h.feature.Update(ctx, params)
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Handler Update h.feature.Update error")
+		log.WithField("Error", err).Error("Handler Update h.feature.Update error of feature")
 		return feature, err
 	}
 	return feature, nil
@@ -131,17 +131,17 @@ func (h *HandlerImpl) Update(ctx context.Context, params arguments.FeatureUpdate
 
 // Delete ...
 func (h *HandlerImpl) Delete(ctx context.Context, params arguments.FeatureDeleteArgs) (int64, error) {
-	log.WithField("params", params).Info("feature of Handler Delete")
+	log.WithField("params", params).Info("Handler Delete of feature")
 	var (
 		id int64
 	)
 	if err := validator.Struct(params); err != nil {
-		log.WithField("Error", err).Error("feature of Handler Delete validator.Struct error")
+		log.WithField("Error", err).Error("Handler Delete validator.Struct error of feature")
 		return id, err
 	}
 	id, err := h.feature.Delete(ctx, params)
 	if err != nil {
-		log.WithField("Error", err).Error("feature of Handler Delete h.feature.Delete error")
+		log.WithField("Error", err).Error("Handler Delete h.feature.Delete error of feature")
 		return id, err
 	}
 	return id, nil

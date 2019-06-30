@@ -19,6 +19,7 @@ func TestUserResolverTestSuite(t *testing.T) {
 
 func (s *UserResolverTestSuite) SetupTest() {
 	s.MockIUser = &mocks.IHandler{}
-	s.User = NewResolver(s.MockIUser)
+	resolver := NewResolver(s.MockIUser)
+	s.User = *resolver
 	s.User.user = s.MockIUser
 }

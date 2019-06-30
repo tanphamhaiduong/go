@@ -22,6 +22,7 @@ var (
 				GraphQLDescription: "This is user's id",
 				GraphQLRequired:    true,
 				Validate:           `validate:"required,min=1"`,
+				FakerTag:           `faker:"unix_time"`,
 			},
 			{
 				Name:               "Email",
@@ -31,6 +32,7 @@ var (
 				GraphQLDescription: "This is user's email",
 				GraphQLRequired:    true,
 				Validate:           `validate:"omitempty"`,
+				FakerTag:           `faker:"email"`,
 			},
 			{
 				Name:               "Name",
@@ -40,6 +42,7 @@ var (
 				GraphQLDescription: "This is user's name",
 				GraphQLRequired:    true,
 				Validate:           `validate:"omitempty"`,
+				FakerTag:           `faker:"name"`,
 			},
 			{
 				Name:               "CompanyID",
@@ -49,6 +52,7 @@ var (
 				GraphQLDescription: "This is user's companyId",
 				GraphQLRequired:    true,
 				Validate:           `validate:"omitempty,min=1"`,
+				FakerTag:           `faker:"unix_time"`,
 			},
 			{
 				Name:               "Status",
@@ -58,6 +62,7 @@ var (
 				GraphQLDescription: "This is user's status",
 				GraphQLRequired:    true,
 				Validate:           `validate:"omitempty,oneof=active inactive"`,
+				FakerTag:           `faker:"name"`,
 			},
 			{
 				Name:               "CreatedBy",
@@ -66,7 +71,8 @@ var (
 				GraphQLType:        graphqltype.String,
 				GraphQLDescription: "This is user's createdBy",
 				GraphQLRequired:    false,
-				Validate:           `validate:"omitempty`,
+				Validate:           `validate:"omitempty"`,
+				FakerTag:           `faker:"email"`,
 			},
 			{
 				Name:               "UpdatedBy",
@@ -75,7 +81,8 @@ var (
 				GraphQLType:        graphqltype.String,
 				GraphQLDescription: "This is user's updatedBy",
 				GraphQLRequired:    false,
-				Validate:           `validate:"omitempty`,
+				Validate:           `validate:"omitempty"`,
+				FakerTag:           `faker:"email"`,
 			},
 		},
 	}
