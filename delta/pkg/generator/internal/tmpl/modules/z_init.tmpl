@@ -11,7 +11,7 @@ import (
 	{{- end }}
 )
 
-// ICoreResolver ...
+// IResolver ...
 type IResolver interface {
 	ForwardParams(p graphql.ResolveParams) (interface{}, error)
 	GetByID(p graphql.ResolveParams) (interface{}, error)
@@ -26,6 +26,13 @@ type IResolver interface {
 type Resolver struct {
 	{{- range $Module := $Modules }}
 		{{ $Module.Name }} I{{ $Module.Name }}Resolver
+	{{- end }}
+}
+
+// Handler ...
+type Handler struct {
+	{{- range $Module := $Modules }}
+		{{ $Module.Name }} I{{ $Module.Name }}Handler
 	{{- end }}
 }
 
@@ -82,6 +89,15 @@ func addToSchema(resolver Resolver){
 // NewResolver ...
 func NewResolver({{- range $Module := $Modules }}{{ $Module.Name | ToLowerCase }} I{{ $Module.Name }}Resolver,{{- end }}) Resolver {
 	return Resolver{
+		{{- range $Module := $Modules }}
+		  {{ $Module.Name }}: {{ $Module.Name | ToLowerCase }},
+        {{- end }}
+	}
+}
+
+// NewHandler ...
+func NewHandler({{- range $Module := $Modules }}{{ $Module.Name | ToLowerCase }} I{{ $Module.Name }}Handler,{{- end }}) Handler {
+	return Handler{
 		{{- range $Module := $Modules }}
 		  {{ $Module.Name }}: {{ $Module.Name | ToLowerCase }},
         {{- end }}

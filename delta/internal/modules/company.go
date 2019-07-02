@@ -4,3 +4,8 @@ package modules
 type ICompanyResolver interface {
 	ICoreCompanyResolver
 }
+
+// ICompanyHandler ...
+type ICompanyHandler interface {
+	ICoreCompanyHandler
+}

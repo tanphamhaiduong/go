@@ -4,3 +4,8 @@ package modules
 type IPermissionResolver interface {
 	ICorePermissionResolver
 }
+
+// IPermissionHandler ...
+type IPermissionHandler interface {
+	ICorePermissionHandler
+}

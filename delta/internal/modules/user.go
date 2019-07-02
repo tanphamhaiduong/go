@@ -4,3 +4,8 @@ package modules
 type IUserResolver interface {
 	ICoreUserResolver
 }
+
+// IUserHandler ...
+type IUserHandler interface {
+	ICoreUserHandler
+}

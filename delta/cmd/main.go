@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
@@ -14,6 +15,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/graphql-go/handler"
 	"github.com/tanphamhaiduong/go/delta/internal/database"
+	"github.com/tanphamhaiduong/go/delta/internal/grpcservice"
 	"github.com/tanphamhaiduong/go/delta/internal/modules"
 	"github.com/tanphamhaiduong/go/delta/internal/modules/company"
 	"github.com/tanphamhaiduong/go/delta/internal/modules/feature"
@@ -21,12 +23,14 @@ import (
 	"github.com/tanphamhaiduong/go/delta/internal/modules/role"
 	"github.com/tanphamhaiduong/go/delta/internal/modules/rolepermission"
 	"github.com/tanphamhaiduong/go/delta/internal/modules/user"
+	"google.golang.org/grpc"
 )
 
 // Config ...
 type Config struct {
 	DatabasePath string
 	Port         string
+	GRPCPort     string
 	DBDriver     string
 	WriteTimeout time.Duration
 	ReadTimeout  time.Duration
@@ -39,6 +43,7 @@ func NewConfig() *Config {
 	return &Config{
 		DatabasePath: "root:root@tcp(127.0.0.1:3306)/delta",
 		Port:         "8000",
+		GRPCPort:     ":9000",
 		DBDriver:     "mysql",
 		WriteTimeout: time.Second * 15,
 		ReadTimeout:  time.Second * 15,
@@ -57,13 +62,15 @@ type Server struct {
 	config         *Config
 	graphQLHandler *handler.Handler
 	resolvers      modules.Resolver
+	handlers       modules.Handler
 }
 
 // NewServer ...
-func NewServer(config *Config, resolvers modules.Resolver) *Server {
+func NewServer(config *Config, resolvers modules.Resolver, handlers modules.Handler) *Server {
 	return &Server{
 		config:    config,
 		resolvers: resolvers,
+		handlers:  handlers,
 	}
 }
 
@@ -93,6 +100,7 @@ func (s *Server) Run() {
 	var (
 		wait time.Duration
 	)
+	// Init HTTP Server
 	flag.DurationVar(&wait, "graceful-timeout", s.config.GracefulTime, "the duration for which the server gracefully wait for existing connections to finish - e.g. 15s or 1m")
 	flag.Parse()
 	srv := &http.Server{
@@ -108,6 +116,25 @@ func (s *Server) Run() {
 	go func() {
 		log.Println(fmt.Sprintf("Listening on %v", s.config.Port))
 		if err := srv.ListenAndServe(); err != nil {
+			log.Println(err)
+		}
+	}()
+
+	// Init GRPC Server
+	lis, err := net.Listen("tcp", s.config.GRPCPort)
+	// creds, err := credentials.NewServerTLSFromFile("./cert/cert.pem", "./cert/key.pem")
+	if err != nil {
+		log.Fatal(err)
+	}
+	// opts := []grpc.ServerOption{grpc.Creds(creds)}
+	opts := []grpc.ServerOption{}
+	grpc := grpc.NewServer(opts...)
+	grpcService := grpcservice.NewGrpcService(s.handlers)
+	grpcService.Register(grpc)
+
+	go func() {
+		log.Println(fmt.Sprintf("Listening on %v", s.config.GRPCPort))
+		if err := grpc.Serve(lis); err != nil {
 			log.Println(err)
 		}
 	}()
@@ -174,7 +201,17 @@ func main() {
 		rolepermissionResolver,
 		userResolver,
 	)
-	server := NewServer(config, resolvers)
+
+	handlers := modules.NewHandler(
+		companyHandler,
+		featureHandler,
+		permissionHandler,
+		roleHandler,
+		rolepermissionHandler,
+		userHandler,
+	)
+
+	server := NewServer(config, resolvers, handlers)
 
 	server.Run()
 }

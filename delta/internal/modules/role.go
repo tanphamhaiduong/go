@@ -4,3 +4,8 @@ package modules
 type IRoleResolver interface {
 	ICoreRoleResolver
 }
+
+// IRoleHandler ...
+type IRoleHandler interface {
+	ICoreRoleHandler
+}

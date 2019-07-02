@@ -11,7 +11,7 @@ import (
 	"github.com/tanphamhaiduong/go/delta/internal/modules/user"
 )
 
-// ICoreResolver ...
+// IResolver ...
 type IResolver interface {
 	ForwardParams(p graphql.ResolveParams) (interface{}, error)
 	GetByID(p graphql.ResolveParams) (interface{}, error)
@@ -30,6 +30,16 @@ type Resolver struct {
 	Role           IRoleResolver
 	RolePermission IRolePermissionResolver
 	User           IUserResolver
+}
+
+// Handler ...
+type Handler struct {
+	Company        ICompanyHandler
+	Feature        IFeatureHandler
+	Permission     IPermissionHandler
+	Role           IRoleHandler
+	RolePermission IRolePermissionHandler
+	User           IUserHandler
 }
 
 func addToSchema(resolver Resolver) {
@@ -308,6 +318,18 @@ func addToSchema(resolver Resolver) {
 // NewResolver ...
 func NewResolver(company ICompanyResolver, feature IFeatureResolver, permission IPermissionResolver, role IRoleResolver, rolepermission IRolePermissionResolver, user IUserResolver) Resolver {
 	return Resolver{
+		Company:        company,
+		Feature:        feature,
+		Permission:     permission,
+		Role:           role,
+		RolePermission: rolepermission,
+		User:           user,
+	}
+}
+
+// NewHandler ...
+func NewHandler(company ICompanyHandler, feature IFeatureHandler, permission IPermissionHandler, role IRoleHandler, rolepermission IRolePermissionHandler, user IUserHandler) Handler {
+	return Handler{
 		Company:        company,
 		Feature:        feature,
 		Permission:     permission,

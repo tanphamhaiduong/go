@@ -4,3 +4,8 @@ package modules
 type IRolePermissionResolver interface {
 	ICoreRolePermissionResolver
 }
+
+// IRolePermissionHandler ...
+type IRolePermissionHandler interface {
+	ICoreRolePermissionHandler
+}

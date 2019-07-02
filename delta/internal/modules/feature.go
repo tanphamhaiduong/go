@@ -4,3 +4,8 @@ package modules
 type IFeatureResolver interface {
 	ICoreFeatureResolver
 }
+
+// IFeatureHandler ...
+type IFeatureHandler interface {
+	ICoreFeatureHandler
+}
