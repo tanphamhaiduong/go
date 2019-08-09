@@ -11,10 +11,21 @@ import (
 
 	sq "github.com/Masterminds/squirrel"
 	log "github.com/sirupsen/logrus"
-	"github.com/tanphamhaiduong/go/delta/internal/utils"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
+		"github.com/tanphamhaiduong/go/delta/internal/database"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
+	"github.com/tanphamhaiduong/go/delta/internal/utils"
 )
+
+//scan{{ $Name }}
+func (r *RepositoryImpl) scan{{ $Name }}(row database.IRow, {{ $name }} *models.{{ $Name }}) error {
+	err := row.Scan(
+	{{- range $field := $fields }}
+		&{{ $name }}.{{ $field.Name }},
+	{{- end }}
+	)
+	return err
+}
 
 // GetByID ...
 func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.{{ $Name }}GetByIDArgs) (models.{{ $Name }}, error) {
@@ -42,11 +53,7 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.{{ $Name 
 		return {{ $name }}, err
 	}
 	row := stmt.QueryRowContext(ctx, args...)
-	err = row.Scan(
-	{{- range $field := $fields }}
-		&{{ $name }}.{{ $field.Name }},
-	{{- end }}
-	)
+	err = r.scan{{ $Name }}(row, &{{ $name }})
 	if err != nil {
 		log.WithField("Error", err).Error("Repository GetByID Scan error of {{ $name }}")
 		return {{ $name }}, err
@@ -87,11 +94,7 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.{{ $Name
 	}
 	for rows.Next() {
 		{{ $name }} := models.{{ $Name }}{}
-		err := rows.Scan(
-			{{- range $field := $fields }}
-				&{{ $name }}.{{- $field.Name }},
-			{{- end }}
-		)
+		err := r.scan{{ $Name }}(rows, &{{ $name }})
 		if err != nil {
 	    log.WithField("Error", err).Error("Repository GetByIDs Scan error of {{ $name }}")
 			return {{ $names }}, err
@@ -105,7 +108,15 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.{{ $Name
 func (r *RepositoryImpl) setArgsToListSelectBuilder(selectBuilder sq.SelectBuilder, params arguments.{{ $Name }}ListArgs) sq.SelectBuilder {
   log.WithField("params", params).Info("Repository setArgsToListSelectBuilder of {{ $name }}")
 	{{- range $field := $fields }}
-		if params.{{- $field.Name }} != {{- if $field.IsInt64 }}0{{ else }}""{{ end }} {
+		if
+			{{- if $field.IsNullTimeField }}
+				value, _ := params.{{- $field.Name }}.Value(); value != nil
+			{{- else }}
+				params.{{- $field.Name }} !=
+					{{- if $field.IsInt64 }}0
+					{{- else }}""
+					{{- end }}
+			{{- end }}{
 			selectBuilder = selectBuilder.Where(sq.{{ $field.QueryType }}{"{{ $field.Name | ToSnakeCase }}": params.{{ $field.Name }}})
 		}
 	{{- end }}
@@ -153,11 +164,7 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.{{- $Name }}
 	defer rows.Close()
 	for rows.Next() {
 		{{ $name }} := models.{{ $Name }}{}
-		err := rows.Scan(
-			{{- range $field := $fields }}
-				&{{ $name }}.{{- $field.Name }},
-			{{- end }}
-		)
+		err := r.scan{{ $Name }}(rows, &{{ $name }})
 		if err != nil {
       log.WithField("Error", err).Error("Repository List Scan error of {{ $name }}")
 			return {{ $names }}, err
@@ -216,13 +223,13 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.{{ $Name }
 		{{ $name }} models.{{ $Name }}
 		insertBuilder = sq.Insert("{{- $name_module }}").Columns(
 			{{- range $field := $fields }}
-				{{- if $field.IsNotIDField }}
+				{{- if not $field.IsIDField }}
 					"{{ $field.Name | ToSnakeCase }}",
 				{{- end }}
 			{{- end }}
 		).Values(
 			{{- range $field := $fields }}
-				{{- if $field.IsNotIDField }}
+				{{- if not $field.IsIDField }}
 					params.{{ $field.Name }},
 				{{- end }}
 			{{- end }}
@@ -264,11 +271,16 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.{{ $Name }
 func (r *RepositoryImpl) setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, params arguments.{{ $Name }}UpdateArgs) sq.UpdateBuilder {
   log.WithField("params", params).Info("Repository setArgsToUpdateBuilder of {{ $name }}")
 	{{- range $field := $fields }}
-		{{- if $field.IsNotIDField }}
-			if params.{{- $field.Name }} != nil {
-				updateBuilder = updateBuilder.Set("{{ $field.Name | ToSnakeCase }}", *params.{{- $field.Name }})
+		{{- if not $field.IsIDField }}
+			if
+			{{- if $field.IsNullTimeField}}
+				value, _ := params.{{- $field.Name }}.Value(); value != nil
+			{{- else }}
+			params.{{- $field.Name }} != nil
+			{{- end }}{
+				updateBuilder = updateBuilder.Set("{{ $field.Name | ToSnakeCase }}", *params.{{ $field.Name }})
 			}
-		{{ end }}
+		{{- end }}
 	{{- end }}
 	return updateBuilder
 }

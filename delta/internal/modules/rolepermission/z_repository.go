@@ -8,9 +8,23 @@ import (
 	sq "github.com/Masterminds/squirrel"
 	log "github.com/sirupsen/logrus"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
+	"github.com/tanphamhaiduong/go/delta/internal/database"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
 	"github.com/tanphamhaiduong/go/delta/internal/utils"
 )
+
+//scanRolePermission
+func (r *RepositoryImpl) scanRolePermission(row database.IRow, rolepermission *models.RolePermission) error {
+	err := row.Scan(
+		&rolepermission.ID,
+		&rolepermission.RoleID,
+		&rolepermission.PermissionID,
+		&rolepermission.Status,
+		&rolepermission.CreatedBy,
+		&rolepermission.UpdatedBy,
+	)
+	return err
+}
 
 // GetByID ...
 func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.RolePermissionGetByIDArgs) (models.RolePermission, error) {
@@ -41,14 +55,7 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.RolePermi
 		return rolepermission, err
 	}
 	row := stmt.QueryRowContext(ctx, args...)
-	err = row.Scan(
-		&rolepermission.ID,
-		&rolepermission.RoleID,
-		&rolepermission.PermissionID,
-		&rolepermission.Status,
-		&rolepermission.CreatedBy,
-		&rolepermission.UpdatedBy,
-	)
+	err = r.scanRolePermission(row, &rolepermission)
 	if err != nil {
 		log.WithField("Error", err).Error("Repository GetByID Scan error of rolepermission")
 		return rolepermission, err
@@ -92,14 +99,7 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.RolePerm
 	}
 	for rows.Next() {
 		rolepermission := models.RolePermission{}
-		err := rows.Scan(
-			&rolepermission.ID,
-			&rolepermission.RoleID,
-			&rolepermission.PermissionID,
-			&rolepermission.Status,
-			&rolepermission.CreatedBy,
-			&rolepermission.UpdatedBy,
-		)
+		err := r.scanRolePermission(rows, &rolepermission)
 		if err != nil {
 			log.WithField("Error", err).Error("Repository GetByIDs Scan error of rolepermission")
 			return rolepermissions, err
@@ -177,14 +177,7 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.RolePermissi
 	defer rows.Close()
 	for rows.Next() {
 		rolepermission := models.RolePermission{}
-		err := rows.Scan(
-			&rolepermission.ID,
-			&rolepermission.RoleID,
-			&rolepermission.PermissionID,
-			&rolepermission.Status,
-			&rolepermission.CreatedBy,
-			&rolepermission.UpdatedBy,
-		)
+		err := r.scanRolePermission(rows, &rolepermission)
 		if err != nil {
 			log.WithField("Error", err).Error("Repository List Scan error of rolepermission")
 			return rolepermissions, err
@@ -306,23 +299,18 @@ func (r *RepositoryImpl) setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, 
 	if params.RoleID != nil {
 		updateBuilder = updateBuilder.Set("role_id", *params.RoleID)
 	}
-
 	if params.PermissionID != nil {
 		updateBuilder = updateBuilder.Set("permission_id", *params.PermissionID)
 	}
-
 	if params.Status != nil {
 		updateBuilder = updateBuilder.Set("status", *params.Status)
 	}
-
 	if params.CreatedBy != nil {
 		updateBuilder = updateBuilder.Set("created_by", *params.CreatedBy)
 	}
-
 	if params.UpdatedBy != nil {
 		updateBuilder = updateBuilder.Set("updated_by", *params.UpdatedBy)
 	}
-
 	return updateBuilder
 }
 

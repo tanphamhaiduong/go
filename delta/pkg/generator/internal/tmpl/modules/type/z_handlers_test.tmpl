@@ -158,7 +158,7 @@ func (s *{{ $Name }}HandlerTestSuite) TestInsert_Success() {
 	{{ $name }} := models.{{ $Name }}{
 		ID: sampleID,
 		{{- range $field := $fields }}
-			{{- if $field.IsNotIDField }}
+			{{- if not $field.IsIDField }}
 				{{ $field.Name }}: params.{{ $field.Name }},
 			{{- end }}
 		{{- end }}
@@ -178,7 +178,7 @@ func (s *{{ $Name }}HandlerTestSuite) TestInsert_Fail() {
 		ctx            = context.Background()
 		params         = arguments.{{ $Name }}InsertArgs{
 			{{- range $field := $fields }}
-				{{- if $field.IsNotIDField }}
+				{{- if not $field.IsIDField }}
 					{{ $field.Name }}: {{ if $field.IsInt64 }}0{{ else }}"mockString"{{ end }},
 				{{- end }}
 			{{- end }}

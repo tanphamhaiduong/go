@@ -8,9 +8,24 @@ import (
 	sq "github.com/Masterminds/squirrel"
 	log "github.com/sirupsen/logrus"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
+	"github.com/tanphamhaiduong/go/delta/internal/database"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
 	"github.com/tanphamhaiduong/go/delta/internal/utils"
 )
+
+//scanUser
+func (r *RepositoryImpl) scanUser(row database.IRow, user *models.User) error {
+	err := row.Scan(
+		&user.ID,
+		&user.Email,
+		&user.Name,
+		&user.CompanyID,
+		&user.Status,
+		&user.CreatedBy,
+		&user.UpdatedBy,
+	)
+	return err
+}
 
 // GetByID ...
 func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.UserGetByIDArgs) (models.User, error) {
@@ -42,15 +57,7 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.UserGetBy
 		return user, err
 	}
 	row := stmt.QueryRowContext(ctx, args...)
-	err = row.Scan(
-		&user.ID,
-		&user.Email,
-		&user.Name,
-		&user.CompanyID,
-		&user.Status,
-		&user.CreatedBy,
-		&user.UpdatedBy,
-	)
+	err = r.scanUser(row, &user)
 	if err != nil {
 		log.WithField("Error", err).Error("Repository GetByID Scan error of user")
 		return user, err
@@ -95,15 +102,7 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.UserGetB
 	}
 	for rows.Next() {
 		user := models.User{}
-		err := rows.Scan(
-			&user.ID,
-			&user.Email,
-			&user.Name,
-			&user.CompanyID,
-			&user.Status,
-			&user.CreatedBy,
-			&user.UpdatedBy,
-		)
+		err := r.scanUser(rows, &user)
 		if err != nil {
 			log.WithField("Error", err).Error("Repository GetByIDs Scan error of user")
 			return users, err
@@ -185,15 +184,7 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.UserListArgs
 	defer rows.Close()
 	for rows.Next() {
 		user := models.User{}
-		err := rows.Scan(
-			&user.ID,
-			&user.Email,
-			&user.Name,
-			&user.CompanyID,
-			&user.Status,
-			&user.CreatedBy,
-			&user.UpdatedBy,
-		)
+		err := r.scanUser(rows, &user)
 		if err != nil {
 			log.WithField("Error", err).Error("Repository List Scan error of user")
 			return users, err
@@ -320,27 +311,21 @@ func (r *RepositoryImpl) setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, 
 	if params.Email != nil {
 		updateBuilder = updateBuilder.Set("email", *params.Email)
 	}
-
 	if params.Name != nil {
 		updateBuilder = updateBuilder.Set("name", *params.Name)
 	}
-
 	if params.CompanyID != nil {
 		updateBuilder = updateBuilder.Set("company_id", *params.CompanyID)
 	}
-
 	if params.Status != nil {
 		updateBuilder = updateBuilder.Set("status", *params.Status)
 	}
-
 	if params.CreatedBy != nil {
 		updateBuilder = updateBuilder.Set("created_by", *params.CreatedBy)
 	}
-
 	if params.UpdatedBy != nil {
 		updateBuilder = updateBuilder.Set("updated_by", *params.UpdatedBy)
 	}
-
 	return updateBuilder
 }
 

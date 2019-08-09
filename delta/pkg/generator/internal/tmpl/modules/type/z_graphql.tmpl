@@ -61,7 +61,7 @@ var (
 	// InsertTypeArgs ...
 	InsertTypeArgs = graphql.FieldConfigArgument{
 		{{- range $field := $fields }}
-			{{- if $field.IsNotIDField }}
+			{{- if not $field.IsIDField }}
 				"{{ $field.Name | ToLowerCamelCase }}": &graphql.ArgumentConfig{
 					{{- if $field.GraphQLRequired }}
             Type:        graphql.NewNonNull({{ $field.GraphQLType }}),
@@ -80,7 +80,7 @@ var (
 			Type: graphql.NewNonNull(graphql.Int),
 		},
 		{{- range $field := $fields }}
-			{{- if $field.IsNotIDField }}
+			{{- if not $field.IsIDField }}
 				"{{ $field.Name | ToLowerCamelCase }}": &graphql.ArgumentConfig{
 					Type:        {{ $field.GraphQLType }},
 					Description: "{{ $field.GraphQLDescription }}",

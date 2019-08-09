@@ -8,9 +8,22 @@ import (
 	sq "github.com/Masterminds/squirrel"
 	log "github.com/sirupsen/logrus"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
+	"github.com/tanphamhaiduong/go/delta/internal/database"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
 	"github.com/tanphamhaiduong/go/delta/internal/utils"
 )
+
+//scanPermission
+func (r *RepositoryImpl) scanPermission(row database.IRow, permission *models.Permission) error {
+	err := row.Scan(
+		&permission.ID,
+		&permission.Name,
+		&permission.Status,
+		&permission.CreatedBy,
+		&permission.UpdatedBy,
+	)
+	return err
+}
 
 // GetByID ...
 func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.PermissionGetByIDArgs) (models.Permission, error) {
@@ -40,13 +53,7 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.Permissio
 		return permission, err
 	}
 	row := stmt.QueryRowContext(ctx, args...)
-	err = row.Scan(
-		&permission.ID,
-		&permission.Name,
-		&permission.Status,
-		&permission.CreatedBy,
-		&permission.UpdatedBy,
-	)
+	err = r.scanPermission(row, &permission)
 	if err != nil {
 		log.WithField("Error", err).Error("Repository GetByID Scan error of permission")
 		return permission, err
@@ -89,13 +96,7 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.Permissi
 	}
 	for rows.Next() {
 		permission := models.Permission{}
-		err := rows.Scan(
-			&permission.ID,
-			&permission.Name,
-			&permission.Status,
-			&permission.CreatedBy,
-			&permission.UpdatedBy,
-		)
+		err := r.scanPermission(rows, &permission)
 		if err != nil {
 			log.WithField("Error", err).Error("Repository GetByIDs Scan error of permission")
 			return permissions, err
@@ -169,13 +170,7 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.PermissionLi
 	defer rows.Close()
 	for rows.Next() {
 		permission := models.Permission{}
-		err := rows.Scan(
-			&permission.ID,
-			&permission.Name,
-			&permission.Status,
-			&permission.CreatedBy,
-			&permission.UpdatedBy,
-		)
+		err := r.scanPermission(rows, &permission)
 		if err != nil {
 			log.WithField("Error", err).Error("Repository List Scan error of permission")
 			return permissions, err
@@ -292,19 +287,15 @@ func (r *RepositoryImpl) setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, 
 	if params.Name != nil {
 		updateBuilder = updateBuilder.Set("name", *params.Name)
 	}
-
 	if params.Status != nil {
 		updateBuilder = updateBuilder.Set("status", *params.Status)
 	}
-
 	if params.CreatedBy != nil {
 		updateBuilder = updateBuilder.Set("created_by", *params.CreatedBy)
 	}
-
 	if params.UpdatedBy != nil {
 		updateBuilder = updateBuilder.Set("updated_by", *params.UpdatedBy)
 	}
-
 	return updateBuilder
 }
 

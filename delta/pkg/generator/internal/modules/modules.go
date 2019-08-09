@@ -25,18 +25,28 @@ func (f *Field) IsInt64() bool {
 }
 
 // IsNotBoolean ...
-func (f *Field) IsNotBoolean() bool {
-	return f.GoType != gotype.Bool
+func (f *Field) IsBoolean() bool {
+	return f.GoType == gotype.Bool
 }
 
 // IsNotIDField ...
-func (f *Field) IsNotIDField() bool {
-	return f.Name != "ID"
+func (f *Field) IsIDField() bool {
+	return f.Name == "ID"
 }
 
 // IsStatusField ...
 func (f *Field) IsStatusField() bool {
-	return f.Name != "Status"
+	return f.Name == "Status"
+}
+
+// IsNullTimeField ...
+func (f *Field) IsNullTimeField() bool {
+	return f.GoType == gotype.NullTime
+}
+
+// IsNullTimeField ...
+func (f *Field) IsTimeField() bool {
+	return f.GoType == gotype.Time
 }
 
 // Module need to generate

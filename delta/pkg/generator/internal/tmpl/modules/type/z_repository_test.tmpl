@@ -246,7 +246,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestInsert_Success() {
 	{{ $name }} := models.{{ $Name }}{
 		ID: sampleID,
 		{{- range $field := $fields }}
-			{{- if $field.IsNotIDField }}
+			{{- if not $field.IsIDField }}
 				{{ $field.Name }}: params.{{ $field.Name }},
 			{{- end }}
 		{{- end }}
@@ -255,7 +255,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestInsert_Success() {
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
 	s.MockIStmt.On("ExecContext", ctx,
 		{{- range $field := $fields }}
-			{{- if $field.IsNotIDField }}
+			{{- if not $field.IsIDField }}
 				params.{{ $field.Name }},
 			{{- end }}
 		{{- end }}
@@ -283,7 +283,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestInsert_Fail() {
 		sampleID int64 = 1
 		params         = arguments.{{ $Name }}InsertArgs{
     {{- range $field := $fields }}
-      {{- if $field.IsNotIDField }}
+      {{- if not $field.IsIDField }}
         {{ $field.Name }}: {{ if $field.IsInt64 }}0{{ else }}"mockString"{{ end }},
       {{- end }}
     {{- end }}
@@ -297,7 +297,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestInsert_Fail() {
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, errors.New("some errors"))
 	s.MockIStmt.On("ExecContext", ctx,
 	{{- range $field := $fields }}
-		{{- if $field.IsNotIDField }}
+		{{- if not $field.IsIDField }}
 			params.{{ $field.Name }},
 		{{- end }}
 	{{- end }}
@@ -318,7 +318,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestSetArgsToUpdateBuilder_Success() {
 		log.Fatal(err)
 	}
 	updateBuilder := sq.Update("{{ $name }}").Where(sq.Eq{"id": *params.ID})
-	expectedSelectBuilder := updateBuilder{{ range $field := $fields }}{{ if $field.IsNotIDField }}.Set("{{ $field.Name | ToSnakeCase }}", *params.{{ $field.Name }} ){{ end }}{{ end }}
+	expectedSelectBuilder := updateBuilder{{ range $field := $fields }}{{ if not $field.IsIDField }}.Set("{{ $field.Name | ToSnakeCase }}", *params.{{ $field.Name }} ){{ end }}{{ end }}
 	actual := s.Repository.setArgsToUpdateBuilder(updateBuilder, params)
 	s.Equal(expectedSelectBuilder, actual)
 }
@@ -342,7 +342,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestUpdate_Success() {
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
 	s.MockIStmt.On("ExecContext", ctx,
 		{{- range $field := $fields }}
-			{{- if $field.IsNotIDField }}
+			{{- if not $field.IsIDField }}
 				*params.{{ $field.Name }},
 			{{- end }}
 		{{- end }}

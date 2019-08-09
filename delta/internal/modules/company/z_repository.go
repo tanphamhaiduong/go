@@ -8,9 +8,22 @@ import (
 	sq "github.com/Masterminds/squirrel"
 	log "github.com/sirupsen/logrus"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
+	"github.com/tanphamhaiduong/go/delta/internal/database"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
 	"github.com/tanphamhaiduong/go/delta/internal/utils"
 )
+
+//scanCompany
+func (r *RepositoryImpl) scanCompany(row database.IRow, company *models.Company) error {
+	err := row.Scan(
+		&company.ID,
+		&company.Name,
+		&company.Status,
+		&company.CreatedBy,
+		&company.UpdatedBy,
+	)
+	return err
+}
 
 // GetByID ...
 func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.CompanyGetByIDArgs) (models.Company, error) {
@@ -40,13 +53,7 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.CompanyGe
 		return company, err
 	}
 	row := stmt.QueryRowContext(ctx, args...)
-	err = row.Scan(
-		&company.ID,
-		&company.Name,
-		&company.Status,
-		&company.CreatedBy,
-		&company.UpdatedBy,
-	)
+	err = r.scanCompany(row, &company)
 	if err != nil {
 		log.WithField("Error", err).Error("Repository GetByID Scan error of company")
 		return company, err
@@ -89,13 +96,7 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.CompanyG
 	}
 	for rows.Next() {
 		company := models.Company{}
-		err := rows.Scan(
-			&company.ID,
-			&company.Name,
-			&company.Status,
-			&company.CreatedBy,
-			&company.UpdatedBy,
-		)
+		err := r.scanCompany(rows, &company)
 		if err != nil {
 			log.WithField("Error", err).Error("Repository GetByIDs Scan error of company")
 			return companies, err
@@ -169,13 +170,7 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.CompanyListA
 	defer rows.Close()
 	for rows.Next() {
 		company := models.Company{}
-		err := rows.Scan(
-			&company.ID,
-			&company.Name,
-			&company.Status,
-			&company.CreatedBy,
-			&company.UpdatedBy,
-		)
+		err := r.scanCompany(rows, &company)
 		if err != nil {
 			log.WithField("Error", err).Error("Repository List Scan error of company")
 			return companies, err
@@ -292,19 +287,15 @@ func (r *RepositoryImpl) setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, 
 	if params.Name != nil {
 		updateBuilder = updateBuilder.Set("name", *params.Name)
 	}
-
 	if params.Status != nil {
 		updateBuilder = updateBuilder.Set("status", *params.Status)
 	}
-
 	if params.CreatedBy != nil {
 		updateBuilder = updateBuilder.Set("created_by", *params.CreatedBy)
 	}
-
 	if params.UpdatedBy != nil {
 		updateBuilder = updateBuilder.Set("updated_by", *params.UpdatedBy)
 	}
-
 	return updateBuilder
 }
 

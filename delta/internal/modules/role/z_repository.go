@@ -8,9 +8,23 @@ import (
 	sq "github.com/Masterminds/squirrel"
 	log "github.com/sirupsen/logrus"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
+	"github.com/tanphamhaiduong/go/delta/internal/database"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
 	"github.com/tanphamhaiduong/go/delta/internal/utils"
 )
+
+//scanRole
+func (r *RepositoryImpl) scanRole(row database.IRow, role *models.Role) error {
+	err := row.Scan(
+		&role.ID,
+		&role.Name,
+		&role.CompanyID,
+		&role.Status,
+		&role.CreatedBy,
+		&role.UpdatedBy,
+	)
+	return err
+}
 
 // GetByID ...
 func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.RoleGetByIDArgs) (models.Role, error) {
@@ -41,14 +55,7 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.RoleGetBy
 		return role, err
 	}
 	row := stmt.QueryRowContext(ctx, args...)
-	err = row.Scan(
-		&role.ID,
-		&role.Name,
-		&role.CompanyID,
-		&role.Status,
-		&role.CreatedBy,
-		&role.UpdatedBy,
-	)
+	err = r.scanRole(row, &role)
 	if err != nil {
 		log.WithField("Error", err).Error("Repository GetByID Scan error of role")
 		return role, err
@@ -92,14 +99,7 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.RoleGetB
 	}
 	for rows.Next() {
 		role := models.Role{}
-		err := rows.Scan(
-			&role.ID,
-			&role.Name,
-			&role.CompanyID,
-			&role.Status,
-			&role.CreatedBy,
-			&role.UpdatedBy,
-		)
+		err := r.scanRole(rows, &role)
 		if err != nil {
 			log.WithField("Error", err).Error("Repository GetByIDs Scan error of role")
 			return roles, err
@@ -177,14 +177,7 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.RoleListArgs
 	defer rows.Close()
 	for rows.Next() {
 		role := models.Role{}
-		err := rows.Scan(
-			&role.ID,
-			&role.Name,
-			&role.CompanyID,
-			&role.Status,
-			&role.CreatedBy,
-			&role.UpdatedBy,
-		)
+		err := r.scanRole(rows, &role)
 		if err != nil {
 			log.WithField("Error", err).Error("Repository List Scan error of role")
 			return roles, err
@@ -306,23 +299,18 @@ func (r *RepositoryImpl) setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, 
 	if params.Name != nil {
 		updateBuilder = updateBuilder.Set("name", *params.Name)
 	}
-
 	if params.CompanyID != nil {
 		updateBuilder = updateBuilder.Set("company_id", *params.CompanyID)
 	}
-
 	if params.Status != nil {
 		updateBuilder = updateBuilder.Set("status", *params.Status)
 	}
-
 	if params.CreatedBy != nil {
 		updateBuilder = updateBuilder.Set("created_by", *params.CreatedBy)
 	}
-
 	if params.UpdatedBy != nil {
 		updateBuilder = updateBuilder.Set("updated_by", *params.UpdatedBy)
 	}
-
 	return updateBuilder
 }
 

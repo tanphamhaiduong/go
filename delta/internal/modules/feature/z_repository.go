@@ -8,9 +8,24 @@ import (
 	sq "github.com/Masterminds/squirrel"
 	log "github.com/sirupsen/logrus"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
+	"github.com/tanphamhaiduong/go/delta/internal/database"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
 	"github.com/tanphamhaiduong/go/delta/internal/utils"
 )
+
+//scanFeature
+func (r *RepositoryImpl) scanFeature(row database.IRow, feature *models.Feature) error {
+	err := row.Scan(
+		&feature.ID,
+		&feature.URL,
+		&feature.Meta,
+		&feature.CompanyID,
+		&feature.Status,
+		&feature.CreatedBy,
+		&feature.UpdatedBy,
+	)
+	return err
+}
 
 // GetByID ...
 func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.FeatureGetByIDArgs) (models.Feature, error) {
@@ -42,15 +57,7 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.FeatureGe
 		return feature, err
 	}
 	row := stmt.QueryRowContext(ctx, args...)
-	err = row.Scan(
-		&feature.ID,
-		&feature.URL,
-		&feature.Meta,
-		&feature.CompanyID,
-		&feature.Status,
-		&feature.CreatedBy,
-		&feature.UpdatedBy,
-	)
+	err = r.scanFeature(row, &feature)
 	if err != nil {
 		log.WithField("Error", err).Error("Repository GetByID Scan error of feature")
 		return feature, err
@@ -95,15 +102,7 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.FeatureG
 	}
 	for rows.Next() {
 		feature := models.Feature{}
-		err := rows.Scan(
-			&feature.ID,
-			&feature.URL,
-			&feature.Meta,
-			&feature.CompanyID,
-			&feature.Status,
-			&feature.CreatedBy,
-			&feature.UpdatedBy,
-		)
+		err := r.scanFeature(rows, &feature)
 		if err != nil {
 			log.WithField("Error", err).Error("Repository GetByIDs Scan error of feature")
 			return features, err
@@ -185,15 +184,7 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.FeatureListA
 	defer rows.Close()
 	for rows.Next() {
 		feature := models.Feature{}
-		err := rows.Scan(
-			&feature.ID,
-			&feature.URL,
-			&feature.Meta,
-			&feature.CompanyID,
-			&feature.Status,
-			&feature.CreatedBy,
-			&feature.UpdatedBy,
-		)
+		err := r.scanFeature(rows, &feature)
 		if err != nil {
 			log.WithField("Error", err).Error("Repository List Scan error of feature")
 			return features, err
@@ -320,27 +311,21 @@ func (r *RepositoryImpl) setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, 
 	if params.URL != nil {
 		updateBuilder = updateBuilder.Set("url", *params.URL)
 	}
-
 	if params.Meta != nil {
 		updateBuilder = updateBuilder.Set("meta", *params.Meta)
 	}
-
 	if params.CompanyID != nil {
 		updateBuilder = updateBuilder.Set("company_id", *params.CompanyID)
 	}
-
 	if params.Status != nil {
 		updateBuilder = updateBuilder.Set("status", *params.Status)
 	}
-
 	if params.CreatedBy != nil {
 		updateBuilder = updateBuilder.Set("created_by", *params.CreatedBy)
 	}
-
 	if params.UpdatedBy != nil {
 		updateBuilder = updateBuilder.Set("updated_by", *params.UpdatedBy)
 	}
-
 	return updateBuilder
 }
 

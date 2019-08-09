@@ -22,7 +22,7 @@ type {{ $Name }}GetByIDsArgs struct {
 type {{ $Name }}CountArgs struct {
 	ID int64 `graphql:"id" validate:"omitempty,min=1" faker:"unix_time"`
 	{{- range $field := $fields }}
-		{{- if $field.IsNotIDField }}
+		{{- if not $field.IsIDField }}
 			{{ $field.Name }} {{ $field.GoType }} `graphql:"{{ $field.Name | ToLowerCamelCase }}" {{ $field.Validate }} {{ $field.FakerTag }}`
 		{{- end }}
 	{{- end }}
@@ -32,7 +32,7 @@ type {{ $Name }}CountArgs struct {
 type {{ $Name }}ListArgs struct {
 	ID int64 `graphql:"id" validate:"omitempty,min=1" faker:"unix_time"`
 	{{- range $field := $fields }}
-		{{- if $field.IsNotIDField }}
+		{{- if not $field.IsIDField }}
 			{{ $field.Name }} {{ $field.GoType }} `graphql:"{{ $field.Name | ToLowerCamelCase }}" {{ $field.Validate }} {{ $field.FakerTag }}`
 		{{- end }}
 	{{- end }}
@@ -43,7 +43,7 @@ type {{ $Name }}ListArgs struct {
 // {{ $Name }}InsertArgs ...
 type {{ $Name }}InsertArgs struct {
 	{{- range $field := $fields }}
-		{{- if $field.IsNotIDField }}
+		{{- if not $field.IsIDField }}
 			{{ $field.Name }} {{ $field.GoType }} `graphql:"{{ $field.Name | ToLowerCamelCase }}" {{ $field.Validate }} {{ $field.FakerTag }}`
 		{{- end }}
 	{{- end }}
