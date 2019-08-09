@@ -96,7 +96,10 @@ func (s *{{ $Name }}RepositoryTestSuite) TestGetByIDs_Fail() {
 
 func (s *{{ $Name }}RepositoryTestSuite) TestSetArgsToListSelectBuilder_Success() {
 	var (
-		params        = arguments.{{ $Name }}ListArgs{}
+		params        = arguments.{{ $Name }}ListArgs{
+			Page:     1,
+			PageSize: 10,
+		}
 		selectBuilder = sq.Select("*").From("{{ $name }}")
 	)
 	err := faker.FakeData(&params)
