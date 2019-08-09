@@ -18,9 +18,11 @@ func (r *RepositoryImpl) scanCompany(row database.IRow, company *models.Company)
 	err := row.Scan(
 		&company.ID,
 		&company.Name,
+		&company.CompanyCode,
 		&company.Status,
 		&company.CreatedBy,
 		&company.UpdatedBy,
+		&company.ApiSecretKey,
 	)
 	return err
 }
@@ -100,13 +102,7 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.CompanyG
 	}
 	for rows.Next() {
 		company := models.Company{}
-		err := rows.Scan(
-			&company.ID,
-			&company.Name,
-			&company.Status,
-			&company.CreatedBy,
-			&company.UpdatedBy,
-		)
+		err := r.scanCompany(rows, &company)
 		if err != nil {
 			log.WithField("Error", err).Error("Repository GetByIDs Scan error of company")
 			return companies, err
@@ -188,13 +184,7 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.CompanyListA
 	defer rows.Close()
 	for rows.Next() {
 		company := models.Company{}
-		err := rows.Scan(
-			&company.ID,
-			&company.Name,
-			&company.Status,
-			&company.CreatedBy,
-			&company.UpdatedBy,
-		)
+		err := r.scanCompany(rows, &company)
 		if err != nil {
 			log.WithField("Error", err).Error("Repository List Scan error of company")
 			return companies, err
@@ -321,7 +311,9 @@ func (r *RepositoryImpl) setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, 
 	if params.Name != nil {
 		updateBuilder = updateBuilder.Set("name", *params.Name)
 	}
-
+	if params.CompanyCode != nil {
+		updateBuilder = updateBuilder.Set("company_code", *params.CompanyCode)
+	}
 	if params.Status != nil {
 		updateBuilder = updateBuilder.Set("status", *params.Status)
 	}
@@ -331,7 +323,9 @@ func (r *RepositoryImpl) setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, 
 	if params.UpdatedBy != nil {
 		updateBuilder = updateBuilder.Set("updated_by", *params.UpdatedBy)
 	}
-
+	if params.ApiSecretKey != nil {
+		updateBuilder = updateBuilder.Set("api_secret_key", *params.ApiSecretKey)
+	}
 	return updateBuilder
 }
 

@@ -4,67 +4,65 @@ package user
 import (
 	"context"
 	"errors"
-	"log"
+	"time"
 
-	"github.com/bxcodec/faker"
 	"github.com/go-sql-driver/mysql"
-
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
 )
 
 func (s *UserHandlerTestSuite) TestGetByID_Success() {
 	var (
-		ctx    = context.Background()
-		params = arguments.UserGetByIDArgs{
+		ctx   = context.Background()
+		param = arguments.UserGetByIDArgs{
 			ID: 1,
 		}
 		user = models.User{}
 	)
-	s.MockIUser.On("GetByID", ctx, params).Return(user, nil)
-	actual, err := s.User.GetByID(ctx, params)
+	s.MockIUser.On("GetByID", ctx, param).Return(user, nil)
+	actual, err := s.User.GetByID(ctx, param)
 	s.Nil(err)
 	s.Equal(user, actual)
 }
 
 func (s *UserHandlerTestSuite) TestGetByID_Fail() {
 	var (
-		ctx    = context.Background()
-		params = arguments.UserGetByIDArgs{
+		ctx   = context.Background()
+		param = arguments.UserGetByIDArgs{
 			ID: 1,
 		}
 		user = models.User{}
 	)
-	s.MockIUser.On("GetByID", ctx, params).Return(user, errors.New("some errors"))
-	actual, err := s.User.GetByID(ctx, params)
+	s.MockIUser.On("GetByID", ctx, param).Return(user, errors.New("some errors"))
+	actual, err := s.User.GetByID(ctx, param)
 	s.Equal(user, actual)
 	s.NotNil(err)
 }
 
 func (s *UserHandlerTestSuite) TestGetByIDs_Success() {
 	var (
-		ctx    = context.Background()
-		params = arguments.UserGetByIDsArgs{
+		ctx   = context.Background()
+		param = arguments.UserGetByIDsArgs{
 			IDs: []int64{1, 2},
 		}
 		users []models.User
 	)
-	s.MockIUser.On("GetByIDs", ctx, params).Return(users, nil)
-	actual, err := s.User.GetByIDs(ctx, params)
+	s.MockIUser.On("GetByIDs", ctx, param).Return(users, nil)
+	actual, err := s.User.GetByIDs(ctx, param)
 	s.Nil(err)
 	s.Equal(users, actual)
 }
 
 func (s *UserHandlerTestSuite) TestGetByIDs_Fail() {
 	var (
-		ctx    = context.Background()
-		params = arguments.UserGetByIDsArgs{
+		ctx   = context.Background()
+		param = arguments.UserGetByIDsArgs{
 			IDs: []int64{1, 2},
 		}
 		users []models.User
 	)
-	s.MockIUser.On("GetByIDs", ctx, params).Return(users, errors.New("some errors"))
-	actual, err := s.User.GetByIDs(ctx, params)
+	s.MockIUser.On("GetByIDs", ctx, param).Return(users, errors.New("some errors"))
+	actual, err := s.User.GetByIDs(ctx, param)
 	s.Equal(users, actual)
 	s.NotNil(err)
 }
@@ -72,16 +70,33 @@ func (s *UserHandlerTestSuite) TestGetByIDs_Fail() {
 func (s *UserHandlerTestSuite) TestList_Success() {
 	var (
 		ctx    = context.Background()
-		params = arguments.UserListArgs{}
-		users  []models.User
+		params = arguments.UserListArgs{
+			ID:       1,
+			Username: "mockString",
+			Password: "mockString",
+			Name:     "mockString",
+			DateOfBirth: mysql.NullTime{
+				Time:  time.Time{},
+				Valid: true,
+			},
+			Reference:     "mockString",
+			AvatarUrl:     "mockString",
+			LicenseNumber: "mockString",
+			PhoneNumber:   "mockString",
+			Extension:     "mockString",
+			TelProvider:   "mockString",
+			TelApi:        "mockString",
+			SupervisorId:  1,
+			RoleId:        1,
+			CompanyID:     1,
+			Status:        "active",
+			CreatedBy:     "mockString",
+			UpdatedBy:     "mockString",
+			Page:          1,
+			PageSize:      10,
+		}
+		users []models.User
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
-	params.Status = "active"
-	params.Page = 1
-	params.PageSize = 10
 	s.MockIUser.On("List", ctx, params).Return(users, nil)
 	actual, err := s.User.List(ctx, params)
 	s.Nil(err)
@@ -92,15 +107,32 @@ func (s *UserHandlerTestSuite) TestList_Fail() {
 	var (
 		ctx    = context.Background()
 		params = arguments.UserListArgs{
-			Page:     1,
-			PageSize: 10,
+			ID:       1,
+			Username: "mockString",
+			Password: "mockString",
+			Name:     "mockString",
+			DateOfBirth: mysql.NullTime{
+				Time:  time.Time{},
+				Valid: true,
+			},
+			Reference:     "mockString",
+			AvatarUrl:     "mockString",
+			LicenseNumber: "mockString",
+			PhoneNumber:   "mockString",
+			Extension:     "mockString",
+			TelProvider:   "mockString",
+			TelApi:        "mockString",
+			SupervisorId:  1,
+			RoleId:        1,
+			CompanyID:     1,
+			Status:        "active",
+			CreatedBy:     "mockString",
+			UpdatedBy:     "mockString",
+			Page:          1,
+			PageSize:      10,
 		}
 		users []models.User
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
 	s.MockIUser.On("List", ctx, params).Return(users, errors.New("some errors"))
 	actual, err := s.User.List(ctx, params)
 	s.Equal(users, actual)
@@ -110,14 +142,31 @@ func (s *UserHandlerTestSuite) TestList_Fail() {
 func (s *UserHandlerTestSuite) TestCount_Success() {
 	var (
 		ctx    = context.Background()
-		params = arguments.UserCountArgs{}
-		count  int64
+		params = arguments.UserCountArgs{
+			ID:       1,
+			Username: "mockString",
+			Password: "mockString",
+			Name:     "mockString",
+			DateOfBirth: mysql.NullTime{
+				Time:  time.Time{},
+				Valid: true,
+			},
+			Reference:     "mockString",
+			AvatarUrl:     "mockString",
+			LicenseNumber: "mockString",
+			PhoneNumber:   "mockString",
+			Extension:     "mockString",
+			TelProvider:   "mockString",
+			TelApi:        "mockString",
+			SupervisorId:  1,
+			RoleId:        1,
+			CompanyID:     1,
+			Status:        "active",
+			CreatedBy:     "mockString",
+			UpdatedBy:     "mockString",
+		}
+		count int64
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
-	params.Status = "active"
 	s.MockIUser.On("Count", ctx, params).Return(count, nil)
 	actual, err := s.User.Count(ctx, params)
 	s.Nil(err)
@@ -127,13 +176,31 @@ func (s *UserHandlerTestSuite) TestCount_Success() {
 func (s *UserHandlerTestSuite) TestCount_Fail() {
 	var (
 		ctx    = context.Background()
-		params = arguments.UserCountArgs{}
-		count  int64
+		params = arguments.UserCountArgs{
+			ID:       1,
+			Username: "mockString",
+			Password: "mockString",
+			Name:     "mockString",
+			DateOfBirth: mysql.NullTime{
+				Time:  time.Time{},
+				Valid: true,
+			},
+			Reference:     "mockString",
+			AvatarUrl:     "mockString",
+			LicenseNumber: "mockString",
+			PhoneNumber:   "mockString",
+			Extension:     "mockString",
+			TelProvider:   "mockString",
+			TelApi:        "mockString",
+			SupervisorId:  1,
+			RoleId:        1,
+			CompanyID:     1,
+			Status:        "active",
+			CreatedBy:     "mockString",
+			UpdatedBy:     "mockString",
+		}
+		count int64
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
 	s.MockIUser.On("Count", ctx, params).Return(count, errors.New("some errors"))
 	actual, err := s.User.Count(ctx, params)
 	s.Equal(count, actual)
@@ -144,13 +211,29 @@ func (s *UserHandlerTestSuite) TestInsert_Success() {
 	var (
 		ctx            = context.Background()
 		sampleID int64 = 1
-		params         = arguments.UserInsertArgs{}
+		params         = arguments.UserInsertArgs{
+			Username: "mockString",
+			Password: "mockString",
+			Name:     "mockString",
+			DateOfBirth: mysql.NullTime{
+				Time:  time.Time{},
+				Valid: true,
+			},
+			Reference:     "mockString",
+			AvatarUrl:     "mockString",
+			LicenseNumber: "mockString",
+			PhoneNumber:   "mockString",
+			Extension:     "mockString",
+			TelProvider:   "mockString",
+			TelApi:        "mockString",
+			SupervisorId:  1,
+			RoleId:        1,
+			CompanyID:     1,
+			Status:        "active",
+			CreatedBy:     "mockString",
+			UpdatedBy:     "mockString",
+		}
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
-	params.Status = "active"
 	user := models.User{
 		ID:            sampleID,
 		Username:      params.Username,
@@ -185,10 +268,13 @@ func (s *UserHandlerTestSuite) TestInsert_Fail() {
 	var (
 		ctx    = context.Background()
 		params = arguments.UserInsertArgs{
-			Username:      "mockString",
-			Password:      "mockString",
-			Name:          "mockString",
-			DateOfBirth:   mysql.NullTime{},
+			Username: "mockString",
+			Password: "mockString",
+			Name:     "mockString",
+			DateOfBirth: mysql.NullTime{
+				Time:  time.Time{},
+				Valid: true,
+			},
 			Reference:     "mockString",
 			AvatarUrl:     "mockString",
 			LicenseNumber: "mockString",
@@ -196,19 +282,15 @@ func (s *UserHandlerTestSuite) TestInsert_Fail() {
 			Extension:     "mockString",
 			TelProvider:   "mockString",
 			TelApi:        "mockString",
-			SupervisorId:  0,
-			RoleId:        0,
-			CompanyID:     0,
-			Status:        "mockString",
+			SupervisorId:  1,
+			RoleId:        1,
+			CompanyID:     1,
+			Status:        "active",
 			CreatedBy:     "mockString",
 			UpdatedBy:     "mockString",
 		}
 		user = models.User{}
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
 	s.MockIUser.On("Insert", ctx, params).Return(user, errors.New("some errors"))
 	actual, err := s.User.Insert(ctx, params)
 	s.Equal(user, actual)
@@ -217,15 +299,34 @@ func (s *UserHandlerTestSuite) TestInsert_Fail() {
 
 func (s *UserHandlerTestSuite) TestUpdate_Success() {
 	var (
-		ctx    = context.Background()
-		params = arguments.UserUpdateArgs{}
-		status = "active"
+		ctx              = context.Background()
+		sampleID   int64 = 1
+		mockString       = "mockString"
+		status           = "active"
+		params           = arguments.UserUpdateArgs{
+			ID:       &sampleID,
+			Username: &mockString,
+			Password: &mockString,
+			Name:     &mockString,
+			DateOfBirth: &mysql.NullTime{
+				Time:  time.Time{},
+				Valid: true,
+			},
+			Reference:     &mockString,
+			AvatarUrl:     &mockString,
+			LicenseNumber: &mockString,
+			PhoneNumber:   &mockString,
+			Extension:     &mockString,
+			TelProvider:   &mockString,
+			TelApi:        &mockString,
+			SupervisorId:  &sampleID,
+			RoleId:        &sampleID,
+			CompanyID:     &sampleID,
+			Status:        &status,
+			CreatedBy:     &mockString,
+			UpdatedBy:     &mockString,
+		}
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
-	params.Status = &status
 	user := models.User{
 		ID:            *params.ID,
 		Username:      *params.Username,
@@ -261,12 +362,16 @@ func (s *UserHandlerTestSuite) TestUpdate_Fail() {
 		ctx              = context.Background()
 		sampleID   int64 = 1
 		mockString       = "mockString"
+		status           = "active"
 		params           = arguments.UserUpdateArgs{
-			ID:            &sampleID,
-			Username:      &mockString,
-			Password:      &mockString,
-			Name:          &mockString,
-			DateOfBirth:   &mysql.NullTime{},
+			ID:       &sampleID,
+			Username: &mockString,
+			Password: &mockString,
+			Name:     &mockString,
+			DateOfBirth: &mysql.NullTime{
+				Time:  time.Time{},
+				Valid: true,
+			},
 			Reference:     &mockString,
 			AvatarUrl:     &mockString,
 			LicenseNumber: &mockString,
@@ -277,16 +382,12 @@ func (s *UserHandlerTestSuite) TestUpdate_Fail() {
 			SupervisorId:  &sampleID,
 			RoleId:        &sampleID,
 			CompanyID:     &sampleID,
-			Status:        &mockString,
+			Status:        &status,
 			CreatedBy:     &mockString,
 			UpdatedBy:     &mockString,
 		}
 		user = models.User{}
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
 	s.MockIUser.On("Update", ctx, params).Return(user, errors.New("some errors"))
 	actual, err := s.User.Update(ctx, params)
 	s.Equal(user, actual)
@@ -295,31 +396,27 @@ func (s *UserHandlerTestSuite) TestUpdate_Fail() {
 
 func (s *UserHandlerTestSuite) TestDelete_Success() {
 	var (
-		ctx    = context.Background()
-		params = arguments.UserDeleteArgs{}
+		ctx   = context.Background()
+		param = arguments.UserDeleteArgs{
+			ID: 1,
+		}
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
-	s.MockIUser.On("Delete", ctx, params).Return(params.ID, nil)
-	actual, err := s.User.Delete(ctx, params)
+	s.MockIUser.On("Delete", ctx, param).Return(param.ID, nil)
+	actual, err := s.User.Delete(ctx, param)
 	s.Nil(err)
-	s.Equal(params.ID, actual)
+	s.Equal(param.ID, actual)
 }
 
 func (s *UserHandlerTestSuite) TestDelete_Fail() {
 	var (
-		ctx         = context.Background()
-		params      = arguments.UserDeleteArgs{}
+		ctx   = context.Background()
+		param = arguments.UserDeleteArgs{
+			ID: 1,
+		}
 		rowEffected int64
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
-	s.MockIUser.On("Delete", ctx, params).Return(rowEffected, errors.New("some errors"))
-	actual, err := s.User.Delete(ctx, params)
+	s.MockIUser.On("Delete", ctx, param).Return(rowEffected, errors.New("some errors"))
+	actual, err := s.User.Delete(ctx, param)
 	s.Equal(rowEffected, actual)
 	s.NotNil(err)
 }

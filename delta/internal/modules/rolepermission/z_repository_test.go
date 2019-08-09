@@ -4,10 +4,8 @@ package rolepermission
 import (
 	"context"
 	"errors"
-	"log"
 
 	sq "github.com/Masterminds/squirrel"
-	"github.com/bxcodec/faker"
 	"github.com/stretchr/testify/mock"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
@@ -16,14 +14,14 @@ import (
 
 func (s *RolePermissionRepositoryTestSuite) TestGetByID_Success() {
 	var (
-		ctx    = context.Background()
-		params = arguments.RolePermissionGetByIDArgs{
+		ctx   = context.Background()
+		param = arguments.RolePermissionGetByIDArgs{
 			ID: 1,
 		}
 		rolepermission models.RolePermission
 	)
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
-	s.MockIStmt.On("QueryRowContext", ctx, mock.Anything).Return(s.MockIRow)
+	s.MockIStmt.On("QueryRowContext", ctx, param.ID).Return(s.MockIRow)
 	s.MockIRow.On("Scan",
 		mock.Anything,
 		mock.Anything,
@@ -31,76 +29,98 @@ func (s *RolePermissionRepositoryTestSuite) TestGetByID_Success() {
 		mock.Anything,
 		mock.Anything,
 	).Return(nil)
-	s.MockIRolePermission.On("GetByID", ctx, params).Return(rolepermission, nil)
-	actual, err := s.Repository.GetByID(ctx, params)
+	s.MockIRolePermission.On("GetByID", ctx, param).Return(rolepermission, nil)
+	actual, err := s.Repository.GetByID(ctx, param)
 	s.Nil(err)
 	s.Equal(rolepermission, actual)
 }
 
 func (s *RolePermissionRepositoryTestSuite) TestGetByID_Fail() {
 	var (
-		ctx    = context.Background()
-		params = arguments.RolePermissionGetByIDArgs{
+		ctx   = context.Background()
+		param = arguments.RolePermissionGetByIDArgs{
 			ID: 1,
 		}
 		rolepermission models.RolePermission
 	)
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, errors.New("some errors"))
-	s.MockIStmt.On("QueryRowContext", ctx, mock.Anything).Return(s.MockIRow)
-	s.MockIRow.On("Scan", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(errors.New("some errors"))
-	s.MockIRolePermission.On("GetByID", ctx, params).Return(rolepermission, errors.New("some errors"))
-	actual, err := s.Repository.GetByID(ctx, params)
+	s.MockIStmt.On("QueryRowContext", ctx, param.ID).Return(s.MockIRow)
+	s.MockIRow.On("Scan",
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+	).Return(errors.New("some errors"))
+	s.MockIRolePermission.On("GetByID", ctx, param).Return(rolepermission, errors.New("some errors"))
+	actual, err := s.Repository.GetByID(ctx, param)
 	s.Equal(rolepermission, actual)
 	s.NotNil(err)
 }
 
 func (s *RolePermissionRepositoryTestSuite) TestGetByIDs_Success() {
 	var (
-		ctx    = context.Background()
-		params = arguments.RolePermissionGetByIDsArgs{
+		ctx   = context.Background()
+		param = arguments.RolePermissionGetByIDsArgs{
 			IDs: []int64{1, 2},
 		}
 		rolepermissions []models.RolePermission
 	)
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
 	s.MockIStmt.On("QueryContext", ctx, mock.Anything, mock.Anything).Return(s.MockIRows, nil)
-	s.MockIRows.On("Scan", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	s.MockIRows.On("Scan",
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+	).Return(nil)
 	s.MockIRows.On("Close").Return(nil)
 	s.MockIRows.On("Next").Return(false)
-	s.MockIRolePermission.On("GetByIDs", ctx, params).Return(rolepermissions, nil)
-	actual, err := s.Repository.GetByIDs(ctx, params)
+	s.MockIRolePermission.On("GetByIDs", ctx, param).Return(rolepermissions, nil)
+	actual, err := s.Repository.GetByIDs(ctx, param)
 	s.Nil(err)
 	s.Equal(rolepermissions, actual)
 }
 
 func (s *RolePermissionRepositoryTestSuite) TestGetByIDs_Fail() {
 	var (
-		ctx    = context.Background()
-		params = arguments.RolePermissionGetByIDsArgs{
+		ctx   = context.Background()
+		param = arguments.RolePermissionGetByIDsArgs{
 			IDs: []int64{1, 2},
 		}
 		rolepermissions []models.RolePermission
 	)
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, errors.New("some errors"))
 	s.MockIStmt.On("QueryContext", ctx, mock.Anything, mock.Anything).Return(s.MockIRows, errors.New("some errors"))
-	s.MockIRows.On("Scan", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(errors.New("some errors"))
+	s.MockIRows.On("Scan",
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+	).Return(errors.New("some errors"))
 	s.MockIRows.On("Close").Return(nil)
 	s.MockIRows.On("Next").Return(false)
-	s.MockIRolePermission.On("GetByIDs", ctx, params).Return(rolepermissions, errors.New("some errors"))
-	actual, err := s.Repository.GetByIDs(ctx, params)
+	s.MockIRolePermission.On("GetByIDs", ctx, param).Return(rolepermissions, errors.New("some errors"))
+	actual, err := s.Repository.GetByIDs(ctx, param)
 	s.Equal(rolepermissions, actual)
 	s.NotNil(err)
 }
 
 func (s *RolePermissionRepositoryTestSuite) TestSetArgsToListSelectBuilder_Success() {
 	var (
-		params        = arguments.RolePermissionListArgs{}
+		params = arguments.RolePermissionListArgs{
+			ID:           1,
+			RoleID:       1,
+			PermissionID: 1,
+			CreatedBy:    "mockString",
+			UpdatedBy:    "mockString",
+			Page:         1,
+			PageSize:     10,
+		}
 		selectBuilder = sq.Select("*").From("rolepermission")
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
 	offset := utils.CalculateOffsetForPage(params.Page, params.PageSize)
 	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Eq{"role_id": params.RoleID}).Where(sq.Eq{"permission_id": params.PermissionID}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy}).Limit(uint64(params.PageSize)).Offset(uint64(offset))
 	expectSQL, expectArgs, expectErr := expectedSelectBuilder.ToSql()
@@ -117,18 +137,33 @@ func (s *RolePermissionRepositoryTestSuite) TestList_Success() {
 	var (
 		ctx    = context.Background()
 		params = arguments.RolePermissionListArgs{
-			Page:     1,
-			PageSize: 10,
+			ID:           1,
+			RoleID:       1,
+			PermissionID: 1,
+			CreatedBy:    "mockString",
+			UpdatedBy:    "mockString",
+			Page:         1,
+			PageSize:     10,
 		}
 		rolepermissions []models.RolePermission
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
-	s.MockIStmt.On("QueryContext", ctx, mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(s.MockIRows, nil)
-	s.MockIRows.On("Scan", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	s.MockIStmt.On("QueryContext", ctx,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+	).Return(s.MockIRows, nil)
+	s.MockIRows.On("Scan",
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+	).Return(nil)
 	s.MockIRows.On("Close").Return(nil)
 	s.MockIRows.On("Next").Return(false)
 	s.MockIRolePermission.On("List", ctx, params).Return(rolepermissions, nil)
@@ -141,18 +176,33 @@ func (s *RolePermissionRepositoryTestSuite) TestList_Fail() {
 	var (
 		ctx    = context.Background()
 		params = arguments.RolePermissionListArgs{
-			Page:     1,
-			PageSize: 10,
+			ID:           1,
+			RoleID:       1,
+			PermissionID: 1,
+			CreatedBy:    "mockString",
+			UpdatedBy:    "mockString",
+			Page:         1,
+			PageSize:     10,
 		}
 		rolepermissions []models.RolePermission
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, errors.New("some errors"))
-	s.MockIStmt.On("QueryContext", ctx, mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(s.MockIRows, errors.New("some errors"))
-	s.MockIRows.On("Scan", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(errors.New("some errors"))
+	s.MockIStmt.On("QueryContext", ctx,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+	).Return(s.MockIRows, errors.New("some errors"))
+	s.MockIRows.On("Scan",
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+	).Return(errors.New("some errors"))
 	s.MockIRows.On("Close").Return(nil)
 	s.MockIRows.On("Next").Return(false)
 	s.MockIRolePermission.On("List", ctx, params).Return(rolepermissions, errors.New("some errors"))
@@ -163,13 +213,15 @@ func (s *RolePermissionRepositoryTestSuite) TestList_Fail() {
 
 func (s *RolePermissionRepositoryTestSuite) TestSetArgsToCountSelectBuilder_Success() {
 	var (
-		params        = arguments.RolePermissionCountArgs{}
+		params = arguments.RolePermissionCountArgs{
+			ID:           1,
+			RoleID:       1,
+			PermissionID: 1,
+			CreatedBy:    "mockString",
+			UpdatedBy:    "mockString",
+		}
 		selectBuilder = sq.Select("COUNT(id)").From("rolepermission")
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
 	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Eq{"role_id": params.RoleID}).Where(sq.Eq{"permission_id": params.PermissionID}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy})
 	expectSQL, expectArgs, expectErr := expectedSelectBuilder.ToSql()
 	// Actual
@@ -184,13 +236,15 @@ func (s *RolePermissionRepositoryTestSuite) TestSetArgsToCountSelectBuilder_Succ
 func (s *RolePermissionRepositoryTestSuite) TestCount_Success() {
 	var (
 		ctx    = context.Background()
-		params = arguments.RolePermissionCountArgs{}
-		count  int64
+		params = arguments.RolePermissionCountArgs{
+			ID:           1,
+			RoleID:       1,
+			PermissionID: 1,
+			CreatedBy:    "mockString",
+			UpdatedBy:    "mockString",
+		}
+		count int64
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
 	s.MockIStmt.On("QueryRowContext", ctx,
 		mock.Anything,
@@ -211,13 +265,15 @@ func (s *RolePermissionRepositoryTestSuite) TestCount_Success() {
 func (s *RolePermissionRepositoryTestSuite) TestCount_Fail() {
 	var (
 		ctx    = context.Background()
-		params = arguments.RolePermissionCountArgs{}
-		count  int64
+		params = arguments.RolePermissionCountArgs{
+			ID:           1,
+			RoleID:       1,
+			PermissionID: 1,
+			CreatedBy:    "mockString",
+			UpdatedBy:    "mockString",
+		}
+		count int64
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, errors.New("some errors"))
 	s.MockIStmt.On("QueryRowContext", ctx, mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(s.MockIRows, errors.New("some errors"))
 	s.MockIRows.On("Scan", mock.Anything).Return(errors.New("some errors"))
@@ -233,13 +289,14 @@ func (s *RolePermissionRepositoryTestSuite) TestInsert_Success() {
 	var (
 		ctx            = context.Background()
 		sampleID int64 = 1
-		params         = arguments.RolePermissionInsertArgs{}
+		params         = arguments.RolePermissionInsertArgs{
+			RoleID:       1,
+			PermissionID: 1,
+			CreatedBy:    "mockString",
+			UpdatedBy:    "mockString",
+		}
 		expected models.RolePermission
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
 	rolepermission := models.RolePermission{
 		ID:           sampleID,
 		RoleID:       params.RoleID,
@@ -279,17 +336,13 @@ func (s *RolePermissionRepositoryTestSuite) TestInsert_Fail() {
 		ctx            = context.Background()
 		sampleID int64 = 1
 		params         = arguments.RolePermissionInsertArgs{
-			RoleID:       0,
-			PermissionID: 0,
+			RoleID:       1,
+			PermissionID: 1,
 			CreatedBy:    "mockString",
 			UpdatedBy:    "mockString",
 		}
 		rolepermission models.RolePermission
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, errors.New("some errors"))
 	s.MockIStmt.On("ExecContext", ctx,
 		params.RoleID,
@@ -306,12 +359,16 @@ func (s *RolePermissionRepositoryTestSuite) TestInsert_Fail() {
 
 func (s *RolePermissionRepositoryTestSuite) TestSetArgsToUpdateBuilder_Success() {
 	var (
-		params = arguments.RolePermissionUpdateArgs{}
+		sampleID   int64 = 1
+		mockString       = "mockString"
+		params           = arguments.RolePermissionUpdateArgs{
+			ID:           &sampleID,
+			RoleID:       &sampleID,
+			PermissionID: &sampleID,
+			CreatedBy:    &mockString,
+			UpdatedBy:    &mockString,
+		}
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
 	updateBuilder := sq.Update("rolepermission").Where(sq.Eq{"id": *params.ID})
 	expectedSelectBuilder := updateBuilder.Set("role_id", *params.RoleID).Set("permission_id", *params.PermissionID).Set("created_by", *params.CreatedBy).Set("updated_by", *params.UpdatedBy)
 	actual := s.Repository.setArgsToUpdateBuilder(updateBuilder, params)
@@ -320,14 +377,18 @@ func (s *RolePermissionRepositoryTestSuite) TestSetArgsToUpdateBuilder_Success()
 
 func (s *RolePermissionRepositoryTestSuite) TestUpdate_Success() {
 	var (
-		ctx      = context.Background()
-		params   = arguments.RolePermissionUpdateArgs{}
+		ctx              = context.Background()
+		sampleID   int64 = 1
+		mockString       = "mockString"
+		params           = arguments.RolePermissionUpdateArgs{
+			ID:           &sampleID,
+			RoleID:       &sampleID,
+			PermissionID: &sampleID,
+			CreatedBy:    &mockString,
+			UpdatedBy:    &mockString,
+		}
 		expected models.RolePermission
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
 	rolepermission := models.RolePermission{
 		ID:           *params.ID,
 		RoleID:       *params.RoleID,
@@ -377,10 +438,6 @@ func (s *RolePermissionRepositoryTestSuite) TestUpdate_Fail() {
 		}
 		rolepermission models.RolePermission
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, errors.New("some errors"))
 	s.MockIStmt.On("ExecContext", ctx, mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(s.MockIResult, errors.New("some errors"))
 	s.MockIResult.On("RowsAffected").Return(sampleID, errors.New("some errors"))
@@ -392,38 +449,34 @@ func (s *RolePermissionRepositoryTestSuite) TestUpdate_Fail() {
 
 func (s *RolePermissionRepositoryTestSuite) TestDelete_Success() {
 	var (
-		ctx               = context.Background()
-		params            = arguments.RolePermissionDeleteArgs{}
+		ctx   = context.Background()
+		param = arguments.RolePermissionDeleteArgs{
+			ID: 1,
+		}
 		rowEffected int64 = 1
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
-	s.MockIStmt.On("ExecContext", ctx, params.ID).Return(s.MockIResult, nil)
-	s.MockIResult.On("RowsAffected").Return(params.ID, nil)
-	s.MockIRolePermission.On("Delete", ctx, params).Return(rowEffected, nil)
-	actual, err := s.Repository.Delete(ctx, params)
+	s.MockIStmt.On("ExecContext", ctx, param.ID).Return(s.MockIResult, nil)
+	s.MockIResult.On("RowsAffected").Return(param.ID, nil)
+	s.MockIRolePermission.On("Delete", ctx, param).Return(rowEffected, nil)
+	actual, err := s.Repository.Delete(ctx, param)
 	s.Nil(err)
-	s.Equal(params.ID, actual)
+	s.Equal(param.ID, actual)
 }
 
 func (s *RolePermissionRepositoryTestSuite) TestDelete_Fail() {
 	var (
-		ctx         = context.Background()
-		params      = arguments.RolePermissionDeleteArgs{}
+		ctx   = context.Background()
+		param = arguments.RolePermissionDeleteArgs{
+			ID: 1,
+		}
 		rowEffected int64
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, errors.New("some errors"))
-	s.MockIStmt.On("ExecContext", ctx, params.ID).Return(s.MockIResult, errors.New("some errors"))
-	s.MockIResult.On("RowsAffected").Return(params.ID, errors.New("some errors"))
-	s.MockIRolePermission.On("Delete", ctx, params).Return(rowEffected, errors.New("some errors"))
-	actual, err := s.Repository.Delete(ctx, params)
+	s.MockIStmt.On("ExecContext", ctx, param.ID).Return(s.MockIResult, errors.New("some errors"))
+	s.MockIResult.On("RowsAffected").Return(param.ID, errors.New("some errors"))
+	s.MockIRolePermission.On("Delete", ctx, param).Return(rowEffected, errors.New("some errors"))
+	actual, err := s.Repository.Delete(ctx, param)
 	s.Equal(rowEffected, actual)
 	s.NotNil(err)
 }

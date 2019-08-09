@@ -62,7 +62,6 @@ var (
 				GraphQLDescription: "This is user's name",
 				GraphQLRequired:    false,
 				Validate:           `validate:"omitempty"`,
-				FakerTag:           `faker:"date"`,
 			},
 			{
 				Name:               "Reference",
@@ -172,7 +171,7 @@ var (
 				GraphQLDescription: "This is user's status",
 				GraphQLRequired:    true,
 				Validate:           `validate:"omitempty,oneof=active inactive"`,
-				FakerTag:           `faker:"name"`,
+				FakerTag:           `faker:"word"`,
 			},
 			{
 				Name:               "CreatedBy",

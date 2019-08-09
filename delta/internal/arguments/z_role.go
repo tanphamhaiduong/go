@@ -16,7 +16,7 @@ type RoleCountArgs struct {
 	ID        int64  `graphql:"id" validate:"omitempty,min=1" faker:"unix_time"`
 	Name      string `graphql:"name" validate:"omitempty" faker:"name"`
 	CompanyID int64  `graphql:"companyId" validate:"omitempty,min=1" faker:"unix_time"`
-	Status    string `graphql:"status" validate:"omitempty,oneof=active inactive" faker:"name"`
+	Status    string `graphql:"status" validate:"omitempty,oneof=active inactive" faker:"word"`
 	CreatedBy string `graphql:"createdBy" validate:"omitempty" faker:"email"`
 	UpdatedBy string `graphql:"updatedBy" validate:"omitempty" faker:"email"`
 }
@@ -26,7 +26,7 @@ type RoleListArgs struct {
 	ID        int64  `graphql:"id" validate:"omitempty,min=1" faker:"unix_time"`
 	Name      string `graphql:"name" validate:"omitempty" faker:"name"`
 	CompanyID int64  `graphql:"companyId" validate:"omitempty,min=1" faker:"unix_time"`
-	Status    string `graphql:"status" validate:"omitempty,oneof=active inactive" faker:"name"`
+	Status    string `graphql:"status" validate:"omitempty,oneof=active inactive" faker:"word"`
 	CreatedBy string `graphql:"createdBy" validate:"omitempty" faker:"email"`
 	UpdatedBy string `graphql:"updatedBy" validate:"omitempty" faker:"email"`
 	Page      int64  `graphql:"page" validate:"required,min=1"`
@@ -37,7 +37,7 @@ type RoleListArgs struct {
 type RoleInsertArgs struct {
 	Name      string `graphql:"name" validate:"omitempty" faker:"name"`
 	CompanyID int64  `graphql:"companyId" validate:"omitempty,min=1" faker:"unix_time"`
-	Status    string `graphql:"status" validate:"omitempty,oneof=active inactive" faker:"name"`
+	Status    string `graphql:"status" validate:"omitempty,oneof=active inactive" faker:"word"`
 	CreatedBy string `graphql:"createdBy" validate:"omitempty" faker:"email"`
 	UpdatedBy string `graphql:"updatedBy" validate:"omitempty" faker:"email"`
 }
@@ -47,7 +47,7 @@ type RoleUpdateArgs struct {
 	ID        *int64  `graphql:"id" validate:"required,min=1" faker:"unix_time"`
 	Name      *string `graphql:"name" validate:"omitempty" faker:"name"`
 	CompanyID *int64  `graphql:"companyId" validate:"omitempty,min=1" faker:"unix_time"`
-	Status    *string `graphql:"status" validate:"omitempty,oneof=active inactive" faker:"name"`
+	Status    *string `graphql:"status" validate:"omitempty,oneof=active inactive" faker:"word"`
 	CreatedBy *string `graphql:"createdBy" validate:"omitempty" faker:"email"`
 	UpdatedBy *string `graphql:"updatedBy" validate:"omitempty" faker:"email"`
 }

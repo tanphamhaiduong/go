@@ -18,6 +18,7 @@ func (r *RepositoryImpl) scanPermission(row database.IRow, permission *models.Pe
 	err := row.Scan(
 		&permission.ID,
 		&permission.Name,
+		&permission.Description,
 		&permission.Status,
 		&permission.CreatedBy,
 		&permission.UpdatedBy,
@@ -98,13 +99,7 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.Permissi
 	}
 	for rows.Next() {
 		permission := models.Permission{}
-		err := rows.Scan(
-			&permission.ID,
-			&permission.Name,
-			&permission.Status,
-			&permission.CreatedBy,
-			&permission.UpdatedBy,
-		)
+		err := r.scanPermission(rows, &permission)
 		if err != nil {
 			log.WithField("Error", err).Error("Repository GetByIDs Scan error of permission")
 			return permissions, err
@@ -182,13 +177,7 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.PermissionLi
 	defer rows.Close()
 	for rows.Next() {
 		permission := models.Permission{}
-		err := rows.Scan(
-			&permission.ID,
-			&permission.Name,
-			&permission.Status,
-			&permission.CreatedBy,
-			&permission.UpdatedBy,
-		)
+		err := r.scanPermission(rows, &permission)
 		if err != nil {
 			log.WithField("Error", err).Error("Repository List Scan error of permission")
 			return permissions, err
@@ -310,7 +299,9 @@ func (r *RepositoryImpl) setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, 
 	if params.Name != nil {
 		updateBuilder = updateBuilder.Set("name", *params.Name)
 	}
-
+	if params.Description != nil {
+		updateBuilder = updateBuilder.Set("description", *params.Description)
+	}
 	if params.Status != nil {
 		updateBuilder = updateBuilder.Set("status", *params.Status)
 	}

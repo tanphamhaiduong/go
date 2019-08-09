@@ -9,7 +9,7 @@ type User struct {
 	Username      string         `faker:"username"`
 	Password      string         `faker:"password"`
 	Name          string         `faker:"name"`
-	DateOfBirth   mysql.NullTime `faker:"date"`
+	DateOfBirth   mysql.NullTime ``
 	Reference     string         `faker:"name"`
 	AvatarUrl     string         `faker:"domain_name"`
 	LicenseNumber string         `faker:"phone_number"`
@@ -20,7 +20,7 @@ type User struct {
 	SupervisorId  int64          `faker:"unix_time"`
 	RoleId        int64          `faker:"unix_time"`
 	CompanyID     int64          `faker:"unix_time"`
-	Status        string         `faker:"name"`
+	Status        string         `faker:"word"`
 	CreatedBy     string         `faker:"email"`
 	UpdatedBy     string         `faker:"email"`
 }

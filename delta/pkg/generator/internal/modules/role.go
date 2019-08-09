@@ -52,7 +52,7 @@ var (
 				GraphQLDescription: "This is role's status",
 				GraphQLRequired:    true,
 				Validate:           `validate:"omitempty,oneof=active inactive"`,
-				FakerTag:           `faker:"name"`,
+				FakerTag:           `faker:"word"`,
 			},
 			{
 				Name:               "CreatedBy",

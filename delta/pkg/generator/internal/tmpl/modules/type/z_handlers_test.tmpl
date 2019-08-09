@@ -20,13 +20,13 @@ import (
 func (s *{{ $Name }}HandlerTestSuite) TestGetByID_Success() {
 	var (
 		ctx    = context.Background()
-		params = arguments.{{ $Name }}GetByIDArgs{
+		param = arguments.{{ $Name }}GetByIDArgs{
 			ID: 1,
 		}
 		{{ $name }} = models.{{ $Name }}{}
 	)
-	s.MockI{{ $Name }}.On("GetByID", ctx, params).Return({{ $name }}, nil)
-	actual, err := s.{{ $Name }}.GetByID(ctx, params)
+	s.MockI{{ $Name }}.On("GetByID", ctx, param).Return({{ $name }}, nil)
+	actual, err := s.{{ $Name }}.GetByID(ctx, param)
 	s.Nil(err)
 	s.Equal({{ $name }}, actual)
 }
@@ -34,13 +34,13 @@ func (s *{{ $Name }}HandlerTestSuite) TestGetByID_Success() {
 func (s *{{ $Name }}HandlerTestSuite) TestGetByID_Fail() {
 	var (
 		ctx    = context.Background()
-		params = arguments.{{ $Name }}GetByIDArgs{
+		param = arguments.{{ $Name }}GetByIDArgs{
 			ID: 1,
 		}
 		{{ $name }} = models.{{ $Name }}{}
 	)
-	s.MockI{{ $Name }}.On("GetByID", ctx, params).Return({{ $name }}, errors.New("some errors"))
-	actual, err := s.{{ $Name }}.GetByID(ctx, params)
+	s.MockI{{ $Name }}.On("GetByID", ctx, param).Return({{ $name }}, errors.New("some errors"))
+	actual, err := s.{{ $Name }}.GetByID(ctx, param)
 	s.Equal({{ $name }}, actual)
 	s.NotNil(err)
 }
@@ -48,13 +48,13 @@ func (s *{{ $Name }}HandlerTestSuite) TestGetByID_Fail() {
 func (s *{{ $Name }}HandlerTestSuite) TestGetByIDs_Success() {
 	var (
 		ctx    = context.Background()
-		params = arguments.{{ $Name }}GetByIDsArgs{
+		param = arguments.{{ $Name }}GetByIDsArgs{
 			IDs: []int64{1, 2},
 		}
 		{{ $names }} []models.{{ $Name }}
 	)
-	s.MockI{{ $Name }}.On("GetByIDs", ctx, params).Return({{ $names }}, nil)
-	actual, err := s.{{ $Name }}.GetByIDs(ctx, params)
+	s.MockI{{ $Name }}.On("GetByIDs", ctx, param).Return({{ $names }}, nil)
+	actual, err := s.{{ $Name }}.GetByIDs(ctx, param)
 	s.Nil(err)
 	s.Equal({{ $names }}, actual)
 }
@@ -62,13 +62,13 @@ func (s *{{ $Name }}HandlerTestSuite) TestGetByIDs_Success() {
 func (s *{{ $Name }}HandlerTestSuite) TestGetByIDs_Fail() {
 	var (
 		ctx    = context.Background()
-		params = arguments.{{ $Name }}GetByIDsArgs{
+		param = arguments.{{ $Name }}GetByIDsArgs{
 			IDs: []int64{1, 2},
 		}
 		{{ $names }} []models.{{ $Name }}
 	)
-	s.MockI{{ $Name }}.On("GetByIDs", ctx, params).Return({{ $names }}, errors.New("some errors"))
-	actual, err := s.{{ $Name }}.GetByIDs(ctx, params)
+	s.MockI{{ $Name }}.On("GetByIDs", ctx, param).Return({{ $names }}, errors.New("some errors"))
+	actual, err := s.{{ $Name }}.GetByIDs(ctx, param)
 	s.Equal({{ $names }}, actual)
 	s.NotNil(err)
 }
@@ -76,20 +76,23 @@ func (s *{{ $Name }}HandlerTestSuite) TestGetByIDs_Fail() {
 func (s *{{ $Name }}HandlerTestSuite) TestList_Success() {
 	var (
 		ctx       = context.Background()
-		params    = arguments.{{ $Name }}ListArgs{}
+		params    = arguments.{{ $Name }}ListArgs{
+			{{- range $field := $fields }}
+				{{ $field.Name }}:
+				{{- if $field.IsInt64 }}1
+				{{- else if $field.IsNullTimeField }} mysql.NullTime{
+					Time:  time.Time{},
+					Valid: true,
+				}
+				{{- else if $field.IsStatusField }} "active"
+				{{- else }}"mockString"
+				{{- end }},
+			{{- end }}
+			Page:     1,
+			PageSize: 10,
+		}
 		{{ $names }} []models.{{ $Name }}
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
-	{{- range $field := $fields }}
-		{{- if $field.IsStatusField }}
-			params.Status = "active"
-		{{- end }}
-	{{- end }}
-	params.Page = 1
-	params.PageSize = 10
 	s.MockI{{ $Name }}.On("List", ctx, params).Return({{ $names }}, nil)
 	actual, err := s.{{ $Name }}.List(ctx, params)
 	s.Nil(err)
@@ -100,15 +103,22 @@ func (s *{{ $Name }}HandlerTestSuite) TestList_Fail() {
 	var (
 		ctx    = context.Background()
 		params = arguments.{{ $Name }}ListArgs{
+			{{- range $field := $fields }}
+				{{ $field.Name }}:
+				{{- if $field.IsInt64 }}1
+				{{- else if $field.IsNullTimeField }} mysql.NullTime{
+					Time:  time.Time{},
+					Valid: true,
+				}
+				{{- else if $field.IsStatusField }} "active"
+				{{- else }}"mockString"
+				{{- end }},
+			{{- end }}
 			Page:     1,
 			PageSize: 10,
 		}
 		{{ $names }} []models.{{ $Name }}
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
 	s.MockI{{ $Name }}.On("List", ctx, params).Return({{ $names }}, errors.New("some errors"))
 	actual, err := s.{{ $Name }}.List(ctx, params)
 	s.Equal({{ $names }}, actual)
@@ -118,18 +128,21 @@ func (s *{{ $Name }}HandlerTestSuite) TestList_Fail() {
 func (s *{{ $Name }}HandlerTestSuite) TestCount_Success() {
 	var (
 		ctx    = context.Background()
-		params = arguments.{{ $Name }}CountArgs{}
+		params = arguments.{{ $Name }}CountArgs{
+			{{- range $field := $fields }}
+				{{ $field.Name }}:
+				{{- if $field.IsInt64 }}1
+				{{- else if $field.IsNullTimeField }} mysql.NullTime{
+					Time:  time.Time{},
+					Valid: true,
+				}
+				{{- else if $field.IsStatusField }} "active"
+				{{- else }}"mockString"
+				{{- end }},
+			{{- end }}
+		}
 		count  int64
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
-	{{- range $field := $fields }}
-		{{- if $field.IsStatusField }}
-			params.Status = "active"
-		{{- end }}
-	{{- end }}
 	s.MockI{{ $Name }}.On("Count", ctx, params).Return(count, nil)
 	actual, err := s.{{ $Name }}.Count(ctx, params)
 	s.Nil(err)
@@ -139,13 +152,21 @@ func (s *{{ $Name }}HandlerTestSuite) TestCount_Success() {
 func (s *{{ $Name }}HandlerTestSuite) TestCount_Fail() {
 	var (
 		ctx    = context.Background()
-		params = arguments.{{ $Name }}CountArgs{}
+		params = arguments.{{ $Name }}CountArgs{
+			{{- range $field := $fields }}
+				{{ $field.Name }}:
+				{{- if $field.IsInt64 }}1
+				{{- else if $field.IsNullTimeField }} mysql.NullTime{
+					Time:  time.Time{},
+					Valid: true,
+				}
+				{{- else if $field.IsStatusField }} "active"
+				{{- else }}"mockString"
+				{{- end }},
+			{{- end }}
+		}
 		count  int64
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
 	s.MockI{{ $Name }}.On("Count", ctx, params).Return(count, errors.New("some errors"))
 	actual, err := s.{{ $Name }}.Count(ctx, params)
 	s.Equal(count, actual)
@@ -156,17 +177,22 @@ func (s *{{ $Name }}HandlerTestSuite) TestInsert_Success() {
 	var (
 		ctx            = context.Background()
 		sampleID int64 = 1
-		params         = arguments.{{ $Name }}InsertArgs{}
+		params         = arguments.{{ $Name }}InsertArgs{
+			{{- range $field := $fields }}
+				{{- if not $field.IsIDField }}
+					{{ $field.Name }}:
+					{{- if $field.IsInt64 }}1
+					{{- else if $field.IsNullTimeField }} mysql.NullTime{
+						Time:  time.Time{},
+						Valid: true,
+					}
+					{{- else if $field.IsStatusField }} "active"
+					{{- else }}"mockString"
+					{{- end }},
+				{{- end }}
+    	{{- end }}
+		}
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
-	{{- range $field := $fields }}
-		{{- if $field.IsStatusField }}
-			params.Status = "active"
-		{{- end }}
-	{{- end }}
 	{{ $name }} := models.{{ $Name }}{
 		ID: sampleID,
 		{{- range $field := $fields }}
@@ -192,8 +218,12 @@ func (s *{{ $Name }}HandlerTestSuite) TestInsert_Fail() {
 			{{- range $field := $fields }}
 				{{- if not $field.IsIDField }}
 					{{ $field.Name }}:
-					{{- if $field.IsInt64 }}0
-					{{- else if $field.IsNullTimeField }} mysql.NullTime{}
+					{{- if $field.IsInt64 }}1
+					{{- else if $field.IsNullTimeField }} mysql.NullTime{
+						Time:  time.Time{},
+						Valid: true,
+					}
+					{{- else if $field.IsStatusField }} "active"
 					{{- else }}"mockString"
 					{{- end }},
 				{{- end }}
@@ -201,10 +231,6 @@ func (s *{{ $Name }}HandlerTestSuite) TestInsert_Fail() {
 		}
 		{{ $name }} = models.{{ $Name }}{}
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
 	s.MockI{{ $Name }}.On("Insert", ctx, params).Return({{ $name }}, errors.New("some errors"))
 	actual, err := s.{{ $Name }}.Insert(ctx, params)
 	s.Equal({{ $name }}, actual)
@@ -214,18 +240,27 @@ func (s *{{ $Name }}HandlerTestSuite) TestInsert_Fail() {
 func (s *{{ $Name }}HandlerTestSuite) TestUpdate_Success() {
 	var (
 		ctx      = context.Background()
-		params   = arguments.{{ $Name }}UpdateArgs{}
-		status = "active"
-	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
-	{{- range $field := $fields }}
-		{{- if $field.IsStatusField }}
-			params.Status = &status
+		sampleID int64 = 1
+		mockString = "mockString"
+		{{- range $field := $fields }}
+			{{- if $field.IsStatusField }}
+				status = "active"
+			{{- end }}
 		{{- end }}
-	{{- end }}
+		params   = arguments.{{ $Name }}UpdateArgs{
+			{{- range $field := $fields }}
+				{{ $field.Name }}:
+				{{- if $field.IsInt64 }} &sampleID
+				{{- else if $field.IsNullTimeField }} &mysql.NullTime{
+					Time:  time.Time{},
+					Valid: true,
+				}
+				{{- else if $field.IsStatusField }} &status
+				{{- else }} &mockString
+				{{- end }},
+    	{{- end }}
+		}
+	)
 	{{ $name }} := models.{{ $Name }}{
 		{{- range $field := $fields }}
 			{{ $field.Name }}: *params.{{ $field.Name }},
@@ -244,23 +279,28 @@ func (s *{{ $Name }}HandlerTestSuite) TestUpdate_Success() {
 func (s *{{ $Name }}HandlerTestSuite) TestUpdate_Fail() {
 	var (
 		ctx              = context.Background()
-		sampleID   int64 = 1
-		mockString       = "mockString"
+		sampleID int64 = 1
+		mockString = "mockString"
+		{{- range $field := $fields }}
+			{{- if $field.IsStatusField }}
+				status = "active"
+			{{- end }}
+		{{- end }}
 		params           = arguments.{{ $Name }}UpdateArgs{
 			{{- range $field := $fields }}
 				{{ $field.Name }}:
-					{{- if $field.IsInt64 }}&sampleID
-					{{- else if $field.IsNullTimeField }} &mysql.NullTime{}
-					{{- else }}&mockString
-					{{- end }},
-			{{- end }}
+				{{- if $field.IsInt64 }} &sampleID
+				{{- else if $field.IsNullTimeField }} &mysql.NullTime{
+					Time:  time.Time{},
+					Valid: true,
+				}
+				{{- else if $field.IsStatusField }} &status
+				{{- else }} &mockString
+				{{- end }},
+    	{{- end }}
 		}
 		{{ $name }} = models.{{ $Name }}{}
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
 	s.MockI{{ $Name }}.On("Update", ctx, params).Return({{ $name }}, errors.New("some errors"))
 	actual, err := s.{{ $Name }}.Update(ctx, params)
 	s.Equal({{ $name }}, actual)
@@ -270,30 +310,26 @@ func (s *{{ $Name }}HandlerTestSuite) TestUpdate_Fail() {
 func (s *{{ $Name }}HandlerTestSuite) TestDelete_Success() {
 	var (
 		ctx               = context.Background()
-		params            = arguments.{{ $Name }}DeleteArgs{}
+		param            = arguments.{{ $Name }}DeleteArgs{
+			ID: 1,
+		}
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
-	s.MockI{{ $Name }}.On("Delete", ctx, params).Return(params.ID, nil)
-	actual, err := s.{{ $Name }}.Delete(ctx, params)
+	s.MockI{{ $Name }}.On("Delete", ctx, param).Return(param.ID, nil)
+	actual, err := s.{{ $Name }}.Delete(ctx, param)
 	s.Nil(err)
-	s.Equal(params.ID, actual)
+	s.Equal(param.ID, actual)
 }
 
 func (s *{{ $Name }}HandlerTestSuite) TestDelete_Fail() {
 	var (
 		ctx         = context.Background()
-		params      = arguments.{{ $Name }}DeleteArgs{}
+		param      = arguments.{{ $Name }}DeleteArgs{
+			ID: 1,
+		}
 		rowEffected int64
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
-	s.MockI{{ $Name }}.On("Delete", ctx, params).Return(rowEffected, errors.New("some errors"))
-	actual, err := s.{{ $Name }}.Delete(ctx, params)
+	s.MockI{{ $Name }}.On("Delete", ctx, param).Return(rowEffected, errors.New("some errors"))
+	actual, err := s.{{ $Name }}.Delete(ctx, param)
 	s.Equal(rowEffected, actual)
 	s.NotNil(err)
 }

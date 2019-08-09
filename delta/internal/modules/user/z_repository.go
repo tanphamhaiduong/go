@@ -17,8 +17,19 @@ import (
 func (r *RepositoryImpl) scanUser(row database.IRow, user *models.User) error {
 	err := row.Scan(
 		&user.ID,
-		&user.Email,
+		&user.Username,
+		&user.Password,
 		&user.Name,
+		&user.DateOfBirth,
+		&user.Reference,
+		&user.AvatarUrl,
+		&user.LicenseNumber,
+		&user.PhoneNumber,
+		&user.Extension,
+		&user.TelProvider,
+		&user.TelApi,
+		&user.SupervisorId,
+		&user.RoleId,
 		&user.CompanyID,
 		&user.Status,
 		&user.CreatedBy,
@@ -124,15 +135,7 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.UserGetB
 	}
 	for rows.Next() {
 		user := models.User{}
-		err := rows.Scan(
-			&user.ID,
-			&user.Email,
-			&user.Name,
-			&user.CompanyID,
-			&user.Status,
-			&user.CreatedBy,
-			&user.UpdatedBy,
-		)
+		err := r.scanUser(rows, &user)
 		if err != nil {
 			log.WithField("Error", err).Error("Repository GetByIDs Scan error of user")
 			return users, err
@@ -258,15 +261,7 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.UserListArgs
 	defer rows.Close()
 	for rows.Next() {
 		user := models.User{}
-		err := rows.Scan(
-			&user.ID,
-			&user.Email,
-			&user.Name,
-			&user.CompanyID,
-			&user.Status,
-			&user.CreatedBy,
-			&user.UpdatedBy,
-		)
+		err := r.scanUser(rows, &user)
 		if err != nil {
 			log.WithField("Error", err).Error("Repository List Scan error of user")
 			return users, err
@@ -448,11 +443,42 @@ func (r *RepositoryImpl) setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, 
 	if params.Username != nil {
 		updateBuilder = updateBuilder.Set("username", *params.Username)
 	}
-
+	if params.Password != nil {
+		updateBuilder = updateBuilder.Set("password", *params.Password)
+	}
 	if params.Name != nil {
 		updateBuilder = updateBuilder.Set("name", *params.Name)
 	}
-
+	if value, _ := params.DateOfBirth.Value(); value != nil {
+		updateBuilder = updateBuilder.Set("date_of_birth", *params.DateOfBirth)
+	}
+	if params.Reference != nil {
+		updateBuilder = updateBuilder.Set("reference", *params.Reference)
+	}
+	if params.AvatarUrl != nil {
+		updateBuilder = updateBuilder.Set("avatar_url", *params.AvatarUrl)
+	}
+	if params.LicenseNumber != nil {
+		updateBuilder = updateBuilder.Set("license_number", *params.LicenseNumber)
+	}
+	if params.PhoneNumber != nil {
+		updateBuilder = updateBuilder.Set("phone_number", *params.PhoneNumber)
+	}
+	if params.Extension != nil {
+		updateBuilder = updateBuilder.Set("extension", *params.Extension)
+	}
+	if params.TelProvider != nil {
+		updateBuilder = updateBuilder.Set("tel_provider", *params.TelProvider)
+	}
+	if params.TelApi != nil {
+		updateBuilder = updateBuilder.Set("tel_api", *params.TelApi)
+	}
+	if params.SupervisorId != nil {
+		updateBuilder = updateBuilder.Set("supervisor_id", *params.SupervisorId)
+	}
+	if params.RoleId != nil {
+		updateBuilder = updateBuilder.Set("role_id", *params.RoleId)
+	}
 	if params.CompanyID != nil {
 		updateBuilder = updateBuilder.Set("company_id", *params.CompanyID)
 	}

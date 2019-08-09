@@ -19,7 +19,7 @@ type UserCountArgs struct {
 	Username      string         `graphql:"username" validate:"omitempty" faker:"username"`
 	Password      string         `graphql:"password" validate:"omitempty" faker:"password"`
 	Name          string         `graphql:"name" validate:"omitempty" faker:"name"`
-	DateOfBirth   mysql.NullTime `graphql:"dateOfBirth" validate:"omitempty" faker:"date"`
+	DateOfBirth   mysql.NullTime `graphql:"dateOfBirth" validate:"omitempty" `
 	Reference     string         `graphql:"reference" validate:"omitempty" faker:"name"`
 	AvatarUrl     string         `graphql:"avatarUrl" validate:"omitempty" faker:"domain_name"`
 	LicenseNumber string         `graphql:"licenseNumber" validate:"omitempty" faker:"phone_number"`
@@ -30,7 +30,7 @@ type UserCountArgs struct {
 	SupervisorId  int64          `graphql:"supervisorId" validate:"omitempty" faker:"unix_time"`
 	RoleId        int64          `graphql:"roleId" validate:"omitempty" faker:"unix_time"`
 	CompanyID     int64          `graphql:"companyId" validate:"omitempty,min=1" faker:"unix_time"`
-	Status        string         `graphql:"status" validate:"omitempty,oneof=active inactive" faker:"name"`
+	Status        string         `graphql:"status" validate:"omitempty,oneof=active inactive" faker:"word"`
 	CreatedBy     string         `graphql:"createdBy" validate:"omitempty" faker:"email"`
 	UpdatedBy     string         `graphql:"updatedBy" validate:"omitempty" faker:"email"`
 }
@@ -41,7 +41,7 @@ type UserListArgs struct {
 	Username      string         `graphql:"username" validate:"omitempty" faker:"username"`
 	Password      string         `graphql:"password" validate:"omitempty" faker:"password"`
 	Name          string         `graphql:"name" validate:"omitempty" faker:"name"`
-	DateOfBirth   mysql.NullTime `graphql:"dateOfBirth" validate:"omitempty" faker:"date"`
+	DateOfBirth   mysql.NullTime `graphql:"dateOfBirth" validate:"omitempty" `
 	Reference     string         `graphql:"reference" validate:"omitempty" faker:"name"`
 	AvatarUrl     string         `graphql:"avatarUrl" validate:"omitempty" faker:"domain_name"`
 	LicenseNumber string         `graphql:"licenseNumber" validate:"omitempty" faker:"phone_number"`
@@ -52,7 +52,7 @@ type UserListArgs struct {
 	SupervisorId  int64          `graphql:"supervisorId" validate:"omitempty" faker:"unix_time"`
 	RoleId        int64          `graphql:"roleId" validate:"omitempty" faker:"unix_time"`
 	CompanyID     int64          `graphql:"companyId" validate:"omitempty,min=1" faker:"unix_time"`
-	Status        string         `graphql:"status" validate:"omitempty,oneof=active inactive" faker:"name"`
+	Status        string         `graphql:"status" validate:"omitempty,oneof=active inactive" faker:"word"`
 	CreatedBy     string         `graphql:"createdBy" validate:"omitempty" faker:"email"`
 	UpdatedBy     string         `graphql:"updatedBy" validate:"omitempty" faker:"email"`
 	Page          int64          `graphql:"page" validate:"required,min=1"`
@@ -64,7 +64,7 @@ type UserInsertArgs struct {
 	Username      string         `graphql:"username" validate:"omitempty" faker:"username"`
 	Password      string         `graphql:"password" validate:"omitempty" faker:"password"`
 	Name          string         `graphql:"name" validate:"omitempty" faker:"name"`
-	DateOfBirth   mysql.NullTime `graphql:"dateOfBirth" validate:"omitempty" faker:"date"`
+	DateOfBirth   mysql.NullTime `graphql:"dateOfBirth" validate:"omitempty" `
 	Reference     string         `graphql:"reference" validate:"omitempty" faker:"name"`
 	AvatarUrl     string         `graphql:"avatarUrl" validate:"omitempty" faker:"domain_name"`
 	LicenseNumber string         `graphql:"licenseNumber" validate:"omitempty" faker:"phone_number"`
@@ -75,7 +75,7 @@ type UserInsertArgs struct {
 	SupervisorId  int64          `graphql:"supervisorId" validate:"omitempty" faker:"unix_time"`
 	RoleId        int64          `graphql:"roleId" validate:"omitempty" faker:"unix_time"`
 	CompanyID     int64          `graphql:"companyId" validate:"omitempty,min=1" faker:"unix_time"`
-	Status        string         `graphql:"status" validate:"omitempty,oneof=active inactive" faker:"name"`
+	Status        string         `graphql:"status" validate:"omitempty,oneof=active inactive" faker:"word"`
 	CreatedBy     string         `graphql:"createdBy" validate:"omitempty" faker:"email"`
 	UpdatedBy     string         `graphql:"updatedBy" validate:"omitempty" faker:"email"`
 }
@@ -86,7 +86,7 @@ type UserUpdateArgs struct {
 	Username      *string         `graphql:"username" validate:"omitempty" faker:"username"`
 	Password      *string         `graphql:"password" validate:"omitempty" faker:"password"`
 	Name          *string         `graphql:"name" validate:"omitempty" faker:"name"`
-	DateOfBirth   *mysql.NullTime `graphql:"dateOfBirth" validate:"omitempty" faker:"date"`
+	DateOfBirth   *mysql.NullTime `graphql:"dateOfBirth" validate:"omitempty" `
 	Reference     *string         `graphql:"reference" validate:"omitempty" faker:"name"`
 	AvatarUrl     *string         `graphql:"avatarUrl" validate:"omitempty" faker:"domain_name"`
 	LicenseNumber *string         `graphql:"licenseNumber" validate:"omitempty" faker:"phone_number"`
@@ -97,7 +97,7 @@ type UserUpdateArgs struct {
 	SupervisorId  *int64          `graphql:"supervisorId" validate:"omitempty" faker:"unix_time"`
 	RoleId        *int64          `graphql:"roleId" validate:"omitempty" faker:"unix_time"`
 	CompanyID     *int64          `graphql:"companyId" validate:"omitempty,min=1" faker:"unix_time"`
-	Status        *string         `graphql:"status" validate:"omitempty,oneof=active inactive" faker:"name"`
+	Status        *string         `graphql:"status" validate:"omitempty,oneof=active inactive" faker:"word"`
 	CreatedBy     *string         `graphql:"createdBy" validate:"omitempty" faker:"email"`
 	UpdatedBy     *string         `graphql:"updatedBy" validate:"omitempty" faker:"email"`
 }

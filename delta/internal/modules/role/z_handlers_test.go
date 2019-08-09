@@ -4,9 +4,6 @@ package role
 import (
 	"context"
 	"errors"
-	"log"
-
-	"github.com/bxcodec/faker"
 
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
@@ -14,56 +11,56 @@ import (
 
 func (s *RoleHandlerTestSuite) TestGetByID_Success() {
 	var (
-		ctx    = context.Background()
-		params = arguments.RoleGetByIDArgs{
+		ctx   = context.Background()
+		param = arguments.RoleGetByIDArgs{
 			ID: 1,
 		}
 		role = models.Role{}
 	)
-	s.MockIRole.On("GetByID", ctx, params).Return(role, nil)
-	actual, err := s.Role.GetByID(ctx, params)
+	s.MockIRole.On("GetByID", ctx, param).Return(role, nil)
+	actual, err := s.Role.GetByID(ctx, param)
 	s.Nil(err)
 	s.Equal(role, actual)
 }
 
 func (s *RoleHandlerTestSuite) TestGetByID_Fail() {
 	var (
-		ctx    = context.Background()
-		params = arguments.RoleGetByIDArgs{
+		ctx   = context.Background()
+		param = arguments.RoleGetByIDArgs{
 			ID: 1,
 		}
 		role = models.Role{}
 	)
-	s.MockIRole.On("GetByID", ctx, params).Return(role, errors.New("some errors"))
-	actual, err := s.Role.GetByID(ctx, params)
+	s.MockIRole.On("GetByID", ctx, param).Return(role, errors.New("some errors"))
+	actual, err := s.Role.GetByID(ctx, param)
 	s.Equal(role, actual)
 	s.NotNil(err)
 }
 
 func (s *RoleHandlerTestSuite) TestGetByIDs_Success() {
 	var (
-		ctx    = context.Background()
-		params = arguments.RoleGetByIDsArgs{
+		ctx   = context.Background()
+		param = arguments.RoleGetByIDsArgs{
 			IDs: []int64{1, 2},
 		}
 		roles []models.Role
 	)
-	s.MockIRole.On("GetByIDs", ctx, params).Return(roles, nil)
-	actual, err := s.Role.GetByIDs(ctx, params)
+	s.MockIRole.On("GetByIDs", ctx, param).Return(roles, nil)
+	actual, err := s.Role.GetByIDs(ctx, param)
 	s.Nil(err)
 	s.Equal(roles, actual)
 }
 
 func (s *RoleHandlerTestSuite) TestGetByIDs_Fail() {
 	var (
-		ctx    = context.Background()
-		params = arguments.RoleGetByIDsArgs{
+		ctx   = context.Background()
+		param = arguments.RoleGetByIDsArgs{
 			IDs: []int64{1, 2},
 		}
 		roles []models.Role
 	)
-	s.MockIRole.On("GetByIDs", ctx, params).Return(roles, errors.New("some errors"))
-	actual, err := s.Role.GetByIDs(ctx, params)
+	s.MockIRole.On("GetByIDs", ctx, param).Return(roles, errors.New("some errors"))
+	actual, err := s.Role.GetByIDs(ctx, param)
 	s.Equal(roles, actual)
 	s.NotNil(err)
 }
@@ -71,16 +68,18 @@ func (s *RoleHandlerTestSuite) TestGetByIDs_Fail() {
 func (s *RoleHandlerTestSuite) TestList_Success() {
 	var (
 		ctx    = context.Background()
-		params = arguments.RoleListArgs{}
-		roles  []models.Role
+		params = arguments.RoleListArgs{
+			ID:        1,
+			Name:      "mockString",
+			CompanyID: 1,
+			Status:    "active",
+			CreatedBy: "mockString",
+			UpdatedBy: "mockString",
+			Page:      1,
+			PageSize:  10,
+		}
+		roles []models.Role
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
-	params.Status = "active"
-	params.Page = 1
-	params.PageSize = 10
 	s.MockIRole.On("List", ctx, params).Return(roles, nil)
 	actual, err := s.Role.List(ctx, params)
 	s.Nil(err)
@@ -91,15 +90,17 @@ func (s *RoleHandlerTestSuite) TestList_Fail() {
 	var (
 		ctx    = context.Background()
 		params = arguments.RoleListArgs{
-			Page:     1,
-			PageSize: 10,
+			ID:        1,
+			Name:      "mockString",
+			CompanyID: 1,
+			Status:    "active",
+			CreatedBy: "mockString",
+			UpdatedBy: "mockString",
+			Page:      1,
+			PageSize:  10,
 		}
 		roles []models.Role
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
 	s.MockIRole.On("List", ctx, params).Return(roles, errors.New("some errors"))
 	actual, err := s.Role.List(ctx, params)
 	s.Equal(roles, actual)
@@ -109,14 +110,16 @@ func (s *RoleHandlerTestSuite) TestList_Fail() {
 func (s *RoleHandlerTestSuite) TestCount_Success() {
 	var (
 		ctx    = context.Background()
-		params = arguments.RoleCountArgs{}
-		count  int64
+		params = arguments.RoleCountArgs{
+			ID:        1,
+			Name:      "mockString",
+			CompanyID: 1,
+			Status:    "active",
+			CreatedBy: "mockString",
+			UpdatedBy: "mockString",
+		}
+		count int64
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
-	params.Status = "active"
 	s.MockIRole.On("Count", ctx, params).Return(count, nil)
 	actual, err := s.Role.Count(ctx, params)
 	s.Nil(err)
@@ -126,13 +129,16 @@ func (s *RoleHandlerTestSuite) TestCount_Success() {
 func (s *RoleHandlerTestSuite) TestCount_Fail() {
 	var (
 		ctx    = context.Background()
-		params = arguments.RoleCountArgs{}
-		count  int64
+		params = arguments.RoleCountArgs{
+			ID:        1,
+			Name:      "mockString",
+			CompanyID: 1,
+			Status:    "active",
+			CreatedBy: "mockString",
+			UpdatedBy: "mockString",
+		}
+		count int64
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
 	s.MockIRole.On("Count", ctx, params).Return(count, errors.New("some errors"))
 	actual, err := s.Role.Count(ctx, params)
 	s.Equal(count, actual)
@@ -143,13 +149,14 @@ func (s *RoleHandlerTestSuite) TestInsert_Success() {
 	var (
 		ctx            = context.Background()
 		sampleID int64 = 1
-		params         = arguments.RoleInsertArgs{}
+		params         = arguments.RoleInsertArgs{
+			Name:      "mockString",
+			CompanyID: 1,
+			Status:    "active",
+			CreatedBy: "mockString",
+			UpdatedBy: "mockString",
+		}
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
-	params.Status = "active"
 	role := models.Role{
 		ID:        sampleID,
 		Name:      params.Name,
@@ -173,17 +180,13 @@ func (s *RoleHandlerTestSuite) TestInsert_Fail() {
 		ctx    = context.Background()
 		params = arguments.RoleInsertArgs{
 			Name:      "mockString",
-			CompanyID: 0,
-			Status:    "mockString",
+			CompanyID: 1,
+			Status:    "active",
 			CreatedBy: "mockString",
 			UpdatedBy: "mockString",
 		}
 		role = models.Role{}
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
 	s.MockIRole.On("Insert", ctx, params).Return(role, errors.New("some errors"))
 	actual, err := s.Role.Insert(ctx, params)
 	s.Equal(role, actual)
@@ -192,15 +195,19 @@ func (s *RoleHandlerTestSuite) TestInsert_Fail() {
 
 func (s *RoleHandlerTestSuite) TestUpdate_Success() {
 	var (
-		ctx    = context.Background()
-		params = arguments.RoleUpdateArgs{}
-		status = "active"
+		ctx              = context.Background()
+		sampleID   int64 = 1
+		mockString       = "mockString"
+		status           = "active"
+		params           = arguments.RoleUpdateArgs{
+			ID:        &sampleID,
+			Name:      &mockString,
+			CompanyID: &sampleID,
+			Status:    &status,
+			CreatedBy: &mockString,
+			UpdatedBy: &mockString,
+		}
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
-	params.Status = &status
 	role := models.Role{
 		ID:        *params.ID,
 		Name:      *params.Name,
@@ -224,20 +231,17 @@ func (s *RoleHandlerTestSuite) TestUpdate_Fail() {
 		ctx              = context.Background()
 		sampleID   int64 = 1
 		mockString       = "mockString"
+		status           = "active"
 		params           = arguments.RoleUpdateArgs{
 			ID:        &sampleID,
 			Name:      &mockString,
 			CompanyID: &sampleID,
-			Status:    &mockString,
+			Status:    &status,
 			CreatedBy: &mockString,
 			UpdatedBy: &mockString,
 		}
 		role = models.Role{}
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
 	s.MockIRole.On("Update", ctx, params).Return(role, errors.New("some errors"))
 	actual, err := s.Role.Update(ctx, params)
 	s.Equal(role, actual)
@@ -246,31 +250,27 @@ func (s *RoleHandlerTestSuite) TestUpdate_Fail() {
 
 func (s *RoleHandlerTestSuite) TestDelete_Success() {
 	var (
-		ctx    = context.Background()
-		params = arguments.RoleDeleteArgs{}
+		ctx   = context.Background()
+		param = arguments.RoleDeleteArgs{
+			ID: 1,
+		}
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
-	s.MockIRole.On("Delete", ctx, params).Return(params.ID, nil)
-	actual, err := s.Role.Delete(ctx, params)
+	s.MockIRole.On("Delete", ctx, param).Return(param.ID, nil)
+	actual, err := s.Role.Delete(ctx, param)
 	s.Nil(err)
-	s.Equal(params.ID, actual)
+	s.Equal(param.ID, actual)
 }
 
 func (s *RoleHandlerTestSuite) TestDelete_Fail() {
 	var (
-		ctx         = context.Background()
-		params      = arguments.RoleDeleteArgs{}
+		ctx   = context.Background()
+		param = arguments.RoleDeleteArgs{
+			ID: 1,
+		}
 		rowEffected int64
 	)
-	err := faker.FakeData(&params)
-	if err != nil {
-		log.Fatal(err)
-	}
-	s.MockIRole.On("Delete", ctx, params).Return(rowEffected, errors.New("some errors"))
-	actual, err := s.Role.Delete(ctx, params)
+	s.MockIRole.On("Delete", ctx, param).Return(rowEffected, errors.New("some errors"))
+	actual, err := s.Role.Delete(ctx, param)
 	s.Equal(rowEffected, actual)
 	s.NotNil(err)
 }

@@ -52,7 +52,7 @@ var (
 				GraphQLDescription: "This is permission's active",
 				GraphQLRequired:    true,
 				Validate:           `validate:"omitempty,oneof=active inactive"`,
-				FakerTag:           `faker:"name"`,
+				FakerTag:           `faker:"word"`,
 			},
 			{
 				Name:               "CreatedBy",
