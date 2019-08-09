@@ -178,8 +178,16 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.{{- $Name }}
 func (r *RepositoryImpl) setArgsToCountSelectBuilder(selectBuilder sq.SelectBuilder, params arguments.{{ $Name }}CountArgs) sq.SelectBuilder {
   log.WithField("params", params).Info("Repository setArgsToCountSelectBuilder of {{ $name }}")
 	{{- range $field := $fields }}
-		if params.{{ $field.Name }} != {{ if $field.IsInt64 }}0{{ else }}""{{- end }} {
-			selectBuilder = selectBuilder.Where(sq.{{ $field.QueryType }}{"{{- $field.Name | ToSnakeCase }}": params.{{ $field.Name }}})
+		if
+			{{- if $field.IsNullTimeField }}
+				value, _ := params.{{- $field.Name }}.Value(); value != nil
+			{{- else }}
+				params.{{- $field.Name }} !=
+					{{- if $field.IsInt64 }}0
+					{{- else }}""
+					{{- end }}
+			{{- end }}{
+			selectBuilder = selectBuilder.Where(sq.{{ $field.QueryType }}{"{{ $field.Name | ToSnakeCase }}": params.{{ $field.Name }}})
 		}
 	{{- end }}
 	return selectBuilder

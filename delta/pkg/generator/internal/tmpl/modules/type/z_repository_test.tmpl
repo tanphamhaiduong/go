@@ -284,7 +284,11 @@ func (s *{{ $Name }}RepositoryTestSuite) TestInsert_Fail() {
 		params         = arguments.{{ $Name }}InsertArgs{
     {{- range $field := $fields }}
       {{- if not $field.IsIDField }}
-        {{ $field.Name }}: {{ if $field.IsInt64 }}0{{ else }}"mockString"{{ end }},
+        {{ $field.Name }}:
+				{{- if $field.IsInt64 }}0
+				{{- else if $field.IsNullTimeField }} mysql.NullTime{}
+				{{- else }}"mockString"
+				{{- end }},
       {{- end }}
     {{- end }}
 		}
@@ -372,7 +376,11 @@ func (s *{{ $Name }}RepositoryTestSuite) TestUpdate_Fail() {
 		mockString       = "mockString"
 		params           = arguments.{{ $Name }}UpdateArgs{
 			{{- range $field := $fields }}
-				{{ $field.Name }}: {{ if $field.IsInt64 }}&sampleID{{ else }}&mockString{{ end }},
+				{{ $field.Name }}:
+					{{- if $field.IsInt64 }}&sampleID
+					{{- else if $field.IsNullTimeField }} &mysql.NullTime{}
+					{{- else }}&mockString
+					{{- end }},
 			{{- end }}
 		}
 		{{ $name }} models.{{ $Name }}
