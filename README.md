@@ -7,7 +7,8 @@ For every project need CRUD, we need to build crud for many entities in your pro
 `cd delta`
 
 ### Step 2: Install dependencies
-`make install`
+Install protobuf `brew install protobuf`  
+Install dependencies `make install`
 
 ### Step 3: Change DIR to database
 `cd database`
