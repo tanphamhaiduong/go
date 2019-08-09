@@ -35,6 +35,16 @@ var (
 				FakerTag:           `faker:"name"`,
 			},
 			{
+				Name:               "CompanyCode",
+				GoType:             gotype.String,
+				QueryType:          querytype.Equal,
+				GraphQLType:        graphqltype.String,
+				GraphQLDescription: "This is company's code",
+				GraphQLRequired:    true,
+				Validate:           `validate:"omitempty"`,
+				FakerTag:           `faker:"name"`,
+			},
+			{
 				Name:               "Status",
 				GoType:             gotype.String,
 				QueryType:          querytype.Equal,
@@ -63,6 +73,16 @@ var (
 				GraphQLRequired:    false,
 				Validate:           `validate:"omitempty"`,
 				FakerTag:           `faker:"email"`,
+			},
+			{
+				Name:               "ApiSecretKey",
+				GoType:             gotype.String,
+				QueryType:          querytype.Equal,
+				GraphQLType:        graphqltype.String,
+				GraphQLDescription: "This is company's updatedBy",
+				GraphQLRequired:    false,
+				Validate:           `validate:"omitempty"`,
+				FakerTag:           `faker:"name"`,
 			},
 		},
 	}

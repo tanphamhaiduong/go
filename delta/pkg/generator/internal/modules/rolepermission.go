@@ -45,16 +45,6 @@ var (
 				FakerTag:           `faker:"unix_time"`,
 			},
 			{
-				Name:               "Status",
-				GoType:             gotype.String,
-				QueryType:          querytype.Equal,
-				GraphQLType:        graphqltype.String,
-				GraphQLDescription: "This is role's status",
-				GraphQLRequired:    true,
-				Validate:           `validate:"omitempty,oneof=active inactive"`,
-				FakerTag:           `faker:"name"`,
-			},
-			{
 				Name:               "CreatedBy",
 				GoType:             gotype.String,
 				QueryType:          querytype.Equal,

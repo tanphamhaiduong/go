@@ -35,6 +35,16 @@ var (
 				FakerTag:           `faker:"name"`,
 			},
 			{
+				Name:               "Description",
+				GoType:             gotype.String,
+				QueryType:          querytype.Equal,
+				GraphQLType:        graphqltype.String,
+				GraphQLDescription: "This is permission's description",
+				GraphQLRequired:    true,
+				Validate:           `validate:"omitempty"`,
+				FakerTag:           `faker:"name"`,
+			},
+			{
 				Name:               "Status",
 				GoType:             gotype.String,
 				QueryType:          querytype.Equal,
