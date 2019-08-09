@@ -1,4 +1,5 @@
 install:
+	@go get -u golang.org/x/tools/cmd/goimports
 	@go get -u github.com/golang/protobuf/protoc-gen-go
 	@go get -u github.com/pressly/goose/cmd/goose
 	@go get -u github.com/vektra/mockery/.../
