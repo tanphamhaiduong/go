@@ -26,17 +26,26 @@ type ICoreRepository interface {
 
 // GetByID ...
 func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.{{ $Name }}GetByIDArgs) (models.{{ $Name }}, error) {
-  log.WithField("params", params).Info("Handler GetByID of {{ $name }}")
+  log.WithFields(log.Fields{
+		"TraceID":ctx.Value("TraceID"),
+		"params": params,
+	}).Info("Handler GetByID of {{ $name }}")
 	var (
 		{{ $name }} models.{{ $Name }}
 	)
 	if err := validator.Struct(params); err != nil {
-		log.WithField("Error", err).Error("Handler GetByID validator.Struct error of {{ $name }}")
+		log.WithFields(log.Fields{
+			"TraceID": ctx.Value("TraceID"),
+			"Error": err,
+		}).Error("Handler GetByID validator.Struct error of {{ $name }}")
     return {{ $name }}, err
   }
 	{{ $name }}, err := h.{{ $name }}.GetByID(ctx, params)
 	if err != nil {
-		log.WithField("Error", err).Error("Handler GetByID h.{{ $name }}.GetByID error of {{ $name }}")
+		log.WithFields(log.Fields{
+			"TraceID": ctx.Value("TraceID"),
+			"Error": err,
+		}).Error("Handler GetByID h.{{ $name }}.GetByID error of {{ $name }}")
 		return {{ $name }}, err
 	}
 	return {{ $name }}, nil
@@ -44,17 +53,26 @@ func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.{{ $Name }}G
 
 // GetByIDs ...
 func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.{{ $Name }}GetByIDsArgs) ([]models.{{ $Name }}, error) {
-  log.WithField("params", params).Info("Handler GetByIDs of {{ $name }}")
+  log.WithFields(log.Fields{
+		"TraceID":ctx.Value("TraceID"),
+		"params": params,
+	}).Info("Handler GetByIDs of {{ $name }}")
 	var (
 		{{ $names }} []models.{{ $Name }}
 	)
 	if err := validator.Struct(params); err != nil {
-		log.WithField("Error", err).Error("Handler GetByIDs validator.Struct error of {{ $name }}")
+		log.WithFields(log.Fields{
+			"TraceID": ctx.Value("TraceID"),
+			"Error": err,
+		}).Error("Handler GetByIDs validator.Struct error of {{ $name }}")
   	return {{ $names }}, err
   }
 	{{ $names }}, err := h.{{ $name }}.GetByIDs(ctx, params)
 	if err != nil {
-		log.WithField("Error", err).Error("Handler GetByIDs h.{{ $name }}.GetByIDs error of {{ $name }}")
+		log.WithFields(log.Fields{
+			"TraceID": ctx.Value("TraceID"),
+			"Error": err,
+		}).Error("Handler GetByIDs h.{{ $name }}.GetByIDs error of {{ $name }}")
 		return {{ $names }}, err
 	}
 	return {{ $names }}, nil
@@ -62,17 +80,26 @@ func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.{{ $Name }}
 
 // Count ...
 func (h *HandlerImpl) Count(ctx context.Context, params arguments.{{ $Name }}CountArgs) (int64, error) {
-  log.WithField("params", params).Info("Handler Count of {{ $name }}")
+  log.WithFields(log.Fields{
+		"TraceID":ctx.Value("TraceID"),
+		"params": params,
+	}).Info("Handler Count of {{ $name }}")
 	var (
 		count int64
 	)
 	if err := validator.Struct(params); err != nil {
-		log.WithField("Error", err).Error("Handler Count validator.Struct error of {{ $name }}")
+		log.WithFields(log.Fields{
+			"TraceID": ctx.Value("TraceID"),
+			"Error": err,
+		}).Error("Handler Count validator.Struct error of {{ $name }}")
 		return count, err
 	}
 	count, err := h.{{ $name }}.Count(ctx, params)
 	if err != nil {
-		log.WithField("Error", err).Error("Handler Count h.{{ $name }}.Count error of {{ $name }}")
+		log.WithFields(log.Fields{
+			"TraceID": ctx.Value("TraceID"),
+			"Error": err,
+		}).Error("Handler Count h.{{ $name }}.Count error of {{ $name }}")
 		return count, err
 	}
 	return count, nil
@@ -80,17 +107,26 @@ func (h *HandlerImpl) Count(ctx context.Context, params arguments.{{ $Name }}Cou
 
 // List ...
 func (h *HandlerImpl) List(ctx context.Context, params arguments.{{ $Name }}ListArgs) ([]models.{{ $Name }}, error) {
-  log.WithField("params", params).Info("Handler List of {{ $name }}")
+  log.WithFields(log.Fields{
+		"TraceID":ctx.Value("TraceID"),
+		"params": params,
+	}).Info("Handler List of {{ $name }}")
 	var (
 		{{ $names }} []models.{{ $Name }}
 	)
 	if err := validator.Struct(params); err != nil {
-		log.WithField("Error", err).Error("Handler List validator.Struct error of {{ $name }}")
+		log.WithFields(log.Fields{
+			"TraceID": ctx.Value("TraceID"),
+			"Error": err,
+		}).Error("Handler List validator.Struct error of {{ $name }}")
 		return {{ $names }}, err
 	}
 	{{ $names }}, err := h.{{ $name }}.List(ctx, params)
 	if err != nil {
-		log.WithField("Error", err).Error("Handler List h.{{ $name }}.List error of {{ $name }}")
+		log.WithFields(log.Fields{
+			"TraceID": ctx.Value("TraceID"),
+			"Error": err,
+		}).Error("Handler List h.{{ $name }}.List error of {{ $name }}")
 		return {{ $names }}, err
 	}
 	return {{ $names }}, nil
@@ -98,17 +134,26 @@ func (h *HandlerImpl) List(ctx context.Context, params arguments.{{ $Name }}List
 
 // Insert ...
 func (h *HandlerImpl) Insert(ctx context.Context, params arguments.{{ $Name }}InsertArgs) (models.{{ $Name }}, error) {
-  log.WithField("params", params).Info("Handler Insert of {{ $name }}")
+  log.WithFields(log.Fields{
+		"TraceID":ctx.Value("TraceID"),
+		"params": params,
+	}).Info("Handler Insert of {{ $name }}")
 	var (
 		{{ $name }} models.{{ $Name }}
 	)
 	if err := validator.Struct(params); err != nil {
-		log.WithField("Error", err).Error("Handler Insert validator.Struct error of {{ $name }}")
+		log.WithFields(log.Fields{
+			"TraceID": ctx.Value("TraceID"),
+			"Error": err,
+		}).Error("Handler Insert validator.Struct error of {{ $name }}")
 		return {{ $name }}, err
 	}
 	{{ $name }}, err := h.{{ $name }}.Insert(ctx, params)
 	if err != nil {
-		log.WithField("Error", err).Error("Handler Insert h.{{ $name }}.Insert error of {{ $name }}")
+		log.WithFields(log.Fields{
+			"TraceID": ctx.Value("TraceID"),
+			"Error": err,
+		}).Error("Handler Insert h.{{ $name }}.Insert error of {{ $name }}")
 		return {{ $name }}, err
 	}
 	return {{ $name }}, nil
@@ -116,17 +161,26 @@ func (h *HandlerImpl) Insert(ctx context.Context, params arguments.{{ $Name }}In
 
 // Update ...
 func (h *HandlerImpl) Update(ctx context.Context, params arguments.{{ $Name }}UpdateArgs) (models.{{ $Name }}, error) {
-  log.WithField("params", params).Info("Handler Update of {{ $name }}")
+  log.WithFields(log.Fields{
+		"TraceID":ctx.Value("TraceID"),
+		"params": params,
+	}).Info("Handler Update of {{ $name }}")
 	var (
 		{{ $name }} models.{{ $Name }}
 	)
 	if err := validator.Struct(params); err != nil {
-		log.WithField("Error", err).Error("Handler Update validator.Struct error of {{ $name }}")
+		log.WithFields(log.Fields{
+			"TraceID": ctx.Value("TraceID"),
+			"Error": err,
+		}).Error("Handler Update validator.Struct error of {{ $name }}")
 		return {{ $name }}, err
 	}
 	{{ $name }}, err := h.{{ $name }}.Update(ctx, params)
 	if err != nil {
-		log.WithField("Error", err).Error("Handler Update h.{{ $name }}.Update error of {{ $name }}")
+		log.WithFields(log.Fields{
+			"TraceID": ctx.Value("TraceID"),
+			"Error": err,
+		}).Error("Handler Update h.{{ $name }}.Update error of {{ $name }}")
 		return {{ $name }}, err
 	}
 	return {{ $name }}, nil
@@ -134,17 +188,26 @@ func (h *HandlerImpl) Update(ctx context.Context, params arguments.{{ $Name }}Up
 
 // Delete ...
 func (h *HandlerImpl) Delete(ctx context.Context, params arguments.{{ $Name }}DeleteArgs) (int64, error) {
-  log.WithField("params", params).Info("Handler Delete of {{ $name }}")
+  log.WithFields(log.Fields{
+		"TraceID":ctx.Value("TraceID"),
+		"params": params,
+	}).Info("Handler Delete of {{ $name }}")
 	var (
 		id int64
 	)
 	if err := validator.Struct(params); err != nil {
-		log.WithField("Error", err).Error("Handler Delete validator.Struct error of {{ $name }}")
+		log.WithFields(log.Fields{
+			"TraceID": ctx.Value("TraceID"),
+			"Error": err,
+		}).Error("Handler Delete validator.Struct error of {{ $name }}")
 		return id, err
 	}
 	id, err := h.{{ $name }}.Delete(ctx, params)
 	if err != nil {
-		log.WithField("Error", err).Error("Handler Delete h.{{ $name }}.Delete error of {{ $name }}")
+		log.WithFields(log.Fields{
+			"TraceID": ctx.Value("TraceID"),
+			"Error": err,
+		}).Error("Handler Delete h.{{ $name }}.Delete error of {{ $name }}")
 		return id, err
 	}
 	return id, nil

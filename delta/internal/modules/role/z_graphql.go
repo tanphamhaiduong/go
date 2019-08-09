@@ -160,13 +160,19 @@ type ICoreHandler interface {
 
 // ForwardParams ...
 func (r *ResolverImpl) ForwardParams(params graphql.ResolveParams) (interface{}, error) {
-	log.WithField("params", params).Info("Resolver ForwardParams of role")
+	log.WithFields(log.Fields{
+		"TraceID": params.Context.Value("TraceID"),
+		"params":  params,
+	}).Info("Resolver ForwardParams of role")
 	return params.Args, nil
 }
 
 // GetByID ...
 func (r *ResolverImpl) GetByID(params graphql.ResolveParams) (interface{}, error) {
-	log.WithField("params", params).Info("Resolver GetByID of role")
+	log.WithFields(log.Fields{
+		"TraceID": params.Context.Value("TraceID"),
+		"params":  params,
+	}).Info("Resolver GetByID of role")
 	// parse params
 	args := arguments.RoleGetByIDArgs{}
 	if err := utils.Parse(params.Args, &args); err != nil {
@@ -181,7 +187,10 @@ func (r *ResolverImpl) GetByID(params graphql.ResolveParams) (interface{}, error
 
 // Count ...
 func (r *ResolverImpl) Count(params graphql.ResolveParams) (interface{}, error) {
-	log.WithField("params", params).Info("Resolver Count of role")
+	log.WithFields(log.Fields{
+		"TraceID": params.Context.Value("TraceID"),
+		"params":  params,
+	}).Info("Resolver Count of role")
 	// parse params
 	args := arguments.RoleCountArgs{}
 	err := utils.Parse(params.Source.(map[string]interface{}), &args)
@@ -197,17 +206,26 @@ func (r *ResolverImpl) Count(params graphql.ResolveParams) (interface{}, error) 
 
 // List ...
 func (r *ResolverImpl) List(params graphql.ResolveParams) (interface{}, error) {
-	log.WithField("params", params).Info("Resolver List of role")
+	log.WithFields(log.Fields{
+		"TraceID": params.Context.Value("TraceID"),
+		"params":  params,
+	}).Info("Resolver List of role")
 	// parse params
 	args := arguments.RoleListArgs{}
 	err := utils.Parse(params.Source.(map[string]interface{}), &args)
 	if err != nil {
-		log.WithField("Error", err).Error("Resolver List utils.Parse role")
+		log.WithFields(log.Fields{
+			"TraceID": params.Context.Value("TraceID"),
+			"Error":   err,
+		}).Error("Resolver List utils.Parse role")
 		return nil, err
 	}
 	response, err := r.role.List(params.Context, args)
 	if err != nil {
-		log.WithField("Error", err).Error("Resolver List r.role.List role")
+		log.WithFields(log.Fields{
+			"TraceID": params.Context.Value("TraceID"),
+			"Error":   err,
+		}).Error("Resolver List r.role.List role")
 		return nil, err
 	}
 	return response, nil
@@ -215,17 +233,26 @@ func (r *ResolverImpl) List(params graphql.ResolveParams) (interface{}, error) {
 
 // Insert ...
 func (r *ResolverImpl) Insert(params graphql.ResolveParams) (interface{}, error) {
-	log.WithField("params", params).Info("Resolver Insert of role")
+	log.WithFields(log.Fields{
+		"TraceID": params.Context.Value("TraceID"),
+		"params":  params,
+	}).Info("Resolver Insert of role")
 	// parse params
 	args := arguments.RoleInsertArgs{}
 	err := utils.Parse(params.Args, &args)
 	if err != nil {
-		log.WithField("Error", err).Error("Resolver Insert utils.Parse role")
+		log.WithFields(log.Fields{
+			"TraceID": params.Context.Value("TraceID"),
+			"Error":   err,
+		}).Error("Resolver Insert utils.Parse role")
 		return nil, err
 	}
 	response, err := r.role.Insert(params.Context, args)
 	if err != nil {
-		log.WithField("Error", err).Error("Resolver Insert r.role.Insert role")
+		log.WithFields(log.Fields{
+			"TraceID": params.Context.Value("TraceID"),
+			"Error":   err,
+		}).Error("Resolver Insert r.role.Insert role")
 		return nil, err
 	}
 	return response, nil
@@ -233,17 +260,26 @@ func (r *ResolverImpl) Insert(params graphql.ResolveParams) (interface{}, error)
 
 // Update ...
 func (r *ResolverImpl) Update(params graphql.ResolveParams) (interface{}, error) {
-	log.WithField("params", params).Info("Resolver Update of role")
+	log.WithFields(log.Fields{
+		"TraceID": params.Context.Value("TraceID"),
+		"params":  params,
+	}).Info("Resolver Update of role")
 	// parse params
 	args := arguments.RoleUpdateArgs{}
 	err := utils.Parse(params.Args, &args)
 	if err != nil {
-		log.WithField("Error", err).Error("Resolver Update utils.Parse role")
+		log.WithFields(log.Fields{
+			"TraceID": params.Context.Value("TraceID"),
+			"Error":   err,
+		}).Error("Resolver Update utils.Parse role")
 		return nil, err
 	}
 	response, err := r.role.Update(params.Context, args)
 	if err != nil {
-		log.WithField("Error", err).Error("Resolver Update r.role.Update role")
+		log.WithFields(log.Fields{
+			"TraceID": params.Context.Value("TraceID"),
+			"Error":   err,
+		}).Error("Resolver Update r.role.Update role")
 		return nil, err
 	}
 	return response, nil
@@ -251,17 +287,26 @@ func (r *ResolverImpl) Update(params graphql.ResolveParams) (interface{}, error)
 
 // Delete ...
 func (r *ResolverImpl) Delete(params graphql.ResolveParams) (interface{}, error) {
-	log.WithField("params", params).Info("Resolver Delete of role")
+	log.WithFields(log.Fields{
+		"TraceID": params.Context.Value("TraceID"),
+		"params":  params,
+	}).Info("Resolver Delete of role")
 	// parse params
 	args := arguments.RoleDeleteArgs{}
 	err := utils.Parse(params.Args, &args)
 	if err != nil {
-		log.WithField("Error", err).Error("Resolver Delete utils.Parse role")
+		log.WithFields(log.Fields{
+			"TraceID": params.Context.Value("TraceID"),
+			"Error":   err,
+		}).Error("Resolver Delete utils.Parse role")
 		return nil, err
 	}
 	response, err := r.role.Delete(params.Context, args)
 	if err != nil {
-		log.WithField("Error", err).Error("Resolver Delete r.role.Delete role")
+		log.WithFields(log.Fields{
+			"TraceID": params.Context.Value("TraceID"),
+			"Error":   err,
+		}).Error("Resolver Delete r.role.Delete role")
 		return nil, err
 	}
 	return response, nil

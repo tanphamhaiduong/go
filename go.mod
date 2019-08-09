@@ -15,6 +15,7 @@ require (
 	github.com/golang/protobuf v1.3.2
 	github.com/google/btree v1.0.0 // indirect
 	github.com/google/pprof v0.0.0-20190515194954-54271f7e092f // indirect
+	github.com/google/uuid v1.1.1
 	github.com/gorilla/mux v1.7.2
 	github.com/graphql-go/graphql v0.7.8
 	github.com/graphql-go/handler v0.2.3

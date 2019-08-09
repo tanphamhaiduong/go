@@ -1,9 +1,13 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"os"
+	"time"
+
+	"github.com/google/uuid"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -25,6 +29,24 @@ func chainMiddleware(mw ...middleware) middleware {
 			last(w, r)
 		}
 	}
+}
+
+func withTimeout(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx, cancel := context.WithTimeout(r.Context(), time.Duration(60*time.Second))
+		defer cancel()
+		r = r.WithContext(ctx)
+		next.ServeHTTP(w, r)
+	})
+}
+
+func withTraceID(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		traceID, _ := uuid.NewRandom()
+		ctx := context.WithValue(r.Context(), "TraceID", traceID.String())
+		r = r.WithContext(ctx)
+		next.ServeHTTP(w, r)
+	})
 }
 
 func withLogging(next http.Handler) http.Handler {

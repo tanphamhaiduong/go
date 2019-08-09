@@ -160,13 +160,19 @@ type ICoreHandler interface {
 
 // ForwardParams ...
 func (r *ResolverImpl) ForwardParams(params graphql.ResolveParams) (interface{}, error) {
-	log.WithField("params", params).Info("Resolver ForwardParams of permission")
+	log.WithFields(log.Fields{
+		"TraceID": params.Context.Value("TraceID"),
+		"params":  params,
+	}).Info("Resolver ForwardParams of permission")
 	return params.Args, nil
 }
 
 // GetByID ...
 func (r *ResolverImpl) GetByID(params graphql.ResolveParams) (interface{}, error) {
-	log.WithField("params", params).Info("Resolver GetByID of permission")
+	log.WithFields(log.Fields{
+		"TraceID": params.Context.Value("TraceID"),
+		"params":  params,
+	}).Info("Resolver GetByID of permission")
 	// parse params
 	args := arguments.PermissionGetByIDArgs{}
 	if err := utils.Parse(params.Args, &args); err != nil {
@@ -181,7 +187,10 @@ func (r *ResolverImpl) GetByID(params graphql.ResolveParams) (interface{}, error
 
 // Count ...
 func (r *ResolverImpl) Count(params graphql.ResolveParams) (interface{}, error) {
-	log.WithField("params", params).Info("Resolver Count of permission")
+	log.WithFields(log.Fields{
+		"TraceID": params.Context.Value("TraceID"),
+		"params":  params,
+	}).Info("Resolver Count of permission")
 	// parse params
 	args := arguments.PermissionCountArgs{}
 	err := utils.Parse(params.Source.(map[string]interface{}), &args)
@@ -197,17 +206,26 @@ func (r *ResolverImpl) Count(params graphql.ResolveParams) (interface{}, error) 
 
 // List ...
 func (r *ResolverImpl) List(params graphql.ResolveParams) (interface{}, error) {
-	log.WithField("params", params).Info("Resolver List of permission")
+	log.WithFields(log.Fields{
+		"TraceID": params.Context.Value("TraceID"),
+		"params":  params,
+	}).Info("Resolver List of permission")
 	// parse params
 	args := arguments.PermissionListArgs{}
 	err := utils.Parse(params.Source.(map[string]interface{}), &args)
 	if err != nil {
-		log.WithField("Error", err).Error("Resolver List utils.Parse permission")
+		log.WithFields(log.Fields{
+			"TraceID": params.Context.Value("TraceID"),
+			"Error":   err,
+		}).Error("Resolver List utils.Parse permission")
 		return nil, err
 	}
 	response, err := r.permission.List(params.Context, args)
 	if err != nil {
-		log.WithField("Error", err).Error("Resolver List r.permission.List permission")
+		log.WithFields(log.Fields{
+			"TraceID": params.Context.Value("TraceID"),
+			"Error":   err,
+		}).Error("Resolver List r.permission.List permission")
 		return nil, err
 	}
 	return response, nil
@@ -215,17 +233,26 @@ func (r *ResolverImpl) List(params graphql.ResolveParams) (interface{}, error) {
 
 // Insert ...
 func (r *ResolverImpl) Insert(params graphql.ResolveParams) (interface{}, error) {
-	log.WithField("params", params).Info("Resolver Insert of permission")
+	log.WithFields(log.Fields{
+		"TraceID": params.Context.Value("TraceID"),
+		"params":  params,
+	}).Info("Resolver Insert of permission")
 	// parse params
 	args := arguments.PermissionInsertArgs{}
 	err := utils.Parse(params.Args, &args)
 	if err != nil {
-		log.WithField("Error", err).Error("Resolver Insert utils.Parse permission")
+		log.WithFields(log.Fields{
+			"TraceID": params.Context.Value("TraceID"),
+			"Error":   err,
+		}).Error("Resolver Insert utils.Parse permission")
 		return nil, err
 	}
 	response, err := r.permission.Insert(params.Context, args)
 	if err != nil {
-		log.WithField("Error", err).Error("Resolver Insert r.permission.Insert permission")
+		log.WithFields(log.Fields{
+			"TraceID": params.Context.Value("TraceID"),
+			"Error":   err,
+		}).Error("Resolver Insert r.permission.Insert permission")
 		return nil, err
 	}
 	return response, nil
@@ -233,17 +260,26 @@ func (r *ResolverImpl) Insert(params graphql.ResolveParams) (interface{}, error)
 
 // Update ...
 func (r *ResolverImpl) Update(params graphql.ResolveParams) (interface{}, error) {
-	log.WithField("params", params).Info("Resolver Update of permission")
+	log.WithFields(log.Fields{
+		"TraceID": params.Context.Value("TraceID"),
+		"params":  params,
+	}).Info("Resolver Update of permission")
 	// parse params
 	args := arguments.PermissionUpdateArgs{}
 	err := utils.Parse(params.Args, &args)
 	if err != nil {
-		log.WithField("Error", err).Error("Resolver Update utils.Parse permission")
+		log.WithFields(log.Fields{
+			"TraceID": params.Context.Value("TraceID"),
+			"Error":   err,
+		}).Error("Resolver Update utils.Parse permission")
 		return nil, err
 	}
 	response, err := r.permission.Update(params.Context, args)
 	if err != nil {
-		log.WithField("Error", err).Error("Resolver Update r.permission.Update permission")
+		log.WithFields(log.Fields{
+			"TraceID": params.Context.Value("TraceID"),
+			"Error":   err,
+		}).Error("Resolver Update r.permission.Update permission")
 		return nil, err
 	}
 	return response, nil
@@ -251,17 +287,26 @@ func (r *ResolverImpl) Update(params graphql.ResolveParams) (interface{}, error)
 
 // Delete ...
 func (r *ResolverImpl) Delete(params graphql.ResolveParams) (interface{}, error) {
-	log.WithField("params", params).Info("Resolver Delete of permission")
+	log.WithFields(log.Fields{
+		"TraceID": params.Context.Value("TraceID"),
+		"params":  params,
+	}).Info("Resolver Delete of permission")
 	// parse params
 	args := arguments.PermissionDeleteArgs{}
 	err := utils.Parse(params.Args, &args)
 	if err != nil {
-		log.WithField("Error", err).Error("Resolver Delete utils.Parse permission")
+		log.WithFields(log.Fields{
+			"TraceID": params.Context.Value("TraceID"),
+			"Error":   err,
+		}).Error("Resolver Delete utils.Parse permission")
 		return nil, err
 	}
 	response, err := r.permission.Delete(params.Context, args)
 	if err != nil {
-		log.WithField("Error", err).Error("Resolver Delete r.permission.Delete permission")
+		log.WithFields(log.Fields{
+			"TraceID": params.Context.Value("TraceID"),
+			"Error":   err,
+		}).Error("Resolver Delete r.permission.Delete permission")
 		return nil, err
 	}
 	return response, nil

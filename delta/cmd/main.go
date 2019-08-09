@@ -76,7 +76,9 @@ func NewServer(config *Config, resolvers modules.Resolver, handlers modules.Hand
 // Handler ...
 func (s *Server) Handler() http.Handler {
 	r := mux.NewRouter()
+	r.Use(withTraceID)
 	r.Use(withLogging)
+	r.Use(withTimeout)
 	r.Use(withAuth)
 	schema, err := modules.MakeSchema(s.resolvers)
 	if err != nil {
