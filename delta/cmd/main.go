@@ -14,6 +14,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
 	"github.com/graphql-go/handler"
+	"github.com/tanphamhaiduong/go/common/logger"
 	"github.com/tanphamhaiduong/go/delta/internal/database"
 	"github.com/tanphamhaiduong/go/delta/internal/grpcservice"
 	"github.com/tanphamhaiduong/go/delta/internal/modules"
@@ -205,6 +206,20 @@ func main() {
 		rolepermissionHandler,
 		userHandler,
 	)
+
+	logConfig := logger.Configuration{
+		EnableConsole:     true,
+		ConsoleLevel:      logger.Debug,
+		ConsoleJSONFormat: true,
+		EnableFile:        true,
+		FileLevel:         logger.Info,
+		FileJSONFormat:    true,
+		FileLocation:      logFileName(),
+	}
+	err = logger.NewLogger(logConfig, logger.InstanceZapLogger)
+	if err != nil {
+		log.Fatalf("Could not instantiate log %s", err.Error())
+	}
 
 	server := NewServer(config, resolvers, handlers)
 

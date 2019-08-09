@@ -20,6 +20,7 @@ var (
 // MakeSchema ...
 func MakeSchema(resolver Resolver) (graphql.Schema, error) {
 	addToSchema(resolver)
+	addCustomToSchema(resolver)
 	schema, err := graphql.NewSchema(graphql.SchemaConfig{
 		Query:    rootQuery,
 		Mutation: rootMutation,

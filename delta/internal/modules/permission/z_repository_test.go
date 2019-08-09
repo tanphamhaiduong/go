@@ -114,6 +114,7 @@ func (s *PermissionRepositoryTestSuite) TestGetByIDs_Fail() {
 
 func (s *PermissionRepositoryTestSuite) TestSetArgsToListSelectBuilder_Success() {
 	var (
+		ctx    = context.Background()
 		params = arguments.PermissionListArgs{
 			ID:          1,
 			Name:        "mockString",
@@ -130,7 +131,7 @@ func (s *PermissionRepositoryTestSuite) TestSetArgsToListSelectBuilder_Success()
 	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Eq{"name": params.Name}).Where(sq.Eq{"description": params.Description}).Where(sq.Eq{"status": params.Status}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy}).Limit(uint64(params.PageSize)).Offset(uint64(offset))
 	expectSQL, expectArgs, expectErr := expectedSelectBuilder.ToSql()
 	// Actual
-	actual := s.Repository.setArgsToListSelectBuilder(selectBuilder, params)
+	actual := s.Repository.setArgsToListSelectBuilder(ctx, selectBuilder, params)
 	sql, args, err := actual.ToSql()
 	s.Nil(err)
 	s.Equal(expectSQL, sql)
@@ -224,6 +225,7 @@ func (s *PermissionRepositoryTestSuite) TestList_Fail() {
 
 func (s *PermissionRepositoryTestSuite) TestSetArgsToCountSelectBuilder_Success() {
 	var (
+		ctx    = context.Background()
 		params = arguments.PermissionCountArgs{
 			ID:          1,
 			Name:        "mockString",
@@ -237,7 +239,7 @@ func (s *PermissionRepositoryTestSuite) TestSetArgsToCountSelectBuilder_Success(
 	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Eq{"name": params.Name}).Where(sq.Eq{"description": params.Description}).Where(sq.Eq{"status": params.Status}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy})
 	expectSQL, expectArgs, expectErr := expectedSelectBuilder.ToSql()
 	// Actual
-	actual := s.Repository.setArgsToCountSelectBuilder(selectBuilder, params)
+	actual := s.Repository.setArgsToCountSelectBuilder(ctx, selectBuilder, params)
 	sql, args, err := actual.ToSql()
 	s.Nil(err)
 	s.Equal(expectSQL, sql)
@@ -380,6 +382,7 @@ func (s *PermissionRepositoryTestSuite) TestInsert_Fail() {
 
 func (s *PermissionRepositoryTestSuite) TestSetArgsToUpdateBuilder_Success() {
 	var (
+		ctx              = context.Background()
 		sampleID   int64 = 1
 		mockString       = "mockString"
 		status           = "active"
@@ -394,7 +397,7 @@ func (s *PermissionRepositoryTestSuite) TestSetArgsToUpdateBuilder_Success() {
 	)
 	updateBuilder := sq.Update("permission").Where(sq.Eq{"id": *params.ID})
 	expectedSelectBuilder := updateBuilder.Set("name", *params.Name).Set("description", *params.Description).Set("status", *params.Status).Set("created_by", *params.CreatedBy).Set("updated_by", *params.UpdatedBy)
-	actual := s.Repository.setArgsToUpdateBuilder(updateBuilder, params)
+	actual := s.Repository.setArgsToUpdateBuilder(ctx, updateBuilder, params)
 	s.Equal(expectedSelectBuilder, actual)
 }
 

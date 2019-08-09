@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	sq "github.com/Masterminds/squirrel"
-	log "github.com/sirupsen/logrus"
+	"github.com/tanphamhaiduong/go/common/logger"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/database"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
@@ -29,10 +29,10 @@ func (r *RepositoryImpl) scanCompany(row database.IRow, company *models.Company)
 
 // GetByID ...
 func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.CompanyGetByIDArgs) (models.Company, error) {
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
-	}).Info("Repository GetByID of company")
+	}).Infof("Repository GetByID of company")
 	var (
 		company       models.Company
 		selectBuilder = sq.Select(
@@ -46,33 +46,33 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.CompanyGe
 		).From("company").Where(sq.Eq{"id": params.ID})
 	)
 	sql, args, err := selectBuilder.ToSql()
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"SQL":     sql,
 		"Args":    args,
-	}).Info("Repository GetByID build sql string of company")
+	}).Infof("Repository GetByID build sql string of company")
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository GetByID selectBuilder error of company")
+		}).Errorf("Repository GetByID selectBuilder error of company")
 		return company, err
 	}
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository GetByID PrepareContext error of company")
+		}).Errorf("Repository GetByID PrepareContext error of company")
 		return company, err
 	}
 	row := stmt.QueryRowContext(ctx, args...)
 	err = r.scanCompany(row, &company)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository GetByID Scan error of company")
+		}).Errorf("Repository GetByID Scan error of company")
 		return company, err
 	}
 	return company, nil
@@ -80,10 +80,10 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.CompanyGe
 
 // GetByIDs ...
 func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.CompanyGetByIDsArgs) ([]models.Company, error) {
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
-	}).Info("Repository GetByIDs of company")
+	}).Infof("Repository GetByIDs of company")
 	var (
 		companies     []models.Company
 		selectBuilder = sq.Select(
@@ -97,43 +97,43 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.CompanyG
 		).From("company").Where(sq.Eq{"id": params.IDs})
 	)
 	sql, args, err := selectBuilder.ToSql()
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"SQL":     sql,
 		"Args":    args,
-	}).Info("Repository GetByIDs build sql string of company")
+	}).Infof("Repository GetByIDs build sql string of company")
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository GetByIDs selectBuilder error of company")
+		}).Errorf("Repository GetByIDs selectBuilder error of company")
 		return companies, err
 	}
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository GetByIDs PrepareContext error of company")
+		}).Errorf("Repository GetByIDs PrepareContext error of company")
 		return companies, err
 	}
 	rows, err := stmt.QueryContext(ctx, args...)
 	defer rows.Close()
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository GetByIDs QueryContext error of company")
+		}).Errorf("Repository GetByIDs QueryContext error of company")
 		return companies, err
 	}
 	for rows.Next() {
 		company := models.Company{}
 		err := r.scanCompany(rows, &company)
 		if err != nil {
-			log.WithFields(log.Fields{
+			logger.WithFields(logger.Fields{
 				"TraceID": ctx.Value("TraceID"),
 				"Error":   err,
-			}).Error("Repository GetByIDs Scan error of company")
+			}).Errorf("Repository GetByIDs Scan error of company")
 			return companies, err
 		}
 		companies = append(companies, company)
@@ -142,10 +142,11 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.CompanyG
 }
 
 // setArgsToListSelectBuilder ...
-func (r *RepositoryImpl) setArgsToListSelectBuilder(selectBuilder sq.SelectBuilder, params arguments.CompanyListArgs) sq.SelectBuilder {
-	log.WithFields(log.Fields{
-		"params": params,
-	}).Info("Repository setArgsToListSelectBuilder of company")
+func (r *RepositoryImpl) setArgsToListSelectBuilder(ctx context.Context, selectBuilder sq.SelectBuilder, params arguments.CompanyListArgs) sq.SelectBuilder {
+	logger.WithFields(logger.Fields{
+		"TraceID": ctx.Value("TraceID"),
+		"params":  params,
+	}).Infof("Repository setArgsToListSelectBuilder of company")
 	if params.ID != 0 {
 		selectBuilder = selectBuilder.Where(sq.Eq{"id": params.ID})
 	}
@@ -179,10 +180,10 @@ func (r *RepositoryImpl) setArgsToListSelectBuilder(selectBuilder sq.SelectBuild
 
 // List ...
 func (r *RepositoryImpl) List(ctx context.Context, params arguments.CompanyListArgs) ([]models.Company, error) {
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
-	}).Info("Repository List of company")
+	}).Infof("Repository List of company")
 	var (
 		companies     []models.Company
 		selectBuilder = sq.Select(
@@ -195,34 +196,34 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.CompanyListA
 			"api_secret_key",
 		).From("company")
 	)
-	selectBuilderWithArgs := r.setArgsToListSelectBuilder(selectBuilder, params)
+	selectBuilderWithArgs := r.setArgsToListSelectBuilder(ctx, selectBuilder, params)
 	sql, args, err := selectBuilderWithArgs.ToSql()
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"SQL":     sql,
 		"Args":    args,
-	}).Info("Repository List build sql string of company")
+	}).Infof("Repository List build sql string of company")
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository List selectBuilderWithArgs error of company")
+		}).Errorf("Repository List selectBuilderWithArgs error of company")
 		return companies, err
 	}
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository List PrepareContext error of company")
+		}).Errorf("Repository List PrepareContext error of company")
 		return companies, err
 	}
 	rows, err := stmt.QueryContext(ctx, args...)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository List QueryContext error of company")
+		}).Errorf("Repository List QueryContext error of company")
 		return companies, err
 	}
 	defer rows.Close()
@@ -230,10 +231,10 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.CompanyListA
 		company := models.Company{}
 		err := r.scanCompany(rows, &company)
 		if err != nil {
-			log.WithFields(log.Fields{
+			logger.WithFields(logger.Fields{
 				"TraceID": ctx.Value("TraceID"),
 				"Error":   err,
-			}).Error("Repository List Scan error of company")
+			}).Errorf("Repository List Scan error of company")
 			return companies, err
 		}
 		companies = append(companies, company)
@@ -242,10 +243,11 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.CompanyListA
 }
 
 // setArgsToCountSelectBuilder ...
-func (r *RepositoryImpl) setArgsToCountSelectBuilder(selectBuilder sq.SelectBuilder, params arguments.CompanyCountArgs) sq.SelectBuilder {
-	log.WithFields(log.Fields{
-		"params": params,
-	}).Info("Repository setArgsToCountSelectBuilder of company")
+func (r *RepositoryImpl) setArgsToCountSelectBuilder(ctx context.Context, selectBuilder sq.SelectBuilder, params arguments.CompanyCountArgs) sq.SelectBuilder {
+	logger.WithFields(logger.Fields{
+		"TraceID": ctx.Value("TraceID"),
+		"params":  params,
+	}).Infof("Repository setArgsToCountSelectBuilder of company")
 	if params.ID != 0 {
 		selectBuilder = selectBuilder.Where(sq.Eq{"id": params.ID})
 	}
@@ -272,43 +274,43 @@ func (r *RepositoryImpl) setArgsToCountSelectBuilder(selectBuilder sq.SelectBuil
 
 // Count ...
 func (r *RepositoryImpl) Count(ctx context.Context, params arguments.CompanyCountArgs) (int64, error) {
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
-	}).Info("Repository Count of company")
+	}).Infof("Repository Count of company")
 	var (
 		count         int64
 		selectBuilder = sq.Select("COUNT(id)").From("company")
 	)
-	selectBuilderWithArgs := r.setArgsToCountSelectBuilder(selectBuilder, params)
+	selectBuilderWithArgs := r.setArgsToCountSelectBuilder(ctx, selectBuilder, params)
 	sql, args, err := selectBuilderWithArgs.ToSql()
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"SQL":     sql,
 		"Args":    args,
-	}).Info("Repository Count build sql string of company")
+	}).Infof("Repository Count build sql string of company")
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Count selectBuilderWithArgs error of company")
+		}).Errorf("Repository Count selectBuilderWithArgs error of company")
 		return count, err
 	}
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Count PrepareContext error of company")
+		}).Errorf("Repository Count PrepareContext error of company")
 		return count, err
 	}
 	row := stmt.QueryRowContext(ctx, args...)
 	err = row.Scan(&count)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Count Scan error of company")
+		}).Errorf("Repository Count Scan error of company")
 		return count, err
 	}
 	return count, nil
@@ -316,10 +318,10 @@ func (r *RepositoryImpl) Count(ctx context.Context, params arguments.CompanyCoun
 
 // Insert ...
 func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.CompanyInsertArgs) (models.Company, error) {
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
-	}).Info("Repository Insert of company")
+	}).Infof("Repository Insert of company")
 	var (
 		company       models.Company
 		insertBuilder = sq.Insert("company").Columns(
@@ -339,58 +341,58 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.CompanyIns
 		)
 	)
 	sql, args, err := insertBuilder.ToSql()
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"SQL":     sql,
 		"Args":    args,
-	}).Info("Repository Insert build sql string of company")
+	}).Infof("Repository Insert build sql string of company")
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Insert insertBuilder error of company")
+		}).Errorf("Repository Insert insertBuilder error of company")
 		return company, err
 	}
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Insert PrepareContext error of company")
+		}).Errorf("Repository Insert PrepareContext error of company")
 		return company, err
 	}
 	row, err := stmt.ExecContext(ctx, args...)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Insert ExecContext error of company")
+		}).Errorf("Repository Insert ExecContext error of company")
 		return company, err
 	}
 	id, err := row.LastInsertId()
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Insert LastInsertId error of company")
+		}).Errorf("Repository Insert LastInsertId error of company")
 		return company, err
 	}
 	newCompany, err := r.GetByID(ctx, arguments.CompanyGetByIDArgs{ID: id})
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Insert GetByID error of company")
+		}).Errorf("Repository Insert GetByID error of company")
 		return company, err
 	}
 	return newCompany, nil
 }
 
 // setArgsToUpdateBuilder ...
-func (r *RepositoryImpl) setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, params arguments.CompanyUpdateArgs) sq.UpdateBuilder {
-	log.WithFields(log.Fields{
+func (r *RepositoryImpl) setArgsToUpdateBuilder(ctx context.Context, updateBuilder sq.UpdateBuilder, params arguments.CompanyUpdateArgs) sq.UpdateBuilder {
+	logger.WithFields(logger.Fields{
 		"params": params,
-	}).Info("Repository setArgsToUpdateBuilder of company")
+	}).Infof("Repository setArgsToUpdateBuilder of company")
 	if params.Name != nil {
 		updateBuilder = updateBuilder.Set("name", *params.Name)
 	}
@@ -414,66 +416,66 @@ func (r *RepositoryImpl) setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, 
 
 // Update ...
 func (r *RepositoryImpl) Update(ctx context.Context, params arguments.CompanyUpdateArgs) (models.Company, error) {
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
-	}).Info("Repository Update of company")
+	}).Infof("Repository Update of company")
 	var (
 		company       models.Company
 		updateBuilder = sq.Update("company").Where(sq.Eq{"id": *params.ID})
 	)
-	updateBuilderWithArgs := r.setArgsToUpdateBuilder(updateBuilder, params)
+	updateBuilderWithArgs := r.setArgsToUpdateBuilder(ctx, updateBuilder, params)
 
 	sql, args, err := updateBuilderWithArgs.ToSql()
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"SQL":     sql,
 		"Args":    args,
-	}).Info("Repository Update build sql string of company")
+	}).Infof("Repository Update build sql string of company")
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Update updateBuilderWithArgs error of company")
+		}).Errorf("Repository Update updateBuilderWithArgs error of company")
 		return company, err
 	}
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Update PrepareContext error of company")
+		}).Errorf("Repository Update PrepareContext error of company")
 		return company, err
 	}
 	result, err := stmt.ExecContext(ctx, args...)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Update ExecContext error of company")
+		}).Errorf("Repository Update ExecContext error of company")
 		return company, err
 	}
 	rowAffected, err := result.RowsAffected()
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Update RowsAffected error of company")
+		}).Errorf("Repository Update RowsAffected error of company")
 		return company, err
 	}
 	if rowAffected <= 0 {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   fmt.Errorf("error when update record id %d", *params.ID),
-		}).Error("Repository Update rowAffected <= 0 of company")
+		}).Errorf("Repository Update rowAffected <= 0 of company")
 		return company, fmt.Errorf("error when update record id %d", *params.ID)
 	}
 	newCompany, err := r.GetByID(ctx, arguments.CompanyGetByIDArgs{ID: *params.ID})
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Update GetByID error of company")
+		}).Errorf("Repository Update GetByID error of company")
 		return company, err
 	}
 	return newCompany, nil
@@ -481,56 +483,56 @@ func (r *RepositoryImpl) Update(ctx context.Context, params arguments.CompanyUpd
 
 // Delete ...
 func (r *RepositoryImpl) Delete(ctx context.Context, params arguments.CompanyDeleteArgs) (int64, error) {
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
-	}).Info("Repository Delete of company")
+	}).Infof("Repository Delete of company")
 	var (
 		id            int64
 		deleteBuilder = sq.Delete("company").Where(sq.Eq{"id": params.ID})
 	)
 	sql, args, err := deleteBuilder.ToSql()
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"SQL":     sql,
 		"Args":    args,
-	}).Info("Repository Delete build sql string of company")
+	}).Infof("Repository Delete build sql string of company")
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Delete deleteBuilder error of company")
+		}).Errorf("Repository Delete deleteBuilder error of company")
 		return id, err
 	}
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Delete PrepareContext error of company")
+		}).Errorf("Repository Delete PrepareContext error of company")
 		return id, err
 	}
 	result, err := stmt.ExecContext(ctx, args...)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Delete ExecContext error of company")
+		}).Errorf("Repository Delete ExecContext error of company")
 		return id, err
 	}
 	rowAffected, err := result.RowsAffected()
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Delete RowsAffected error of company")
+		}).Errorf("Repository Delete RowsAffected error of company")
 		return id, err
 	}
 	if rowAffected <= 0 {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   fmt.Errorf("not found record by id %d", params.ID),
-		}).Error("Repository Update rowAffected <= 0 of company")
+		}).Errorf("Repository Update rowAffected <= 0 of company")
 		return id, fmt.Errorf("not found record by id %d", params.ID)
 	}
 	return params.ID, nil

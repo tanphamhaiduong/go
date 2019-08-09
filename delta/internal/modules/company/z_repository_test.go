@@ -118,6 +118,7 @@ func (s *CompanyRepositoryTestSuite) TestGetByIDs_Fail() {
 
 func (s *CompanyRepositoryTestSuite) TestSetArgsToListSelectBuilder_Success() {
 	var (
+		ctx    = context.Background()
 		params = arguments.CompanyListArgs{
 			ID:           1,
 			Name:         "mockString",
@@ -135,7 +136,7 @@ func (s *CompanyRepositoryTestSuite) TestSetArgsToListSelectBuilder_Success() {
 	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Like{"name": params.Name}).Where(sq.Eq{"company_code": params.CompanyCode}).Where(sq.Eq{"status": params.Status}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy}).Where(sq.Eq{"api_secret_key": params.ApiSecretKey}).Limit(uint64(params.PageSize)).Offset(uint64(offset))
 	expectSQL, expectArgs, expectErr := expectedSelectBuilder.ToSql()
 	// Actual
-	actual := s.Repository.setArgsToListSelectBuilder(selectBuilder, params)
+	actual := s.Repository.setArgsToListSelectBuilder(ctx, selectBuilder, params)
 	sql, args, err := actual.ToSql()
 	s.Nil(err)
 	s.Equal(expectSQL, sql)
@@ -235,6 +236,7 @@ func (s *CompanyRepositoryTestSuite) TestList_Fail() {
 
 func (s *CompanyRepositoryTestSuite) TestSetArgsToCountSelectBuilder_Success() {
 	var (
+		ctx    = context.Background()
 		params = arguments.CompanyCountArgs{
 			ID:           1,
 			Name:         "mockString",
@@ -249,7 +251,7 @@ func (s *CompanyRepositoryTestSuite) TestSetArgsToCountSelectBuilder_Success() {
 	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Like{"name": params.Name}).Where(sq.Eq{"company_code": params.CompanyCode}).Where(sq.Eq{"status": params.Status}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy}).Where(sq.Eq{"api_secret_key": params.ApiSecretKey})
 	expectSQL, expectArgs, expectErr := expectedSelectBuilder.ToSql()
 	// Actual
-	actual := s.Repository.setArgsToCountSelectBuilder(selectBuilder, params)
+	actual := s.Repository.setArgsToCountSelectBuilder(ctx, selectBuilder, params)
 	sql, args, err := actual.ToSql()
 	s.Nil(err)
 	s.Equal(expectSQL, sql)
@@ -401,6 +403,7 @@ func (s *CompanyRepositoryTestSuite) TestInsert_Fail() {
 
 func (s *CompanyRepositoryTestSuite) TestSetArgsToUpdateBuilder_Success() {
 	var (
+		ctx              = context.Background()
 		sampleID   int64 = 1
 		mockString       = "mockString"
 		status           = "active"
@@ -416,7 +419,7 @@ func (s *CompanyRepositoryTestSuite) TestSetArgsToUpdateBuilder_Success() {
 	)
 	updateBuilder := sq.Update("company").Where(sq.Eq{"id": *params.ID})
 	expectedSelectBuilder := updateBuilder.Set("name", *params.Name).Set("company_code", *params.CompanyCode).Set("status", *params.Status).Set("created_by", *params.CreatedBy).Set("updated_by", *params.UpdatedBy).Set("api_secret_key", *params.ApiSecretKey)
-	actual := s.Repository.setArgsToUpdateBuilder(updateBuilder, params)
+	actual := s.Repository.setArgsToUpdateBuilder(ctx, updateBuilder, params)
 	s.Equal(expectedSelectBuilder, actual)
 }
 

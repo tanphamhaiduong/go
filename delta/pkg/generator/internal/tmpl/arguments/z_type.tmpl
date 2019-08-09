@@ -9,7 +9,7 @@ import (
 
 // {{ $Name }}GetByIDArgs ...
 type {{ $Name }}GetByIDArgs struct {
-	ID int64 `graphql:"id" validate:"required,min=1" faker:"unix_time"`
+	ID int64 `graphql:"id" validate:"required,min=1"`
 }
 
 // {{ $Name }}GetByIDsArgs ...
@@ -20,20 +20,20 @@ type {{ $Name }}GetByIDsArgs struct {
 
 // {{ $Name }}CountArgs ...
 type {{ $Name }}CountArgs struct {
-	ID int64 `graphql:"id" validate:"omitempty,min=1" faker:"unix_time"`
+	ID int64 `graphql:"id" validate:"omitempty,min=1"`
 	{{- range $field := $fields }}
 		{{- if not $field.IsIDField }}
-			{{ $field.Name }} {{ $field.GoType }} `graphql:"{{ $field.Name | ToLowerCamelCase }}" {{ $field.Validate }} {{ $field.FakerTag }}`
+			{{ $field.Name }} {{ $field.GoType }} `graphql:"{{ $field.Name | ToLowerCamelCase }}" {{ $field.Validate }}`
 		{{- end }}
 	{{- end }}
 }
 
 // {{ $Name }}ListArgs ...
 type {{ $Name }}ListArgs struct {
-	ID int64 `graphql:"id" validate:"omitempty,min=1" faker:"unix_time"`
+	ID int64 `graphql:"id" validate:"omitempty,min=1"`
 	{{- range $field := $fields }}
 		{{- if not $field.IsIDField }}
-			{{ $field.Name }} {{ $field.GoType }} `graphql:"{{ $field.Name | ToLowerCamelCase }}" {{ $field.Validate }} {{ $field.FakerTag }}`
+			{{ $field.Name }} {{ $field.GoType }} `graphql:"{{ $field.Name | ToLowerCamelCase }}" {{ $field.Validate }}`
 		{{- end }}
 	{{- end }}
 	Page int64 `graphql:"page" validate:"required,min=1"`
@@ -44,7 +44,7 @@ type {{ $Name }}ListArgs struct {
 type {{ $Name }}InsertArgs struct {
 	{{- range $field := $fields }}
 		{{- if not $field.IsIDField }}
-			{{ $field.Name }} {{ $field.GoType }} `graphql:"{{ $field.Name | ToLowerCamelCase }}" {{ $field.Validate }} {{ $field.FakerTag }}`
+			{{ $field.Name }} {{ $field.GoType }} `graphql:"{{ $field.Name | ToLowerCamelCase }}" {{ $field.Validate }}`
 		{{- end }}
 	{{- end }}
 }
@@ -52,11 +52,11 @@ type {{ $Name }}InsertArgs struct {
 // {{ $Name }}UpdateArgs ...
 type {{ $Name }}UpdateArgs struct {
 	{{- range $field := $fields }}
-		{{ $field.Name }} *{{ $field.GoType }} `graphql:"{{ $field.Name | ToLowerCamelCase }}" {{ $field.Validate }} {{ $field.FakerTag }}`
+		{{ $field.Name }} *{{ $field.GoType }} `graphql:"{{ $field.Name | ToLowerCamelCase }}" {{ $field.Validate }}`
 	{{- end }}
 }
 
 // {{ $Name }}DeleteArgs ...
 type {{ $Name }}DeleteArgs struct {
-	ID int64 `graphql:"id" validate:"required,min=1" faker:"unix_time"`
+	ID int64 `graphql:"id" validate:"required,min=1"`
 }

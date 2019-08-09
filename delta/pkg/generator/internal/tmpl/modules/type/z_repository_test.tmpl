@@ -108,6 +108,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestGetByIDs_Fail() {
 
 func (s *{{ $Name }}RepositoryTestSuite) TestSetArgsToListSelectBuilder_Success() {
 	var (
+		ctx = context.Background()
 		params = arguments.{{ $Name }}ListArgs{
 			{{- range $field := $fields }}
 				{{ $field.Name }}:
@@ -129,7 +130,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestSetArgsToListSelectBuilder_Success(
 	expectedSelectBuilder := selectBuilder{{ range $field := $fields }}.Where(sq.{{ $field.QueryType }}{ "{{ $field.Name | ToSnakeCase }}": params.{{ $field.Name }} }){{ end }}.Limit(uint64(params.PageSize)).Offset(uint64(offset))
 	expectSQL, expectArgs, expectErr := expectedSelectBuilder.ToSql()
 	// Actual
-	actual := s.Repository.setArgsToListSelectBuilder(selectBuilder, params)
+	actual := s.Repository.setArgsToListSelectBuilder(ctx, selectBuilder, params)
 	sql, args, err := actual.ToSql()
 	s.Nil(err)
 	s.Equal(expectSQL, sql)
@@ -221,6 +222,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestList_Fail() {
 
 func (s *{{ $Name }}RepositoryTestSuite) TestSetArgsToCountSelectBuilder_Success() {
 	var (
+		ctx = context.Background()
 		params = arguments.{{ $Name }}CountArgs{
 			{{- range $field := $fields }}
 				{{ $field.Name }}:
@@ -239,7 +241,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestSetArgsToCountSelectBuilder_Success
 	expectedSelectBuilder := selectBuilder{{ range $field := $fields }}.Where(sq.{{ $field.QueryType }}{ "{{ $field.Name | ToSnakeCase }}": params.{{ $field.Name }} }){{ end }}
 	expectSQL, expectArgs, expectErr := expectedSelectBuilder.ToSql()
 	// Actual
-	actual := s.Repository.setArgsToCountSelectBuilder(selectBuilder, params)
+	actual := s.Repository.setArgsToCountSelectBuilder(ctx, selectBuilder, params)
 	sql, args, err := actual.ToSql()
 	s.Nil(err)
 	s.Equal(expectSQL, sql)
@@ -402,6 +404,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestInsert_Fail() {
 
 func (s *{{ $Name }}RepositoryTestSuite) TestSetArgsToUpdateBuilder_Success() {
 	var (
+		ctx = context.Background()
 		sampleID int64 = 1
 		mockString = "mockString"
 		{{- range $field := $fields }}
@@ -425,7 +428,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestSetArgsToUpdateBuilder_Success() {
 	)
 	updateBuilder := sq.Update("{{ $name }}").Where(sq.Eq{"id": *params.ID})
 	expectedSelectBuilder := updateBuilder{{ range $field := $fields }}{{ if not $field.IsIDField }}.Set("{{ $field.Name | ToSnakeCase }}", *params.{{ $field.Name }} ){{ end }}{{ end }}
-	actual := s.Repository.setArgsToUpdateBuilder(updateBuilder, params)
+	actual := s.Repository.setArgsToUpdateBuilder(ctx, updateBuilder, params)
 	s.Equal(expectedSelectBuilder, actual)
 }
 

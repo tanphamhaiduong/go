@@ -22,7 +22,6 @@ var (
 				GraphQLDescription: "This is user's id",
 				GraphQLRequired:    true,
 				Validate:           `validate:"required,min=1"`,
-				FakerTag:           `faker:"unix_time"`,
 			},
 			{
 				Name:               "Username",
@@ -32,7 +31,6 @@ var (
 				GraphQLDescription: "This is user's username",
 				GraphQLRequired:    true,
 				Validate:           `validate:"omitempty"`,
-				FakerTag:           `faker:"username"`,
 			},
 			{
 				Name:               "Password",
@@ -42,7 +40,6 @@ var (
 				GraphQLDescription: "This is user's password",
 				GraphQLRequired:    true,
 				Validate:           `validate:"omitempty"`,
-				FakerTag:           `faker:"password"`,
 			},
 			{
 				Name:               "Name",
@@ -52,7 +49,6 @@ var (
 				GraphQLDescription: "This is user's name",
 				GraphQLRequired:    true,
 				Validate:           `validate:"omitempty"`,
-				FakerTag:           `faker:"name"`,
 			},
 			{
 				Name:               "DateOfBirth",
@@ -71,7 +67,6 @@ var (
 				GraphQLDescription: "This is user's reference",
 				GraphQLRequired:    true,
 				Validate:           `validate:"omitempty"`,
-				FakerTag:           `faker:"name"`,
 			},
 			{
 				Name:               "AvatarUrl",
@@ -81,7 +76,6 @@ var (
 				GraphQLDescription: "This is user's avatar url",
 				GraphQLRequired:    true,
 				Validate:           `validate:"omitempty"`,
-				FakerTag:           `faker:"domain_name"`,
 			},
 			{
 				Name:               "LicenseNumber",
@@ -91,7 +85,6 @@ var (
 				GraphQLDescription: "This is user's license number",
 				GraphQLRequired:    true,
 				Validate:           `validate:"omitempty"`,
-				FakerTag:           `faker:"phone_number"`,
 			},
 			{
 				Name:               "PhoneNumber",
@@ -101,7 +94,6 @@ var (
 				GraphQLDescription: "This is user's name",
 				GraphQLRequired:    true,
 				Validate:           `validate:"omitempty"`,
-				FakerTag:           `faker:"phone_number"`,
 			},
 			{
 				Name:               "Extension",
@@ -111,7 +103,6 @@ var (
 				GraphQLDescription: "This is user's extension",
 				GraphQLRequired:    true,
 				Validate:           `validate:"omitempty"`,
-				FakerTag:           `faker:"phone_number"`,
 			},
 			{
 				Name:               "TelProvider",
@@ -121,7 +112,6 @@ var (
 				GraphQLDescription: "This is user's tel provider",
 				GraphQLRequired:    true,
 				Validate:           `validate:"omitempty"`,
-				FakerTag:           `faker:"phone_number"`,
 			},
 			{
 				Name:               "TelApi",
@@ -131,7 +121,6 @@ var (
 				GraphQLDescription: "This is user's tel api",
 				GraphQLRequired:    true,
 				Validate:           `validate:"omitempty"`,
-				FakerTag:           `faker:"domain_name"`,
 			},
 			{
 				Name:               "SupervisorId",
@@ -141,7 +130,6 @@ var (
 				GraphQLDescription: "This is user's tel supervisorId",
 				GraphQLRequired:    true,
 				Validate:           `validate:"omitempty"`,
-				FakerTag:           `faker:"unix_time"`,
 			},
 			{
 				Name:               "RoleId",
@@ -151,7 +139,6 @@ var (
 				GraphQLDescription: "This is user's tel roleId",
 				GraphQLRequired:    true,
 				Validate:           `validate:"omitempty"`,
-				FakerTag:           `faker:"unix_time"`,
 			},
 			{
 				Name:               "CompanyID",
@@ -161,7 +148,6 @@ var (
 				GraphQLDescription: "This is user's companyId",
 				GraphQLRequired:    true,
 				Validate:           `validate:"omitempty,min=1"`,
-				FakerTag:           `faker:"unix_time"`,
 			},
 			{
 				Name:               "Status",
@@ -171,7 +157,6 @@ var (
 				GraphQLDescription: "This is user's status",
 				GraphQLRequired:    true,
 				Validate:           `validate:"omitempty,oneof=active inactive"`,
-				FakerTag:           `faker:"word"`,
 			},
 			{
 				Name:               "CreatedBy",
@@ -181,7 +166,6 @@ var (
 				GraphQLDescription: "This is user's createdBy",
 				GraphQLRequired:    false,
 				Validate:           `validate:"omitempty"`,
-				FakerTag:           `faker:"email"`,
 			},
 			{
 				Name:               "UpdatedBy",
@@ -191,7 +175,6 @@ var (
 				GraphQLDescription: "This is user's updatedBy",
 				GraphQLRequired:    false,
 				Validate:           `validate:"omitempty"`,
-				FakerTag:           `faker:"email"`,
 			},
 		},
 	}

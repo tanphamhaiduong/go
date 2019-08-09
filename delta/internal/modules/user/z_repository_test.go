@@ -164,6 +164,7 @@ func (s *UserRepositoryTestSuite) TestGetByIDs_Fail() {
 
 func (s *UserRepositoryTestSuite) TestSetArgsToListSelectBuilder_Success() {
 	var (
+		ctx    = context.Background()
 		params = arguments.UserListArgs{
 			ID:       1,
 			Username: "mockString",
@@ -195,7 +196,7 @@ func (s *UserRepositoryTestSuite) TestSetArgsToListSelectBuilder_Success() {
 	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Eq{"username": params.Username}).Where(sq.Eq{"password": params.Password}).Where(sq.Eq{"name": params.Name}).Where(sq.Eq{"date_of_birth": params.DateOfBirth}).Where(sq.Eq{"reference": params.Reference}).Where(sq.Eq{"avatar_url": params.AvatarUrl}).Where(sq.Eq{"license_number": params.LicenseNumber}).Where(sq.Eq{"phone_number": params.PhoneNumber}).Where(sq.Eq{"extension": params.Extension}).Where(sq.Eq{"tel_provider": params.TelProvider}).Where(sq.Eq{"tel_api": params.TelApi}).Where(sq.Eq{"supervisor_id": params.SupervisorId}).Where(sq.Eq{"role_id": params.RoleId}).Where(sq.Eq{"company_id": params.CompanyID}).Where(sq.Eq{"status": params.Status}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy}).Limit(uint64(params.PageSize)).Offset(uint64(offset))
 	expectSQL, expectArgs, expectErr := expectedSelectBuilder.ToSql()
 	// Actual
-	actual := s.Repository.setArgsToListSelectBuilder(selectBuilder, params)
+	actual := s.Repository.setArgsToListSelectBuilder(ctx, selectBuilder, params)
 	sql, args, err := actual.ToSql()
 	s.Nil(err)
 	s.Equal(expectSQL, sql)
@@ -367,6 +368,7 @@ func (s *UserRepositoryTestSuite) TestList_Fail() {
 
 func (s *UserRepositoryTestSuite) TestSetArgsToCountSelectBuilder_Success() {
 	var (
+		ctx    = context.Background()
 		params = arguments.UserCountArgs{
 			ID:       1,
 			Username: "mockString",
@@ -395,7 +397,7 @@ func (s *UserRepositoryTestSuite) TestSetArgsToCountSelectBuilder_Success() {
 	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Eq{"username": params.Username}).Where(sq.Eq{"password": params.Password}).Where(sq.Eq{"name": params.Name}).Where(sq.Eq{"date_of_birth": params.DateOfBirth}).Where(sq.Eq{"reference": params.Reference}).Where(sq.Eq{"avatar_url": params.AvatarUrl}).Where(sq.Eq{"license_number": params.LicenseNumber}).Where(sq.Eq{"phone_number": params.PhoneNumber}).Where(sq.Eq{"extension": params.Extension}).Where(sq.Eq{"tel_provider": params.TelProvider}).Where(sq.Eq{"tel_api": params.TelApi}).Where(sq.Eq{"supervisor_id": params.SupervisorId}).Where(sq.Eq{"role_id": params.RoleId}).Where(sq.Eq{"company_id": params.CompanyID}).Where(sq.Eq{"status": params.Status}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy})
 	expectSQL, expectArgs, expectErr := expectedSelectBuilder.ToSql()
 	// Actual
-	actual := s.Repository.setArgsToCountSelectBuilder(selectBuilder, params)
+	actual := s.Repository.setArgsToCountSelectBuilder(ctx, selectBuilder, params)
 	sql, args, err := actual.ToSql()
 	s.Nil(err)
 	s.Equal(expectSQL, sql)
@@ -658,6 +660,7 @@ func (s *UserRepositoryTestSuite) TestInsert_Fail() {
 
 func (s *UserRepositoryTestSuite) TestSetArgsToUpdateBuilder_Success() {
 	var (
+		ctx              = context.Background()
 		sampleID   int64 = 1
 		mockString       = "mockString"
 		status           = "active"
@@ -687,7 +690,7 @@ func (s *UserRepositoryTestSuite) TestSetArgsToUpdateBuilder_Success() {
 	)
 	updateBuilder := sq.Update("user").Where(sq.Eq{"id": *params.ID})
 	expectedSelectBuilder := updateBuilder.Set("username", *params.Username).Set("password", *params.Password).Set("name", *params.Name).Set("date_of_birth", *params.DateOfBirth).Set("reference", *params.Reference).Set("avatar_url", *params.AvatarUrl).Set("license_number", *params.LicenseNumber).Set("phone_number", *params.PhoneNumber).Set("extension", *params.Extension).Set("tel_provider", *params.TelProvider).Set("tel_api", *params.TelApi).Set("supervisor_id", *params.SupervisorId).Set("role_id", *params.RoleId).Set("company_id", *params.CompanyID).Set("status", *params.Status).Set("created_by", *params.CreatedBy).Set("updated_by", *params.UpdatedBy)
-	actual := s.Repository.setArgsToUpdateBuilder(updateBuilder, params)
+	actual := s.Repository.setArgsToUpdateBuilder(ctx, updateBuilder, params)
 	s.Equal(expectedSelectBuilder, actual)
 }
 

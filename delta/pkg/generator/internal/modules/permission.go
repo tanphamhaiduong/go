@@ -22,7 +22,6 @@ var (
 				GraphQLDescription: "This is permission's id",
 				GraphQLRequired:    true,
 				Validate:           `validate:"required,min=1"`,
-				FakerTag:           `faker:"unix_time"`,
 			},
 			{
 				Name:               "Name",
@@ -32,7 +31,6 @@ var (
 				GraphQLDescription: "This is permission's name",
 				GraphQLRequired:    true,
 				Validate:           `validate:"omitempty"`,
-				FakerTag:           `faker:"name"`,
 			},
 			{
 				Name:               "Description",
@@ -42,7 +40,6 @@ var (
 				GraphQLDescription: "This is permission's description",
 				GraphQLRequired:    true,
 				Validate:           `validate:"omitempty"`,
-				FakerTag:           `faker:"name"`,
 			},
 			{
 				Name:               "Status",
@@ -52,7 +49,6 @@ var (
 				GraphQLDescription: "This is permission's active",
 				GraphQLRequired:    true,
 				Validate:           `validate:"omitempty,oneof=active inactive"`,
-				FakerTag:           `faker:"word"`,
 			},
 			{
 				Name:               "CreatedBy",
@@ -62,7 +58,6 @@ var (
 				GraphQLDescription: "This is permission's createdBy",
 				GraphQLRequired:    false,
 				Validate:           `validate:"omitempty"`,
-				FakerTag:           `faker:"email"`,
 			},
 			{
 				Name:               "UpdatedBy",
@@ -72,7 +67,6 @@ var (
 				GraphQLDescription: "This is permission's updatedBy",
 				GraphQLRequired:    false,
 				Validate:           `validate:"omitempty"`,
-				FakerTag:           `faker:"email"`,
 			},
 		},
 	}

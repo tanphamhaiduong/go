@@ -5,22 +5,22 @@ import "github.com/go-sql-driver/mysql"
 
 // User ...
 type User struct {
-	ID            int64          `faker:"unix_time"`
-	Username      string         `faker:"username"`
-	Password      string         `faker:"password"`
-	Name          string         `faker:"name"`
-	DateOfBirth   mysql.NullTime ``
-	Reference     string         `faker:"name"`
-	AvatarUrl     string         `faker:"domain_name"`
-	LicenseNumber string         `faker:"phone_number"`
-	PhoneNumber   string         `faker:"phone_number"`
-	Extension     string         `faker:"phone_number"`
-	TelProvider   string         `faker:"phone_number"`
-	TelApi        string         `faker:"domain_name"`
-	SupervisorId  int64          `faker:"unix_time"`
-	RoleId        int64          `faker:"unix_time"`
-	CompanyID     int64          `faker:"unix_time"`
-	Status        string         `faker:"word"`
-	CreatedBy     string         `faker:"email"`
-	UpdatedBy     string         `faker:"email"`
+	ID            int64
+	Username      string
+	Password      string
+	Name          string
+	DateOfBirth   mysql.NullTime
+	Reference     string
+	AvatarUrl     string
+	LicenseNumber string
+	PhoneNumber   string
+	Extension     string
+	TelProvider   string
+	TelApi        string
+	SupervisorId  int64
+	RoleId        int64
+	CompanyID     int64
+	Status        string
+	CreatedBy     string
+	UpdatedBy     string
 }

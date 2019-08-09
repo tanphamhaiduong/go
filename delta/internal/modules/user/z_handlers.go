@@ -4,7 +4,7 @@ package user
 import (
 	"context"
 
-	log "github.com/sirupsen/logrus"
+	"github.com/tanphamhaiduong/go/common/logger"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
 	"github.com/tanphamhaiduong/go/delta/internal/validator"
@@ -12,37 +12,37 @@ import (
 
 // ICoreRepository ...
 type ICoreRepository interface {
-	GetByID(ctx context.Context, params arguments.UserGetByIDArgs) (models.User, error)
-	GetByIDs(ctx context.Context, params arguments.UserGetByIDsArgs) ([]models.User, error)
+	GetByID(ctx context.Context, param arguments.UserGetByIDArgs) (models.User, error)
+	GetByIDs(ctx context.Context, param arguments.UserGetByIDsArgs) ([]models.User, error)
 	List(ctx context.Context, params arguments.UserListArgs) ([]models.User, error)
 	Count(ctx context.Context, params arguments.UserCountArgs) (int64, error)
 	Insert(ctx context.Context, params arguments.UserInsertArgs) (models.User, error)
 	Update(ctx context.Context, params arguments.UserUpdateArgs) (models.User, error)
-	Delete(ctx context.Context, params arguments.UserDeleteArgs) (int64, error)
+	Delete(ctx context.Context, param arguments.UserDeleteArgs) (int64, error)
 }
 
 // GetByID ...
 func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.UserGetByIDArgs) (models.User, error) {
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
-	}).Info("Handler GetByID of user")
+	}).Infof("Handler GetByID of user")
 	var (
 		user models.User
 	)
 	if err := validator.Struct(params); err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Handler GetByID validator.Struct error of user")
+		}).Errorf("Handler GetByID validator.Struct error of user")
 		return user, err
 	}
 	user, err := h.user.GetByID(ctx, params)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Handler GetByID h.user.GetByID error of user")
+		}).Errorf("Handler GetByID h.user.GetByID error of user")
 		return user, err
 	}
 	return user, nil
@@ -50,26 +50,26 @@ func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.UserGetByIDA
 
 // GetByIDs ...
 func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.UserGetByIDsArgs) ([]models.User, error) {
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
-	}).Info("Handler GetByIDs of user")
+	}).Infof("Handler GetByIDs of user")
 	var (
 		users []models.User
 	)
 	if err := validator.Struct(params); err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Handler GetByIDs validator.Struct error of user")
+		}).Errorf("Handler GetByIDs validator.Struct error of user")
 		return users, err
 	}
 	users, err := h.user.GetByIDs(ctx, params)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Handler GetByIDs h.user.GetByIDs error of user")
+		}).Errorf("Handler GetByIDs h.user.GetByIDs error of user")
 		return users, err
 	}
 	return users, nil
@@ -77,26 +77,26 @@ func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.UserGetByID
 
 // Count ...
 func (h *HandlerImpl) Count(ctx context.Context, params arguments.UserCountArgs) (int64, error) {
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
-	}).Info("Handler Count of user")
+	}).Infof("Handler Count of user")
 	var (
 		count int64
 	)
 	if err := validator.Struct(params); err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Handler Count validator.Struct error of user")
+		}).Errorf("Handler Count validator.Struct error of user")
 		return count, err
 	}
 	count, err := h.user.Count(ctx, params)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Handler Count h.user.Count error of user")
+		}).Errorf("Handler Count h.user.Count error of user")
 		return count, err
 	}
 	return count, nil
@@ -104,26 +104,26 @@ func (h *HandlerImpl) Count(ctx context.Context, params arguments.UserCountArgs)
 
 // List ...
 func (h *HandlerImpl) List(ctx context.Context, params arguments.UserListArgs) ([]models.User, error) {
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
-	}).Info("Handler List of user")
+	}).Infof("Handler List of user")
 	var (
 		users []models.User
 	)
 	if err := validator.Struct(params); err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Handler List validator.Struct error of user")
+		}).Errorf("Handler List validator.Struct error of user")
 		return users, err
 	}
 	users, err := h.user.List(ctx, params)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Handler List h.user.List error of user")
+		}).Errorf("Handler List h.user.List error of user")
 		return users, err
 	}
 	return users, nil
@@ -131,26 +131,26 @@ func (h *HandlerImpl) List(ctx context.Context, params arguments.UserListArgs) (
 
 // Insert ...
 func (h *HandlerImpl) Insert(ctx context.Context, params arguments.UserInsertArgs) (models.User, error) {
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
-	}).Info("Handler Insert of user")
+	}).Infof("Handler Insert of user")
 	var (
 		user models.User
 	)
 	if err := validator.Struct(params); err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Handler Insert validator.Struct error of user")
+		}).Errorf("Handler Insert validator.Struct error of user")
 		return user, err
 	}
 	user, err := h.user.Insert(ctx, params)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Handler Insert h.user.Insert error of user")
+		}).Errorf("Handler Insert h.user.Insert error of user")
 		return user, err
 	}
 	return user, nil
@@ -158,53 +158,53 @@ func (h *HandlerImpl) Insert(ctx context.Context, params arguments.UserInsertArg
 
 // Update ...
 func (h *HandlerImpl) Update(ctx context.Context, params arguments.UserUpdateArgs) (models.User, error) {
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
-	}).Info("Handler Update of user")
+	}).Infof("Handler Update of user")
 	var (
 		user models.User
 	)
 	if err := validator.Struct(params); err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Handler Update validator.Struct error of user")
+		}).Errorf("Handler Update validator.Struct error of user")
 		return user, err
 	}
 	user, err := h.user.Update(ctx, params)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Handler Update h.user.Update error of user")
+		}).Errorf("Handler Update h.user.Update error of user")
 		return user, err
 	}
 	return user, nil
 }
 
 // Delete ...
-func (h *HandlerImpl) Delete(ctx context.Context, params arguments.UserDeleteArgs) (int64, error) {
-	log.WithFields(log.Fields{
+func (h *HandlerImpl) Delete(ctx context.Context, param arguments.UserDeleteArgs) (int64, error) {
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
-		"params":  params,
-	}).Info("Handler Delete of user")
+		"param":   param,
+	}).Infof("Handler Delete of user")
 	var (
 		id int64
 	)
-	if err := validator.Struct(params); err != nil {
-		log.WithFields(log.Fields{
+	if err := validator.Struct(param); err != nil {
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Handler Delete validator.Struct error of user")
+		}).Errorf("Handler Delete validator.Struct error of user")
 		return id, err
 	}
-	id, err := h.user.Delete(ctx, params)
+	id, err := h.user.Delete(ctx, param)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Handler Delete h.user.Delete error of user")
+		}).Errorf("Handler Delete h.user.Delete error of user")
 		return id, err
 	}
 	return id, nil

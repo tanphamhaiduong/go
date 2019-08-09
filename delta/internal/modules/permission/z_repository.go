@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	sq "github.com/Masterminds/squirrel"
-	log "github.com/sirupsen/logrus"
+	"github.com/tanphamhaiduong/go/common/logger"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/database"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
@@ -28,10 +28,10 @@ func (r *RepositoryImpl) scanPermission(row database.IRow, permission *models.Pe
 
 // GetByID ...
 func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.PermissionGetByIDArgs) (models.Permission, error) {
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
-	}).Info("Repository GetByID of permission")
+	}).Infof("Repository GetByID of permission")
 	var (
 		permission    models.Permission
 		selectBuilder = sq.Select(
@@ -44,33 +44,33 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.Permissio
 		).From("permission").Where(sq.Eq{"id": params.ID})
 	)
 	sql, args, err := selectBuilder.ToSql()
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"SQL":     sql,
 		"Args":    args,
-	}).Info("Repository GetByID build sql string of permission")
+	}).Infof("Repository GetByID build sql string of permission")
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository GetByID selectBuilder error of permission")
+		}).Errorf("Repository GetByID selectBuilder error of permission")
 		return permission, err
 	}
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository GetByID PrepareContext error of permission")
+		}).Errorf("Repository GetByID PrepareContext error of permission")
 		return permission, err
 	}
 	row := stmt.QueryRowContext(ctx, args...)
 	err = r.scanPermission(row, &permission)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository GetByID Scan error of permission")
+		}).Errorf("Repository GetByID Scan error of permission")
 		return permission, err
 	}
 	return permission, nil
@@ -78,10 +78,10 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.Permissio
 
 // GetByIDs ...
 func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.PermissionGetByIDsArgs) ([]models.Permission, error) {
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
-	}).Info("Repository GetByIDs of permission")
+	}).Infof("Repository GetByIDs of permission")
 	var (
 		permissions   []models.Permission
 		selectBuilder = sq.Select(
@@ -94,43 +94,43 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.Permissi
 		).From("permission").Where(sq.Eq{"id": params.IDs})
 	)
 	sql, args, err := selectBuilder.ToSql()
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"SQL":     sql,
 		"Args":    args,
-	}).Info("Repository GetByIDs build sql string of permission")
+	}).Infof("Repository GetByIDs build sql string of permission")
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository GetByIDs selectBuilder error of permission")
+		}).Errorf("Repository GetByIDs selectBuilder error of permission")
 		return permissions, err
 	}
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository GetByIDs PrepareContext error of permission")
+		}).Errorf("Repository GetByIDs PrepareContext error of permission")
 		return permissions, err
 	}
 	rows, err := stmt.QueryContext(ctx, args...)
 	defer rows.Close()
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository GetByIDs QueryContext error of permission")
+		}).Errorf("Repository GetByIDs QueryContext error of permission")
 		return permissions, err
 	}
 	for rows.Next() {
 		permission := models.Permission{}
 		err := r.scanPermission(rows, &permission)
 		if err != nil {
-			log.WithFields(log.Fields{
+			logger.WithFields(logger.Fields{
 				"TraceID": ctx.Value("TraceID"),
 				"Error":   err,
-			}).Error("Repository GetByIDs Scan error of permission")
+			}).Errorf("Repository GetByIDs Scan error of permission")
 			return permissions, err
 		}
 		permissions = append(permissions, permission)
@@ -139,10 +139,11 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.Permissi
 }
 
 // setArgsToListSelectBuilder ...
-func (r *RepositoryImpl) setArgsToListSelectBuilder(selectBuilder sq.SelectBuilder, params arguments.PermissionListArgs) sq.SelectBuilder {
-	log.WithFields(log.Fields{
-		"params": params,
-	}).Info("Repository setArgsToListSelectBuilder of permission")
+func (r *RepositoryImpl) setArgsToListSelectBuilder(ctx context.Context, selectBuilder sq.SelectBuilder, params arguments.PermissionListArgs) sq.SelectBuilder {
+	logger.WithFields(logger.Fields{
+		"TraceID": ctx.Value("TraceID"),
+		"params":  params,
+	}).Infof("Repository setArgsToListSelectBuilder of permission")
 	if params.ID != 0 {
 		selectBuilder = selectBuilder.Where(sq.Eq{"id": params.ID})
 	}
@@ -173,10 +174,10 @@ func (r *RepositoryImpl) setArgsToListSelectBuilder(selectBuilder sq.SelectBuild
 
 // List ...
 func (r *RepositoryImpl) List(ctx context.Context, params arguments.PermissionListArgs) ([]models.Permission, error) {
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
-	}).Info("Repository List of permission")
+	}).Infof("Repository List of permission")
 	var (
 		permissions   []models.Permission
 		selectBuilder = sq.Select(
@@ -188,34 +189,34 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.PermissionLi
 			"updated_by",
 		).From("permission")
 	)
-	selectBuilderWithArgs := r.setArgsToListSelectBuilder(selectBuilder, params)
+	selectBuilderWithArgs := r.setArgsToListSelectBuilder(ctx, selectBuilder, params)
 	sql, args, err := selectBuilderWithArgs.ToSql()
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"SQL":     sql,
 		"Args":    args,
-	}).Info("Repository List build sql string of permission")
+	}).Infof("Repository List build sql string of permission")
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository List selectBuilderWithArgs error of permission")
+		}).Errorf("Repository List selectBuilderWithArgs error of permission")
 		return permissions, err
 	}
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository List PrepareContext error of permission")
+		}).Errorf("Repository List PrepareContext error of permission")
 		return permissions, err
 	}
 	rows, err := stmt.QueryContext(ctx, args...)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository List QueryContext error of permission")
+		}).Errorf("Repository List QueryContext error of permission")
 		return permissions, err
 	}
 	defer rows.Close()
@@ -223,10 +224,10 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.PermissionLi
 		permission := models.Permission{}
 		err := r.scanPermission(rows, &permission)
 		if err != nil {
-			log.WithFields(log.Fields{
+			logger.WithFields(logger.Fields{
 				"TraceID": ctx.Value("TraceID"),
 				"Error":   err,
-			}).Error("Repository List Scan error of permission")
+			}).Errorf("Repository List Scan error of permission")
 			return permissions, err
 		}
 		permissions = append(permissions, permission)
@@ -235,10 +236,11 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.PermissionLi
 }
 
 // setArgsToCountSelectBuilder ...
-func (r *RepositoryImpl) setArgsToCountSelectBuilder(selectBuilder sq.SelectBuilder, params arguments.PermissionCountArgs) sq.SelectBuilder {
-	log.WithFields(log.Fields{
-		"params": params,
-	}).Info("Repository setArgsToCountSelectBuilder of permission")
+func (r *RepositoryImpl) setArgsToCountSelectBuilder(ctx context.Context, selectBuilder sq.SelectBuilder, params arguments.PermissionCountArgs) sq.SelectBuilder {
+	logger.WithFields(logger.Fields{
+		"TraceID": ctx.Value("TraceID"),
+		"params":  params,
+	}).Infof("Repository setArgsToCountSelectBuilder of permission")
 	if params.ID != 0 {
 		selectBuilder = selectBuilder.Where(sq.Eq{"id": params.ID})
 	}
@@ -262,43 +264,43 @@ func (r *RepositoryImpl) setArgsToCountSelectBuilder(selectBuilder sq.SelectBuil
 
 // Count ...
 func (r *RepositoryImpl) Count(ctx context.Context, params arguments.PermissionCountArgs) (int64, error) {
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
-	}).Info("Repository Count of permission")
+	}).Infof("Repository Count of permission")
 	var (
 		count         int64
 		selectBuilder = sq.Select("COUNT(id)").From("permission")
 	)
-	selectBuilderWithArgs := r.setArgsToCountSelectBuilder(selectBuilder, params)
+	selectBuilderWithArgs := r.setArgsToCountSelectBuilder(ctx, selectBuilder, params)
 	sql, args, err := selectBuilderWithArgs.ToSql()
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"SQL":     sql,
 		"Args":    args,
-	}).Info("Repository Count build sql string of permission")
+	}).Infof("Repository Count build sql string of permission")
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Count selectBuilderWithArgs error of permission")
+		}).Errorf("Repository Count selectBuilderWithArgs error of permission")
 		return count, err
 	}
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Count PrepareContext error of permission")
+		}).Errorf("Repository Count PrepareContext error of permission")
 		return count, err
 	}
 	row := stmt.QueryRowContext(ctx, args...)
 	err = row.Scan(&count)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Count Scan error of permission")
+		}).Errorf("Repository Count Scan error of permission")
 		return count, err
 	}
 	return count, nil
@@ -306,10 +308,10 @@ func (r *RepositoryImpl) Count(ctx context.Context, params arguments.PermissionC
 
 // Insert ...
 func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.PermissionInsertArgs) (models.Permission, error) {
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
-	}).Info("Repository Insert of permission")
+	}).Infof("Repository Insert of permission")
 	var (
 		permission    models.Permission
 		insertBuilder = sq.Insert("permission").Columns(
@@ -327,58 +329,58 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.Permission
 		)
 	)
 	sql, args, err := insertBuilder.ToSql()
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"SQL":     sql,
 		"Args":    args,
-	}).Info("Repository Insert build sql string of permission")
+	}).Infof("Repository Insert build sql string of permission")
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Insert insertBuilder error of permission")
+		}).Errorf("Repository Insert insertBuilder error of permission")
 		return permission, err
 	}
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Insert PrepareContext error of permission")
+		}).Errorf("Repository Insert PrepareContext error of permission")
 		return permission, err
 	}
 	row, err := stmt.ExecContext(ctx, args...)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Insert ExecContext error of permission")
+		}).Errorf("Repository Insert ExecContext error of permission")
 		return permission, err
 	}
 	id, err := row.LastInsertId()
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Insert LastInsertId error of permission")
+		}).Errorf("Repository Insert LastInsertId error of permission")
 		return permission, err
 	}
 	newPermission, err := r.GetByID(ctx, arguments.PermissionGetByIDArgs{ID: id})
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Insert GetByID error of permission")
+		}).Errorf("Repository Insert GetByID error of permission")
 		return permission, err
 	}
 	return newPermission, nil
 }
 
 // setArgsToUpdateBuilder ...
-func (r *RepositoryImpl) setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, params arguments.PermissionUpdateArgs) sq.UpdateBuilder {
-	log.WithFields(log.Fields{
+func (r *RepositoryImpl) setArgsToUpdateBuilder(ctx context.Context, updateBuilder sq.UpdateBuilder, params arguments.PermissionUpdateArgs) sq.UpdateBuilder {
+	logger.WithFields(logger.Fields{
 		"params": params,
-	}).Info("Repository setArgsToUpdateBuilder of permission")
+	}).Infof("Repository setArgsToUpdateBuilder of permission")
 	if params.Name != nil {
 		updateBuilder = updateBuilder.Set("name", *params.Name)
 	}
@@ -399,66 +401,66 @@ func (r *RepositoryImpl) setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, 
 
 // Update ...
 func (r *RepositoryImpl) Update(ctx context.Context, params arguments.PermissionUpdateArgs) (models.Permission, error) {
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
-	}).Info("Repository Update of permission")
+	}).Infof("Repository Update of permission")
 	var (
 		permission    models.Permission
 		updateBuilder = sq.Update("permission").Where(sq.Eq{"id": *params.ID})
 	)
-	updateBuilderWithArgs := r.setArgsToUpdateBuilder(updateBuilder, params)
+	updateBuilderWithArgs := r.setArgsToUpdateBuilder(ctx, updateBuilder, params)
 
 	sql, args, err := updateBuilderWithArgs.ToSql()
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"SQL":     sql,
 		"Args":    args,
-	}).Info("Repository Update build sql string of permission")
+	}).Infof("Repository Update build sql string of permission")
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Update updateBuilderWithArgs error of permission")
+		}).Errorf("Repository Update updateBuilderWithArgs error of permission")
 		return permission, err
 	}
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Update PrepareContext error of permission")
+		}).Errorf("Repository Update PrepareContext error of permission")
 		return permission, err
 	}
 	result, err := stmt.ExecContext(ctx, args...)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Update ExecContext error of permission")
+		}).Errorf("Repository Update ExecContext error of permission")
 		return permission, err
 	}
 	rowAffected, err := result.RowsAffected()
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Update RowsAffected error of permission")
+		}).Errorf("Repository Update RowsAffected error of permission")
 		return permission, err
 	}
 	if rowAffected <= 0 {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   fmt.Errorf("error when update record id %d", *params.ID),
-		}).Error("Repository Update rowAffected <= 0 of permission")
+		}).Errorf("Repository Update rowAffected <= 0 of permission")
 		return permission, fmt.Errorf("error when update record id %d", *params.ID)
 	}
 	newPermission, err := r.GetByID(ctx, arguments.PermissionGetByIDArgs{ID: *params.ID})
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Update GetByID error of permission")
+		}).Errorf("Repository Update GetByID error of permission")
 		return permission, err
 	}
 	return newPermission, nil
@@ -466,56 +468,56 @@ func (r *RepositoryImpl) Update(ctx context.Context, params arguments.Permission
 
 // Delete ...
 func (r *RepositoryImpl) Delete(ctx context.Context, params arguments.PermissionDeleteArgs) (int64, error) {
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
-	}).Info("Repository Delete of permission")
+	}).Infof("Repository Delete of permission")
 	var (
 		id            int64
 		deleteBuilder = sq.Delete("permission").Where(sq.Eq{"id": params.ID})
 	)
 	sql, args, err := deleteBuilder.ToSql()
-	log.WithFields(log.Fields{
+	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"SQL":     sql,
 		"Args":    args,
-	}).Info("Repository Delete build sql string of permission")
+	}).Infof("Repository Delete build sql string of permission")
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Delete deleteBuilder error of permission")
+		}).Errorf("Repository Delete deleteBuilder error of permission")
 		return id, err
 	}
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Delete PrepareContext error of permission")
+		}).Errorf("Repository Delete PrepareContext error of permission")
 		return id, err
 	}
 	result, err := stmt.ExecContext(ctx, args...)
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Delete ExecContext error of permission")
+		}).Errorf("Repository Delete ExecContext error of permission")
 		return id, err
 	}
 	rowAffected, err := result.RowsAffected()
 	if err != nil {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   err,
-		}).Error("Repository Delete RowsAffected error of permission")
+		}).Errorf("Repository Delete RowsAffected error of permission")
 		return id, err
 	}
 	if rowAffected <= 0 {
-		log.WithFields(log.Fields{
+		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
 			"Error":   fmt.Errorf("not found record by id %d", params.ID),
-		}).Error("Repository Update rowAffected <= 0 of permission")
+		}).Errorf("Repository Update rowAffected <= 0 of permission")
 		return id, fmt.Errorf("not found record by id %d", params.ID)
 	}
 	return params.ID, nil

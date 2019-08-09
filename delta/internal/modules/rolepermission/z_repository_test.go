@@ -110,6 +110,7 @@ func (s *RolePermissionRepositoryTestSuite) TestGetByIDs_Fail() {
 
 func (s *RolePermissionRepositoryTestSuite) TestSetArgsToListSelectBuilder_Success() {
 	var (
+		ctx    = context.Background()
 		params = arguments.RolePermissionListArgs{
 			ID:           1,
 			RoleID:       1,
@@ -125,7 +126,7 @@ func (s *RolePermissionRepositoryTestSuite) TestSetArgsToListSelectBuilder_Succe
 	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Eq{"role_id": params.RoleID}).Where(sq.Eq{"permission_id": params.PermissionID}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy}).Limit(uint64(params.PageSize)).Offset(uint64(offset))
 	expectSQL, expectArgs, expectErr := expectedSelectBuilder.ToSql()
 	// Actual
-	actual := s.Repository.setArgsToListSelectBuilder(selectBuilder, params)
+	actual := s.Repository.setArgsToListSelectBuilder(ctx, selectBuilder, params)
 	sql, args, err := actual.ToSql()
 	s.Nil(err)
 	s.Equal(expectSQL, sql)
@@ -213,6 +214,7 @@ func (s *RolePermissionRepositoryTestSuite) TestList_Fail() {
 
 func (s *RolePermissionRepositoryTestSuite) TestSetArgsToCountSelectBuilder_Success() {
 	var (
+		ctx    = context.Background()
 		params = arguments.RolePermissionCountArgs{
 			ID:           1,
 			RoleID:       1,
@@ -225,7 +227,7 @@ func (s *RolePermissionRepositoryTestSuite) TestSetArgsToCountSelectBuilder_Succ
 	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Eq{"role_id": params.RoleID}).Where(sq.Eq{"permission_id": params.PermissionID}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy})
 	expectSQL, expectArgs, expectErr := expectedSelectBuilder.ToSql()
 	// Actual
-	actual := s.Repository.setArgsToCountSelectBuilder(selectBuilder, params)
+	actual := s.Repository.setArgsToCountSelectBuilder(ctx, selectBuilder, params)
 	sql, args, err := actual.ToSql()
 	s.Nil(err)
 	s.Equal(expectSQL, sql)
@@ -359,6 +361,7 @@ func (s *RolePermissionRepositoryTestSuite) TestInsert_Fail() {
 
 func (s *RolePermissionRepositoryTestSuite) TestSetArgsToUpdateBuilder_Success() {
 	var (
+		ctx              = context.Background()
 		sampleID   int64 = 1
 		mockString       = "mockString"
 		params           = arguments.RolePermissionUpdateArgs{
@@ -371,7 +374,7 @@ func (s *RolePermissionRepositoryTestSuite) TestSetArgsToUpdateBuilder_Success()
 	)
 	updateBuilder := sq.Update("rolepermission").Where(sq.Eq{"id": *params.ID})
 	expectedSelectBuilder := updateBuilder.Set("role_id", *params.RoleID).Set("permission_id", *params.PermissionID).Set("created_by", *params.CreatedBy).Set("updated_by", *params.UpdatedBy)
-	actual := s.Repository.setArgsToUpdateBuilder(updateBuilder, params)
+	actual := s.Repository.setArgsToUpdateBuilder(ctx, updateBuilder, params)
 	s.Equal(expectedSelectBuilder, actual)
 }
 

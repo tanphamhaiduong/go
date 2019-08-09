@@ -2,14 +2,14 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"net/http"
-	"os"
+	"strings"
 	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/google/uuid"
-
-	log "github.com/sirupsen/logrus"
+	"github.com/tanphamhaiduong/go/common/logger"
+	"github.com/tanphamhaiduong/go/delta/internal/models"
 )
 
 // middleware provides a convenient mechanism for filtering HTTP requests
@@ -50,32 +50,46 @@ func withTraceID(next http.Handler) http.Handler {
 }
 
 func withLogging(next http.Handler) http.Handler {
-	// Log as JSON instead of the default ASCII formatter.
-	log.SetFormatter(&log.JSONFormatter{})
-
-	// Output to stdout instead of the default stderr
-	// Can be any io.Writer, see below for File example
-	log.SetOutput(os.Stdout)
-
 	// Only log the warning severity or above.
-	log.SetLevel(log.TraceLevel)
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.WithFields(log.Fields{
-			"Method":     r.Method,
-			"Host":       r.Host,
-			"Header":     r.Header,
-			"RemoteAddr": r.RemoteAddr,
-			"Proto":      r.Proto,
-			"URL":        r.URL,
-		}).Info(fmt.Sprintf("Logged connection from %s", r.RemoteAddr))
+		logger.WithFields(logger.Fields{
+			"TraceID":       r.Context().Value("TraceID"),
+			"Host":          r.Host,
+			"RemoteAddr":    r.RemoteAddr,
+			"Method":        r.Method,
+			"RequestURI":    r.RequestURI,
+			"Proto":         r.Proto,
+			"Connection":    r.Header.Get("Connection"),
+			"ContentLength": r.ContentLength,
+			"ContentType":   r.Header.Get("Content-Type"),
+			"UserAgent":     r.Header.Get("User-Agent"),
+			"URL":           r.URL,
+		}).Infof("Logged connection from %s", r.RemoteAddr)
 		next.ServeHTTP(w, r)
+		start := time.Now()
+		duration := time.Now().Sub(start)
+		logger.WithFields(logger.Fields{
+			"TraceID":  r.Context().Value("TraceID"),
+			"Duration": duration,
+		}).Infof("Logged connection from %s", r.RemoteAddr)
 	})
 }
 
 func withAuth(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var (
+			jwtKey        = []byte("test")
+			authorization = r.Header.Get("Authorization")
+			tokenString   = strings.ReplaceAll(authorization, "Bearer ", "")
+		)
+
+		claims := &models.Claims{}
+		_, _ = jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+			return jwtKey, nil
+		})
+		ctx := context.WithValue(r.Context(), "user", claims)
+		r = r.WithContext(ctx)
 		// Implement Get User and inject to request to here
-		log.Info("With Auth")
 		next.ServeHTTP(w, r)
 	})
 }

@@ -6,6 +6,6 @@ package models
 // {{ $Name }} ...
 type {{ $Name }} struct {
 	{{- range $field := $fields }}
-		{{ $field.Name }} {{ $field.GoType }} `{{ $field.FakerTag }}`
+		{{ $field.Name }} {{ $field.GoType }}
 	{{- end }}
 }

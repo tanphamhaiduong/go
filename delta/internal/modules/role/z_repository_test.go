@@ -114,6 +114,7 @@ func (s *RoleRepositoryTestSuite) TestGetByIDs_Fail() {
 
 func (s *RoleRepositoryTestSuite) TestSetArgsToListSelectBuilder_Success() {
 	var (
+		ctx    = context.Background()
 		params = arguments.RoleListArgs{
 			ID:        1,
 			Name:      "mockString",
@@ -130,7 +131,7 @@ func (s *RoleRepositoryTestSuite) TestSetArgsToListSelectBuilder_Success() {
 	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Eq{"name": params.Name}).Where(sq.Eq{"company_id": params.CompanyID}).Where(sq.Eq{"status": params.Status}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy}).Limit(uint64(params.PageSize)).Offset(uint64(offset))
 	expectSQL, expectArgs, expectErr := expectedSelectBuilder.ToSql()
 	// Actual
-	actual := s.Repository.setArgsToListSelectBuilder(selectBuilder, params)
+	actual := s.Repository.setArgsToListSelectBuilder(ctx, selectBuilder, params)
 	sql, args, err := actual.ToSql()
 	s.Nil(err)
 	s.Equal(expectSQL, sql)
@@ -224,6 +225,7 @@ func (s *RoleRepositoryTestSuite) TestList_Fail() {
 
 func (s *RoleRepositoryTestSuite) TestSetArgsToCountSelectBuilder_Success() {
 	var (
+		ctx    = context.Background()
 		params = arguments.RoleCountArgs{
 			ID:        1,
 			Name:      "mockString",
@@ -237,7 +239,7 @@ func (s *RoleRepositoryTestSuite) TestSetArgsToCountSelectBuilder_Success() {
 	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Eq{"name": params.Name}).Where(sq.Eq{"company_id": params.CompanyID}).Where(sq.Eq{"status": params.Status}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy})
 	expectSQL, expectArgs, expectErr := expectedSelectBuilder.ToSql()
 	// Actual
-	actual := s.Repository.setArgsToCountSelectBuilder(selectBuilder, params)
+	actual := s.Repository.setArgsToCountSelectBuilder(ctx, selectBuilder, params)
 	sql, args, err := actual.ToSql()
 	s.Nil(err)
 	s.Equal(expectSQL, sql)
@@ -380,6 +382,7 @@ func (s *RoleRepositoryTestSuite) TestInsert_Fail() {
 
 func (s *RoleRepositoryTestSuite) TestSetArgsToUpdateBuilder_Success() {
 	var (
+		ctx              = context.Background()
 		sampleID   int64 = 1
 		mockString       = "mockString"
 		status           = "active"
@@ -394,7 +397,7 @@ func (s *RoleRepositoryTestSuite) TestSetArgsToUpdateBuilder_Success() {
 	)
 	updateBuilder := sq.Update("role").Where(sq.Eq{"id": *params.ID})
 	expectedSelectBuilder := updateBuilder.Set("name", *params.Name).Set("company_id", *params.CompanyID).Set("status", *params.Status).Set("created_by", *params.CreatedBy).Set("updated_by", *params.UpdatedBy)
-	actual := s.Repository.setArgsToUpdateBuilder(updateBuilder, params)
+	actual := s.Repository.setArgsToUpdateBuilder(ctx, updateBuilder, params)
 	s.Equal(expectedSelectBuilder, actual)
 }
 
