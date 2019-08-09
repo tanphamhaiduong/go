@@ -83,7 +83,11 @@ func (s *{{ $Name }}HandlerTestSuite) TestList_Success() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	params.Status = "active"
+	{{- range $field := $fields }}
+		{{- if $field.IsStatusField }}
+			params.Status = "active"
+		{{- end }}
+	{{- end }}
 	params.Page = 1
 	params.PageSize = 10
 	s.MockI{{ $Name }}.On("List", ctx, params).Return({{ $names }}, nil)
@@ -121,7 +125,11 @@ func (s *{{ $Name }}HandlerTestSuite) TestCount_Success() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	params.Status = "active"
+	{{- range $field := $fields }}
+		{{- if $field.IsStatusField }}
+			params.Status = "active"
+		{{- end }}
+	{{- end }}
 	s.MockI{{ $Name }}.On("Count", ctx, params).Return(count, nil)
 	actual, err := s.{{ $Name }}.Count(ctx, params)
 	s.Nil(err)
@@ -154,7 +162,11 @@ func (s *{{ $Name }}HandlerTestSuite) TestInsert_Success() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	params.Status = "active"
+	{{- range $field := $fields }}
+		{{- if $field.IsStatusField }}
+			params.Status = "active"
+		{{- end }}
+	{{- end }}
 	{{ $name }} := models.{{ $Name }}{
 		ID: sampleID,
 		{{- range $field := $fields }}
@@ -209,7 +221,11 @@ func (s *{{ $Name }}HandlerTestSuite) TestUpdate_Success() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	params.Status = &status
+	{{- range $field := $fields }}
+		{{- if $field.IsStatusField }}
+			params.Status = &status
+		{{- end }}
+	{{- end }}
 	{{ $name }} := models.{{ $Name }}{
 		{{- range $field := $fields }}
 			{{ $field.Name }}: *params.{{ $field.Name }},
