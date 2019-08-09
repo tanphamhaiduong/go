@@ -34,8 +34,19 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.UserGetBy
 		user          models.User
 		selectBuilder = sq.Select(
 			"id",
-			"email",
+			"username",
+			"password",
 			"name",
+			"date_of_birth",
+			"reference",
+			"avatar_url",
+			"license_number",
+			"phone_number",
+			"extension",
+			"tel_provider",
+			"tel_api",
+			"supervisor_id",
+			"role_id",
 			"company_id",
 			"status",
 			"created_by",
@@ -72,8 +83,19 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.UserGetB
 		users         []models.User
 		selectBuilder = sq.Select(
 			"id",
-			"email",
+			"username",
+			"password",
 			"name",
+			"date_of_birth",
+			"reference",
+			"avatar_url",
+			"license_number",
+			"phone_number",
+			"extension",
+			"tel_provider",
+			"tel_api",
+			"supervisor_id",
+			"role_id",
 			"company_id",
 			"status",
 			"created_by",
@@ -102,7 +124,15 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.UserGetB
 	}
 	for rows.Next() {
 		user := models.User{}
-		err := r.scanUser(rows, &user)
+		err := rows.Scan(
+			&user.ID,
+			&user.Email,
+			&user.Name,
+			&user.CompanyID,
+			&user.Status,
+			&user.CreatedBy,
+			&user.UpdatedBy,
+		)
 		if err != nil {
 			log.WithField("Error", err).Error("Repository GetByIDs Scan error of user")
 			return users, err
@@ -118,11 +148,44 @@ func (r *RepositoryImpl) setArgsToListSelectBuilder(selectBuilder sq.SelectBuild
 	if params.ID != 0 {
 		selectBuilder = selectBuilder.Where(sq.Eq{"id": params.ID})
 	}
-	if params.Email != "" {
-		selectBuilder = selectBuilder.Where(sq.Eq{"email": params.Email})
+	if params.Username != "" {
+		selectBuilder = selectBuilder.Where(sq.Eq{"username": params.Username})
+	}
+	if params.Password != "" {
+		selectBuilder = selectBuilder.Where(sq.Eq{"password": params.Password})
 	}
 	if params.Name != "" {
 		selectBuilder = selectBuilder.Where(sq.Eq{"name": params.Name})
+	}
+	if value, _ := params.DateOfBirth.Value(); value != nil {
+		selectBuilder = selectBuilder.Where(sq.Eq{"date_of_birth": params.DateOfBirth})
+	}
+	if params.Reference != "" {
+		selectBuilder = selectBuilder.Where(sq.Eq{"reference": params.Reference})
+	}
+	if params.AvatarUrl != "" {
+		selectBuilder = selectBuilder.Where(sq.Eq{"avatar_url": params.AvatarUrl})
+	}
+	if params.LicenseNumber != "" {
+		selectBuilder = selectBuilder.Where(sq.Eq{"license_number": params.LicenseNumber})
+	}
+	if params.PhoneNumber != "" {
+		selectBuilder = selectBuilder.Where(sq.Eq{"phone_number": params.PhoneNumber})
+	}
+	if params.Extension != "" {
+		selectBuilder = selectBuilder.Where(sq.Eq{"extension": params.Extension})
+	}
+	if params.TelProvider != "" {
+		selectBuilder = selectBuilder.Where(sq.Eq{"tel_provider": params.TelProvider})
+	}
+	if params.TelApi != "" {
+		selectBuilder = selectBuilder.Where(sq.Eq{"tel_api": params.TelApi})
+	}
+	if params.SupervisorId != 0 {
+		selectBuilder = selectBuilder.Where(sq.Eq{"supervisor_id": params.SupervisorId})
+	}
+	if params.RoleId != 0 {
+		selectBuilder = selectBuilder.Where(sq.Eq{"role_id": params.RoleId})
 	}
 	if params.CompanyID != 0 {
 		selectBuilder = selectBuilder.Where(sq.Eq{"company_id": params.CompanyID})
@@ -153,8 +216,19 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.UserListArgs
 		users         []models.User
 		selectBuilder = sq.Select(
 			"id",
-			"email",
+			"username",
+			"password",
 			"name",
+			"date_of_birth",
+			"reference",
+			"avatar_url",
+			"license_number",
+			"phone_number",
+			"extension",
+			"tel_provider",
+			"tel_api",
+			"supervisor_id",
+			"role_id",
 			"company_id",
 			"status",
 			"created_by",
@@ -184,7 +258,15 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.UserListArgs
 	defer rows.Close()
 	for rows.Next() {
 		user := models.User{}
-		err := r.scanUser(rows, &user)
+		err := rows.Scan(
+			&user.ID,
+			&user.Email,
+			&user.Name,
+			&user.CompanyID,
+			&user.Status,
+			&user.CreatedBy,
+			&user.UpdatedBy,
+		)
 		if err != nil {
 			log.WithField("Error", err).Error("Repository List Scan error of user")
 			return users, err
@@ -200,11 +282,44 @@ func (r *RepositoryImpl) setArgsToCountSelectBuilder(selectBuilder sq.SelectBuil
 	if params.ID != 0 {
 		selectBuilder = selectBuilder.Where(sq.Eq{"id": params.ID})
 	}
-	if params.Email != "" {
-		selectBuilder = selectBuilder.Where(sq.Eq{"email": params.Email})
+	if params.Username != "" {
+		selectBuilder = selectBuilder.Where(sq.Eq{"username": params.Username})
+	}
+	if params.Password != "" {
+		selectBuilder = selectBuilder.Where(sq.Eq{"password": params.Password})
 	}
 	if params.Name != "" {
 		selectBuilder = selectBuilder.Where(sq.Eq{"name": params.Name})
+	}
+	if value, _ := params.DateOfBirth.Value(); value != nil {
+		selectBuilder = selectBuilder.Where(sq.Eq{"date_of_birth": params.DateOfBirth})
+	}
+	if params.Reference != "" {
+		selectBuilder = selectBuilder.Where(sq.Eq{"reference": params.Reference})
+	}
+	if params.AvatarUrl != "" {
+		selectBuilder = selectBuilder.Where(sq.Eq{"avatar_url": params.AvatarUrl})
+	}
+	if params.LicenseNumber != "" {
+		selectBuilder = selectBuilder.Where(sq.Eq{"license_number": params.LicenseNumber})
+	}
+	if params.PhoneNumber != "" {
+		selectBuilder = selectBuilder.Where(sq.Eq{"phone_number": params.PhoneNumber})
+	}
+	if params.Extension != "" {
+		selectBuilder = selectBuilder.Where(sq.Eq{"extension": params.Extension})
+	}
+	if params.TelProvider != "" {
+		selectBuilder = selectBuilder.Where(sq.Eq{"tel_provider": params.TelProvider})
+	}
+	if params.TelApi != "" {
+		selectBuilder = selectBuilder.Where(sq.Eq{"tel_api": params.TelApi})
+	}
+	if params.SupervisorId != 0 {
+		selectBuilder = selectBuilder.Where(sq.Eq{"supervisor_id": params.SupervisorId})
+	}
+	if params.RoleId != 0 {
+		selectBuilder = selectBuilder.Where(sq.Eq{"role_id": params.RoleId})
 	}
 	if params.CompanyID != 0 {
 		selectBuilder = selectBuilder.Where(sq.Eq{"company_id": params.CompanyID})
@@ -258,15 +373,37 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.UserInsert
 	var (
 		user          models.User
 		insertBuilder = sq.Insert("user").Columns(
-			"email",
+			"username",
+			"password",
 			"name",
+			"date_of_birth",
+			"reference",
+			"avatar_url",
+			"license_number",
+			"phone_number",
+			"extension",
+			"tel_provider",
+			"tel_api",
+			"supervisor_id",
+			"role_id",
 			"company_id",
 			"status",
 			"created_by",
 			"updated_by",
 		).Values(
-			params.Email,
+			params.Username,
+			params.Password,
 			params.Name,
+			params.DateOfBirth,
+			params.Reference,
+			params.AvatarUrl,
+			params.LicenseNumber,
+			params.PhoneNumber,
+			params.Extension,
+			params.TelProvider,
+			params.TelApi,
+			params.SupervisorId,
+			params.RoleId,
 			params.CompanyID,
 			params.Status,
 			params.CreatedBy,
@@ -308,12 +445,14 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.UserInsert
 // setArgsToUpdateBuilder ...
 func (r *RepositoryImpl) setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, params arguments.UserUpdateArgs) sq.UpdateBuilder {
 	log.WithField("params", params).Info("Repository setArgsToUpdateBuilder of user")
-	if params.Email != nil {
-		updateBuilder = updateBuilder.Set("email", *params.Email)
+	if params.Username != nil {
+		updateBuilder = updateBuilder.Set("username", *params.Username)
 	}
+
 	if params.Name != nil {
 		updateBuilder = updateBuilder.Set("name", *params.Name)
 	}
+
 	if params.CompanyID != nil {
 		updateBuilder = updateBuilder.Set("company_id", *params.CompanyID)
 	}

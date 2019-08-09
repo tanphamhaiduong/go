@@ -18,7 +18,6 @@ import (
 	"github.com/tanphamhaiduong/go/delta/internal/grpcservice"
 	"github.com/tanphamhaiduong/go/delta/internal/modules"
 	"github.com/tanphamhaiduong/go/delta/internal/modules/company"
-	"github.com/tanphamhaiduong/go/delta/internal/modules/feature"
 	"github.com/tanphamhaiduong/go/delta/internal/modules/permission"
 	"github.com/tanphamhaiduong/go/delta/internal/modules/role"
 	"github.com/tanphamhaiduong/go/delta/internal/modules/rolepermission"
@@ -41,7 +40,7 @@ type Config struct {
 // NewConfig ...
 func NewConfig() *Config {
 	return &Config{
-		DatabasePath: "root:root@tcp(127.0.0.1:3306)/delta",
+		DatabasePath: "root:root@tcp(127.0.0.1:3306)/crm",
 		Port:         "8000",
 		GRPCPort:     ":9000",
 		DBDriver:     "mysql",
@@ -172,10 +171,6 @@ func main() {
 	companyRepository := company.NewRepository(db)
 	companyHandler := company.NewHandler(companyRepository)
 	companyResolver := company.NewResolver(companyHandler)
-	// Feature
-	featureRepository := feature.NewRepository(db)
-	featureHandler := feature.NewHandler(featureRepository)
-	featureResolver := feature.NewResolver(featureHandler)
 	// Permission
 	permissionRepository := permission.NewRepository(db)
 	permissionHandler := permission.NewHandler(permissionRepository)
@@ -195,7 +190,6 @@ func main() {
 	// Init Resolvers
 	resolvers := modules.NewResolver(
 		companyResolver,
-		featureResolver,
 		permissionResolver,
 		roleResolver,
 		rolepermissionResolver,
@@ -204,7 +198,6 @@ func main() {
 
 	handlers := modules.NewHandler(
 		companyHandler,
-		featureHandler,
 		permissionHandler,
 		roleHandler,
 		rolepermissionHandler,

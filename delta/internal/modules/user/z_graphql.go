@@ -7,6 +7,7 @@ import (
 	"github.com/graphql-go/graphql"
 	log "github.com/sirupsen/logrus"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
+	"github.com/tanphamhaiduong/go/delta/internal/customgraphql"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
 	"github.com/tanphamhaiduong/go/delta/internal/utils"
 )
@@ -21,13 +22,57 @@ var (
 				Type:        graphql.NewNonNull(graphql.Int),
 				Description: "This is user's id",
 			},
-			"email": &graphql.Field{
+			"username": &graphql.Field{
 				Type:        graphql.NewNonNull(graphql.String),
-				Description: "This is user's email",
+				Description: "This is user's username",
+			},
+			"password": &graphql.Field{
+				Type:        graphql.NewNonNull(graphql.String),
+				Description: "This is user's password",
 			},
 			"name": &graphql.Field{
 				Type:        graphql.NewNonNull(graphql.String),
 				Description: "This is user's name",
+			},
+			"dateOfBirth": &graphql.Field{
+				Type:        customgraphql.NullDateTime,
+				Description: "This is user's name",
+			},
+			"reference": &graphql.Field{
+				Type:        graphql.NewNonNull(graphql.String),
+				Description: "This is user's reference",
+			},
+			"avatarUrl": &graphql.Field{
+				Type:        graphql.NewNonNull(graphql.String),
+				Description: "This is user's avatar url",
+			},
+			"licenseNumber": &graphql.Field{
+				Type:        graphql.NewNonNull(graphql.String),
+				Description: "This is user's license number",
+			},
+			"phoneNumber": &graphql.Field{
+				Type:        graphql.NewNonNull(graphql.String),
+				Description: "This is user's name",
+			},
+			"extension": &graphql.Field{
+				Type:        graphql.NewNonNull(graphql.String),
+				Description: "This is user's extension",
+			},
+			"telProvider": &graphql.Field{
+				Type:        graphql.NewNonNull(graphql.String),
+				Description: "This is user's tel provider",
+			},
+			"telApi": &graphql.Field{
+				Type:        graphql.NewNonNull(graphql.String),
+				Description: "This is user's tel api",
+			},
+			"supervisorId": &graphql.Field{
+				Type:        graphql.NewNonNull(graphql.Int),
+				Description: "This is user's tel supervisorId",
+			},
+			"roleId": &graphql.Field{
+				Type:        graphql.NewNonNull(graphql.Int),
+				Description: "This is user's tel roleId",
 			},
 			"companyId": &graphql.Field{
 				Type:        graphql.NewNonNull(graphql.Int),
@@ -61,13 +106,57 @@ var (
 			Type:        graphql.Int,
 			Description: "This is user's id",
 		},
-		"email": &graphql.ArgumentConfig{
+		"username": &graphql.ArgumentConfig{
 			Type:        graphql.String,
-			Description: "This is user's email",
+			Description: "This is user's username",
+		},
+		"password": &graphql.ArgumentConfig{
+			Type:        graphql.String,
+			Description: "This is user's password",
 		},
 		"name": &graphql.ArgumentConfig{
 			Type:        graphql.String,
 			Description: "This is user's name",
+		},
+		"dateOfBirth": &graphql.ArgumentConfig{
+			Type:        customgraphql.NullDateTime,
+			Description: "This is user's name",
+		},
+		"reference": &graphql.ArgumentConfig{
+			Type:        graphql.String,
+			Description: "This is user's reference",
+		},
+		"avatarUrl": &graphql.ArgumentConfig{
+			Type:        graphql.String,
+			Description: "This is user's avatar url",
+		},
+		"licenseNumber": &graphql.ArgumentConfig{
+			Type:        graphql.String,
+			Description: "This is user's license number",
+		},
+		"phoneNumber": &graphql.ArgumentConfig{
+			Type:        graphql.String,
+			Description: "This is user's name",
+		},
+		"extension": &graphql.ArgumentConfig{
+			Type:        graphql.String,
+			Description: "This is user's extension",
+		},
+		"telProvider": &graphql.ArgumentConfig{
+			Type:        graphql.String,
+			Description: "This is user's tel provider",
+		},
+		"telApi": &graphql.ArgumentConfig{
+			Type:        graphql.String,
+			Description: "This is user's tel api",
+		},
+		"supervisorId": &graphql.ArgumentConfig{
+			Type:        graphql.Int,
+			Description: "This is user's tel supervisorId",
+		},
+		"roleId": &graphql.ArgumentConfig{
+			Type:        graphql.Int,
+			Description: "This is user's tel roleId",
 		},
 		"companyId": &graphql.ArgumentConfig{
 			Type:        graphql.Int,
@@ -98,13 +187,57 @@ var (
 
 	// InsertTypeArgs ...
 	InsertTypeArgs = graphql.FieldConfigArgument{
-		"email": &graphql.ArgumentConfig{
+		"username": &graphql.ArgumentConfig{
 			Type:        graphql.NewNonNull(graphql.String),
-			Description: "This is user's email",
+			Description: "This is user's username",
+		},
+		"password": &graphql.ArgumentConfig{
+			Type:        graphql.NewNonNull(graphql.String),
+			Description: "This is user's password",
 		},
 		"name": &graphql.ArgumentConfig{
 			Type:        graphql.NewNonNull(graphql.String),
 			Description: "This is user's name",
+		},
+		"dateOfBirth": &graphql.ArgumentConfig{
+			Type:        customgraphql.NullDateTime,
+			Description: "This is user's name",
+		},
+		"reference": &graphql.ArgumentConfig{
+			Type:        graphql.NewNonNull(graphql.String),
+			Description: "This is user's reference",
+		},
+		"avatarUrl": &graphql.ArgumentConfig{
+			Type:        graphql.NewNonNull(graphql.String),
+			Description: "This is user's avatar url",
+		},
+		"licenseNumber": &graphql.ArgumentConfig{
+			Type:        graphql.NewNonNull(graphql.String),
+			Description: "This is user's license number",
+		},
+		"phoneNumber": &graphql.ArgumentConfig{
+			Type:        graphql.NewNonNull(graphql.String),
+			Description: "This is user's name",
+		},
+		"extension": &graphql.ArgumentConfig{
+			Type:        graphql.NewNonNull(graphql.String),
+			Description: "This is user's extension",
+		},
+		"telProvider": &graphql.ArgumentConfig{
+			Type:        graphql.NewNonNull(graphql.String),
+			Description: "This is user's tel provider",
+		},
+		"telApi": &graphql.ArgumentConfig{
+			Type:        graphql.NewNonNull(graphql.String),
+			Description: "This is user's tel api",
+		},
+		"supervisorId": &graphql.ArgumentConfig{
+			Type:        graphql.NewNonNull(graphql.Int),
+			Description: "This is user's tel supervisorId",
+		},
+		"roleId": &graphql.ArgumentConfig{
+			Type:        graphql.NewNonNull(graphql.Int),
+			Description: "This is user's tel roleId",
 		},
 		"companyId": &graphql.ArgumentConfig{
 			Type:        graphql.NewNonNull(graphql.Int),
@@ -129,13 +262,57 @@ var (
 		"id": &graphql.ArgumentConfig{
 			Type: graphql.NewNonNull(graphql.Int),
 		},
-		"email": &graphql.ArgumentConfig{
+		"username": &graphql.ArgumentConfig{
 			Type:        graphql.String,
-			Description: "This is user's email",
+			Description: "This is user's username",
+		},
+		"password": &graphql.ArgumentConfig{
+			Type:        graphql.String,
+			Description: "This is user's password",
 		},
 		"name": &graphql.ArgumentConfig{
 			Type:        graphql.String,
 			Description: "This is user's name",
+		},
+		"dateOfBirth": &graphql.ArgumentConfig{
+			Type:        customgraphql.NullDateTime,
+			Description: "This is user's name",
+		},
+		"reference": &graphql.ArgumentConfig{
+			Type:        graphql.String,
+			Description: "This is user's reference",
+		},
+		"avatarUrl": &graphql.ArgumentConfig{
+			Type:        graphql.String,
+			Description: "This is user's avatar url",
+		},
+		"licenseNumber": &graphql.ArgumentConfig{
+			Type:        graphql.String,
+			Description: "This is user's license number",
+		},
+		"phoneNumber": &graphql.ArgumentConfig{
+			Type:        graphql.String,
+			Description: "This is user's name",
+		},
+		"extension": &graphql.ArgumentConfig{
+			Type:        graphql.String,
+			Description: "This is user's extension",
+		},
+		"telProvider": &graphql.ArgumentConfig{
+			Type:        graphql.String,
+			Description: "This is user's tel provider",
+		},
+		"telApi": &graphql.ArgumentConfig{
+			Type:        graphql.String,
+			Description: "This is user's tel api",
+		},
+		"supervisorId": &graphql.ArgumentConfig{
+			Type:        graphql.Int,
+			Description: "This is user's tel supervisorId",
+		},
+		"roleId": &graphql.ArgumentConfig{
+			Type:        graphql.Int,
+			Description: "This is user's tel roleId",
 		},
 		"companyId": &graphql.ArgumentConfig{
 			Type:        graphql.Int,

@@ -151,11 +151,12 @@ func (s *PermissionHandlerTestSuite) TestInsert_Success() {
 	}
 	params.Status = "active"
 	permission := models.Permission{
-		ID:        sampleID,
-		Name:      params.Name,
-		Status:    params.Status,
-		CreatedBy: params.CreatedBy,
-		UpdatedBy: params.UpdatedBy,
+		ID:          sampleID,
+		Name:        params.Name,
+		Description: params.Description,
+		Status:      params.Status,
+		CreatedBy:   params.CreatedBy,
+		UpdatedBy:   params.UpdatedBy,
 	}
 	// Mock Insert
 	s.MockIPermission.On("Insert", ctx, params).Return(permission, nil)
@@ -171,10 +172,11 @@ func (s *PermissionHandlerTestSuite) TestInsert_Fail() {
 	var (
 		ctx    = context.Background()
 		params = arguments.PermissionInsertArgs{
-			Name:      "mockString",
-			Status:    "mockString",
-			CreatedBy: "mockString",
-			UpdatedBy: "mockString",
+			Name:        "mockString",
+			Description: "mockString",
+			Status:      "mockString",
+			CreatedBy:   "mockString",
+			UpdatedBy:   "mockString",
 		}
 		permission = models.Permission{}
 	)
@@ -200,11 +202,12 @@ func (s *PermissionHandlerTestSuite) TestUpdate_Success() {
 	}
 	params.Status = &status
 	permission := models.Permission{
-		ID:        *params.ID,
-		Name:      *params.Name,
-		Status:    *params.Status,
-		CreatedBy: *params.CreatedBy,
-		UpdatedBy: *params.UpdatedBy,
+		ID:          *params.ID,
+		Name:        *params.Name,
+		Description: *params.Description,
+		Status:      *params.Status,
+		CreatedBy:   *params.CreatedBy,
+		UpdatedBy:   *params.UpdatedBy,
 	}
 	// Mock Insert
 	s.MockIPermission.On("Update", ctx, params).Return(permission, nil)
@@ -222,11 +225,12 @@ func (s *PermissionHandlerTestSuite) TestUpdate_Fail() {
 		sampleID   int64 = 1
 		mockString       = "mockString"
 		params           = arguments.PermissionUpdateArgs{
-			ID:        &sampleID,
-			Name:      &mockString,
-			Status:    &mockString,
-			CreatedBy: &mockString,
-			UpdatedBy: &mockString,
+			ID:          &sampleID,
+			Name:        &mockString,
+			Description: &mockString,
+			Status:      &mockString,
+			CreatedBy:   &mockString,
+			UpdatedBy:   &mockString,
 		}
 		permission = models.Permission{}
 	)

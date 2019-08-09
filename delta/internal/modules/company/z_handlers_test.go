@@ -151,11 +151,13 @@ func (s *CompanyHandlerTestSuite) TestInsert_Success() {
 	}
 	params.Status = "active"
 	company := models.Company{
-		ID:        sampleID,
-		Name:      params.Name,
-		Status:    params.Status,
-		CreatedBy: params.CreatedBy,
-		UpdatedBy: params.UpdatedBy,
+		ID:           sampleID,
+		Name:         params.Name,
+		CompanyCode:  params.CompanyCode,
+		Status:       params.Status,
+		CreatedBy:    params.CreatedBy,
+		UpdatedBy:    params.UpdatedBy,
+		ApiSecretKey: params.ApiSecretKey,
 	}
 	// Mock Insert
 	s.MockICompany.On("Insert", ctx, params).Return(company, nil)
@@ -171,10 +173,12 @@ func (s *CompanyHandlerTestSuite) TestInsert_Fail() {
 	var (
 		ctx    = context.Background()
 		params = arguments.CompanyInsertArgs{
-			Name:      "mockString",
-			Status:    "mockString",
-			CreatedBy: "mockString",
-			UpdatedBy: "mockString",
+			Name:         "mockString",
+			CompanyCode:  "mockString",
+			Status:       "mockString",
+			CreatedBy:    "mockString",
+			UpdatedBy:    "mockString",
+			ApiSecretKey: "mockString",
 		}
 		company = models.Company{}
 	)
@@ -200,11 +204,13 @@ func (s *CompanyHandlerTestSuite) TestUpdate_Success() {
 	}
 	params.Status = &status
 	company := models.Company{
-		ID:        *params.ID,
-		Name:      *params.Name,
-		Status:    *params.Status,
-		CreatedBy: *params.CreatedBy,
-		UpdatedBy: *params.UpdatedBy,
+		ID:           *params.ID,
+		Name:         *params.Name,
+		CompanyCode:  *params.CompanyCode,
+		Status:       *params.Status,
+		CreatedBy:    *params.CreatedBy,
+		UpdatedBy:    *params.UpdatedBy,
+		ApiSecretKey: *params.ApiSecretKey,
 	}
 	// Mock Insert
 	s.MockICompany.On("Update", ctx, params).Return(company, nil)
@@ -222,11 +228,13 @@ func (s *CompanyHandlerTestSuite) TestUpdate_Fail() {
 		sampleID   int64 = 1
 		mockString       = "mockString"
 		params           = arguments.CompanyUpdateArgs{
-			ID:        &sampleID,
-			Name:      &mockString,
-			Status:    &mockString,
-			CreatedBy: &mockString,
-			UpdatedBy: &mockString,
+			ID:           &sampleID,
+			Name:         &mockString,
+			CompanyCode:  &mockString,
+			Status:       &mockString,
+			CreatedBy:    &mockString,
+			UpdatedBy:    &mockString,
+			ApiSecretKey: &mockString,
 		}
 		company = models.Company{}
 	)

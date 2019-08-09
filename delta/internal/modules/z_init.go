@@ -4,7 +4,6 @@ package modules
 import (
 	"github.com/graphql-go/graphql"
 	"github.com/tanphamhaiduong/go/delta/internal/modules/company"
-	"github.com/tanphamhaiduong/go/delta/internal/modules/feature"
 	"github.com/tanphamhaiduong/go/delta/internal/modules/permission"
 	"github.com/tanphamhaiduong/go/delta/internal/modules/role"
 	"github.com/tanphamhaiduong/go/delta/internal/modules/rolepermission"
@@ -25,7 +24,6 @@ type IResolver interface {
 // Resolver ...
 type Resolver struct {
 	Company        ICompanyResolver
-	Feature        IFeatureResolver
 	Permission     IPermissionResolver
 	Role           IRoleResolver
 	RolePermission IRolePermissionResolver
@@ -35,7 +33,6 @@ type Resolver struct {
 // Handler ...
 type Handler struct {
 	Company        ICompanyHandler
-	Feature        IFeatureHandler
 	Permission     IPermissionHandler
 	Role           IRoleHandler
 	RolePermission IRolePermissionHandler
@@ -87,51 +84,6 @@ func addToSchema(resolver Resolver) {
 		Description: "This is delete company query",
 		Args:        company.DeleteTypeArgs,
 		Resolve:     resolver.Company.Delete,
-	})
-	rootQuery.AddFieldConfig("feature", &graphql.Field{
-		Type:        feature.Type,
-		Description: "This is GetByID for feature",
-		Args:        feature.GetByIDTypeArgs,
-		Resolve:     resolver.Feature.GetByID,
-	})
-	rootQuery.AddFieldConfig("features", &graphql.Field{
-		Type: graphql.NewObject(graphql.ObjectConfig{
-			Name:        "Features",
-			Description: "This is type features",
-			Fields: graphql.Fields{
-				"records": &graphql.Field{
-					Type:        graphql.NewNonNull(graphql.NewList(feature.Type)),
-					Description: "This is records of features",
-					Resolve:     resolver.Feature.List,
-				},
-				"totalRecords": &graphql.Field{
-					Type:        graphql.NewNonNull(graphql.Int),
-					Description: "This is totalRecords of features query",
-					Resolve:     resolver.Feature.Count,
-				},
-			},
-		}),
-		Description: "This is get list of feature query",
-		Args:        feature.ListTypeArgs,
-		Resolve:     resolver.Feature.ForwardParams,
-	})
-	rootMutation.AddFieldConfig("insertFeature", &graphql.Field{
-		Type:        feature.Type,
-		Description: "This is insert feature query",
-		Args:        feature.InsertTypeArgs,
-		Resolve:     resolver.Feature.Insert,
-	})
-	rootMutation.AddFieldConfig("updateFeature", &graphql.Field{
-		Type:        feature.Type,
-		Description: "This is update feature query",
-		Args:        feature.UpdateTypeArgs,
-		Resolve:     resolver.Feature.Update,
-	})
-	rootMutation.AddFieldConfig("deleteFeature", &graphql.Field{
-		Type:        graphql.NewNonNull(graphql.Int),
-		Description: "This is delete feature query",
-		Args:        feature.DeleteTypeArgs,
-		Resolve:     resolver.Feature.Delete,
 	})
 	rootQuery.AddFieldConfig("permission", &graphql.Field{
 		Type:        permission.Type,
@@ -316,10 +268,9 @@ func addToSchema(resolver Resolver) {
 }
 
 // NewResolver ...
-func NewResolver(company ICompanyResolver, feature IFeatureResolver, permission IPermissionResolver, role IRoleResolver, rolepermission IRolePermissionResolver, user IUserResolver) Resolver {
+func NewResolver(company ICompanyResolver, permission IPermissionResolver, role IRoleResolver, rolepermission IRolePermissionResolver, user IUserResolver) Resolver {
 	return Resolver{
 		Company:        company,
-		Feature:        feature,
 		Permission:     permission,
 		Role:           role,
 		RolePermission: rolepermission,
@@ -328,10 +279,9 @@ func NewResolver(company ICompanyResolver, feature IFeatureResolver, permission 
 }
 
 // NewHandler ...
-func NewHandler(company ICompanyHandler, feature IFeatureHandler, permission IPermissionHandler, role IRoleHandler, rolepermission IRolePermissionHandler, user IUserHandler) Handler {
+func NewHandler(company ICompanyHandler, permission IPermissionHandler, role IRoleHandler, rolepermission IRolePermissionHandler, user IUserHandler) Handler {
 	return Handler{
 		Company:        company,
-		Feature:        feature,
 		Permission:     permission,
 		Role:           role,
 		RolePermission: rolepermission,

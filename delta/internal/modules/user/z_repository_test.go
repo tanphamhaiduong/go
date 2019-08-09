@@ -8,6 +8,7 @@ import (
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/bxcodec/faker"
+	"github.com/go-sql-driver/mysql"
 	"github.com/stretchr/testify/mock"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
@@ -25,6 +26,17 @@ func (s *UserRepositoryTestSuite) TestGetByID_Success() {
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
 	s.MockIStmt.On("QueryRowContext", ctx, mock.Anything).Return(s.MockIRow)
 	s.MockIRow.On("Scan",
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
 		mock.Anything,
 		mock.Anything,
 		mock.Anything,
@@ -104,7 +116,7 @@ func (s *UserRepositoryTestSuite) TestSetArgsToListSelectBuilder_Success() {
 		log.Fatal(err)
 	}
 	offset := utils.CalculateOffsetForPage(params.Page, params.PageSize)
-	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Eq{"email": params.Email}).Where(sq.Eq{"name": params.Name}).Where(sq.Eq{"company_id": params.CompanyID}).Where(sq.Eq{"status": params.Status}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy}).Limit(uint64(params.PageSize)).Offset(uint64(offset))
+	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Eq{"username": params.Username}).Where(sq.Eq{"password": params.Password}).Where(sq.Eq{"name": params.Name}).Where(sq.Eq{"date_of_birth": params.DateOfBirth}).Where(sq.Eq{"reference": params.Reference}).Where(sq.Eq{"avatar_url": params.AvatarUrl}).Where(sq.Eq{"license_number": params.LicenseNumber}).Where(sq.Eq{"phone_number": params.PhoneNumber}).Where(sq.Eq{"extension": params.Extension}).Where(sq.Eq{"tel_provider": params.TelProvider}).Where(sq.Eq{"tel_api": params.TelApi}).Where(sq.Eq{"supervisor_id": params.SupervisorId}).Where(sq.Eq{"role_id": params.RoleId}).Where(sq.Eq{"company_id": params.CompanyID}).Where(sq.Eq{"status": params.Status}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy}).Limit(uint64(params.PageSize)).Offset(uint64(offset))
 	expectSQL, expectArgs, expectErr := expectedSelectBuilder.ToSql()
 	// Actual
 	actual := s.Repository.setArgsToListSelectBuilder(selectBuilder, params)
@@ -172,7 +184,7 @@ func (s *UserRepositoryTestSuite) TestSetArgsToCountSelectBuilder_Success() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Eq{"email": params.Email}).Where(sq.Eq{"name": params.Name}).Where(sq.Eq{"company_id": params.CompanyID}).Where(sq.Eq{"status": params.Status}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy})
+	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Eq{"username": params.Username}).Where(sq.Eq{"password": params.Password}).Where(sq.Eq{"name": params.Name}).Where(sq.Eq{"date_of_birth": params.DateOfBirth}).Where(sq.Eq{"reference": params.Reference}).Where(sq.Eq{"avatar_url": params.AvatarUrl}).Where(sq.Eq{"license_number": params.LicenseNumber}).Where(sq.Eq{"phone_number": params.PhoneNumber}).Where(sq.Eq{"extension": params.Extension}).Where(sq.Eq{"tel_provider": params.TelProvider}).Where(sq.Eq{"tel_api": params.TelApi}).Where(sq.Eq{"supervisor_id": params.SupervisorId}).Where(sq.Eq{"role_id": params.RoleId}).Where(sq.Eq{"company_id": params.CompanyID}).Where(sq.Eq{"status": params.Status}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy})
 	expectSQL, expectArgs, expectErr := expectedSelectBuilder.ToSql()
 	// Actual
 	actual := s.Repository.setArgsToCountSelectBuilder(selectBuilder, params)
@@ -195,6 +207,17 @@ func (s *UserRepositoryTestSuite) TestCount_Success() {
 	}
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
 	s.MockIStmt.On("QueryRowContext", ctx,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
 		mock.Anything,
 		mock.Anything,
 		mock.Anything,
@@ -245,19 +268,41 @@ func (s *UserRepositoryTestSuite) TestInsert_Success() {
 		log.Fatal(err)
 	}
 	user := models.User{
-		ID:        sampleID,
-		Email:     params.Email,
-		Name:      params.Name,
-		CompanyID: params.CompanyID,
-		Status:    params.Status,
-		CreatedBy: params.CreatedBy,
-		UpdatedBy: params.UpdatedBy,
+		ID:            sampleID,
+		Username:      params.Username,
+		Password:      params.Password,
+		Name:          params.Name,
+		DateOfBirth:   params.DateOfBirth,
+		Reference:     params.Reference,
+		AvatarUrl:     params.AvatarUrl,
+		LicenseNumber: params.LicenseNumber,
+		PhoneNumber:   params.PhoneNumber,
+		Extension:     params.Extension,
+		TelProvider:   params.TelProvider,
+		TelApi:        params.TelApi,
+		SupervisorId:  params.SupervisorId,
+		RoleId:        params.RoleId,
+		CompanyID:     params.CompanyID,
+		Status:        params.Status,
+		CreatedBy:     params.CreatedBy,
+		UpdatedBy:     params.UpdatedBy,
 	}
 	//Mock Insert
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
 	s.MockIStmt.On("ExecContext", ctx,
-		params.Email,
+		params.Username,
+		params.Password,
 		params.Name,
+		params.DateOfBirth,
+		params.Reference,
+		params.AvatarUrl,
+		params.LicenseNumber,
+		params.PhoneNumber,
+		params.Extension,
+		params.TelProvider,
+		params.TelApi,
+		params.SupervisorId,
+		params.RoleId,
 		params.CompanyID,
 		params.Status,
 		params.CreatedBy,
@@ -269,6 +314,17 @@ func (s *UserRepositoryTestSuite) TestInsert_Success() {
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
 	s.MockIStmt.On("QueryRowContext", ctx, mock.Anything).Return(s.MockIRow)
 	s.MockIRow.On("Scan",
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
 		mock.Anything,
 		mock.Anything,
 		mock.Anything,
@@ -289,12 +345,23 @@ func (s *UserRepositoryTestSuite) TestInsert_Fail() {
 		ctx            = context.Background()
 		sampleID int64 = 1
 		params         = arguments.UserInsertArgs{
-			Email:     "mockString",
-			Name:      "mockString",
-			CompanyID: 0,
-			Status:    "mockString",
-			CreatedBy: "mockString",
-			UpdatedBy: "mockString",
+			Username:      "mockString",
+			Password:      "mockString",
+			Name:          "mockString",
+			DateOfBirth:   mysql.NullTime{},
+			Reference:     "mockString",
+			AvatarUrl:     "mockString",
+			LicenseNumber: "mockString",
+			PhoneNumber:   "mockString",
+			Extension:     "mockString",
+			TelProvider:   "mockString",
+			TelApi:        "mockString",
+			SupervisorId:  0,
+			RoleId:        0,
+			CompanyID:     0,
+			Status:        "mockString",
+			CreatedBy:     "mockString",
+			UpdatedBy:     "mockString",
 		}
 		user models.User
 	)
@@ -304,8 +371,19 @@ func (s *UserRepositoryTestSuite) TestInsert_Fail() {
 	}
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, errors.New("some errors"))
 	s.MockIStmt.On("ExecContext", ctx,
-		params.Email,
+		params.Username,
+		params.Password,
 		params.Name,
+		params.DateOfBirth,
+		params.Reference,
+		params.AvatarUrl,
+		params.LicenseNumber,
+		params.PhoneNumber,
+		params.Extension,
+		params.TelProvider,
+		params.TelApi,
+		params.SupervisorId,
+		params.RoleId,
 		params.CompanyID,
 		params.Status,
 		params.CreatedBy,
@@ -327,7 +405,7 @@ func (s *UserRepositoryTestSuite) TestSetArgsToUpdateBuilder_Success() {
 		log.Fatal(err)
 	}
 	updateBuilder := sq.Update("user").Where(sq.Eq{"id": *params.ID})
-	expectedSelectBuilder := updateBuilder.Set("email", *params.Email).Set("name", *params.Name).Set("company_id", *params.CompanyID).Set("status", *params.Status).Set("created_by", *params.CreatedBy).Set("updated_by", *params.UpdatedBy)
+	expectedSelectBuilder := updateBuilder.Set("username", *params.Username).Set("password", *params.Password).Set("name", *params.Name).Set("date_of_birth", *params.DateOfBirth).Set("reference", *params.Reference).Set("avatar_url", *params.AvatarUrl).Set("license_number", *params.LicenseNumber).Set("phone_number", *params.PhoneNumber).Set("extension", *params.Extension).Set("tel_provider", *params.TelProvider).Set("tel_api", *params.TelApi).Set("supervisor_id", *params.SupervisorId).Set("role_id", *params.RoleId).Set("company_id", *params.CompanyID).Set("status", *params.Status).Set("created_by", *params.CreatedBy).Set("updated_by", *params.UpdatedBy)
 	actual := s.Repository.setArgsToUpdateBuilder(updateBuilder, params)
 	s.Equal(expectedSelectBuilder, actual)
 }
@@ -343,19 +421,41 @@ func (s *UserRepositoryTestSuite) TestUpdate_Success() {
 		log.Fatal(err)
 	}
 	user := models.User{
-		ID:        *params.ID,
-		Email:     *params.Email,
-		Name:      *params.Name,
-		CompanyID: *params.CompanyID,
-		Status:    *params.Status,
-		CreatedBy: *params.CreatedBy,
-		UpdatedBy: *params.UpdatedBy,
+		ID:            *params.ID,
+		Username:      *params.Username,
+		Password:      *params.Password,
+		Name:          *params.Name,
+		DateOfBirth:   *params.DateOfBirth,
+		Reference:     *params.Reference,
+		AvatarUrl:     *params.AvatarUrl,
+		LicenseNumber: *params.LicenseNumber,
+		PhoneNumber:   *params.PhoneNumber,
+		Extension:     *params.Extension,
+		TelProvider:   *params.TelProvider,
+		TelApi:        *params.TelApi,
+		SupervisorId:  *params.SupervisorId,
+		RoleId:        *params.RoleId,
+		CompanyID:     *params.CompanyID,
+		Status:        *params.Status,
+		CreatedBy:     *params.CreatedBy,
+		UpdatedBy:     *params.UpdatedBy,
 	}
 	// Mock Update
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
 	s.MockIStmt.On("ExecContext", ctx,
-		*params.Email,
+		*params.Username,
+		*params.Password,
 		*params.Name,
+		*params.DateOfBirth,
+		*params.Reference,
+		*params.AvatarUrl,
+		*params.LicenseNumber,
+		*params.PhoneNumber,
+		*params.Extension,
+		*params.TelProvider,
+		*params.TelApi,
+		*params.SupervisorId,
+		*params.RoleId,
 		*params.CompanyID,
 		*params.Status,
 		*params.CreatedBy,
@@ -368,6 +468,17 @@ func (s *UserRepositoryTestSuite) TestUpdate_Success() {
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
 	s.MockIStmt.On("QueryRowContext", ctx, mock.Anything).Return(s.MockIRow)
 	s.MockIRow.On("Scan",
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
 		mock.Anything,
 		mock.Anything,
 		mock.Anything,
@@ -389,13 +500,24 @@ func (s *UserRepositoryTestSuite) TestUpdate_Fail() {
 		sampleID   int64 = 1
 		mockString       = "mockString"
 		params           = arguments.UserUpdateArgs{
-			ID:        &sampleID,
-			Email:     &mockString,
-			Name:      &mockString,
-			CompanyID: &sampleID,
-			Status:    &mockString,
-			CreatedBy: &mockString,
-			UpdatedBy: &mockString,
+			ID:            &sampleID,
+			Username:      &mockString,
+			Password:      &mockString,
+			Name:          &mockString,
+			DateOfBirth:   &mysql.NullTime{},
+			Reference:     &mockString,
+			AvatarUrl:     &mockString,
+			LicenseNumber: &mockString,
+			PhoneNumber:   &mockString,
+			Extension:     &mockString,
+			TelProvider:   &mockString,
+			TelApi:        &mockString,
+			SupervisorId:  &sampleID,
+			RoleId:        &sampleID,
+			CompanyID:     &sampleID,
+			Status:        &mockString,
+			CreatedBy:     &mockString,
+			UpdatedBy:     &mockString,
 		}
 		user models.User
 	)

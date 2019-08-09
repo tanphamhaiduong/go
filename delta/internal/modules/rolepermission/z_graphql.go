@@ -29,10 +29,6 @@ var (
 				Type:        graphql.NewNonNull(graphql.Int),
 				Description: "This is rolePermission's permissionId",
 			},
-			"status": &graphql.Field{
-				Type:        graphql.NewNonNull(graphql.String),
-				Description: "This is role's status",
-			},
 			"createdBy": &graphql.Field{
 				Type:        graphql.String,
 				Description: "This is rolePermission's createdBy",
@@ -65,10 +61,6 @@ var (
 			Type:        graphql.Int,
 			Description: "This is rolePermission's permissionId",
 		},
-		"status": &graphql.ArgumentConfig{
-			Type:        graphql.String,
-			Description: "This is role's status",
-		},
 		"createdBy": &graphql.ArgumentConfig{
 			Type:        graphql.String,
 			Description: "This is rolePermission's createdBy",
@@ -98,10 +90,6 @@ var (
 			Type:        graphql.NewNonNull(graphql.Int),
 			Description: "This is rolePermission's permissionId",
 		},
-		"status": &graphql.ArgumentConfig{
-			Type:        graphql.NewNonNull(graphql.String),
-			Description: "This is role's status",
-		},
 		"createdBy": &graphql.ArgumentConfig{
 			Type:        graphql.String,
 			Description: "This is rolePermission's createdBy",
@@ -124,10 +112,6 @@ var (
 		"permissionId": &graphql.ArgumentConfig{
 			Type:        graphql.Int,
 			Description: "This is rolePermission's permissionId",
-		},
-		"status": &graphql.ArgumentConfig{
-			Type:        graphql.String,
-			Description: "This is role's status",
 		},
 		"createdBy": &graphql.ArgumentConfig{
 			Type:        graphql.String,

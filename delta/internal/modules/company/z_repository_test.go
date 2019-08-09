@@ -30,6 +30,8 @@ func (s *CompanyRepositoryTestSuite) TestGetByID_Success() {
 		mock.Anything,
 		mock.Anything,
 		mock.Anything,
+		mock.Anything,
+		mock.Anything,
 	).Return(nil)
 	s.MockICompany.On("GetByID", ctx, params).Return(company, nil)
 	actual, err := s.Repository.GetByID(ctx, params)
@@ -102,7 +104,7 @@ func (s *CompanyRepositoryTestSuite) TestSetArgsToListSelectBuilder_Success() {
 		log.Fatal(err)
 	}
 	offset := utils.CalculateOffsetForPage(params.Page, params.PageSize)
-	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Like{"name": params.Name}).Where(sq.Eq{"status": params.Status}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy}).Limit(uint64(params.PageSize)).Offset(uint64(offset))
+	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Like{"name": params.Name}).Where(sq.Eq{"company_code": params.CompanyCode}).Where(sq.Eq{"status": params.Status}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy}).Where(sq.Eq{"api_secret_key": params.ApiSecretKey}).Limit(uint64(params.PageSize)).Offset(uint64(offset))
 	expectSQL, expectArgs, expectErr := expectedSelectBuilder.ToSql()
 	// Actual
 	actual := s.Repository.setArgsToListSelectBuilder(selectBuilder, params)
@@ -170,7 +172,7 @@ func (s *CompanyRepositoryTestSuite) TestSetArgsToCountSelectBuilder_Success() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Like{"name": params.Name}).Where(sq.Eq{"status": params.Status}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy})
+	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Like{"name": params.Name}).Where(sq.Eq{"company_code": params.CompanyCode}).Where(sq.Eq{"status": params.Status}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy}).Where(sq.Eq{"api_secret_key": params.ApiSecretKey})
 	expectSQL, expectArgs, expectErr := expectedSelectBuilder.ToSql()
 	// Actual
 	actual := s.Repository.setArgsToCountSelectBuilder(selectBuilder, params)
@@ -193,6 +195,8 @@ func (s *CompanyRepositoryTestSuite) TestCount_Success() {
 	}
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
 	s.MockIStmt.On("QueryRowContext", ctx,
+		mock.Anything,
+		mock.Anything,
 		mock.Anything,
 		mock.Anything,
 		mock.Anything,
@@ -241,19 +245,23 @@ func (s *CompanyRepositoryTestSuite) TestInsert_Success() {
 		log.Fatal(err)
 	}
 	company := models.Company{
-		ID:        sampleID,
-		Name:      params.Name,
-		Status:    params.Status,
-		CreatedBy: params.CreatedBy,
-		UpdatedBy: params.UpdatedBy,
+		ID:           sampleID,
+		Name:         params.Name,
+		CompanyCode:  params.CompanyCode,
+		Status:       params.Status,
+		CreatedBy:    params.CreatedBy,
+		UpdatedBy:    params.UpdatedBy,
+		ApiSecretKey: params.ApiSecretKey,
 	}
 	//Mock Insert
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
 	s.MockIStmt.On("ExecContext", ctx,
 		params.Name,
+		params.CompanyCode,
 		params.Status,
 		params.CreatedBy,
 		params.UpdatedBy,
+		params.ApiSecretKey,
 	).Return(s.MockIResult, nil)
 	s.MockIResult.On("LastInsertId").Return(sampleID, nil)
 	s.MockICompany.On("Insert", ctx, params).Return(company, nil)
@@ -261,6 +269,8 @@ func (s *CompanyRepositoryTestSuite) TestInsert_Success() {
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
 	s.MockIStmt.On("QueryRowContext", ctx, mock.Anything).Return(s.MockIRow)
 	s.MockIRow.On("Scan",
+		mock.Anything,
+		mock.Anything,
 		mock.Anything,
 		mock.Anything,
 		mock.Anything,
@@ -279,10 +289,12 @@ func (s *CompanyRepositoryTestSuite) TestInsert_Fail() {
 		ctx            = context.Background()
 		sampleID int64 = 1
 		params         = arguments.CompanyInsertArgs{
-			Name:      "mockString",
-			Status:    "mockString",
-			CreatedBy: "mockString",
-			UpdatedBy: "mockString",
+			Name:         "mockString",
+			CompanyCode:  "mockString",
+			Status:       "mockString",
+			CreatedBy:    "mockString",
+			UpdatedBy:    "mockString",
+			ApiSecretKey: "mockString",
 		}
 		company models.Company
 	)
@@ -293,9 +305,11 @@ func (s *CompanyRepositoryTestSuite) TestInsert_Fail() {
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, errors.New("some errors"))
 	s.MockIStmt.On("ExecContext", ctx,
 		params.Name,
+		params.CompanyCode,
 		params.Status,
 		params.CreatedBy,
 		params.UpdatedBy,
+		params.ApiSecretKey,
 	).Return(s.MockIResult, errors.New("some errors"))
 	s.MockIResult.On("LastInsertId").Return(sampleID, errors.New("some errors"))
 	s.MockICompany.On("Insert", ctx, params).Return(company, errors.New("some errors"))
@@ -313,7 +327,7 @@ func (s *CompanyRepositoryTestSuite) TestSetArgsToUpdateBuilder_Success() {
 		log.Fatal(err)
 	}
 	updateBuilder := sq.Update("company").Where(sq.Eq{"id": *params.ID})
-	expectedSelectBuilder := updateBuilder.Set("name", *params.Name).Set("status", *params.Status).Set("created_by", *params.CreatedBy).Set("updated_by", *params.UpdatedBy)
+	expectedSelectBuilder := updateBuilder.Set("name", *params.Name).Set("company_code", *params.CompanyCode).Set("status", *params.Status).Set("created_by", *params.CreatedBy).Set("updated_by", *params.UpdatedBy).Set("api_secret_key", *params.ApiSecretKey)
 	actual := s.Repository.setArgsToUpdateBuilder(updateBuilder, params)
 	s.Equal(expectedSelectBuilder, actual)
 }
@@ -329,19 +343,23 @@ func (s *CompanyRepositoryTestSuite) TestUpdate_Success() {
 		log.Fatal(err)
 	}
 	company := models.Company{
-		ID:        *params.ID,
-		Name:      *params.Name,
-		Status:    *params.Status,
-		CreatedBy: *params.CreatedBy,
-		UpdatedBy: *params.UpdatedBy,
+		ID:           *params.ID,
+		Name:         *params.Name,
+		CompanyCode:  *params.CompanyCode,
+		Status:       *params.Status,
+		CreatedBy:    *params.CreatedBy,
+		UpdatedBy:    *params.UpdatedBy,
+		ApiSecretKey: *params.ApiSecretKey,
 	}
 	// Mock Update
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
 	s.MockIStmt.On("ExecContext", ctx,
 		*params.Name,
+		*params.CompanyCode,
 		*params.Status,
 		*params.CreatedBy,
 		*params.UpdatedBy,
+		*params.ApiSecretKey,
 		*params.ID,
 	).Return(s.MockIResult, nil)
 	s.MockIResult.On("RowsAffected").Return(*params.ID, nil)
@@ -350,6 +368,8 @@ func (s *CompanyRepositoryTestSuite) TestUpdate_Success() {
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
 	s.MockIStmt.On("QueryRowContext", ctx, mock.Anything).Return(s.MockIRow)
 	s.MockIRow.On("Scan",
+		mock.Anything,
+		mock.Anything,
 		mock.Anything,
 		mock.Anything,
 		mock.Anything,
@@ -369,11 +389,13 @@ func (s *CompanyRepositoryTestSuite) TestUpdate_Fail() {
 		sampleID   int64 = 1
 		mockString       = "mockString"
 		params           = arguments.CompanyUpdateArgs{
-			ID:        &sampleID,
-			Name:      &mockString,
-			Status:    &mockString,
-			CreatedBy: &mockString,
-			UpdatedBy: &mockString,
+			ID:           &sampleID,
+			Name:         &mockString,
+			CompanyCode:  &mockString,
+			Status:       &mockString,
+			CreatedBy:    &mockString,
+			UpdatedBy:    &mockString,
+			ApiSecretKey: &mockString,
 		}
 		company models.Company
 	)

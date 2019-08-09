@@ -16,7 +16,6 @@ type RolePermissionCountArgs struct {
 	ID           int64  `graphql:"id" validate:"omitempty,min=1" faker:"unix_time"`
 	RoleID       int64  `graphql:"roleId" validate:"omitempty,min=1" faker:"unix_time"`
 	PermissionID int64  `graphql:"permissionId" validate:"omitempty,min=1" faker:"unix_time"`
-	Status       string `graphql:"status" validate:"omitempty,oneof=active inactive" faker:"name"`
 	CreatedBy    string `graphql:"createdBy" validate:"omitempty" faker:"email"`
 	UpdatedBy    string `graphql:"updatedBy" validate:"omitempty" faker:"email"`
 }
@@ -26,7 +25,6 @@ type RolePermissionListArgs struct {
 	ID           int64  `graphql:"id" validate:"omitempty,min=1" faker:"unix_time"`
 	RoleID       int64  `graphql:"roleId" validate:"omitempty,min=1" faker:"unix_time"`
 	PermissionID int64  `graphql:"permissionId" validate:"omitempty,min=1" faker:"unix_time"`
-	Status       string `graphql:"status" validate:"omitempty,oneof=active inactive" faker:"name"`
 	CreatedBy    string `graphql:"createdBy" validate:"omitempty" faker:"email"`
 	UpdatedBy    string `graphql:"updatedBy" validate:"omitempty" faker:"email"`
 	Page         int64  `graphql:"page" validate:"required,min=1"`
@@ -37,7 +35,6 @@ type RolePermissionListArgs struct {
 type RolePermissionInsertArgs struct {
 	RoleID       int64  `graphql:"roleId" validate:"omitempty,min=1" faker:"unix_time"`
 	PermissionID int64  `graphql:"permissionId" validate:"omitempty,min=1" faker:"unix_time"`
-	Status       string `graphql:"status" validate:"omitempty,oneof=active inactive" faker:"name"`
 	CreatedBy    string `graphql:"createdBy" validate:"omitempty" faker:"email"`
 	UpdatedBy    string `graphql:"updatedBy" validate:"omitempty" faker:"email"`
 }
@@ -47,7 +44,6 @@ type RolePermissionUpdateArgs struct {
 	ID           *int64  `graphql:"id" validate:"required,min=1" faker:"unix_time"`
 	RoleID       *int64  `graphql:"roleId" validate:"omitempty,min=1" faker:"unix_time"`
 	PermissionID *int64  `graphql:"permissionId" validate:"omitempty,min=1" faker:"unix_time"`
-	Status       *string `graphql:"status" validate:"omitempty,oneof=active inactive" faker:"name"`
 	CreatedBy    *string `graphql:"createdBy" validate:"omitempty" faker:"email"`
 	UpdatedBy    *string `graphql:"updatedBy" validate:"omitempty" faker:"email"`
 }

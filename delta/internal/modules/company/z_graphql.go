@@ -25,6 +25,10 @@ var (
 				Type:        graphql.NewNonNull(graphql.String),
 				Description: "This is company's name",
 			},
+			"companyCode": &graphql.Field{
+				Type:        graphql.NewNonNull(graphql.String),
+				Description: "This is company's code",
+			},
 			"status": &graphql.Field{
 				Type:        graphql.NewNonNull(graphql.String),
 				Description: "This is company's status",
@@ -34,6 +38,10 @@ var (
 				Description: "This is company's createdBy",
 			},
 			"updatedBy": &graphql.Field{
+				Type:        graphql.String,
+				Description: "This is company's updatedBy",
+			},
+			"apiSecretKey": &graphql.Field{
 				Type:        graphql.String,
 				Description: "This is company's updatedBy",
 			},
@@ -57,6 +65,10 @@ var (
 			Type:        graphql.String,
 			Description: "This is company's name",
 		},
+		"companyCode": &graphql.ArgumentConfig{
+			Type:        graphql.String,
+			Description: "This is company's code",
+		},
 		"status": &graphql.ArgumentConfig{
 			Type:        graphql.String,
 			Description: "This is company's status",
@@ -66,6 +78,10 @@ var (
 			Description: "This is company's createdBy",
 		},
 		"updatedBy": &graphql.ArgumentConfig{
+			Type:        graphql.String,
+			Description: "This is company's updatedBy",
+		},
+		"apiSecretKey": &graphql.ArgumentConfig{
 			Type:        graphql.String,
 			Description: "This is company's updatedBy",
 		},
@@ -86,6 +102,10 @@ var (
 			Type:        graphql.NewNonNull(graphql.String),
 			Description: "This is company's name",
 		},
+		"companyCode": &graphql.ArgumentConfig{
+			Type:        graphql.NewNonNull(graphql.String),
+			Description: "This is company's code",
+		},
 		"status": &graphql.ArgumentConfig{
 			Type:        graphql.NewNonNull(graphql.String),
 			Description: "This is company's status",
@@ -95,6 +115,10 @@ var (
 			Description: "This is company's createdBy",
 		},
 		"updatedBy": &graphql.ArgumentConfig{
+			Type:        graphql.String,
+			Description: "This is company's updatedBy",
+		},
+		"apiSecretKey": &graphql.ArgumentConfig{
 			Type:        graphql.String,
 			Description: "This is company's updatedBy",
 		},
@@ -109,6 +133,10 @@ var (
 			Type:        graphql.String,
 			Description: "This is company's name",
 		},
+		"companyCode": &graphql.ArgumentConfig{
+			Type:        graphql.String,
+			Description: "This is company's code",
+		},
 		"status": &graphql.ArgumentConfig{
 			Type:        graphql.String,
 			Description: "This is company's status",
@@ -118,6 +146,10 @@ var (
 			Description: "This is company's createdBy",
 		},
 		"updatedBy": &graphql.ArgumentConfig{
+			Type:        graphql.String,
+			Description: "This is company's updatedBy",
+		},
+		"apiSecretKey": &graphql.ArgumentConfig{
 			Type:        graphql.String,
 			Description: "This is company's updatedBy",
 		},

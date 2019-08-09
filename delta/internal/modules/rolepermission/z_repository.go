@@ -35,7 +35,6 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.RolePermi
 			"id",
 			"role_id",
 			"permission_id",
-			"status",
 			"created_by",
 			"updated_by",
 		).From("role_permission").Where(sq.Eq{"id": params.ID})
@@ -72,7 +71,6 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.RolePerm
 			"id",
 			"role_id",
 			"permission_id",
-			"status",
 			"created_by",
 			"updated_by",
 		).From("role_permission").Where(sq.Eq{"id": params.IDs})
@@ -99,7 +97,14 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.RolePerm
 	}
 	for rows.Next() {
 		rolepermission := models.RolePermission{}
-		err := r.scanRolePermission(rows, &rolepermission)
+		err := rows.Scan(
+			&rolepermission.ID,
+			&rolepermission.RoleID,
+			&rolepermission.PermissionID,
+			&rolepermission.Status,
+			&rolepermission.CreatedBy,
+			&rolepermission.UpdatedBy,
+		)
 		if err != nil {
 			log.WithField("Error", err).Error("Repository GetByIDs Scan error of rolepermission")
 			return rolepermissions, err
@@ -120,9 +125,6 @@ func (r *RepositoryImpl) setArgsToListSelectBuilder(selectBuilder sq.SelectBuild
 	}
 	if params.PermissionID != 0 {
 		selectBuilder = selectBuilder.Where(sq.Eq{"permission_id": params.PermissionID})
-	}
-	if params.Status != "" {
-		selectBuilder = selectBuilder.Where(sq.Eq{"status": params.Status})
 	}
 	if params.CreatedBy != "" {
 		selectBuilder = selectBuilder.Where(sq.Eq{"created_by": params.CreatedBy})
@@ -149,7 +151,6 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.RolePermissi
 			"id",
 			"role_id",
 			"permission_id",
-			"status",
 			"created_by",
 			"updated_by",
 		).From("role_permission")
@@ -177,7 +178,14 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.RolePermissi
 	defer rows.Close()
 	for rows.Next() {
 		rolepermission := models.RolePermission{}
-		err := r.scanRolePermission(rows, &rolepermission)
+		err := rows.Scan(
+			&rolepermission.ID,
+			&rolepermission.RoleID,
+			&rolepermission.PermissionID,
+			&rolepermission.Status,
+			&rolepermission.CreatedBy,
+			&rolepermission.UpdatedBy,
+		)
 		if err != nil {
 			log.WithField("Error", err).Error("Repository List Scan error of rolepermission")
 			return rolepermissions, err
@@ -198,9 +206,6 @@ func (r *RepositoryImpl) setArgsToCountSelectBuilder(selectBuilder sq.SelectBuil
 	}
 	if params.PermissionID != 0 {
 		selectBuilder = selectBuilder.Where(sq.Eq{"permission_id": params.PermissionID})
-	}
-	if params.Status != "" {
-		selectBuilder = selectBuilder.Where(sq.Eq{"status": params.Status})
 	}
 	if params.CreatedBy != "" {
 		selectBuilder = selectBuilder.Where(sq.Eq{"created_by": params.CreatedBy})
@@ -250,13 +255,11 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.RolePermis
 		insertBuilder  = sq.Insert("role_permission").Columns(
 			"role_id",
 			"permission_id",
-			"status",
 			"created_by",
 			"updated_by",
 		).Values(
 			params.RoleID,
 			params.PermissionID,
-			params.Status,
 			params.CreatedBy,
 			params.UpdatedBy,
 		)
@@ -302,9 +305,11 @@ func (r *RepositoryImpl) setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, 
 	if params.PermissionID != nil {
 		updateBuilder = updateBuilder.Set("permission_id", *params.PermissionID)
 	}
+
 	if params.Status != nil {
 		updateBuilder = updateBuilder.Set("status", *params.Status)
 	}
+
 	if params.CreatedBy != nil {
 		updateBuilder = updateBuilder.Set("created_by", *params.CreatedBy)
 	}

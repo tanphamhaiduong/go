@@ -7,6 +7,7 @@ import (
 	"log"
 
 	"github.com/bxcodec/faker"
+	"github.com/go-sql-driver/mysql"
 
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
@@ -151,13 +152,24 @@ func (s *UserHandlerTestSuite) TestInsert_Success() {
 	}
 	params.Status = "active"
 	user := models.User{
-		ID:        sampleID,
-		Email:     params.Email,
-		Name:      params.Name,
-		CompanyID: params.CompanyID,
-		Status:    params.Status,
-		CreatedBy: params.CreatedBy,
-		UpdatedBy: params.UpdatedBy,
+		ID:            sampleID,
+		Username:      params.Username,
+		Password:      params.Password,
+		Name:          params.Name,
+		DateOfBirth:   params.DateOfBirth,
+		Reference:     params.Reference,
+		AvatarUrl:     params.AvatarUrl,
+		LicenseNumber: params.LicenseNumber,
+		PhoneNumber:   params.PhoneNumber,
+		Extension:     params.Extension,
+		TelProvider:   params.TelProvider,
+		TelApi:        params.TelApi,
+		SupervisorId:  params.SupervisorId,
+		RoleId:        params.RoleId,
+		CompanyID:     params.CompanyID,
+		Status:        params.Status,
+		CreatedBy:     params.CreatedBy,
+		UpdatedBy:     params.UpdatedBy,
 	}
 	// Mock Insert
 	s.MockIUser.On("Insert", ctx, params).Return(user, nil)
@@ -173,12 +185,23 @@ func (s *UserHandlerTestSuite) TestInsert_Fail() {
 	var (
 		ctx    = context.Background()
 		params = arguments.UserInsertArgs{
-			Email:     "mockString",
-			Name:      "mockString",
-			CompanyID: 0,
-			Status:    "mockString",
-			CreatedBy: "mockString",
-			UpdatedBy: "mockString",
+			Username:      "mockString",
+			Password:      "mockString",
+			Name:          "mockString",
+			DateOfBirth:   mysql.NullTime{},
+			Reference:     "mockString",
+			AvatarUrl:     "mockString",
+			LicenseNumber: "mockString",
+			PhoneNumber:   "mockString",
+			Extension:     "mockString",
+			TelProvider:   "mockString",
+			TelApi:        "mockString",
+			SupervisorId:  0,
+			RoleId:        0,
+			CompanyID:     0,
+			Status:        "mockString",
+			CreatedBy:     "mockString",
+			UpdatedBy:     "mockString",
 		}
 		user = models.User{}
 	)
@@ -204,13 +227,24 @@ func (s *UserHandlerTestSuite) TestUpdate_Success() {
 	}
 	params.Status = &status
 	user := models.User{
-		ID:        *params.ID,
-		Email:     *params.Email,
-		Name:      *params.Name,
-		CompanyID: *params.CompanyID,
-		Status:    *params.Status,
-		CreatedBy: *params.CreatedBy,
-		UpdatedBy: *params.UpdatedBy,
+		ID:            *params.ID,
+		Username:      *params.Username,
+		Password:      *params.Password,
+		Name:          *params.Name,
+		DateOfBirth:   *params.DateOfBirth,
+		Reference:     *params.Reference,
+		AvatarUrl:     *params.AvatarUrl,
+		LicenseNumber: *params.LicenseNumber,
+		PhoneNumber:   *params.PhoneNumber,
+		Extension:     *params.Extension,
+		TelProvider:   *params.TelProvider,
+		TelApi:        *params.TelApi,
+		SupervisorId:  *params.SupervisorId,
+		RoleId:        *params.RoleId,
+		CompanyID:     *params.CompanyID,
+		Status:        *params.Status,
+		CreatedBy:     *params.CreatedBy,
+		UpdatedBy:     *params.UpdatedBy,
 	}
 	// Mock Insert
 	s.MockIUser.On("Update", ctx, params).Return(user, nil)
@@ -228,13 +262,24 @@ func (s *UserHandlerTestSuite) TestUpdate_Fail() {
 		sampleID   int64 = 1
 		mockString       = "mockString"
 		params           = arguments.UserUpdateArgs{
-			ID:        &sampleID,
-			Email:     &mockString,
-			Name:      &mockString,
-			CompanyID: &sampleID,
-			Status:    &mockString,
-			CreatedBy: &mockString,
-			UpdatedBy: &mockString,
+			ID:            &sampleID,
+			Username:      &mockString,
+			Password:      &mockString,
+			Name:          &mockString,
+			DateOfBirth:   &mysql.NullTime{},
+			Reference:     &mockString,
+			AvatarUrl:     &mockString,
+			LicenseNumber: &mockString,
+			PhoneNumber:   &mockString,
+			Extension:     &mockString,
+			TelProvider:   &mockString,
+			TelApi:        &mockString,
+			SupervisorId:  &sampleID,
+			RoleId:        &sampleID,
+			CompanyID:     &sampleID,
+			Status:        &mockString,
+			CreatedBy:     &mockString,
+			UpdatedBy:     &mockString,
 		}
 		user = models.User{}
 	)

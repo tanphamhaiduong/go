@@ -154,7 +154,6 @@ func (s *RolePermissionHandlerTestSuite) TestInsert_Success() {
 		ID:           sampleID,
 		RoleID:       params.RoleID,
 		PermissionID: params.PermissionID,
-		Status:       params.Status,
 		CreatedBy:    params.CreatedBy,
 		UpdatedBy:    params.UpdatedBy,
 	}
@@ -174,7 +173,6 @@ func (s *RolePermissionHandlerTestSuite) TestInsert_Fail() {
 		params = arguments.RolePermissionInsertArgs{
 			RoleID:       0,
 			PermissionID: 0,
-			Status:       "mockString",
 			CreatedBy:    "mockString",
 			UpdatedBy:    "mockString",
 		}
@@ -205,7 +203,6 @@ func (s *RolePermissionHandlerTestSuite) TestUpdate_Success() {
 		ID:           *params.ID,
 		RoleID:       *params.RoleID,
 		PermissionID: *params.PermissionID,
-		Status:       *params.Status,
 		CreatedBy:    *params.CreatedBy,
 		UpdatedBy:    *params.UpdatedBy,
 	}
@@ -228,7 +225,6 @@ func (s *RolePermissionHandlerTestSuite) TestUpdate_Fail() {
 			ID:           &sampleID,
 			RoleID:       &sampleID,
 			PermissionID: &sampleID,
-			Status:       &mockString,
 			CreatedBy:    &mockString,
 			UpdatedBy:    &mockString,
 		}

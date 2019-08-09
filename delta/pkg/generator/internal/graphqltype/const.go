@@ -11,4 +11,6 @@ const (
 	Boolean = "graphql.Boolean"
 	// Float ...
 	Float = "graphql.Float"
+	// NullDateTime ...
+	NullDateTime = "customgraphql.NullDateTime"
 )

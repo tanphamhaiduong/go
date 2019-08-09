@@ -25,6 +25,10 @@ var (
 				Type:        graphql.NewNonNull(graphql.String),
 				Description: "This is permission's name",
 			},
+			"description": &graphql.Field{
+				Type:        graphql.NewNonNull(graphql.String),
+				Description: "This is permission's description",
+			},
 			"status": &graphql.Field{
 				Type:        graphql.NewNonNull(graphql.String),
 				Description: "This is permission's active",
@@ -57,6 +61,10 @@ var (
 			Type:        graphql.String,
 			Description: "This is permission's name",
 		},
+		"description": &graphql.ArgumentConfig{
+			Type:        graphql.String,
+			Description: "This is permission's description",
+		},
 		"status": &graphql.ArgumentConfig{
 			Type:        graphql.String,
 			Description: "This is permission's active",
@@ -86,6 +94,10 @@ var (
 			Type:        graphql.NewNonNull(graphql.String),
 			Description: "This is permission's name",
 		},
+		"description": &graphql.ArgumentConfig{
+			Type:        graphql.NewNonNull(graphql.String),
+			Description: "This is permission's description",
+		},
 		"status": &graphql.ArgumentConfig{
 			Type:        graphql.NewNonNull(graphql.String),
 			Description: "This is permission's active",
@@ -108,6 +120,10 @@ var (
 		"name": &graphql.ArgumentConfig{
 			Type:        graphql.String,
 			Description: "This is permission's name",
+		},
+		"description": &graphql.ArgumentConfig{
+			Type:        graphql.String,
+			Description: "This is permission's description",
 		},
 		"status": &graphql.ArgumentConfig{
 			Type:        graphql.String,

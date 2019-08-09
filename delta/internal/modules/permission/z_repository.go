@@ -33,6 +33,7 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.Permissio
 		selectBuilder = sq.Select(
 			"id",
 			"name",
+			"description",
 			"status",
 			"created_by",
 			"updated_by",
@@ -69,6 +70,7 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.Permissi
 		selectBuilder = sq.Select(
 			"id",
 			"name",
+			"description",
 			"status",
 			"created_by",
 			"updated_by",
@@ -96,7 +98,13 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.Permissi
 	}
 	for rows.Next() {
 		permission := models.Permission{}
-		err := r.scanPermission(rows, &permission)
+		err := rows.Scan(
+			&permission.ID,
+			&permission.Name,
+			&permission.Status,
+			&permission.CreatedBy,
+			&permission.UpdatedBy,
+		)
 		if err != nil {
 			log.WithField("Error", err).Error("Repository GetByIDs Scan error of permission")
 			return permissions, err
@@ -114,6 +122,9 @@ func (r *RepositoryImpl) setArgsToListSelectBuilder(selectBuilder sq.SelectBuild
 	}
 	if params.Name != "" {
 		selectBuilder = selectBuilder.Where(sq.Eq{"name": params.Name})
+	}
+	if params.Description != "" {
+		selectBuilder = selectBuilder.Where(sq.Eq{"description": params.Description})
 	}
 	if params.Status != "" {
 		selectBuilder = selectBuilder.Where(sq.Eq{"status": params.Status})
@@ -142,6 +153,7 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.PermissionLi
 		selectBuilder = sq.Select(
 			"id",
 			"name",
+			"description",
 			"status",
 			"created_by",
 			"updated_by",
@@ -170,7 +182,13 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.PermissionLi
 	defer rows.Close()
 	for rows.Next() {
 		permission := models.Permission{}
-		err := r.scanPermission(rows, &permission)
+		err := rows.Scan(
+			&permission.ID,
+			&permission.Name,
+			&permission.Status,
+			&permission.CreatedBy,
+			&permission.UpdatedBy,
+		)
 		if err != nil {
 			log.WithField("Error", err).Error("Repository List Scan error of permission")
 			return permissions, err
@@ -188,6 +206,9 @@ func (r *RepositoryImpl) setArgsToCountSelectBuilder(selectBuilder sq.SelectBuil
 	}
 	if params.Name != "" {
 		selectBuilder = selectBuilder.Where(sq.Eq{"name": params.Name})
+	}
+	if params.Description != "" {
+		selectBuilder = selectBuilder.Where(sq.Eq{"description": params.Description})
 	}
 	if params.Status != "" {
 		selectBuilder = selectBuilder.Where(sq.Eq{"status": params.Status})
@@ -239,11 +260,13 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.Permission
 		permission    models.Permission
 		insertBuilder = sq.Insert("permission").Columns(
 			"name",
+			"description",
 			"status",
 			"created_by",
 			"updated_by",
 		).Values(
 			params.Name,
+			params.Description,
 			params.Status,
 			params.CreatedBy,
 			params.UpdatedBy,
@@ -287,6 +310,7 @@ func (r *RepositoryImpl) setArgsToUpdateBuilder(updateBuilder sq.UpdateBuilder, 
 	if params.Name != nil {
 		updateBuilder = updateBuilder.Set("name", *params.Name)
 	}
+
 	if params.Status != nil {
 		updateBuilder = updateBuilder.Set("status", *params.Status)
 	}
