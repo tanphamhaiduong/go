@@ -8,10 +8,8 @@ package {{ $name }}
 import (
 	"context"
 	"errors"
-	"log"
 
 	sq "github.com/Masterminds/squirrel"
-	"github.com/bxcodec/faker"
 	"github.com/stretchr/testify/mock"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
@@ -33,7 +31,6 @@ func (s *{{ $Name }}RepositoryTestSuite) TestGetByID_Success() {
 			mock.Anything,
 		{{- end }}
 	).Return(nil)
-	s.MockI{{ $Name }}.On("GetByID", ctx, param).Return({{ $name }}, nil)
 	actual, err := s.Repository.GetByID(ctx, param)
 	s.Nil(err)
 	s.Equal({{ $name }}, actual)
@@ -54,7 +51,26 @@ func (s *{{ $Name }}RepositoryTestSuite) TestGetByID_Fail() {
 			mock.Anything,
 		{{- end }}
 	).Return(errors.New("some errors"))
-	s.MockI{{ $Name }}.On("GetByID", ctx, param).Return({{ $name }}, errors.New("some errors"))
+	actual, err := s.Repository.GetByID(ctx, param)
+	s.Equal({{ $name }}, actual)
+	s.NotNil(err)
+}
+
+func (s *{{ $Name }}RepositoryTestSuite) TestGetByID_Fail1() {
+	var (
+		ctx    = context.Background()
+		param = arguments.{{ $Name }}GetByIDArgs{
+			ID: 1,
+		}
+		{{ $name }} models.{{ $Name }}
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("QueryRowContext", ctx, param.ID).Return(s.MockIRow)
+	s.MockIRow.On("Scan",
+		{{- range $field := $fields }}
+			mock.Anything,
+		{{- end }}
+	).Return(errors.New("some errors"))
 	actual, err := s.Repository.GetByID(ctx, param)
 	s.Equal({{ $name }}, actual)
 	s.NotNil(err)
@@ -77,7 +93,6 @@ func (s *{{ $Name }}RepositoryTestSuite) TestGetByIDs_Success() {
 	).Return(nil)
 	s.MockIRows.On("Close").Return(nil)
 	s.MockIRows.On("Next").Return(false)
-	s.MockI{{ $Name }}.On("GetByIDs", ctx, param).Return({{ $names }}, nil)
 	actual, err := s.Repository.GetByIDs(ctx, param)
 	s.Nil(err)
 	s.Equal({{ $names }}, actual)
@@ -100,7 +115,50 @@ func (s *{{ $Name }}RepositoryTestSuite) TestGetByIDs_Fail() {
 	).Return(errors.New("some errors"))
 	s.MockIRows.On("Close").Return(nil)
 	s.MockIRows.On("Next").Return(false)
-	s.MockI{{ $Name }}.On("GetByIDs", ctx, param).Return({{ $names }}, errors.New("some errors"))
+	actual, err := s.Repository.GetByIDs(ctx, param)
+	s.Equal({{ $names }}, actual)
+	s.NotNil(err)
+}
+
+func (s *{{ $Name }}RepositoryTestSuite) TestGetByIDs_Fail1() {
+	var (
+		ctx    = context.Background()
+		param = arguments.{{ $Name }}GetByIDsArgs{
+			IDs: []int64{1, 2},
+		}
+		{{ $names }} []models.{{ $Name }}
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("QueryContext", ctx, mock.Anything, mock.Anything).Return(s.MockIRows, errors.New("some errors"))
+	s.MockIRows.On("Scan",
+		{{- range $field := $fields }}
+			mock.Anything,
+		{{- end }}
+	).Return(errors.New("some errors"))
+	s.MockIRows.On("Close").Return(nil)
+	s.MockIRows.On("Next").Return(false)
+	actual, err := s.Repository.GetByIDs(ctx, param)
+	s.Equal({{ $names }}, actual)
+	s.NotNil(err)
+}
+
+func (s *{{ $Name }}RepositoryTestSuite) TestGetByIDs_Fail2() {
+	var (
+		ctx    = context.Background()
+		param = arguments.{{ $Name }}GetByIDsArgs{
+			IDs: []int64{1, 2},
+		}
+		{{ $names }} []models.{{ $Name }}
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("QueryContext", ctx, mock.Anything, mock.Anything).Return(s.MockIRows, nil)
+	s.MockIRows.On("Scan",
+		{{- range $field := $fields }}
+			mock.Anything,
+		{{- end }}
+	).Return(errors.New("some errors"))
+	s.MockIRows.On("Close").Return(nil)
+	s.MockIRows.On("Next").Return(true)
 	actual, err := s.Repository.GetByIDs(ctx, param)
 	s.Equal({{ $names }}, actual)
 	s.NotNil(err)
@@ -160,9 +218,13 @@ func (s *{{ $Name }}RepositoryTestSuite) TestList_Success() {
 	)
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
 	s.MockIStmt.On("QueryContext", ctx,
-	{{- range $field := $fields }}
-		mock.Anything,
-	{{- end }}
+		{{- range $field := $fields }}
+				{{- if $field.IsNullTimeField }}
+					params.{{ $field.Name }}.Time,
+				{{- else }}
+					params.{{ $field.Name }},
+				{{- end }}
+		{{- end }}
 		mock.Anything,
 		mock.Anything,
 	).Return(s.MockIRows, nil)
@@ -173,7 +235,6 @@ func (s *{{ $Name }}RepositoryTestSuite) TestList_Success() {
 	).Return(nil)
 	s.MockIRows.On("Close").Return(nil)
 	s.MockIRows.On("Next").Return(false)
-	s.MockI{{ $Name }}.On("List", ctx, params).Return({{ $names }}, nil)
 	actual, err := s.Repository.List(ctx, params)
 	s.Nil(err)
 	s.Equal({{ $names }}, actual)
@@ -202,7 +263,11 @@ func (s *{{ $Name }}RepositoryTestSuite) TestList_Fail() {
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, errors.New("some errors"))
 	s.MockIStmt.On("QueryContext", ctx,
 		{{- range $field := $fields }}
-			mock.Anything,
+			{{- if $field.IsNullTimeField }}
+				params.{{ $field.Name }}.Time,
+			{{- else }}
+				params.{{ $field.Name }},
+			{{- end }}
 		{{- end }}
 		mock.Anything,
 		mock.Anything,
@@ -214,7 +279,94 @@ func (s *{{ $Name }}RepositoryTestSuite) TestList_Fail() {
 	).Return(errors.New("some errors"))
 	s.MockIRows.On("Close").Return(nil)
 	s.MockIRows.On("Next").Return(false)
-	s.MockI{{ $Name }}.On("List", ctx, params).Return({{ $names }}, errors.New("some errors"))
+	actual, err := s.Repository.List(ctx, params)
+	s.Equal({{ $names }}, actual)
+	s.NotNil(err)
+}
+
+func (s *{{ $Name }}RepositoryTestSuite) TestList_Fail1() {
+	var (
+		ctx    = context.Background()
+		params = arguments.{{ $Name }}ListArgs{
+			{{- range $field := $fields }}
+				{{ $field.Name }}:
+				{{- if $field.IsInt64 }}1
+				{{- else if $field.IsNullTimeField }} mysql.NullTime{
+					Time:  time.Time{},
+					Valid: true,
+				}
+				{{- else if $field.IsStatusField }} "active"
+				{{- else }}"mockString"
+				{{- end }},
+			{{- end }}
+			Page:     1,
+			PageSize: 10,
+		}
+		{{ $names }} []models.{{ $Name }}
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("QueryContext", ctx,
+		{{- range $field := $fields }}
+			{{- if $field.IsNullTimeField }}
+				params.{{ $field.Name }}.Time,
+			{{- else }}
+				params.{{ $field.Name }},
+			{{- end }}
+		{{- end }}
+		mock.Anything,
+		mock.Anything,
+	).Return(s.MockIRows, errors.New("some errors"))
+	s.MockIRows.On("Scan",
+		{{- range $field := $fields }}
+			mock.Anything,
+		{{- end }}
+	).Return(errors.New("some errors"))
+	s.MockIRows.On("Close").Return(nil)
+	s.MockIRows.On("Next").Return(false)
+	actual, err := s.Repository.List(ctx, params)
+	s.Equal({{ $names }}, actual)
+	s.NotNil(err)
+}
+
+func (s *{{ $Name }}RepositoryTestSuite) TestList_Fail2() {
+	var (
+		ctx    = context.Background()
+		params = arguments.{{ $Name }}ListArgs{
+			{{- range $field := $fields }}
+				{{ $field.Name }}:
+				{{- if $field.IsInt64 }}1
+				{{- else if $field.IsNullTimeField }} mysql.NullTime{
+					Time:  time.Time{},
+					Valid: true,
+				}
+				{{- else if $field.IsStatusField }} "active"
+				{{- else }}"mockString"
+				{{- end }},
+			{{- end }}
+			Page:     1,
+			PageSize: 10,
+		}
+		{{ $names }} []models.{{ $Name }}
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("QueryContext", ctx,
+		{{- range $field := $fields }}
+			{{- if $field.IsNullTimeField }}
+				params.{{ $field.Name }}.Time,
+			{{- else }}
+				params.{{ $field.Name }},
+			{{- end }}
+		{{- end }}
+		mock.Anything,
+		mock.Anything,
+	).Return(s.MockIRows, nil)
+	s.MockIRows.On("Scan",
+		{{- range $field := $fields }}
+			mock.Anything,
+		{{- end }}
+	).Return(errors.New("some errors"))
+	s.MockIRows.On("Close").Return(nil)
+	s.MockIRows.On("Next").Return(true)
 	actual, err := s.Repository.List(ctx, params)
 	s.Equal({{ $names }}, actual)
 	s.NotNil(err)
@@ -270,13 +422,14 @@ func (s *{{ $Name }}RepositoryTestSuite) TestCount_Success() {
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
 	s.MockIStmt.On("QueryRowContext", ctx,
 		{{- range $field := $fields }}
-			mock.Anything,
+		{{- if $field.IsNullTimeField }}
+			params.{{ $field.Name }}.Time,
+		{{- else }}
+			params.{{ $field.Name }},
 		{{- end }}
+	{{- end }}
 	).Return(s.MockIRows, nil)
 	s.MockIRows.On("Scan", mock.Anything).Return(nil)
-	s.MockIRows.On("Close").Return(nil)
-	s.MockIRows.On("Next").Return(false)
-	s.MockI{{ $Name }}.On("List", ctx, params).Return(count, nil)
 	actual, err := s.Repository.Count(ctx, params)
 	s.Nil(err)
 	s.Equal(count, actual)
@@ -301,11 +454,84 @@ func (s *{{ $Name }}RepositoryTestSuite) TestCount_Fail() {
 		count  int64
 	)
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, errors.New("some errors"))
-	s.MockIStmt.On("QueryRowContext", ctx, mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(s.MockIRows, errors.New("some errors"))
+	s.MockIStmt.On("QueryRowContext", ctx,
+		{{- range $field := $fields }}
+			{{- if $field.IsNullTimeField }}
+				params.{{ $field.Name }}.Time,
+			{{- else }}
+				params.{{ $field.Name }},
+			{{- end }}
+		{{- end }}
+	).Return(s.MockIRows, errors.New("some errors"))
 	s.MockIRows.On("Scan", mock.Anything).Return(errors.New("some errors"))
-	s.MockIRows.On("Close").Return(nil)
-	s.MockIRows.On("Next").Return(false)
-	s.MockI{{ $Name }}.On("List", ctx, params).Return(count, errors.New("some errors"))
+	actual, err := s.Repository.Count(ctx, params)
+	s.Equal(count, actual)
+	s.NotNil(err)
+}
+
+func (s *{{ $Name }}RepositoryTestSuite) TestCount_Fail1() {
+	var (
+		ctx    = context.Background()
+		params = arguments.{{ $Name }}CountArgs{
+			{{- range $field := $fields }}
+				{{ $field.Name }}:
+				{{- if $field.IsInt64 }}1
+				{{- else if $field.IsNullTimeField }} mysql.NullTime{
+					Time:  time.Time{},
+					Valid: true,
+				}
+				{{- else if $field.IsStatusField }} "active"
+				{{- else }}"mockString"
+				{{- end }},
+			{{- end }}
+		}
+		count  int64
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("QueryRowContext", ctx,
+		{{- range $field := $fields }}
+			{{- if $field.IsNullTimeField }}
+				params.{{ $field.Name }}.Time,
+			{{- else }}
+				params.{{ $field.Name }},
+			{{- end }}
+		{{- end }}
+	).Return(s.MockIRows, errors.New("some errors"))
+	s.MockIRows.On("Scan", mock.Anything).Return(errors.New("some errors"))
+	actual, err := s.Repository.Count(ctx, params)
+	s.Equal(count, actual)
+	s.NotNil(err)
+}
+
+func (s *{{ $Name }}RepositoryTestSuite) TestCount_Fail2() {
+	var (
+		ctx    = context.Background()
+		params = arguments.{{ $Name }}CountArgs{
+			{{- range $field := $fields }}
+				{{ $field.Name }}:
+				{{- if $field.IsInt64 }}1
+				{{- else if $field.IsNullTimeField }} mysql.NullTime{
+					Time:  time.Time{},
+					Valid: true,
+				}
+				{{- else if $field.IsStatusField }} "active"
+				{{- else }}"mockString"
+				{{- end }},
+			{{- end }}
+		}
+		count  int64
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("QueryRowContext", ctx,
+		{{- range $field := $fields }}
+			{{- if $field.IsNullTimeField }}
+				params.{{ $field.Name }}.Time,
+			{{- else }}
+				params.{{ $field.Name }},
+			{{- end }}
+		{{- end }}
+	).Return(s.MockIRows, nil)
+	s.MockIRows.On("Scan", mock.Anything).Return(errors.New("some errors"))
 	actual, err := s.Repository.Count(ctx, params)
 	s.Equal(count, actual)
 	s.NotNil(err)
@@ -332,14 +558,6 @@ func (s *{{ $Name }}RepositoryTestSuite) TestInsert_Success() {
 		}
 		expected models.{{ $Name }}
 	)
-	{{ $name }} := models.{{ $Name }}{
-		ID: sampleID,
-		{{- range $field := $fields }}
-			{{- if not $field.IsIDField }}
-				{{ $field.Name }}: params.{{ $field.Name }},
-			{{- end }}
-		{{- end }}
-	}
 	//Mock Insert
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
 	s.MockIStmt.On("ExecContext", ctx,
@@ -350,7 +568,6 @@ func (s *{{ $Name }}RepositoryTestSuite) TestInsert_Success() {
 		{{- end }}
 	).Return(s.MockIResult, nil)
 	s.MockIResult.On("LastInsertId").Return(sampleID, nil)
-	s.MockI{{ $Name }}.On("Insert", ctx, params).Return({{ $name }}, nil)
 	// Mock GetByID
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
 	s.MockIStmt.On("QueryRowContext", ctx, mock.Anything).Return(s.MockIRow)
@@ -359,7 +576,6 @@ func (s *{{ $Name }}RepositoryTestSuite) TestInsert_Success() {
 			mock.Anything,
 		{{- end }}
 	).Return(nil)
-	s.MockI{{ $Name }}.On("GetByID", ctx, params).Return({{ $name }}, nil)
 
 	actual, err := s.Repository.Insert(ctx, params)
 	s.Nil(err)
@@ -396,9 +612,123 @@ func (s *{{ $Name }}RepositoryTestSuite) TestInsert_Fail() {
 	{{- end }}
 	).Return(s.MockIResult, errors.New("some errors"))
 	s.MockIResult.On("LastInsertId").Return(sampleID, errors.New("some errors"))
-	s.MockI{{ $Name }}.On("Insert", ctx, params).Return({{ $name }}, errors.New("some errors"))
 	actual, err := s.Repository.Insert(ctx, params)
 	s.Equal({{ $name }}, actual)
+	s.NotNil(err)
+}
+
+func (s *{{ $Name }}RepositoryTestSuite) TestInsert_Fail1() {
+	var (
+		ctx            = context.Background()
+		sampleID int64 = 1
+		params         = arguments.{{ $Name }}InsertArgs{
+    {{- range $field := $fields }}
+      {{- if not $field.IsIDField }}
+        {{ $field.Name }}:
+				{{- if $field.IsInt64 }}1
+				{{- else if $field.IsNullTimeField }} mysql.NullTime{
+					Time:  time.Time{},
+					Valid: true,
+				}
+				{{- else if $field.IsStatusField }} "active"
+				{{- else }}"mockString"
+				{{- end }},
+      {{- end }}
+    {{- end }}
+		}
+		{{ $name }} models.{{ $Name }}
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("ExecContext", ctx,
+	{{- range $field := $fields }}
+		{{- if not $field.IsIDField }}
+			params.{{ $field.Name }},
+		{{- end }}
+	{{- end }}
+	).Return(s.MockIResult, errors.New("some errors"))
+	s.MockIResult.On("LastInsertId").Return(sampleID, errors.New("some errors"))
+	actual, err := s.Repository.Insert(ctx, params)
+	s.Equal({{ $name }}, actual)
+	s.NotNil(err)
+}
+
+func (s *{{ $Name }}RepositoryTestSuite) TestInsert_Fail2() {
+	var (
+		ctx            = context.Background()
+		sampleID int64 = 1
+		params         = arguments.{{ $Name }}InsertArgs{
+    {{- range $field := $fields }}
+      {{- if not $field.IsIDField }}
+        {{ $field.Name }}:
+				{{- if $field.IsInt64 }}1
+				{{- else if $field.IsNullTimeField }} mysql.NullTime{
+					Time:  time.Time{},
+					Valid: true,
+				}
+				{{- else if $field.IsStatusField }} "active"
+				{{- else }}"mockString"
+				{{- end }},
+      {{- end }}
+    {{- end }}
+		}
+		{{ $name }} models.{{ $Name }}
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("ExecContext", ctx,
+	{{- range $field := $fields }}
+		{{- if not $field.IsIDField }}
+			params.{{ $field.Name }},
+		{{- end }}
+	{{- end }}
+	).Return(s.MockIResult, nil)
+	s.MockIResult.On("LastInsertId").Return(sampleID, errors.New("some errors"))
+	actual, err := s.Repository.Insert(ctx, params)
+	s.Equal({{ $name }}, actual)
+	s.NotNil(err)
+}
+
+func (s *{{ $Name }}RepositoryTestSuite) TestInsert_Fail3() {
+	var (
+		ctx            = context.Background()
+		sampleID int64 = 1
+		params         = arguments.{{ $Name }}InsertArgs{
+			{{- range $field := $fields }}
+				{{- if not $field.IsIDField }}
+					{{ $field.Name }}:
+					{{- if $field.IsInt64 }}1
+					{{- else if $field.IsNullTimeField }} mysql.NullTime{
+						Time:  time.Time{},
+						Valid: true,
+					}
+					{{- else if $field.IsStatusField }} "active"
+					{{- else }}"mockString"
+					{{- end }},
+				{{- end }}
+    	{{- end }}
+		}
+		expected models.{{ $Name }}
+	)
+	//Mock Insert
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("ExecContext", ctx,
+		{{- range $field := $fields }}
+			{{- if not $field.IsIDField }}
+				params.{{ $field.Name }},
+			{{- end }}
+		{{- end }}
+	).Return(s.MockIResult, nil)
+	s.MockIResult.On("LastInsertId").Return(sampleID, nil)
+	// Mock GetByID
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("QueryRowContext", ctx, mock.Anything).Return(s.MockIRow)
+	s.MockIRow.On("Scan",
+		{{- range $field := $fields }}
+			mock.Anything,
+		{{- end }}
+	).Return(errors.New("some errors"))
+
+	actual, err := s.Repository.Insert(ctx, params)
+	s.Equal(expected, actual)
 	s.NotNil(err)
 }
 
@@ -436,6 +766,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestUpdate_Success() {
 	var (
 		ctx      = context.Background()
 		sampleID int64 = 1
+		rowEffected int64 = 1
 		mockString = "mockString"
 		{{- range $field := $fields }}
 			{{- if $field.IsStatusField }}
@@ -457,11 +788,6 @@ func (s *{{ $Name }}RepositoryTestSuite) TestUpdate_Success() {
 		}
 		expected models.{{ $Name }}
 	)
-	{{ $name }} := models.{{ $Name }}{
-		{{- range $field := $fields }}
-			{{ $field.Name }}: *params.{{ $field.Name }},
-		{{- end }}
-	}
 	// Mock Update
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
 	s.MockIStmt.On("ExecContext", ctx,
@@ -472,8 +798,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestUpdate_Success() {
 		{{- end }}
 		*params.ID,
 	).Return(s.MockIResult, nil)
-	s.MockIResult.On("RowsAffected").Return(*params.ID, nil)
-	s.MockI{{ $Name }}.On("Update", ctx, params).Return({{ $name }}, nil)
+	s.MockIResult.On("RowsAffected").Return(rowEffected, nil)
 	// Mock GetByID
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
 	s.MockIStmt.On("QueryRowContext", ctx, mock.Anything).Return(s.MockIRow)
@@ -482,7 +807,6 @@ func (s *{{ $Name }}RepositoryTestSuite) TestUpdate_Success() {
 			mock.Anything,
 		{{- end }}
 	).Return(nil)
-	s.MockI{{ $Name }}.On("GetByID", ctx, params).Return({{ $name }}, nil)
 
 	actual, err := s.Repository.Update(ctx, params)
 	s.Nil(err)
@@ -493,6 +817,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestUpdate_Fail() {
 	var (
 		ctx              = context.Background()
 		sampleID int64 = 1
+		rowEffected int64
 		mockString = "mockString"
 		{{- range $field := $fields }}
 			{{- if $field.IsStatusField }}
@@ -515,9 +840,188 @@ func (s *{{ $Name }}RepositoryTestSuite) TestUpdate_Fail() {
 		{{ $name }} models.{{ $Name }}
 	)
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, errors.New("some errors"))
-	s.MockIStmt.On("ExecContext", ctx, mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(s.MockIResult, errors.New("some errors"))
-	s.MockIResult.On("RowsAffected").Return(sampleID, errors.New("some errors"))
-	s.MockI{{ $Name }}.On("Update", ctx, params).Return({{ $name }}, errors.New("some errors"))
+	s.MockIStmt.On("ExecContext", ctx,
+	{{- range $field := $fields }}
+		{{- if not $field.IsIDField }}
+			*params.{{ $field.Name }},
+		{{- end }}
+	{{- end }}
+		*params.ID,
+	).Return(s.MockIResult, errors.New("some errors"))
+	s.MockIResult.On("RowsAffected").Return(rowEffected, errors.New("some errors"))
+	actual, err := s.Repository.Update(ctx, params)
+	s.Equal({{ $name }}, actual)
+	s.NotNil(err)
+}
+
+func (s *{{ $Name }}RepositoryTestSuite) TestUpdate_Fail1() {
+	var (
+		ctx              = context.Background()
+		sampleID int64 = 1
+		rowEffected int64
+		mockString = "mockString"
+		{{- range $field := $fields }}
+			{{- if $field.IsStatusField }}
+				status = "active"
+			{{- end }}
+		{{- end }}
+		params = arguments.{{ $Name }}UpdateArgs{
+			{{- range $field := $fields }}
+				{{ $field.Name }}:
+					{{- if $field.IsInt64 }}&sampleID
+					{{- else if $field.IsNullTimeField }} &mysql.NullTime{
+						Time:  time.Time{},
+						Valid: true,
+					}
+					{{- else if $field.IsStatusField }} &status
+					{{- else }}&mockString
+					{{- end }},
+			{{- end }}
+		}
+		{{ $name }} models.{{ $Name }}
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("ExecContext", ctx,
+	{{- range $field := $fields }}
+		{{- if not $field.IsIDField }}
+			*params.{{ $field.Name }},
+		{{- end }}
+	{{- end }}
+		*params.ID,
+	).Return(s.MockIResult, errors.New("some errors"))
+	s.MockIResult.On("RowsAffected").Return(rowEffected, errors.New("some errors"))
+	actual, err := s.Repository.Update(ctx, params)
+	s.Equal({{ $name }}, actual)
+	s.NotNil(err)
+}
+
+func (s *{{ $Name }}RepositoryTestSuite) TestUpdate_Fail2() {
+	var (
+		ctx              = context.Background()
+		sampleID int64 = 1
+		rowEffected int64
+		mockString = "mockString"
+		{{- range $field := $fields }}
+			{{- if $field.IsStatusField }}
+				status = "active"
+			{{- end }}
+		{{- end }}
+		params = arguments.{{ $Name }}UpdateArgs{
+			{{- range $field := $fields }}
+				{{ $field.Name }}:
+					{{- if $field.IsInt64 }}&sampleID
+					{{- else if $field.IsNullTimeField }} &mysql.NullTime{
+						Time:  time.Time{},
+						Valid: true,
+					}
+					{{- else if $field.IsStatusField }} &status
+					{{- else }}&mockString
+					{{- end }},
+			{{- end }}
+		}
+		{{ $name }} models.{{ $Name }}
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("ExecContext", ctx,
+	{{- range $field := $fields }}
+		{{- if not $field.IsIDField }}
+			*params.{{ $field.Name }},
+		{{- end }}
+	{{- end }}
+		*params.ID,
+	).Return(s.MockIResult, nil)
+	s.MockIResult.On("RowsAffected").Return(rowEffected, errors.New("some errors"))
+	actual, err := s.Repository.Update(ctx, params)
+	s.Equal({{ $name }}, actual)
+	s.NotNil(err)
+}
+
+func (s *{{ $Name }}RepositoryTestSuite) TestUpdate_Fail3() {
+	var (
+		ctx              = context.Background()
+		sampleID int64 = 1
+		rowEffected int64
+		mockString = "mockString"
+		{{- range $field := $fields }}
+			{{- if $field.IsStatusField }}
+				status = "active"
+			{{- end }}
+		{{- end }}
+		params = arguments.{{ $Name }}UpdateArgs{
+			{{- range $field := $fields }}
+				{{ $field.Name }}:
+					{{- if $field.IsInt64 }}&sampleID
+					{{- else if $field.IsNullTimeField }} &mysql.NullTime{
+						Time:  time.Time{},
+						Valid: true,
+					}
+					{{- else if $field.IsStatusField }} &status
+					{{- else }}&mockString
+					{{- end }},
+			{{- end }}
+		}
+		{{ $name }} models.{{ $Name }}
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("ExecContext", ctx,
+	{{- range $field := $fields }}
+		{{- if not $field.IsIDField }}
+			*params.{{ $field.Name }},
+		{{- end }}
+	{{- end }}
+		*params.ID,
+	).Return(s.MockIResult, nil)
+	s.MockIResult.On("RowsAffected").Return(rowEffected, nil)
+	actual, err := s.Repository.Update(ctx, params)
+	s.Equal({{ $name }}, actual)
+	s.NotNil(err)
+}
+
+func (s *{{ $Name }}RepositoryTestSuite) TestUpdate_Fail4() {
+	var (
+		ctx      = context.Background()
+		sampleID int64 = 1
+		mockString = "mockString"
+		{{- range $field := $fields }}
+			{{- if $field.IsStatusField }}
+				status = "active"
+			{{- end }}
+		{{- end }}
+		params   = arguments.{{ $Name }}UpdateArgs{
+			{{- range $field := $fields }}
+				{{ $field.Name }}:
+				{{- if $field.IsInt64 }} &sampleID
+				{{- else if $field.IsNullTimeField }} &mysql.NullTime{
+					Time:  time.Time{},
+					Valid: true,
+				}
+				{{- else if $field.IsStatusField }} &status
+				{{- else }} &mockString
+				{{- end }},
+    	{{- end }}
+		}
+		{{ $name }} models.{{ $Name }}
+	)
+	// Mock Update
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("ExecContext", ctx,
+		{{- range $field := $fields }}
+			{{- if not $field.IsIDField }}
+				*params.{{ $field.Name }},
+			{{- end }}
+		{{- end }}
+		*params.ID,
+	).Return(s.MockIResult, nil)
+	s.MockIResult.On("RowsAffected").Return(*params.ID, nil)
+	// Mock GetByID
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("QueryRowContext", ctx, mock.Anything).Return(s.MockIRow)
+	s.MockIRow.On("Scan",
+		{{- range $field := $fields }}
+			mock.Anything,
+		{{- end }}
+	).Return(errors.New("some errors"))
+
 	actual, err := s.Repository.Update(ctx, params)
 	s.Equal({{ $name }}, actual)
 	s.NotNil(err)
@@ -533,8 +1037,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestDelete_Success() {
 	)
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
 	s.MockIStmt.On("ExecContext", ctx, param.ID).Return(s.MockIResult, nil)
-	s.MockIResult.On("RowsAffected").Return(param.ID, nil)
-	s.MockI{{ $Name }}.On("Delete", ctx, param).Return(rowEffected, nil)
+	s.MockIResult.On("RowsAffected").Return(rowEffected, nil)
 	actual, err := s.Repository.Delete(ctx, param)
 	s.Nil(err)
 	s.Equal(param.ID, actual)
@@ -550,8 +1053,55 @@ func (s *{{ $Name }}RepositoryTestSuite) TestDelete_Fail() {
 	)
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, errors.New("some errors"))
 	s.MockIStmt.On("ExecContext", ctx, param.ID).Return(s.MockIResult, errors.New("some errors"))
-	s.MockIResult.On("RowsAffected").Return(param.ID, errors.New("some errors"))
-	s.MockI{{ $Name }}.On("Delete", ctx, param).Return(rowEffected, errors.New("some errors"))
+	s.MockIResult.On("RowsAffected").Return(rowEffected, errors.New("some errors"))
+	actual, err := s.Repository.Delete(ctx, param)
+	s.Equal(rowEffected, actual)
+	s.NotNil(err)
+}
+
+func (s *{{ $Name }}RepositoryTestSuite) TestDelete_Fail1() {
+	var (
+		ctx         = context.Background()
+		param      = arguments.{{ $Name }}DeleteArgs{
+			ID: 1,
+		}
+		rowEffected int64
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("ExecContext", ctx, param.ID).Return(s.MockIResult, errors.New("some errors"))
+	s.MockIResult.On("RowsAffected").Return(rowEffected, errors.New("some errors"))
+	actual, err := s.Repository.Delete(ctx, param)
+	s.Equal(rowEffected, actual)
+	s.NotNil(err)
+}
+
+func (s *{{ $Name }}RepositoryTestSuite) TestDelete_Fail2() {
+	var (
+		ctx         = context.Background()
+		param      = arguments.{{ $Name }}DeleteArgs{
+			ID: 1,
+		}
+		rowEffected int64
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("ExecContext", ctx, param.ID).Return(s.MockIResult, nil)
+	s.MockIResult.On("RowsAffected").Return(rowEffected, errors.New("some errors"))
+	actual, err := s.Repository.Delete(ctx, param)
+	s.Equal(rowEffected, actual)
+	s.NotNil(err)
+}
+
+func (s *{{ $Name }}RepositoryTestSuite) TestDelete_Fail3() {
+	var (
+		ctx         = context.Background()
+		param      = arguments.{{ $Name }}DeleteArgs{
+			ID: 1,
+		}
+		rowEffected int64
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("ExecContext", ctx, param.ID).Return(s.MockIResult, nil)
+	s.MockIResult.On("RowsAffected").Return(rowEffected, nil)
 	actual, err := s.Repository.Delete(ctx, param)
 	s.Equal(rowEffected, actual)
 	s.NotNil(err)

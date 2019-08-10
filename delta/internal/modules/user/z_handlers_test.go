@@ -39,6 +39,20 @@ func (s *UserHandlerTestSuite) TestGetByID_Fail() {
 	s.NotNil(err)
 }
 
+func (s *UserHandlerTestSuite) TestGetByID_Fail1() {
+	var (
+		ctx   = context.Background()
+		param = arguments.UserGetByIDArgs{
+			ID: 0,
+		}
+		user = models.User{}
+	)
+	s.MockIUser.On("GetByID", ctx, param).Return(user, errors.New("some errors"))
+	actual, err := s.User.GetByID(ctx, param)
+	s.Equal(user, actual)
+	s.NotNil(err)
+}
+
 func (s *UserHandlerTestSuite) TestGetByIDs_Success() {
 	var (
 		ctx   = context.Background()
@@ -59,6 +73,18 @@ func (s *UserHandlerTestSuite) TestGetByIDs_Fail() {
 		param = arguments.UserGetByIDsArgs{
 			IDs: []int64{1, 2},
 		}
+		users []models.User
+	)
+	s.MockIUser.On("GetByIDs", ctx, param).Return(users, errors.New("some errors"))
+	actual, err := s.User.GetByIDs(ctx, param)
+	s.Equal(users, actual)
+	s.NotNil(err)
+}
+
+func (s *UserHandlerTestSuite) TestGetByIDs_Fail1() {
+	var (
+		ctx   = context.Background()
+		param = arguments.UserGetByIDsArgs{}
 		users []models.User
 	)
 	s.MockIUser.On("GetByIDs", ctx, param).Return(users, errors.New("some errors"))
@@ -139,6 +165,42 @@ func (s *UserHandlerTestSuite) TestList_Fail() {
 	s.NotNil(err)
 }
 
+func (s *UserHandlerTestSuite) TestList_Fail1() {
+	var (
+		ctx    = context.Background()
+		params = arguments.UserListArgs{
+			ID:       0,
+			Username: "mockString",
+			Password: "mockString",
+			Name:     "mockString",
+			DateOfBirth: mysql.NullTime{
+				Time:  time.Time{},
+				Valid: true,
+			},
+			Reference:     "mockString",
+			AvatarUrl:     "mockString",
+			LicenseNumber: "mockString",
+			PhoneNumber:   "mockString",
+			Extension:     "mockString",
+			TelProvider:   "mockString",
+			TelApi:        "mockString",
+			SupervisorId:  0,
+			RoleId:        0,
+			CompanyID:     0,
+			Status:        "active",
+			CreatedBy:     "mockString",
+			UpdatedBy:     "mockString",
+			Page:          1,
+			PageSize:      10,
+		}
+		users []models.User
+	)
+	s.MockIUser.On("List", ctx, params).Return(users, errors.New("some errors"))
+	actual, err := s.User.List(ctx, params)
+	s.Equal(users, actual)
+	s.NotNil(err)
+}
+
 func (s *UserHandlerTestSuite) TestCount_Success() {
 	var (
 		ctx    = context.Background()
@@ -195,6 +257,40 @@ func (s *UserHandlerTestSuite) TestCount_Fail() {
 			SupervisorId:  1,
 			RoleId:        1,
 			CompanyID:     1,
+			Status:        "active",
+			CreatedBy:     "mockString",
+			UpdatedBy:     "mockString",
+		}
+		count int64
+	)
+	s.MockIUser.On("Count", ctx, params).Return(count, errors.New("some errors"))
+	actual, err := s.User.Count(ctx, params)
+	s.Equal(count, actual)
+	s.NotNil(err)
+}
+
+func (s *UserHandlerTestSuite) TestCount_Fail1() {
+	var (
+		ctx    = context.Background()
+		params = arguments.UserCountArgs{
+			ID:       0,
+			Username: "mockString",
+			Password: "mockString",
+			Name:     "mockString",
+			DateOfBirth: mysql.NullTime{
+				Time:  time.Time{},
+				Valid: true,
+			},
+			Reference:     "mockString",
+			AvatarUrl:     "mockString",
+			LicenseNumber: "mockString",
+			PhoneNumber:   "mockString",
+			Extension:     "mockString",
+			TelProvider:   "mockString",
+			TelApi:        "mockString",
+			SupervisorId:  0,
+			RoleId:        0,
+			CompanyID:     0,
 			Status:        "active",
 			CreatedBy:     "mockString",
 			UpdatedBy:     "mockString",
@@ -285,6 +381,39 @@ func (s *UserHandlerTestSuite) TestInsert_Fail() {
 			SupervisorId:  1,
 			RoleId:        1,
 			CompanyID:     1,
+			Status:        "active",
+			CreatedBy:     "mockString",
+			UpdatedBy:     "mockString",
+		}
+		user = models.User{}
+	)
+	s.MockIUser.On("Insert", ctx, params).Return(user, errors.New("some errors"))
+	actual, err := s.User.Insert(ctx, params)
+	s.Equal(user, actual)
+	s.NotNil(err)
+}
+
+func (s *UserHandlerTestSuite) TestInsert_Fail1() {
+	var (
+		ctx    = context.Background()
+		params = arguments.UserInsertArgs{
+			Username: "mockString",
+			Password: "mockString",
+			Name:     "mockString",
+			DateOfBirth: mysql.NullTime{
+				Time:  time.Time{},
+				Valid: true,
+			},
+			Reference:     "mockString",
+			AvatarUrl:     "mockString",
+			LicenseNumber: "mockString",
+			PhoneNumber:   "mockString",
+			Extension:     "mockString",
+			TelProvider:   "mockString",
+			TelApi:        "mockString",
+			SupervisorId:  0,
+			RoleId:        0,
+			CompanyID:     0,
 			Status:        "active",
 			CreatedBy:     "mockString",
 			UpdatedBy:     "mockString",
@@ -394,6 +523,43 @@ func (s *UserHandlerTestSuite) TestUpdate_Fail() {
 	s.NotNil(err)
 }
 
+func (s *UserHandlerTestSuite) TestUpdate_Fail1() {
+	var (
+		ctx        = context.Background()
+		sampleID   int64
+		mockString = "mockString"
+		status     = "active"
+		params     = arguments.UserUpdateArgs{
+			ID:       &sampleID,
+			Username: &mockString,
+			Password: &mockString,
+			Name:     &mockString,
+			DateOfBirth: &mysql.NullTime{
+				Time:  time.Time{},
+				Valid: true,
+			},
+			Reference:     &mockString,
+			AvatarUrl:     &mockString,
+			LicenseNumber: &mockString,
+			PhoneNumber:   &mockString,
+			Extension:     &mockString,
+			TelProvider:   &mockString,
+			TelApi:        &mockString,
+			SupervisorId:  &sampleID,
+			RoleId:        &sampleID,
+			CompanyID:     &sampleID,
+			Status:        &status,
+			CreatedBy:     &mockString,
+			UpdatedBy:     &mockString,
+		}
+		user = models.User{}
+	)
+	s.MockIUser.On("Update", ctx, params).Return(user, errors.New("some errors"))
+	actual, err := s.User.Update(ctx, params)
+	s.Equal(user, actual)
+	s.NotNil(err)
+}
+
 func (s *UserHandlerTestSuite) TestDelete_Success() {
 	var (
 		ctx   = context.Background()
@@ -412,6 +578,20 @@ func (s *UserHandlerTestSuite) TestDelete_Fail() {
 		ctx   = context.Background()
 		param = arguments.UserDeleteArgs{
 			ID: 1,
+		}
+		rowEffected int64
+	)
+	s.MockIUser.On("Delete", ctx, param).Return(rowEffected, errors.New("some errors"))
+	actual, err := s.User.Delete(ctx, param)
+	s.Equal(rowEffected, actual)
+	s.NotNil(err)
+}
+
+func (s *UserHandlerTestSuite) TestDelete_Fail1() {
+	var (
+		ctx   = context.Background()
+		param = arguments.UserDeleteArgs{
+			ID: 0,
 		}
 		rowEffected int64
 	)

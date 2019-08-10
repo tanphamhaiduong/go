@@ -37,6 +37,20 @@ func (s *PermissionHandlerTestSuite) TestGetByID_Fail() {
 	s.NotNil(err)
 }
 
+func (s *PermissionHandlerTestSuite) TestGetByID_Fail1() {
+	var (
+		ctx   = context.Background()
+		param = arguments.PermissionGetByIDArgs{
+			ID: 0,
+		}
+		permission = models.Permission{}
+	)
+	s.MockIPermission.On("GetByID", ctx, param).Return(permission, errors.New("some errors"))
+	actual, err := s.Permission.GetByID(ctx, param)
+	s.Equal(permission, actual)
+	s.NotNil(err)
+}
+
 func (s *PermissionHandlerTestSuite) TestGetByIDs_Success() {
 	var (
 		ctx   = context.Background()
@@ -57,6 +71,18 @@ func (s *PermissionHandlerTestSuite) TestGetByIDs_Fail() {
 		param = arguments.PermissionGetByIDsArgs{
 			IDs: []int64{1, 2},
 		}
+		permissions []models.Permission
+	)
+	s.MockIPermission.On("GetByIDs", ctx, param).Return(permissions, errors.New("some errors"))
+	actual, err := s.Permission.GetByIDs(ctx, param)
+	s.Equal(permissions, actual)
+	s.NotNil(err)
+}
+
+func (s *PermissionHandlerTestSuite) TestGetByIDs_Fail1() {
+	var (
+		ctx         = context.Background()
+		param       = arguments.PermissionGetByIDsArgs{}
 		permissions []models.Permission
 	)
 	s.MockIPermission.On("GetByIDs", ctx, param).Return(permissions, errors.New("some errors"))
@@ -91,6 +117,27 @@ func (s *PermissionHandlerTestSuite) TestList_Fail() {
 		ctx    = context.Background()
 		params = arguments.PermissionListArgs{
 			ID:          1,
+			Name:        "mockString",
+			Description: "mockString",
+			Status:      "active",
+			CreatedBy:   "mockString",
+			UpdatedBy:   "mockString",
+			Page:        1,
+			PageSize:    10,
+		}
+		permissions []models.Permission
+	)
+	s.MockIPermission.On("List", ctx, params).Return(permissions, errors.New("some errors"))
+	actual, err := s.Permission.List(ctx, params)
+	s.Equal(permissions, actual)
+	s.NotNil(err)
+}
+
+func (s *PermissionHandlerTestSuite) TestList_Fail1() {
+	var (
+		ctx    = context.Background()
+		params = arguments.PermissionListArgs{
+			ID:          0,
 			Name:        "mockString",
 			Description: "mockString",
 			Status:      "active",
@@ -145,6 +192,25 @@ func (s *PermissionHandlerTestSuite) TestCount_Fail() {
 	s.NotNil(err)
 }
 
+func (s *PermissionHandlerTestSuite) TestCount_Fail1() {
+	var (
+		ctx    = context.Background()
+		params = arguments.PermissionCountArgs{
+			ID:          0,
+			Name:        "mockString",
+			Description: "mockString",
+			Status:      "active",
+			CreatedBy:   "mockString",
+			UpdatedBy:   "mockString",
+		}
+		count int64
+	)
+	s.MockIPermission.On("Count", ctx, params).Return(count, errors.New("some errors"))
+	actual, err := s.Permission.Count(ctx, params)
+	s.Equal(count, actual)
+	s.NotNil(err)
+}
+
 func (s *PermissionHandlerTestSuite) TestInsert_Success() {
 	var (
 		ctx            = context.Background()
@@ -176,6 +242,24 @@ func (s *PermissionHandlerTestSuite) TestInsert_Success() {
 }
 
 func (s *PermissionHandlerTestSuite) TestInsert_Fail() {
+	var (
+		ctx    = context.Background()
+		params = arguments.PermissionInsertArgs{
+			Name:        "mockString",
+			Description: "mockString",
+			Status:      "active",
+			CreatedBy:   "mockString",
+			UpdatedBy:   "mockString",
+		}
+		permission = models.Permission{}
+	)
+	s.MockIPermission.On("Insert", ctx, params).Return(permission, errors.New("some errors"))
+	actual, err := s.Permission.Insert(ctx, params)
+	s.Equal(permission, actual)
+	s.NotNil(err)
+}
+
+func (s *PermissionHandlerTestSuite) TestInsert_Fail1() {
 	var (
 		ctx    = context.Background()
 		params = arguments.PermissionInsertArgs{
@@ -248,6 +332,28 @@ func (s *PermissionHandlerTestSuite) TestUpdate_Fail() {
 	s.NotNil(err)
 }
 
+func (s *PermissionHandlerTestSuite) TestUpdate_Fail1() {
+	var (
+		ctx        = context.Background()
+		sampleID   int64
+		mockString = "mockString"
+		status     = "active"
+		params     = arguments.PermissionUpdateArgs{
+			ID:          &sampleID,
+			Name:        &mockString,
+			Description: &mockString,
+			Status:      &status,
+			CreatedBy:   &mockString,
+			UpdatedBy:   &mockString,
+		}
+		permission = models.Permission{}
+	)
+	s.MockIPermission.On("Update", ctx, params).Return(permission, errors.New("some errors"))
+	actual, err := s.Permission.Update(ctx, params)
+	s.Equal(permission, actual)
+	s.NotNil(err)
+}
+
 func (s *PermissionHandlerTestSuite) TestDelete_Success() {
 	var (
 		ctx   = context.Background()
@@ -266,6 +372,20 @@ func (s *PermissionHandlerTestSuite) TestDelete_Fail() {
 		ctx   = context.Background()
 		param = arguments.PermissionDeleteArgs{
 			ID: 1,
+		}
+		rowEffected int64
+	)
+	s.MockIPermission.On("Delete", ctx, param).Return(rowEffected, errors.New("some errors"))
+	actual, err := s.Permission.Delete(ctx, param)
+	s.Equal(rowEffected, actual)
+	s.NotNil(err)
+}
+
+func (s *PermissionHandlerTestSuite) TestDelete_Fail1() {
+	var (
+		ctx   = context.Background()
+		param = arguments.PermissionDeleteArgs{
+			ID: 0,
 		}
 		rowEffected int64
 	)

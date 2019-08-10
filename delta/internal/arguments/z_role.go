@@ -8,7 +8,7 @@ type RoleGetByIDArgs struct {
 
 // RoleGetByIDsArgs ...
 type RoleGetByIDsArgs struct {
-	IDs []int64 `graphql:"ids"`
+	IDs []int64 `graphql:"ids" validate:"required"`
 }
 
 // RoleCountArgs ...

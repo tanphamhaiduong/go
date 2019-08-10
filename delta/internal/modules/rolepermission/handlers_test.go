@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/suite"
+	"github.com/tanphamhaiduong/go/common/logger"
 	"github.com/tanphamhaiduong/go/delta/internal/modules/rolepermission/mocks"
 )
 
@@ -22,4 +23,6 @@ func (s *RolePermissionHandlerTestSuite) SetupTest() {
 	handler := NewHandler(s.MockIRolePermission)
 	s.RolePermission = *handler
 	s.RolePermission.rolepermission = s.MockIRolePermission
+	logConfig := logger.Configuration{}
+	logger.NewLogger(logConfig, logger.InstanceZapLogger)
 }

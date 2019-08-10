@@ -192,6 +192,10 @@ func (r *ResolverImpl) GetByID(param graphql.ResolveParams) (interface{}, error)
 	// parse param
 	args := arguments.CompanyGetByIDArgs{}
 	if err := utils.Parse(param.Args, &args); err != nil {
+		logger.WithFields(logger.Fields{
+			"TraceID": param.Context.Value("TraceID"),
+			"Error":   err,
+		}).Errorf("Resolver Count utils.Parse company")
 		return nil, err
 	}
 	response, err := r.company.GetByID(param.Context, args)
@@ -211,6 +215,10 @@ func (r *ResolverImpl) Count(params graphql.ResolveParams) (interface{}, error) 
 	args := arguments.CompanyCountArgs{}
 	err := utils.Parse(params.Source.(map[string]interface{}), &args)
 	if err != nil {
+		logger.WithFields(logger.Fields{
+			"TraceID": params.Context.Value("TraceID"),
+			"Error":   err,
+		}).Errorf("Resolver Count utils.Parse company")
 		return nil, err
 	}
 	response, err := r.company.Count(params.Context, args)

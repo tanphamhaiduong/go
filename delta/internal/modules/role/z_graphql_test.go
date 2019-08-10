@@ -11,6 +11,17 @@ import (
 	"github.com/tanphamhaiduong/go/delta/internal/models"
 )
 
+func (s *RoleResolverTestSuite) TestForwardParams_Success() {
+	var (
+		sampleID int64 = 1
+		params         = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
+		expected       = map[string]interface{}(map[string]interface{}{"id": sampleID})
+	)
+	actual, err := s.Role.ForwardParams(params)
+	s.Nil(err)
+	s.Equal(expected, actual)
+}
+
 func (s *RoleResolverTestSuite) TestGetByID_Success() {
 	var (
 		ctx            = context.Background()

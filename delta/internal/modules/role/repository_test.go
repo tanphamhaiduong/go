@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/suite"
+	"github.com/tanphamhaiduong/go/common/logger"
 	mocksDB "github.com/tanphamhaiduong/go/delta/internal/database/mocks"
 	"github.com/tanphamhaiduong/go/delta/internal/modules/role/mocks"
 )
@@ -33,4 +34,6 @@ func (s *RoleRepositoryTestSuite) SetupTest() {
 	s.MockIRole = &mocks.IRepository{}
 	repository := NewRepository(mockIDB)
 	s.Repository = *repository
+	logConfig := logger.Configuration{}
+	logger.NewLogger(logConfig, logger.InstanceZapLogger)
 }

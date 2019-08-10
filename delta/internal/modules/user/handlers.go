@@ -74,6 +74,7 @@ func (h *HandlerImpl) signTokens(user models.User, param arguments.UserLoginArgs
 	return tokenString, err
 }
 
+// Login ...
 func (h *HandlerImpl) Login(ctx context.Context, param arguments.UserLoginArgs) (string, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID":  ctx.Value("TraceID"),

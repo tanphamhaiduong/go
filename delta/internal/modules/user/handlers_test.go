@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/suite"
+	"github.com/tanphamhaiduong/go/common/logger"
 	"github.com/tanphamhaiduong/go/delta/internal/modules/user/mocks"
 )
 
@@ -22,4 +23,6 @@ func (s *UserHandlerTestSuite) SetupTest() {
 	handler := NewHandler(s.MockIUser)
 	s.User = *handler
 	s.User.user = s.MockIUser
+	logConfig := logger.Configuration{}
+	logger.NewLogger(logConfig, logger.InstanceZapLogger)
 }

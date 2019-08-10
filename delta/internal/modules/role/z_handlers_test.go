@@ -37,6 +37,20 @@ func (s *RoleHandlerTestSuite) TestGetByID_Fail() {
 	s.NotNil(err)
 }
 
+func (s *RoleHandlerTestSuite) TestGetByID_Fail1() {
+	var (
+		ctx   = context.Background()
+		param = arguments.RoleGetByIDArgs{
+			ID: 0,
+		}
+		role = models.Role{}
+	)
+	s.MockIRole.On("GetByID", ctx, param).Return(role, errors.New("some errors"))
+	actual, err := s.Role.GetByID(ctx, param)
+	s.Equal(role, actual)
+	s.NotNil(err)
+}
+
 func (s *RoleHandlerTestSuite) TestGetByIDs_Success() {
 	var (
 		ctx   = context.Background()
@@ -57,6 +71,18 @@ func (s *RoleHandlerTestSuite) TestGetByIDs_Fail() {
 		param = arguments.RoleGetByIDsArgs{
 			IDs: []int64{1, 2},
 		}
+		roles []models.Role
+	)
+	s.MockIRole.On("GetByIDs", ctx, param).Return(roles, errors.New("some errors"))
+	actual, err := s.Role.GetByIDs(ctx, param)
+	s.Equal(roles, actual)
+	s.NotNil(err)
+}
+
+func (s *RoleHandlerTestSuite) TestGetByIDs_Fail1() {
+	var (
+		ctx   = context.Background()
+		param = arguments.RoleGetByIDsArgs{}
 		roles []models.Role
 	)
 	s.MockIRole.On("GetByIDs", ctx, param).Return(roles, errors.New("some errors"))
@@ -93,6 +119,27 @@ func (s *RoleHandlerTestSuite) TestList_Fail() {
 			ID:        1,
 			Name:      "mockString",
 			CompanyID: 1,
+			Status:    "active",
+			CreatedBy: "mockString",
+			UpdatedBy: "mockString",
+			Page:      1,
+			PageSize:  10,
+		}
+		roles []models.Role
+	)
+	s.MockIRole.On("List", ctx, params).Return(roles, errors.New("some errors"))
+	actual, err := s.Role.List(ctx, params)
+	s.Equal(roles, actual)
+	s.NotNil(err)
+}
+
+func (s *RoleHandlerTestSuite) TestList_Fail1() {
+	var (
+		ctx    = context.Background()
+		params = arguments.RoleListArgs{
+			ID:        0,
+			Name:      "mockString",
+			CompanyID: 0,
 			Status:    "active",
 			CreatedBy: "mockString",
 			UpdatedBy: "mockString",
@@ -145,6 +192,25 @@ func (s *RoleHandlerTestSuite) TestCount_Fail() {
 	s.NotNil(err)
 }
 
+func (s *RoleHandlerTestSuite) TestCount_Fail1() {
+	var (
+		ctx    = context.Background()
+		params = arguments.RoleCountArgs{
+			ID:        0,
+			Name:      "mockString",
+			CompanyID: 0,
+			Status:    "active",
+			CreatedBy: "mockString",
+			UpdatedBy: "mockString",
+		}
+		count int64
+	)
+	s.MockIRole.On("Count", ctx, params).Return(count, errors.New("some errors"))
+	actual, err := s.Role.Count(ctx, params)
+	s.Equal(count, actual)
+	s.NotNil(err)
+}
+
 func (s *RoleHandlerTestSuite) TestInsert_Success() {
 	var (
 		ctx            = context.Background()
@@ -181,6 +247,24 @@ func (s *RoleHandlerTestSuite) TestInsert_Fail() {
 		params = arguments.RoleInsertArgs{
 			Name:      "mockString",
 			CompanyID: 1,
+			Status:    "active",
+			CreatedBy: "mockString",
+			UpdatedBy: "mockString",
+		}
+		role = models.Role{}
+	)
+	s.MockIRole.On("Insert", ctx, params).Return(role, errors.New("some errors"))
+	actual, err := s.Role.Insert(ctx, params)
+	s.Equal(role, actual)
+	s.NotNil(err)
+}
+
+func (s *RoleHandlerTestSuite) TestInsert_Fail1() {
+	var (
+		ctx    = context.Background()
+		params = arguments.RoleInsertArgs{
+			Name:      "mockString",
+			CompanyID: 0,
 			Status:    "active",
 			CreatedBy: "mockString",
 			UpdatedBy: "mockString",
@@ -248,6 +332,28 @@ func (s *RoleHandlerTestSuite) TestUpdate_Fail() {
 	s.NotNil(err)
 }
 
+func (s *RoleHandlerTestSuite) TestUpdate_Fail1() {
+	var (
+		ctx        = context.Background()
+		sampleID   int64
+		mockString = "mockString"
+		status     = "active"
+		params     = arguments.RoleUpdateArgs{
+			ID:        &sampleID,
+			Name:      &mockString,
+			CompanyID: &sampleID,
+			Status:    &status,
+			CreatedBy: &mockString,
+			UpdatedBy: &mockString,
+		}
+		role = models.Role{}
+	)
+	s.MockIRole.On("Update", ctx, params).Return(role, errors.New("some errors"))
+	actual, err := s.Role.Update(ctx, params)
+	s.Equal(role, actual)
+	s.NotNil(err)
+}
+
 func (s *RoleHandlerTestSuite) TestDelete_Success() {
 	var (
 		ctx   = context.Background()
@@ -266,6 +372,20 @@ func (s *RoleHandlerTestSuite) TestDelete_Fail() {
 		ctx   = context.Background()
 		param = arguments.RoleDeleteArgs{
 			ID: 1,
+		}
+		rowEffected int64
+	)
+	s.MockIRole.On("Delete", ctx, param).Return(rowEffected, errors.New("some errors"))
+	actual, err := s.Role.Delete(ctx, param)
+	s.Equal(rowEffected, actual)
+	s.NotNil(err)
+}
+
+func (s *RoleHandlerTestSuite) TestDelete_Fail1() {
+	var (
+		ctx   = context.Background()
+		param = arguments.RoleDeleteArgs{
+			ID: 0,
 		}
 		rowEffected int64
 	)

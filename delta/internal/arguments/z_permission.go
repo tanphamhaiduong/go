@@ -8,7 +8,7 @@ type PermissionGetByIDArgs struct {
 
 // PermissionGetByIDsArgs ...
 type PermissionGetByIDsArgs struct {
-	IDs []int64 `graphql:"ids"`
+	IDs []int64 `graphql:"ids" validate:"required"`
 }
 
 // PermissionCountArgs ...

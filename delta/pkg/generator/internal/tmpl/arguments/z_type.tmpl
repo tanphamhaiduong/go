@@ -14,7 +14,7 @@ type {{ $Name }}GetByIDArgs struct {
 
 // {{ $Name }}GetByIDsArgs ...
 type {{ $Name }}GetByIDsArgs struct {
-	IDs []int64 `graphql:"ids"`
+	IDs []int64 `graphql:"ids" validate:"required"`
 }
 
 

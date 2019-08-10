@@ -44,7 +44,6 @@ func (s *UserRepositoryTestSuite) TestGetByID_Success() {
 		mock.Anything,
 		mock.Anything,
 	).Return(nil)
-	s.MockIUser.On("GetByID", ctx, param).Return(user, nil)
 	actual, err := s.Repository.GetByID(ctx, param)
 	s.Nil(err)
 	s.Equal(user, actual)
@@ -80,7 +79,41 @@ func (s *UserRepositoryTestSuite) TestGetByID_Fail() {
 		mock.Anything,
 		mock.Anything,
 	).Return(errors.New("some errors"))
-	s.MockIUser.On("GetByID", ctx, param).Return(user, errors.New("some errors"))
+	actual, err := s.Repository.GetByID(ctx, param)
+	s.Equal(user, actual)
+	s.NotNil(err)
+}
+
+func (s *UserRepositoryTestSuite) TestGetByID_Fail1() {
+	var (
+		ctx   = context.Background()
+		param = arguments.UserGetByIDArgs{
+			ID: 1,
+		}
+		user models.User
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("QueryRowContext", ctx, param.ID).Return(s.MockIRow)
+	s.MockIRow.On("Scan",
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+	).Return(errors.New("some errors"))
 	actual, err := s.Repository.GetByID(ctx, param)
 	s.Equal(user, actual)
 	s.NotNil(err)
@@ -118,7 +151,6 @@ func (s *UserRepositoryTestSuite) TestGetByIDs_Success() {
 	).Return(nil)
 	s.MockIRows.On("Close").Return(nil)
 	s.MockIRows.On("Next").Return(false)
-	s.MockIUser.On("GetByIDs", ctx, param).Return(users, nil)
 	actual, err := s.Repository.GetByIDs(ctx, param)
 	s.Nil(err)
 	s.Equal(users, actual)
@@ -156,7 +188,80 @@ func (s *UserRepositoryTestSuite) TestGetByIDs_Fail() {
 	).Return(errors.New("some errors"))
 	s.MockIRows.On("Close").Return(nil)
 	s.MockIRows.On("Next").Return(false)
-	s.MockIUser.On("GetByIDs", ctx, param).Return(users, errors.New("some errors"))
+	actual, err := s.Repository.GetByIDs(ctx, param)
+	s.Equal(users, actual)
+	s.NotNil(err)
+}
+
+func (s *UserRepositoryTestSuite) TestGetByIDs_Fail1() {
+	var (
+		ctx   = context.Background()
+		param = arguments.UserGetByIDsArgs{
+			IDs: []int64{1, 2},
+		}
+		users []models.User
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("QueryContext", ctx, mock.Anything, mock.Anything).Return(s.MockIRows, errors.New("some errors"))
+	s.MockIRows.On("Scan",
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+	).Return(errors.New("some errors"))
+	s.MockIRows.On("Close").Return(nil)
+	s.MockIRows.On("Next").Return(false)
+	actual, err := s.Repository.GetByIDs(ctx, param)
+	s.Equal(users, actual)
+	s.NotNil(err)
+}
+
+func (s *UserRepositoryTestSuite) TestGetByIDs_Fail2() {
+	var (
+		ctx   = context.Background()
+		param = arguments.UserGetByIDsArgs{
+			IDs: []int64{1, 2},
+		}
+		users []models.User
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("QueryContext", ctx, mock.Anything, mock.Anything).Return(s.MockIRows, nil)
+	s.MockIRows.On("Scan",
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+	).Return(errors.New("some errors"))
+	s.MockIRows.On("Close").Return(nil)
+	s.MockIRows.On("Next").Return(true)
 	actual, err := s.Repository.GetByIDs(ctx, param)
 	s.Equal(users, actual)
 	s.NotNil(err)
@@ -236,24 +341,24 @@ func (s *UserRepositoryTestSuite) TestList_Success() {
 	)
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
 	s.MockIStmt.On("QueryContext", ctx,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
+		params.ID,
+		params.Username,
+		params.Password,
+		params.Name,
+		params.DateOfBirth.Time,
+		params.Reference,
+		params.AvatarUrl,
+		params.LicenseNumber,
+		params.PhoneNumber,
+		params.Extension,
+		params.TelProvider,
+		params.TelApi,
+		params.SupervisorId,
+		params.RoleId,
+		params.CompanyID,
+		params.Status,
+		params.CreatedBy,
+		params.UpdatedBy,
 		mock.Anything,
 		mock.Anything,
 	).Return(s.MockIRows, nil)
@@ -279,7 +384,6 @@ func (s *UserRepositoryTestSuite) TestList_Success() {
 	).Return(nil)
 	s.MockIRows.On("Close").Return(nil)
 	s.MockIRows.On("Next").Return(false)
-	s.MockIUser.On("List", ctx, params).Return(users, nil)
 	actual, err := s.Repository.List(ctx, params)
 	s.Nil(err)
 	s.Equal(users, actual)
@@ -317,24 +421,24 @@ func (s *UserRepositoryTestSuite) TestList_Fail() {
 	)
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, errors.New("some errors"))
 	s.MockIStmt.On("QueryContext", ctx,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
+		params.ID,
+		params.Username,
+		params.Password,
+		params.Name,
+		params.DateOfBirth.Time,
+		params.Reference,
+		params.AvatarUrl,
+		params.LicenseNumber,
+		params.PhoneNumber,
+		params.Extension,
+		params.TelProvider,
+		params.TelApi,
+		params.SupervisorId,
+		params.RoleId,
+		params.CompanyID,
+		params.Status,
+		params.CreatedBy,
+		params.UpdatedBy,
 		mock.Anything,
 		mock.Anything,
 	).Return(s.MockIRows, errors.New("some errors"))
@@ -360,7 +464,166 @@ func (s *UserRepositoryTestSuite) TestList_Fail() {
 	).Return(errors.New("some errors"))
 	s.MockIRows.On("Close").Return(nil)
 	s.MockIRows.On("Next").Return(false)
-	s.MockIUser.On("List", ctx, params).Return(users, errors.New("some errors"))
+	actual, err := s.Repository.List(ctx, params)
+	s.Equal(users, actual)
+	s.NotNil(err)
+}
+
+func (s *UserRepositoryTestSuite) TestList_Fail1() {
+	var (
+		ctx    = context.Background()
+		params = arguments.UserListArgs{
+			ID:       1,
+			Username: "mockString",
+			Password: "mockString",
+			Name:     "mockString",
+			DateOfBirth: mysql.NullTime{
+				Time:  time.Time{},
+				Valid: true,
+			},
+			Reference:     "mockString",
+			AvatarUrl:     "mockString",
+			LicenseNumber: "mockString",
+			PhoneNumber:   "mockString",
+			Extension:     "mockString",
+			TelProvider:   "mockString",
+			TelApi:        "mockString",
+			SupervisorId:  1,
+			RoleId:        1,
+			CompanyID:     1,
+			Status:        "active",
+			CreatedBy:     "mockString",
+			UpdatedBy:     "mockString",
+			Page:          1,
+			PageSize:      10,
+		}
+		users []models.User
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("QueryContext", ctx,
+		params.ID,
+		params.Username,
+		params.Password,
+		params.Name,
+		params.DateOfBirth.Time,
+		params.Reference,
+		params.AvatarUrl,
+		params.LicenseNumber,
+		params.PhoneNumber,
+		params.Extension,
+		params.TelProvider,
+		params.TelApi,
+		params.SupervisorId,
+		params.RoleId,
+		params.CompanyID,
+		params.Status,
+		params.CreatedBy,
+		params.UpdatedBy,
+		mock.Anything,
+		mock.Anything,
+	).Return(s.MockIRows, errors.New("some errors"))
+	s.MockIRows.On("Scan",
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+	).Return(errors.New("some errors"))
+	s.MockIRows.On("Close").Return(nil)
+	s.MockIRows.On("Next").Return(false)
+	actual, err := s.Repository.List(ctx, params)
+	s.Equal(users, actual)
+	s.NotNil(err)
+}
+
+func (s *UserRepositoryTestSuite) TestList_Fail2() {
+	var (
+		ctx    = context.Background()
+		params = arguments.UserListArgs{
+			ID:       1,
+			Username: "mockString",
+			Password: "mockString",
+			Name:     "mockString",
+			DateOfBirth: mysql.NullTime{
+				Time:  time.Time{},
+				Valid: true,
+			},
+			Reference:     "mockString",
+			AvatarUrl:     "mockString",
+			LicenseNumber: "mockString",
+			PhoneNumber:   "mockString",
+			Extension:     "mockString",
+			TelProvider:   "mockString",
+			TelApi:        "mockString",
+			SupervisorId:  1,
+			RoleId:        1,
+			CompanyID:     1,
+			Status:        "active",
+			CreatedBy:     "mockString",
+			UpdatedBy:     "mockString",
+			Page:          1,
+			PageSize:      10,
+		}
+		users []models.User
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("QueryContext", ctx,
+		params.ID,
+		params.Username,
+		params.Password,
+		params.Name,
+		params.DateOfBirth.Time,
+		params.Reference,
+		params.AvatarUrl,
+		params.LicenseNumber,
+		params.PhoneNumber,
+		params.Extension,
+		params.TelProvider,
+		params.TelApi,
+		params.SupervisorId,
+		params.RoleId,
+		params.CompanyID,
+		params.Status,
+		params.CreatedBy,
+		params.UpdatedBy,
+		mock.Anything,
+		mock.Anything,
+	).Return(s.MockIRows, nil)
+	s.MockIRows.On("Scan",
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+	).Return(errors.New("some errors"))
+	s.MockIRows.On("Close").Return(nil)
+	s.MockIRows.On("Next").Return(true)
 	actual, err := s.Repository.List(ctx, params)
 	s.Equal(users, actual)
 	s.NotNil(err)
@@ -435,29 +698,26 @@ func (s *UserRepositoryTestSuite) TestCount_Success() {
 	)
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
 	s.MockIStmt.On("QueryRowContext", ctx,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
+		params.ID,
+		params.Username,
+		params.Password,
+		params.Name,
+		params.DateOfBirth.Time,
+		params.Reference,
+		params.AvatarUrl,
+		params.LicenseNumber,
+		params.PhoneNumber,
+		params.Extension,
+		params.TelProvider,
+		params.TelApi,
+		params.SupervisorId,
+		params.RoleId,
+		params.CompanyID,
+		params.Status,
+		params.CreatedBy,
+		params.UpdatedBy,
 	).Return(s.MockIRows, nil)
 	s.MockIRows.On("Scan", mock.Anything).Return(nil)
-	s.MockIRows.On("Close").Return(nil)
-	s.MockIRows.On("Next").Return(false)
-	s.MockIUser.On("List", ctx, params).Return(count, nil)
 	actual, err := s.Repository.Count(ctx, params)
 	s.Nil(err)
 	s.Equal(count, actual)
@@ -492,11 +752,137 @@ func (s *UserRepositoryTestSuite) TestCount_Fail() {
 		count int64
 	)
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, errors.New("some errors"))
-	s.MockIStmt.On("QueryRowContext", ctx, mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(s.MockIRows, errors.New("some errors"))
+	s.MockIStmt.On("QueryRowContext", ctx,
+		params.ID,
+		params.Username,
+		params.Password,
+		params.Name,
+		params.DateOfBirth.Time,
+		params.Reference,
+		params.AvatarUrl,
+		params.LicenseNumber,
+		params.PhoneNumber,
+		params.Extension,
+		params.TelProvider,
+		params.TelApi,
+		params.SupervisorId,
+		params.RoleId,
+		params.CompanyID,
+		params.Status,
+		params.CreatedBy,
+		params.UpdatedBy,
+	).Return(s.MockIRows, errors.New("some errors"))
 	s.MockIRows.On("Scan", mock.Anything).Return(errors.New("some errors"))
-	s.MockIRows.On("Close").Return(nil)
-	s.MockIRows.On("Next").Return(false)
-	s.MockIUser.On("List", ctx, params).Return(count, errors.New("some errors"))
+	actual, err := s.Repository.Count(ctx, params)
+	s.Equal(count, actual)
+	s.NotNil(err)
+}
+
+func (s *UserRepositoryTestSuite) TestCount_Fail1() {
+	var (
+		ctx    = context.Background()
+		params = arguments.UserCountArgs{
+			ID:       1,
+			Username: "mockString",
+			Password: "mockString",
+			Name:     "mockString",
+			DateOfBirth: mysql.NullTime{
+				Time:  time.Time{},
+				Valid: true,
+			},
+			Reference:     "mockString",
+			AvatarUrl:     "mockString",
+			LicenseNumber: "mockString",
+			PhoneNumber:   "mockString",
+			Extension:     "mockString",
+			TelProvider:   "mockString",
+			TelApi:        "mockString",
+			SupervisorId:  1,
+			RoleId:        1,
+			CompanyID:     1,
+			Status:        "active",
+			CreatedBy:     "mockString",
+			UpdatedBy:     "mockString",
+		}
+		count int64
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("QueryRowContext", ctx,
+		params.ID,
+		params.Username,
+		params.Password,
+		params.Name,
+		params.DateOfBirth.Time,
+		params.Reference,
+		params.AvatarUrl,
+		params.LicenseNumber,
+		params.PhoneNumber,
+		params.Extension,
+		params.TelProvider,
+		params.TelApi,
+		params.SupervisorId,
+		params.RoleId,
+		params.CompanyID,
+		params.Status,
+		params.CreatedBy,
+		params.UpdatedBy,
+	).Return(s.MockIRows, errors.New("some errors"))
+	s.MockIRows.On("Scan", mock.Anything).Return(errors.New("some errors"))
+	actual, err := s.Repository.Count(ctx, params)
+	s.Equal(count, actual)
+	s.NotNil(err)
+}
+
+func (s *UserRepositoryTestSuite) TestCount_Fail2() {
+	var (
+		ctx    = context.Background()
+		params = arguments.UserCountArgs{
+			ID:       1,
+			Username: "mockString",
+			Password: "mockString",
+			Name:     "mockString",
+			DateOfBirth: mysql.NullTime{
+				Time:  time.Time{},
+				Valid: true,
+			},
+			Reference:     "mockString",
+			AvatarUrl:     "mockString",
+			LicenseNumber: "mockString",
+			PhoneNumber:   "mockString",
+			Extension:     "mockString",
+			TelProvider:   "mockString",
+			TelApi:        "mockString",
+			SupervisorId:  1,
+			RoleId:        1,
+			CompanyID:     1,
+			Status:        "active",
+			CreatedBy:     "mockString",
+			UpdatedBy:     "mockString",
+		}
+		count int64
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("QueryRowContext", ctx,
+		params.ID,
+		params.Username,
+		params.Password,
+		params.Name,
+		params.DateOfBirth.Time,
+		params.Reference,
+		params.AvatarUrl,
+		params.LicenseNumber,
+		params.PhoneNumber,
+		params.Extension,
+		params.TelProvider,
+		params.TelApi,
+		params.SupervisorId,
+		params.RoleId,
+		params.CompanyID,
+		params.Status,
+		params.CreatedBy,
+		params.UpdatedBy,
+	).Return(s.MockIRows, nil)
+	s.MockIRows.On("Scan", mock.Anything).Return(errors.New("some errors"))
 	actual, err := s.Repository.Count(ctx, params)
 	s.Equal(count, actual)
 	s.NotNil(err)
@@ -530,26 +916,6 @@ func (s *UserRepositoryTestSuite) TestInsert_Success() {
 		}
 		expected models.User
 	)
-	user := models.User{
-		ID:            sampleID,
-		Username:      params.Username,
-		Password:      params.Password,
-		Name:          params.Name,
-		DateOfBirth:   params.DateOfBirth,
-		Reference:     params.Reference,
-		AvatarUrl:     params.AvatarUrl,
-		LicenseNumber: params.LicenseNumber,
-		PhoneNumber:   params.PhoneNumber,
-		Extension:     params.Extension,
-		TelProvider:   params.TelProvider,
-		TelApi:        params.TelApi,
-		SupervisorId:  params.SupervisorId,
-		RoleId:        params.RoleId,
-		CompanyID:     params.CompanyID,
-		Status:        params.Status,
-		CreatedBy:     params.CreatedBy,
-		UpdatedBy:     params.UpdatedBy,
-	}
 	//Mock Insert
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
 	s.MockIStmt.On("ExecContext", ctx,
@@ -572,7 +938,6 @@ func (s *UserRepositoryTestSuite) TestInsert_Success() {
 		params.UpdatedBy,
 	).Return(s.MockIResult, nil)
 	s.MockIResult.On("LastInsertId").Return(sampleID, nil)
-	s.MockIUser.On("Insert", ctx, params).Return(user, nil)
 	// Mock GetByID
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
 	s.MockIStmt.On("QueryRowContext", ctx, mock.Anything).Return(s.MockIRow)
@@ -596,7 +961,6 @@ func (s *UserRepositoryTestSuite) TestInsert_Success() {
 		mock.Anything,
 		mock.Anything,
 	).Return(nil)
-	s.MockIUser.On("GetByID", ctx, params).Return(user, nil)
 
 	actual, err := s.Repository.Insert(ctx, params)
 	s.Nil(err)
@@ -652,9 +1016,195 @@ func (s *UserRepositoryTestSuite) TestInsert_Fail() {
 		params.UpdatedBy,
 	).Return(s.MockIResult, errors.New("some errors"))
 	s.MockIResult.On("LastInsertId").Return(sampleID, errors.New("some errors"))
-	s.MockIUser.On("Insert", ctx, params).Return(user, errors.New("some errors"))
 	actual, err := s.Repository.Insert(ctx, params)
 	s.Equal(user, actual)
+	s.NotNil(err)
+}
+
+func (s *UserRepositoryTestSuite) TestInsert_Fail1() {
+	var (
+		ctx            = context.Background()
+		sampleID int64 = 1
+		params         = arguments.UserInsertArgs{
+			Username: "mockString",
+			Password: "mockString",
+			Name:     "mockString",
+			DateOfBirth: mysql.NullTime{
+				Time:  time.Time{},
+				Valid: true,
+			},
+			Reference:     "mockString",
+			AvatarUrl:     "mockString",
+			LicenseNumber: "mockString",
+			PhoneNumber:   "mockString",
+			Extension:     "mockString",
+			TelProvider:   "mockString",
+			TelApi:        "mockString",
+			SupervisorId:  1,
+			RoleId:        1,
+			CompanyID:     1,
+			Status:        "active",
+			CreatedBy:     "mockString",
+			UpdatedBy:     "mockString",
+		}
+		user models.User
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("ExecContext", ctx,
+		params.Username,
+		params.Password,
+		params.Name,
+		params.DateOfBirth,
+		params.Reference,
+		params.AvatarUrl,
+		params.LicenseNumber,
+		params.PhoneNumber,
+		params.Extension,
+		params.TelProvider,
+		params.TelApi,
+		params.SupervisorId,
+		params.RoleId,
+		params.CompanyID,
+		params.Status,
+		params.CreatedBy,
+		params.UpdatedBy,
+	).Return(s.MockIResult, errors.New("some errors"))
+	s.MockIResult.On("LastInsertId").Return(sampleID, errors.New("some errors"))
+	actual, err := s.Repository.Insert(ctx, params)
+	s.Equal(user, actual)
+	s.NotNil(err)
+}
+
+func (s *UserRepositoryTestSuite) TestInsert_Fail2() {
+	var (
+		ctx            = context.Background()
+		sampleID int64 = 1
+		params         = arguments.UserInsertArgs{
+			Username: "mockString",
+			Password: "mockString",
+			Name:     "mockString",
+			DateOfBirth: mysql.NullTime{
+				Time:  time.Time{},
+				Valid: true,
+			},
+			Reference:     "mockString",
+			AvatarUrl:     "mockString",
+			LicenseNumber: "mockString",
+			PhoneNumber:   "mockString",
+			Extension:     "mockString",
+			TelProvider:   "mockString",
+			TelApi:        "mockString",
+			SupervisorId:  1,
+			RoleId:        1,
+			CompanyID:     1,
+			Status:        "active",
+			CreatedBy:     "mockString",
+			UpdatedBy:     "mockString",
+		}
+		user models.User
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("ExecContext", ctx,
+		params.Username,
+		params.Password,
+		params.Name,
+		params.DateOfBirth,
+		params.Reference,
+		params.AvatarUrl,
+		params.LicenseNumber,
+		params.PhoneNumber,
+		params.Extension,
+		params.TelProvider,
+		params.TelApi,
+		params.SupervisorId,
+		params.RoleId,
+		params.CompanyID,
+		params.Status,
+		params.CreatedBy,
+		params.UpdatedBy,
+	).Return(s.MockIResult, nil)
+	s.MockIResult.On("LastInsertId").Return(sampleID, errors.New("some errors"))
+	actual, err := s.Repository.Insert(ctx, params)
+	s.Equal(user, actual)
+	s.NotNil(err)
+}
+
+func (s *UserRepositoryTestSuite) TestInsert_Fail3() {
+	var (
+		ctx            = context.Background()
+		sampleID int64 = 1
+		params         = arguments.UserInsertArgs{
+			Username: "mockString",
+			Password: "mockString",
+			Name:     "mockString",
+			DateOfBirth: mysql.NullTime{
+				Time:  time.Time{},
+				Valid: true,
+			},
+			Reference:     "mockString",
+			AvatarUrl:     "mockString",
+			LicenseNumber: "mockString",
+			PhoneNumber:   "mockString",
+			Extension:     "mockString",
+			TelProvider:   "mockString",
+			TelApi:        "mockString",
+			SupervisorId:  1,
+			RoleId:        1,
+			CompanyID:     1,
+			Status:        "active",
+			CreatedBy:     "mockString",
+			UpdatedBy:     "mockString",
+		}
+		expected models.User
+	)
+	//Mock Insert
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("ExecContext", ctx,
+		params.Username,
+		params.Password,
+		params.Name,
+		params.DateOfBirth,
+		params.Reference,
+		params.AvatarUrl,
+		params.LicenseNumber,
+		params.PhoneNumber,
+		params.Extension,
+		params.TelProvider,
+		params.TelApi,
+		params.SupervisorId,
+		params.RoleId,
+		params.CompanyID,
+		params.Status,
+		params.CreatedBy,
+		params.UpdatedBy,
+	).Return(s.MockIResult, nil)
+	s.MockIResult.On("LastInsertId").Return(sampleID, nil)
+	// Mock GetByID
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("QueryRowContext", ctx, mock.Anything).Return(s.MockIRow)
+	s.MockIRow.On("Scan",
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+	).Return(errors.New("some errors"))
+
+	actual, err := s.Repository.Insert(ctx, params)
+	s.Equal(expected, actual)
 	s.NotNil(err)
 }
 
@@ -696,11 +1246,12 @@ func (s *UserRepositoryTestSuite) TestSetArgsToUpdateBuilder_Success() {
 
 func (s *UserRepositoryTestSuite) TestUpdate_Success() {
 	var (
-		ctx              = context.Background()
-		sampleID   int64 = 1
-		mockString       = "mockString"
-		status           = "active"
-		params           = arguments.UserUpdateArgs{
+		ctx               = context.Background()
+		sampleID    int64 = 1
+		rowEffected int64 = 1
+		mockString        = "mockString"
+		status            = "active"
+		params            = arguments.UserUpdateArgs{
 			ID:       &sampleID,
 			Username: &mockString,
 			Password: &mockString,
@@ -725,26 +1276,6 @@ func (s *UserRepositoryTestSuite) TestUpdate_Success() {
 		}
 		expected models.User
 	)
-	user := models.User{
-		ID:            *params.ID,
-		Username:      *params.Username,
-		Password:      *params.Password,
-		Name:          *params.Name,
-		DateOfBirth:   *params.DateOfBirth,
-		Reference:     *params.Reference,
-		AvatarUrl:     *params.AvatarUrl,
-		LicenseNumber: *params.LicenseNumber,
-		PhoneNumber:   *params.PhoneNumber,
-		Extension:     *params.Extension,
-		TelProvider:   *params.TelProvider,
-		TelApi:        *params.TelApi,
-		SupervisorId:  *params.SupervisorId,
-		RoleId:        *params.RoleId,
-		CompanyID:     *params.CompanyID,
-		Status:        *params.Status,
-		CreatedBy:     *params.CreatedBy,
-		UpdatedBy:     *params.UpdatedBy,
-	}
 	// Mock Update
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
 	s.MockIStmt.On("ExecContext", ctx,
@@ -767,8 +1298,7 @@ func (s *UserRepositoryTestSuite) TestUpdate_Success() {
 		*params.UpdatedBy,
 		*params.ID,
 	).Return(s.MockIResult, nil)
-	s.MockIResult.On("RowsAffected").Return(*params.ID, nil)
-	s.MockIUser.On("Update", ctx, params).Return(user, nil)
+	s.MockIResult.On("RowsAffected").Return(rowEffected, nil)
 	// Mock GetByID
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
 	s.MockIStmt.On("QueryRowContext", ctx, mock.Anything).Return(s.MockIRow)
@@ -792,7 +1322,6 @@ func (s *UserRepositoryTestSuite) TestUpdate_Success() {
 		mock.Anything,
 		mock.Anything,
 	).Return(nil)
-	s.MockIUser.On("GetByID", ctx, params).Return(user, nil)
 
 	actual, err := s.Repository.Update(ctx, params)
 	s.Nil(err)
@@ -800,6 +1329,242 @@ func (s *UserRepositoryTestSuite) TestUpdate_Success() {
 }
 
 func (s *UserRepositoryTestSuite) TestUpdate_Fail() {
+	var (
+		ctx               = context.Background()
+		sampleID    int64 = 1
+		rowEffected int64
+		mockString  = "mockString"
+		status      = "active"
+		params      = arguments.UserUpdateArgs{
+			ID:       &sampleID,
+			Username: &mockString,
+			Password: &mockString,
+			Name:     &mockString,
+			DateOfBirth: &mysql.NullTime{
+				Time:  time.Time{},
+				Valid: true,
+			},
+			Reference:     &mockString,
+			AvatarUrl:     &mockString,
+			LicenseNumber: &mockString,
+			PhoneNumber:   &mockString,
+			Extension:     &mockString,
+			TelProvider:   &mockString,
+			TelApi:        &mockString,
+			SupervisorId:  &sampleID,
+			RoleId:        &sampleID,
+			CompanyID:     &sampleID,
+			Status:        &status,
+			CreatedBy:     &mockString,
+			UpdatedBy:     &mockString,
+		}
+		user models.User
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, errors.New("some errors"))
+	s.MockIStmt.On("ExecContext", ctx,
+		*params.Username,
+		*params.Password,
+		*params.Name,
+		*params.DateOfBirth,
+		*params.Reference,
+		*params.AvatarUrl,
+		*params.LicenseNumber,
+		*params.PhoneNumber,
+		*params.Extension,
+		*params.TelProvider,
+		*params.TelApi,
+		*params.SupervisorId,
+		*params.RoleId,
+		*params.CompanyID,
+		*params.Status,
+		*params.CreatedBy,
+		*params.UpdatedBy,
+		*params.ID,
+	).Return(s.MockIResult, errors.New("some errors"))
+	s.MockIResult.On("RowsAffected").Return(rowEffected, errors.New("some errors"))
+	actual, err := s.Repository.Update(ctx, params)
+	s.Equal(user, actual)
+	s.NotNil(err)
+}
+
+func (s *UserRepositoryTestSuite) TestUpdate_Fail1() {
+	var (
+		ctx               = context.Background()
+		sampleID    int64 = 1
+		rowEffected int64
+		mockString  = "mockString"
+		status      = "active"
+		params      = arguments.UserUpdateArgs{
+			ID:       &sampleID,
+			Username: &mockString,
+			Password: &mockString,
+			Name:     &mockString,
+			DateOfBirth: &mysql.NullTime{
+				Time:  time.Time{},
+				Valid: true,
+			},
+			Reference:     &mockString,
+			AvatarUrl:     &mockString,
+			LicenseNumber: &mockString,
+			PhoneNumber:   &mockString,
+			Extension:     &mockString,
+			TelProvider:   &mockString,
+			TelApi:        &mockString,
+			SupervisorId:  &sampleID,
+			RoleId:        &sampleID,
+			CompanyID:     &sampleID,
+			Status:        &status,
+			CreatedBy:     &mockString,
+			UpdatedBy:     &mockString,
+		}
+		user models.User
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("ExecContext", ctx,
+		*params.Username,
+		*params.Password,
+		*params.Name,
+		*params.DateOfBirth,
+		*params.Reference,
+		*params.AvatarUrl,
+		*params.LicenseNumber,
+		*params.PhoneNumber,
+		*params.Extension,
+		*params.TelProvider,
+		*params.TelApi,
+		*params.SupervisorId,
+		*params.RoleId,
+		*params.CompanyID,
+		*params.Status,
+		*params.CreatedBy,
+		*params.UpdatedBy,
+		*params.ID,
+	).Return(s.MockIResult, errors.New("some errors"))
+	s.MockIResult.On("RowsAffected").Return(rowEffected, errors.New("some errors"))
+	actual, err := s.Repository.Update(ctx, params)
+	s.Equal(user, actual)
+	s.NotNil(err)
+}
+
+func (s *UserRepositoryTestSuite) TestUpdate_Fail2() {
+	var (
+		ctx               = context.Background()
+		sampleID    int64 = 1
+		rowEffected int64
+		mockString  = "mockString"
+		status      = "active"
+		params      = arguments.UserUpdateArgs{
+			ID:       &sampleID,
+			Username: &mockString,
+			Password: &mockString,
+			Name:     &mockString,
+			DateOfBirth: &mysql.NullTime{
+				Time:  time.Time{},
+				Valid: true,
+			},
+			Reference:     &mockString,
+			AvatarUrl:     &mockString,
+			LicenseNumber: &mockString,
+			PhoneNumber:   &mockString,
+			Extension:     &mockString,
+			TelProvider:   &mockString,
+			TelApi:        &mockString,
+			SupervisorId:  &sampleID,
+			RoleId:        &sampleID,
+			CompanyID:     &sampleID,
+			Status:        &status,
+			CreatedBy:     &mockString,
+			UpdatedBy:     &mockString,
+		}
+		user models.User
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("ExecContext", ctx,
+		*params.Username,
+		*params.Password,
+		*params.Name,
+		*params.DateOfBirth,
+		*params.Reference,
+		*params.AvatarUrl,
+		*params.LicenseNumber,
+		*params.PhoneNumber,
+		*params.Extension,
+		*params.TelProvider,
+		*params.TelApi,
+		*params.SupervisorId,
+		*params.RoleId,
+		*params.CompanyID,
+		*params.Status,
+		*params.CreatedBy,
+		*params.UpdatedBy,
+		*params.ID,
+	).Return(s.MockIResult, nil)
+	s.MockIResult.On("RowsAffected").Return(rowEffected, errors.New("some errors"))
+	actual, err := s.Repository.Update(ctx, params)
+	s.Equal(user, actual)
+	s.NotNil(err)
+}
+
+func (s *UserRepositoryTestSuite) TestUpdate_Fail3() {
+	var (
+		ctx               = context.Background()
+		sampleID    int64 = 1
+		rowEffected int64
+		mockString  = "mockString"
+		status      = "active"
+		params      = arguments.UserUpdateArgs{
+			ID:       &sampleID,
+			Username: &mockString,
+			Password: &mockString,
+			Name:     &mockString,
+			DateOfBirth: &mysql.NullTime{
+				Time:  time.Time{},
+				Valid: true,
+			},
+			Reference:     &mockString,
+			AvatarUrl:     &mockString,
+			LicenseNumber: &mockString,
+			PhoneNumber:   &mockString,
+			Extension:     &mockString,
+			TelProvider:   &mockString,
+			TelApi:        &mockString,
+			SupervisorId:  &sampleID,
+			RoleId:        &sampleID,
+			CompanyID:     &sampleID,
+			Status:        &status,
+			CreatedBy:     &mockString,
+			UpdatedBy:     &mockString,
+		}
+		user models.User
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("ExecContext", ctx,
+		*params.Username,
+		*params.Password,
+		*params.Name,
+		*params.DateOfBirth,
+		*params.Reference,
+		*params.AvatarUrl,
+		*params.LicenseNumber,
+		*params.PhoneNumber,
+		*params.Extension,
+		*params.TelProvider,
+		*params.TelApi,
+		*params.SupervisorId,
+		*params.RoleId,
+		*params.CompanyID,
+		*params.Status,
+		*params.CreatedBy,
+		*params.UpdatedBy,
+		*params.ID,
+	).Return(s.MockIResult, nil)
+	s.MockIResult.On("RowsAffected").Return(rowEffected, nil)
+	actual, err := s.Repository.Update(ctx, params)
+	s.Equal(user, actual)
+	s.NotNil(err)
+}
+
+func (s *UserRepositoryTestSuite) TestUpdate_Fail4() {
 	var (
 		ctx              = context.Background()
 		sampleID   int64 = 1
@@ -830,10 +1595,53 @@ func (s *UserRepositoryTestSuite) TestUpdate_Fail() {
 		}
 		user models.User
 	)
-	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, errors.New("some errors"))
-	s.MockIStmt.On("ExecContext", ctx, mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(s.MockIResult, errors.New("some errors"))
-	s.MockIResult.On("RowsAffected").Return(sampleID, errors.New("some errors"))
-	s.MockIUser.On("Update", ctx, params).Return(user, errors.New("some errors"))
+	// Mock Update
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("ExecContext", ctx,
+		*params.Username,
+		*params.Password,
+		*params.Name,
+		*params.DateOfBirth,
+		*params.Reference,
+		*params.AvatarUrl,
+		*params.LicenseNumber,
+		*params.PhoneNumber,
+		*params.Extension,
+		*params.TelProvider,
+		*params.TelApi,
+		*params.SupervisorId,
+		*params.RoleId,
+		*params.CompanyID,
+		*params.Status,
+		*params.CreatedBy,
+		*params.UpdatedBy,
+		*params.ID,
+	).Return(s.MockIResult, nil)
+	s.MockIResult.On("RowsAffected").Return(*params.ID, nil)
+	// Mock GetByID
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("QueryRowContext", ctx, mock.Anything).Return(s.MockIRow)
+	s.MockIRow.On("Scan",
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+	).Return(errors.New("some errors"))
+
 	actual, err := s.Repository.Update(ctx, params)
 	s.Equal(user, actual)
 	s.NotNil(err)
@@ -849,8 +1657,7 @@ func (s *UserRepositoryTestSuite) TestDelete_Success() {
 	)
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
 	s.MockIStmt.On("ExecContext", ctx, param.ID).Return(s.MockIResult, nil)
-	s.MockIResult.On("RowsAffected").Return(param.ID, nil)
-	s.MockIUser.On("Delete", ctx, param).Return(rowEffected, nil)
+	s.MockIResult.On("RowsAffected").Return(rowEffected, nil)
 	actual, err := s.Repository.Delete(ctx, param)
 	s.Nil(err)
 	s.Equal(param.ID, actual)
@@ -866,8 +1673,55 @@ func (s *UserRepositoryTestSuite) TestDelete_Fail() {
 	)
 	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, errors.New("some errors"))
 	s.MockIStmt.On("ExecContext", ctx, param.ID).Return(s.MockIResult, errors.New("some errors"))
-	s.MockIResult.On("RowsAffected").Return(param.ID, errors.New("some errors"))
-	s.MockIUser.On("Delete", ctx, param).Return(rowEffected, errors.New("some errors"))
+	s.MockIResult.On("RowsAffected").Return(rowEffected, errors.New("some errors"))
+	actual, err := s.Repository.Delete(ctx, param)
+	s.Equal(rowEffected, actual)
+	s.NotNil(err)
+}
+
+func (s *UserRepositoryTestSuite) TestDelete_Fail1() {
+	var (
+		ctx   = context.Background()
+		param = arguments.UserDeleteArgs{
+			ID: 1,
+		}
+		rowEffected int64
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("ExecContext", ctx, param.ID).Return(s.MockIResult, errors.New("some errors"))
+	s.MockIResult.On("RowsAffected").Return(rowEffected, errors.New("some errors"))
+	actual, err := s.Repository.Delete(ctx, param)
+	s.Equal(rowEffected, actual)
+	s.NotNil(err)
+}
+
+func (s *UserRepositoryTestSuite) TestDelete_Fail2() {
+	var (
+		ctx   = context.Background()
+		param = arguments.UserDeleteArgs{
+			ID: 1,
+		}
+		rowEffected int64
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("ExecContext", ctx, param.ID).Return(s.MockIResult, nil)
+	s.MockIResult.On("RowsAffected").Return(rowEffected, errors.New("some errors"))
+	actual, err := s.Repository.Delete(ctx, param)
+	s.Equal(rowEffected, actual)
+	s.NotNil(err)
+}
+
+func (s *UserRepositoryTestSuite) TestDelete_Fail3() {
+	var (
+		ctx   = context.Background()
+		param = arguments.UserDeleteArgs{
+			ID: 1,
+		}
+		rowEffected int64
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("ExecContext", ctx, param.ID).Return(s.MockIResult, nil)
+	s.MockIResult.On("RowsAffected").Return(rowEffected, nil)
 	actual, err := s.Repository.Delete(ctx, param)
 	s.Equal(rowEffected, actual)
 	s.NotNil(err)

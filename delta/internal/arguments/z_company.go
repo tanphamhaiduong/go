@@ -8,7 +8,7 @@ type CompanyGetByIDArgs struct {
 
 // CompanyGetByIDsArgs ...
 type CompanyGetByIDsArgs struct {
-	IDs []int64 `graphql:"ids"`
+	IDs []int64 `graphql:"ids" validate:"required"`
 }
 
 // CompanyCountArgs ...

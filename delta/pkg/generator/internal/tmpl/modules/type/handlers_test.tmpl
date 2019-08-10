@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/suite"
+	"github.com/tanphamhaiduong/go/common/logger"
 	"github.com/tanphamhaiduong/go/delta/internal/modules/{{ $name }}/mocks"
 )
 
@@ -24,4 +25,6 @@ func (s *{{ $Name }}HandlerTestSuite) SetupTest() {
 	handler := NewHandler(s.MockI{{ $Name }})
 	s.{{ $Name }} = *handler
 	s.{{ $Name }}.{{ $name }} = s.MockI{{ $Name }}
+	logConfig := logger.Configuration{}
+	logger.NewLogger(logConfig, logger.InstanceZapLogger)
 }

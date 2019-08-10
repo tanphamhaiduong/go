@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/suite"
+	"github.com/tanphamhaiduong/go/common/logger"
 	"github.com/tanphamhaiduong/go/delta/internal/modules/permission/mocks"
 )
 
@@ -22,4 +23,6 @@ func (s *PermissionHandlerTestSuite) SetupTest() {
 	handler := NewHandler(s.MockIPermission)
 	s.Permission = *handler
 	s.Permission.permission = s.MockIPermission
+	logConfig := logger.Configuration{}
+	logger.NewLogger(logConfig, logger.InstanceZapLogger)
 }

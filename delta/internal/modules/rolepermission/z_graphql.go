@@ -160,6 +160,10 @@ func (r *ResolverImpl) GetByID(param graphql.ResolveParams) (interface{}, error)
 	// parse param
 	args := arguments.RolePermissionGetByIDArgs{}
 	if err := utils.Parse(param.Args, &args); err != nil {
+		logger.WithFields(logger.Fields{
+			"TraceID": param.Context.Value("TraceID"),
+			"Error":   err,
+		}).Errorf("Resolver Count utils.Parse rolepermission")
 		return nil, err
 	}
 	response, err := r.rolepermission.GetByID(param.Context, args)
@@ -179,6 +183,10 @@ func (r *ResolverImpl) Count(params graphql.ResolveParams) (interface{}, error) 
 	args := arguments.RolePermissionCountArgs{}
 	err := utils.Parse(params.Source.(map[string]interface{}), &args)
 	if err != nil {
+		logger.WithFields(logger.Fields{
+			"TraceID": params.Context.Value("TraceID"),
+			"Error":   err,
+		}).Errorf("Resolver Count utils.Parse rolepermission")
 		return nil, err
 	}
 	response, err := r.rolepermission.Count(params.Context, args)
