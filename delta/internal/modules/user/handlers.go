@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -59,7 +60,8 @@ func (h *HandlerImpl) validateUser(ctx context.Context, user models.User, param 
 
 func (h *HandlerImpl) signTokens(user models.User, param arguments.UserLogin) (string, error) {
 	var (
-		jwtKey              = []byte("test")
+		secretKey           = os.Getenv("SECRET_KEY")
+		jwtKey              = []byte(secretKey)
 		expirationTokenTime = time.Now().Add(5 * time.Minute)
 		claims              = &models.Claims{
 			User: user,
@@ -67,7 +69,11 @@ func (h *HandlerImpl) signTokens(user models.User, param arguments.UserLogin) (s
 				ExpiresAt: expirationTokenTime.Unix(),
 			},
 		}
+		isDevelopmentEnv = secretKey == ""
 	)
+	if isDevelopmentEnv {
+		jwtKey = []byte("test")
+	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err := token.SignedString(jwtKey)
 

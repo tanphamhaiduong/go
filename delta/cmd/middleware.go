@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -78,11 +79,15 @@ func withLogging(next http.Handler) http.Handler {
 func withAuth(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var (
-			jwtKey        = []byte("test")
-			authorization = r.Header.Get("Authorization")
-			tokenString   = strings.ReplaceAll(authorization, "Bearer ", "")
+			secretKey        = os.Getenv("SECRET_KEY")
+			jwtKey           = []byte(secretKey)
+			authorization    = r.Header.Get("Authorization")
+			tokenString      = strings.ReplaceAll(authorization, "Bearer ", "")
+			isDevelopmentEnv = secretKey == ""
 		)
-
+		if isDevelopmentEnv {
+			jwtKey = []byte("test")
+		}
 		claims := &models.Claims{}
 		_, _ = jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 			return jwtKey, nil
