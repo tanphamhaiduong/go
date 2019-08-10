@@ -7,6 +7,7 @@ import (
 	"github.com/tanphamhaiduong/go/common/logger"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
+	"github.com/tanphamhaiduong/go/delta/internal/utils"
 	"github.com/tanphamhaiduong/go/delta/internal/validator"
 )
 
@@ -24,7 +25,7 @@ type ICoreRepository interface {
 // GetByID ...
 func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.RoleGetByID) (models.Role, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Handler GetByID of role")
 	var (
@@ -32,7 +33,7 @@ func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.RoleGetByID)
 	)
 	if err := validator.Struct(params); err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler GetByID validator.Struct error of role")
 		return role, err
@@ -40,7 +41,7 @@ func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.RoleGetByID)
 	role, err := h.role.GetByID(ctx, params)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler GetByID h.role.GetByID error of role")
 		return role, err
@@ -51,7 +52,7 @@ func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.RoleGetByID)
 // GetByIDs ...
 func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.RoleGetByIDs) ([]models.Role, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Handler GetByIDs of role")
 	var (
@@ -59,7 +60,7 @@ func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.RoleGetByID
 	)
 	if err := validator.Struct(params); err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler GetByIDs validator.Struct error of role")
 		return roles, err
@@ -67,7 +68,7 @@ func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.RoleGetByID
 	roles, err := h.role.GetByIDs(ctx, params)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler GetByIDs h.role.GetByIDs error of role")
 		return roles, err
@@ -78,7 +79,7 @@ func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.RoleGetByID
 // Count ...
 func (h *HandlerImpl) Count(ctx context.Context, params arguments.RoleCount) (int64, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Handler Count of role")
 	var (
@@ -86,7 +87,7 @@ func (h *HandlerImpl) Count(ctx context.Context, params arguments.RoleCount) (in
 	)
 	if err := validator.Struct(params); err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler Count validator.Struct error of role")
 		return count, err
@@ -94,7 +95,7 @@ func (h *HandlerImpl) Count(ctx context.Context, params arguments.RoleCount) (in
 	count, err := h.role.Count(ctx, params)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler Count h.role.Count error of role")
 		return count, err
@@ -105,7 +106,7 @@ func (h *HandlerImpl) Count(ctx context.Context, params arguments.RoleCount) (in
 // List ...
 func (h *HandlerImpl) List(ctx context.Context, params arguments.RoleList) ([]models.Role, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Handler List of role")
 	var (
@@ -113,7 +114,7 @@ func (h *HandlerImpl) List(ctx context.Context, params arguments.RoleList) ([]mo
 	)
 	if err := validator.Struct(params); err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler List validator.Struct error of role")
 		return roles, err
@@ -121,7 +122,7 @@ func (h *HandlerImpl) List(ctx context.Context, params arguments.RoleList) ([]mo
 	roles, err := h.role.List(ctx, params)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler List h.role.List error of role")
 		return roles, err
@@ -132,7 +133,7 @@ func (h *HandlerImpl) List(ctx context.Context, params arguments.RoleList) ([]mo
 // Insert ...
 func (h *HandlerImpl) Insert(ctx context.Context, params arguments.RoleInsert) (models.Role, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Handler Insert of role")
 	var (
@@ -140,7 +141,7 @@ func (h *HandlerImpl) Insert(ctx context.Context, params arguments.RoleInsert) (
 	)
 	if err := validator.Struct(params); err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler Insert validator.Struct error of role")
 		return role, err
@@ -148,7 +149,7 @@ func (h *HandlerImpl) Insert(ctx context.Context, params arguments.RoleInsert) (
 	role, err := h.role.Insert(ctx, params)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler Insert h.role.Insert error of role")
 		return role, err
@@ -159,7 +160,7 @@ func (h *HandlerImpl) Insert(ctx context.Context, params arguments.RoleInsert) (
 // Update ...
 func (h *HandlerImpl) Update(ctx context.Context, params arguments.RoleUpdate) (models.Role, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Handler Update of role")
 	var (
@@ -167,7 +168,7 @@ func (h *HandlerImpl) Update(ctx context.Context, params arguments.RoleUpdate) (
 	)
 	if err := validator.Struct(params); err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler Update validator.Struct error of role")
 		return role, err
@@ -175,7 +176,7 @@ func (h *HandlerImpl) Update(ctx context.Context, params arguments.RoleUpdate) (
 	role, err := h.role.Update(ctx, params)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler Update h.role.Update error of role")
 		return role, err
@@ -186,7 +187,7 @@ func (h *HandlerImpl) Update(ctx context.Context, params arguments.RoleUpdate) (
 // Delete ...
 func (h *HandlerImpl) Delete(ctx context.Context, param arguments.RoleDelete) (int64, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"param":   param,
 	}).Infof("Handler Delete of role")
 	var (
@@ -194,7 +195,7 @@ func (h *HandlerImpl) Delete(ctx context.Context, param arguments.RoleDelete) (i
 	)
 	if err := validator.Struct(param); err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler Delete validator.Struct error of role")
 		return id, err
@@ -202,7 +203,7 @@ func (h *HandlerImpl) Delete(ctx context.Context, param arguments.RoleDelete) (i
 	id, err := h.role.Delete(ctx, param)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler Delete h.role.Delete error of role")
 		return id, err

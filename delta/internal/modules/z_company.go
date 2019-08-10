@@ -4,6 +4,7 @@ package modules
 import (
 	"context"
 
+	"github.com/graphql-go/graphql"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
 )
@@ -15,12 +16,16 @@ type ICoreCompanyHandler interface {
 	List(ctx context.Context, params arguments.CompanyList) ([]models.Company, error)
 	Insert(ctx context.Context, params arguments.CompanyInsert) (models.Company, error)
 	Update(ctx context.Context, params arguments.CompanyUpdate) (models.Company, error)
-	Delete(ctx context.Context, params arguments.CompanyDelete) (int64, error)
 }
 
 // ICoreCompanyResolver ...
 type ICoreCompanyResolver interface {
-	IResolver
+	ForwardParams(p graphql.ResolveParams) (interface{}, error)
+	GetByID(p graphql.ResolveParams) (interface{}, error)
+	Count(p graphql.ResolveParams) (interface{}, error)
+	List(p graphql.ResolveParams) (interface{}, error)
+	Insert(p graphql.ResolveParams) (interface{}, error)
+	Update(p graphql.ResolveParams) (interface{}, error)
 }
 
 //go:generate mockery -name=ICompanyResolver -output=mocks -case=underscore

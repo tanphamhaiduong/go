@@ -7,6 +7,7 @@ import (
 	"github.com/tanphamhaiduong/go/common/logger"
 	"github.com/tanphamhaiduong/go/delta/internal/database"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
+	"github.com/tanphamhaiduong/go/delta/internal/utils"
 )
 
 // IDatabase ...
@@ -31,7 +32,7 @@ func NewRepository(db database.IDB) *RepositoryImpl {
 // GetByUsername ...
 func (r *RepositoryImpl) GetByUsername(ctx context.Context, username string) (models.User, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID":  ctx.Value("TraceID"),
+		"traceId":  ctx.Value(utils.TraceIDKey),
 		"username": username,
 	}).Infof("Repository GetByUsername of user")
 	var (
@@ -59,13 +60,13 @@ func (r *RepositoryImpl) GetByUsername(ctx context.Context, username string) (mo
 	)
 	sql, args, err := selectBuilder.ToSql()
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"SQL":     sql,
 		"Args":    args,
 	}).Infof("Repository GetByUsername build sql string of user")
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository GetByUsername selectBuilder error of user")
 		return user, err
@@ -73,7 +74,7 @@ func (r *RepositoryImpl) GetByUsername(ctx context.Context, username string) (mo
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository GetByUsername PrepareContext error of user")
 		return user, err
@@ -82,7 +83,7 @@ func (r *RepositoryImpl) GetByUsername(ctx context.Context, username string) (mo
 	err = r.scanUser(row, &user)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository GetByUsername Scan error of user")
 		return user, err

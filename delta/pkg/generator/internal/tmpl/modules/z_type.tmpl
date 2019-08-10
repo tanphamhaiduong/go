@@ -1,5 +1,6 @@
 // @generated
 package modules
+{{- $Module := .Module }}
 {{- $Name := .Module.Name }}
 
 import (
@@ -11,17 +12,47 @@ import (
 
 // ICore{{ $Name }}Handler ...
 type ICore{{ $Name }}Handler interface {
-  GetByID(ctx context.Context, params arguments.{{ $Name }}GetByID) (models.{{ $Name }}, error)
-	Count(ctx context.Context, params arguments.{{ $Name }}Count) (int64, error)
-	List(ctx context.Context, params arguments.{{ $Name }}List) ([]models.{{ $Name }}, error)
-	Insert(ctx context.Context, params arguments.{{ $Name }}Insert) (models.{{ $Name }}, error)
-	Update(ctx context.Context, params arguments.{{ $Name }}Update) (models.{{ $Name }}, error)
-	Delete(ctx context.Context, params arguments.{{ $Name }}Delete) (int64, error)
+	{{- if $Module.IsHaveGetByID }}
+  	GetByID(ctx context.Context, params arguments.{{ $Name }}GetByID) (models.{{ $Name }}, error)
+	{{- end }}
+	{{- if $Module.IsHaveCount }}
+		Count(ctx context.Context, params arguments.{{ $Name }}Count) (int64, error)
+	{{- end }}
+	{{- if $Module.IsHaveCount }}
+		List(ctx context.Context, params arguments.{{ $Name }}List) ([]models.{{ $Name }}, error)
+	{{- end }}
+	{{- if $Module.IsHaveInsert }}
+		Insert(ctx context.Context, params arguments.{{ $Name }}Insert) (models.{{ $Name }}, error)
+	{{- end }}
+	{{- if $Module.IsHaveUpdate }}
+		Update(ctx context.Context, params arguments.{{ $Name }}Update) (models.{{ $Name }}, error)
+	{{- end }}
+	{{- if $Module.IsHaveDelete }}
+		Delete(ctx context.Context, params arguments.{{ $Name }}Delete) (int64, error)
+	{{- end }}
 }
 
 // ICore{{ $Name }}Resolver ...
 type ICore{{ $Name }}Resolver interface {
-  IResolver
+  ForwardParams(p graphql.ResolveParams) (interface{}, error)
+	{{- if $Module.IsHaveGetByID }}
+		GetByID(p graphql.ResolveParams) (interface{}, error)
+	{{- end }}
+	{{- if $Module.IsHaveCount }}
+		Count(p graphql.ResolveParams) (interface{}, error)
+	{{- end }}
+	{{- if $Module.IsHaveList }}
+		List(p graphql.ResolveParams) (interface{}, error)
+	{{- end }}
+	{{- if $Module.IsHaveInsert }}
+		Insert(p graphql.ResolveParams) (interface{}, error)
+	{{- end }}
+	{{- if $Module.IsHaveUpdate }}
+		Update(p graphql.ResolveParams) (interface{}, error)
+	{{- end }}
+	{{- if $Module.IsHaveDelete }}
+		Delete(p graphql.ResolveParams) (interface{}, error)
+	{{- end }}
 }
 
 //go:generate mockery -name=I{{ $Name }}Resolver -output=mocks -case=underscore

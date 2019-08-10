@@ -28,7 +28,7 @@ func (r *RepositoryImpl) scanRolePermission(row database.IRow, rolepermission *m
 // GetByID ...
 func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.RolePermissionGetByID) (models.RolePermission, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Repository GetByID of rolepermission")
 	var (
@@ -43,13 +43,13 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.RolePermi
 	)
 	sql, args, err := selectBuilder.ToSql()
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"SQL":     sql,
 		"Args":    args,
 	}).Infof("Repository GetByID build sql string of rolepermission")
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository GetByID selectBuilder error of rolepermission")
 		return rolepermission, err
@@ -57,7 +57,7 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.RolePermi
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository GetByID PrepareContext error of rolepermission")
 		return rolepermission, err
@@ -66,7 +66,7 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.RolePermi
 	err = r.scanRolePermission(row, &rolepermission)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository GetByID Scan error of rolepermission")
 		return rolepermission, err
@@ -77,7 +77,7 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.RolePermi
 // GetByIDs ...
 func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.RolePermissionGetByIDs) ([]models.RolePermission, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Repository GetByIDs of rolepermission")
 	var (
@@ -92,13 +92,13 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.RolePerm
 	)
 	sql, args, err := selectBuilder.ToSql()
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"SQL":     sql,
 		"Args":    args,
 	}).Infof("Repository GetByIDs build sql string of rolepermission")
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository GetByIDs selectBuilder error of rolepermission")
 		return rolepermissions, err
@@ -106,7 +106,7 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.RolePerm
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository GetByIDs PrepareContext error of rolepermission")
 		return rolepermissions, err
@@ -115,7 +115,7 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.RolePerm
 	defer rows.Close()
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository GetByIDs QueryContext error of rolepermission")
 		return rolepermissions, err
@@ -125,7 +125,7 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.RolePerm
 		err := r.scanRolePermission(rows, &rolepermission)
 		if err != nil {
 			logger.WithFields(logger.Fields{
-				"TraceID": ctx.Value("TraceID"),
+				"traceId": ctx.Value(utils.TraceIDKey),
 				"Error":   err,
 			}).Errorf("Repository GetByIDs Scan error of rolepermission")
 			return rolepermissions, err
@@ -138,7 +138,7 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.RolePerm
 // setArgsToListSelectBuilder ...
 func (r *RepositoryImpl) setArgsToListSelectBuilder(ctx context.Context, selectBuilder sq.SelectBuilder, params arguments.RolePermissionList) sq.SelectBuilder {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Repository setArgsToListSelectBuilder of rolepermission")
 	if params.ID != 0 {
@@ -169,7 +169,7 @@ func (r *RepositoryImpl) setArgsToListSelectBuilder(ctx context.Context, selectB
 // List ...
 func (r *RepositoryImpl) List(ctx context.Context, params arguments.RolePermissionList) ([]models.RolePermission, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Repository List of rolepermission")
 	var (
@@ -185,13 +185,13 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.RolePermissi
 	selectBuilderWithArgs := r.setArgsToListSelectBuilder(ctx, selectBuilder, params)
 	sql, args, err := selectBuilderWithArgs.ToSql()
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"SQL":     sql,
 		"Args":    args,
 	}).Infof("Repository List build sql string of rolepermission")
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository List selectBuilderWithArgs error of rolepermission")
 		return rolepermissions, err
@@ -199,7 +199,7 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.RolePermissi
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository List PrepareContext error of rolepermission")
 		return rolepermissions, err
@@ -207,7 +207,7 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.RolePermissi
 	rows, err := stmt.QueryContext(ctx, args...)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository List QueryContext error of rolepermission")
 		return rolepermissions, err
@@ -218,7 +218,7 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.RolePermissi
 		err := r.scanRolePermission(rows, &rolepermission)
 		if err != nil {
 			logger.WithFields(logger.Fields{
-				"TraceID": ctx.Value("TraceID"),
+				"traceId": ctx.Value(utils.TraceIDKey),
 				"Error":   err,
 			}).Errorf("Repository List Scan error of rolepermission")
 			return rolepermissions, err
@@ -231,7 +231,7 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.RolePermissi
 // setArgsToCountSelectBuilder ...
 func (r *RepositoryImpl) setArgsToCountSelectBuilder(ctx context.Context, selectBuilder sq.SelectBuilder, params arguments.RolePermissionCount) sq.SelectBuilder {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Repository setArgsToCountSelectBuilder of rolepermission")
 	if params.ID != 0 {
@@ -255,7 +255,7 @@ func (r *RepositoryImpl) setArgsToCountSelectBuilder(ctx context.Context, select
 // Count ...
 func (r *RepositoryImpl) Count(ctx context.Context, params arguments.RolePermissionCount) (int64, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Repository Count of rolepermission")
 	var (
@@ -265,13 +265,13 @@ func (r *RepositoryImpl) Count(ctx context.Context, params arguments.RolePermiss
 	selectBuilderWithArgs := r.setArgsToCountSelectBuilder(ctx, selectBuilder, params)
 	sql, args, err := selectBuilderWithArgs.ToSql()
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"SQL":     sql,
 		"Args":    args,
 	}).Infof("Repository Count build sql string of rolepermission")
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Count selectBuilderWithArgs error of rolepermission")
 		return count, err
@@ -279,7 +279,7 @@ func (r *RepositoryImpl) Count(ctx context.Context, params arguments.RolePermiss
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Count PrepareContext error of rolepermission")
 		return count, err
@@ -288,7 +288,7 @@ func (r *RepositoryImpl) Count(ctx context.Context, params arguments.RolePermiss
 	err = row.Scan(&count)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Count Scan error of rolepermission")
 		return count, err
@@ -299,7 +299,7 @@ func (r *RepositoryImpl) Count(ctx context.Context, params arguments.RolePermiss
 // Insert ...
 func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.RolePermissionInsert) (models.RolePermission, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Repository Insert of rolepermission")
 	var (
@@ -318,13 +318,13 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.RolePermis
 	)
 	sql, args, err := insertBuilder.ToSql()
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"SQL":     sql,
 		"Args":    args,
 	}).Infof("Repository Insert build sql string of rolepermission")
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Insert insertBuilder error of rolepermission")
 		return rolepermission, err
@@ -332,7 +332,7 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.RolePermis
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Insert PrepareContext error of rolepermission")
 		return rolepermission, err
@@ -340,7 +340,7 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.RolePermis
 	row, err := stmt.ExecContext(ctx, args...)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Insert ExecContext error of rolepermission")
 		return rolepermission, err
@@ -348,7 +348,7 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.RolePermis
 	id, err := row.LastInsertId()
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Insert LastInsertId error of rolepermission")
 		return rolepermission, err
@@ -356,7 +356,7 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.RolePermis
 	newRolePermission, err := r.GetByID(ctx, arguments.RolePermissionGetByID{ID: id})
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Insert GetByID error of rolepermission")
 		return rolepermission, err
@@ -387,7 +387,7 @@ func (r *RepositoryImpl) setArgsToUpdateBuilder(ctx context.Context, updateBuild
 // Update ...
 func (r *RepositoryImpl) Update(ctx context.Context, params arguments.RolePermissionUpdate) (models.RolePermission, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Repository Update of rolepermission")
 	var (
@@ -398,13 +398,13 @@ func (r *RepositoryImpl) Update(ctx context.Context, params arguments.RolePermis
 
 	sql, args, err := updateBuilderWithArgs.ToSql()
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"SQL":     sql,
 		"Args":    args,
 	}).Infof("Repository Update build sql string of rolepermission")
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Update updateBuilderWithArgs error of rolepermission")
 		return rolepermission, err
@@ -412,7 +412,7 @@ func (r *RepositoryImpl) Update(ctx context.Context, params arguments.RolePermis
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Update PrepareContext error of rolepermission")
 		return rolepermission, err
@@ -420,7 +420,7 @@ func (r *RepositoryImpl) Update(ctx context.Context, params arguments.RolePermis
 	result, err := stmt.ExecContext(ctx, args...)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Update ExecContext error of rolepermission")
 		return rolepermission, err
@@ -428,14 +428,14 @@ func (r *RepositoryImpl) Update(ctx context.Context, params arguments.RolePermis
 	rowAffected, err := result.RowsAffected()
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Update RowsAffected error of rolepermission")
 		return rolepermission, err
 	}
 	if rowAffected <= 0 {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   fmt.Errorf("error when update record id %d", *params.ID),
 		}).Errorf("Repository Update rowAffected <= 0 of rolepermission")
 		return rolepermission, fmt.Errorf("error when update record id %d", *params.ID)
@@ -443,7 +443,7 @@ func (r *RepositoryImpl) Update(ctx context.Context, params arguments.RolePermis
 	newRolePermission, err := r.GetByID(ctx, arguments.RolePermissionGetByID{ID: *params.ID})
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Update GetByID error of rolepermission")
 		return rolepermission, err
@@ -454,7 +454,7 @@ func (r *RepositoryImpl) Update(ctx context.Context, params arguments.RolePermis
 // Delete ...
 func (r *RepositoryImpl) Delete(ctx context.Context, params arguments.RolePermissionDelete) (int64, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Repository Delete of rolepermission")
 	var (
@@ -463,13 +463,13 @@ func (r *RepositoryImpl) Delete(ctx context.Context, params arguments.RolePermis
 	)
 	sql, args, err := deleteBuilder.ToSql()
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"SQL":     sql,
 		"Args":    args,
 	}).Infof("Repository Delete build sql string of rolepermission")
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Delete deleteBuilder error of rolepermission")
 		return id, err
@@ -477,7 +477,7 @@ func (r *RepositoryImpl) Delete(ctx context.Context, params arguments.RolePermis
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Delete PrepareContext error of rolepermission")
 		return id, err
@@ -485,7 +485,7 @@ func (r *RepositoryImpl) Delete(ctx context.Context, params arguments.RolePermis
 	result, err := stmt.ExecContext(ctx, args...)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Delete ExecContext error of rolepermission")
 		return id, err
@@ -493,14 +493,14 @@ func (r *RepositoryImpl) Delete(ctx context.Context, params arguments.RolePermis
 	rowAffected, err := result.RowsAffected()
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Delete RowsAffected error of rolepermission")
 		return id, err
 	}
 	if rowAffected <= 0 {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   fmt.Errorf("not found record by id %d", params.ID),
 		}).Errorf("Repository Update rowAffected <= 0 of rolepermission")
 		return id, fmt.Errorf("not found record by id %d", params.ID)

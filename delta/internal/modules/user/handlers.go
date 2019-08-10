@@ -13,6 +13,7 @@ import (
 	"github.com/tanphamhaiduong/go/delta/internal/models"
 	"github.com/tanphamhaiduong/go/delta/internal/modules/permission"
 	"github.com/tanphamhaiduong/go/delta/internal/modules/rolepermission"
+	"github.com/tanphamhaiduong/go/delta/internal/utils"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -40,8 +41,8 @@ func NewHandler(user IRepository, permission permission.IHandler, rolePermission
 
 func (h *HandlerImpl) fetchUser(ctx context.Context, param arguments.UserLogin) (models.User, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
-		"param":   param,
+		"traceId":  ctx.Value(utils.TraceIDKey),
+		"username": param.Username,
 	}).Infof("fetchUser")
 	user, err := h.user.GetByUsername(ctx, param.Username)
 	if err != nil {
@@ -52,7 +53,7 @@ func (h *HandlerImpl) fetchUser(ctx context.Context, param arguments.UserLogin) 
 
 func (h *HandlerImpl) fetchRolePermission(ctx context.Context, roleID int64) ([]models.RolePermission, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"roleID":  roleID,
 	}).Infof("fetchRolePermission")
 	var (
@@ -62,7 +63,7 @@ func (h *HandlerImpl) fetchRolePermission(ctx context.Context, roleID int64) ([]
 	rolePermissions, err := h.rolePermission.GetByRoleID(ctx, roleID)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"err":     err,
 		}).Errorf("fetchRolePermission cannot fetch rolePermission.GetByRoleID")
 		return rolePermissions, err
@@ -72,7 +73,7 @@ func (h *HandlerImpl) fetchRolePermission(ctx context.Context, roleID int64) ([]
 
 func (h *HandlerImpl) fetchPermission(ctx context.Context, rolePermissions []models.RolePermission) ([]models.Permission, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID":         ctx.Value("TraceID"),
+		"traceId":         ctx.Value(utils.TraceIDKey),
 		"rolePermissions": rolePermissions,
 	}).Infof("fetchPermission")
 	var (
@@ -80,12 +81,12 @@ func (h *HandlerImpl) fetchPermission(ctx context.Context, rolePermissions []mod
 		permissions   []models.Permission
 	)
 	for _, rolePermission := range rolePermissions {
-		permissionIDs = append(permissionIDs, rolePermission.ID)
+		permissionIDs = append(permissionIDs, rolePermission.PermissionID)
 	}
 	permissions, err := h.permission.GetByIDs(ctx, arguments.PermissionGetByIDs{IDs: permissionIDs})
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"err":     err,
 		}).Errorf("fetchPermission cannot fetch permission.GetByIDs")
 		return permissions, err
@@ -95,7 +96,7 @@ func (h *HandlerImpl) fetchPermission(ctx context.Context, rolePermissions []mod
 
 func (h *HandlerImpl) validateUser(ctx context.Context, user models.User, param arguments.UserLogin) bool {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"param":   param,
 		"user":    user,
 	}).Infof("validateUser")
@@ -134,13 +135,13 @@ func (h *HandlerImpl) signTokens(user models.User, permissions []models.Permissi
 // Login ...
 func (h *HandlerImpl) Login(ctx context.Context, param arguments.UserLogin) (string, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID":  ctx.Value("TraceID"),
+		"traceId":  ctx.Value(utils.TraceIDKey),
 		"Username": param.Username,
 	}).Infof("Login by username and password")
 	user, err := h.fetchUser(ctx, param)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"error":   err,
 		}).Errorf("Login cannot fetch user")
 		return "", err
@@ -148,7 +149,7 @@ func (h *HandlerImpl) Login(ctx context.Context, param arguments.UserLogin) (str
 	rolePermissions, err := h.fetchRolePermission(ctx, user.RoleID)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"error":   err,
 		}).Errorf("Login cannot fetch rolePermissions")
 		return "", err
@@ -156,7 +157,7 @@ func (h *HandlerImpl) Login(ctx context.Context, param arguments.UserLogin) (str
 	permissions, err := h.fetchPermission(ctx, rolePermissions)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"error":   err,
 		}).Errorf("Login cannot fetch permissions")
 		return "", err
@@ -164,7 +165,7 @@ func (h *HandlerImpl) Login(ctx context.Context, param arguments.UserLogin) (str
 	isValidUser := h.validateUser(ctx, user, param)
 	if !isValidUser {
 		logger.WithFields(logger.Fields{
-			"TraceID":  ctx.Value("TraceID"),
+			"traceId":  ctx.Value(utils.TraceIDKey),
 			"Username": param.Username,
 		}).Errorf("Login User is not valid")
 		return "", errors.New("User is not valid")
@@ -172,7 +173,7 @@ func (h *HandlerImpl) Login(ctx context.Context, param arguments.UserLogin) (str
 	tokenString, err := h.signTokens(user, permissions, param)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID":  ctx.Value("TraceID"),
+			"traceId":  ctx.Value(utils.TraceIDKey),
 			"Username": param.Username,
 			"Error":    err,
 		}).Errorf("Cannot sign token")

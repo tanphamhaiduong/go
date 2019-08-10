@@ -3,12 +3,14 @@ package permission
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 
 	"github.com/graphql-go/graphql"
 
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
+	"github.com/tanphamhaiduong/go/delta/internal/utils"
 )
 
 func (s *PermissionResolverTestSuite) TestForwardParams_Success() {
@@ -22,11 +24,50 @@ func (s *PermissionResolverTestSuite) TestForwardParams_Success() {
 	s.Equal(expected, actual)
 }
 
+func (s *PermissionResolverTestSuite) TestCheckPermission_True() {
+	var (
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "PermissionGetByID",
+				},
+			},
+		}
+		expected = true
+	)
+	actual := s.Permission.checkPermission(*claims, "PermissionGetByID")
+	s.Equal(expected, actual)
+}
+
+func (s *PermissionResolverTestSuite) TestCheckPermission_False() {
+	var (
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "PermissionList",
+				},
+			},
+		}
+		expected = false
+	)
+	actual := s.Permission.checkPermission(*claims, "PermissionGetByID")
+	s.Equal(expected, actual)
+}
 func (s *PermissionResolverTestSuite) TestGetByID_Success() {
 	var (
-		ctx              = context.Background()
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "PermissionGetByID",
+				},
+			},
+		}
 		sampleID   int64 = 1
-		params           = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
+		ctx              = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params           = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
 		permission models.Permission
 		args       = arguments.PermissionGetByID{
 			ID: 1,
@@ -40,9 +81,17 @@ func (s *PermissionResolverTestSuite) TestGetByID_Success() {
 
 func (s *PermissionResolverTestSuite) TestGetByID_Fail() {
 	var (
-		ctx              = context.Background()
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "PermissionGetByID",
+				},
+			},
+		}
 		sampleID   int64 = 1
-		params           = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
+		ctx              = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params           = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
 		permission models.Permission
 		args       = arguments.PermissionGetByID{
 			ID: 1,
@@ -54,10 +103,65 @@ func (s *PermissionResolverTestSuite) TestGetByID_Fail() {
 	s.NotNil(err)
 }
 
+func (s *PermissionResolverTestSuite) TestGetByID_Fail1() {
+	var (
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "PermissionGetByID",
+				},
+			},
+		}
+		sampleID   int64 = 1
+		ctx              = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params           = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
+		permission models.Permission
+		args       = arguments.PermissionGetByID{
+			ID: 1,
+		}
+	)
+	s.MockIPermission.On("GetByID", ctx, args).Return(permission, sql.ErrNoRows)
+	actual, err := s.Permission.GetByID(params)
+	s.Nil(actual)
+	s.NotNil(err)
+}
+
+func (s *PermissionResolverTestSuite) TestGetByID_Fail2() {
+	var (
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "",
+				},
+			},
+		}
+		sampleID   int64 = 1
+		ctx              = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params           = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
+		permission models.Permission
+		args       = arguments.PermissionGetByID{
+			ID: 1,
+		}
+	)
+	s.MockIPermission.On("GetByID", ctx, args).Return(permission, sql.ErrNoRows)
+	actual, err := s.Permission.GetByID(params)
+	s.Nil(actual)
+	s.NotNil(err)
+}
 func (s *PermissionResolverTestSuite) TestList_Success() {
 	var (
-		ctx         = context.Background()
-		params      = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "PermissionList",
+				},
+			},
+		}
+		ctx         = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params      = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
 		permissions []models.Permission
 		args        = arguments.PermissionList{
 			Page:     1,
@@ -72,8 +176,16 @@ func (s *PermissionResolverTestSuite) TestList_Success() {
 
 func (s *PermissionResolverTestSuite) TestList_Fail() {
 	var (
-		ctx         = context.Background()
-		params      = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "PermissionList",
+				},
+			},
+		}
+		ctx         = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params      = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
 		permissions []models.Permission
 		args        = arguments.PermissionList{
 			Page:     1,
@@ -86,10 +198,65 @@ func (s *PermissionResolverTestSuite) TestList_Fail() {
 	s.NotNil(err)
 }
 
+func (s *PermissionResolverTestSuite) TestList_Fail1() {
+	var (
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "PermissionList",
+				},
+			},
+		}
+		ctx         = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params      = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
+		permissions []models.Permission
+		args        = arguments.PermissionList{
+			Page:     1,
+			PageSize: 10,
+		}
+	)
+	s.MockIPermission.On("List", ctx, args).Return(permissions, sql.ErrNoRows)
+	actual, err := s.Permission.List(params)
+	s.Nil(actual)
+	s.NotNil(err)
+}
+
+func (s *PermissionResolverTestSuite) TestList_Fail2() {
+	var (
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "",
+				},
+			},
+		}
+		ctx         = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params      = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
+		permissions []models.Permission
+		args        = arguments.PermissionList{
+			Page:     1,
+			PageSize: 10,
+		}
+	)
+	s.MockIPermission.On("List", ctx, args).Return(permissions, errors.New("some errors"))
+	actual, err := s.Permission.List(params)
+	s.Nil(actual)
+	s.NotNil(err)
+}
 func (s *PermissionResolverTestSuite) TestCount_Success() {
 	var (
-		ctx    = context.Background()
-		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "PermissionCount",
+				},
+			},
+		}
+		ctx    = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{}}
 		args   = arguments.PermissionCount{}
 		count  int64
 	)
@@ -101,8 +268,16 @@ func (s *PermissionResolverTestSuite) TestCount_Success() {
 
 func (s *PermissionResolverTestSuite) TestCount_Fail() {
 	var (
-		ctx    = context.Background()
-		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "PermissionCount",
+				},
+			},
+		}
+		ctx    = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{}}
 		args   = arguments.PermissionCount{}
 		count  int64
 	)
@@ -112,10 +287,59 @@ func (s *PermissionResolverTestSuite) TestCount_Fail() {
 	s.NotNil(err)
 }
 
+func (s *PermissionResolverTestSuite) TestCount_Fail1() {
+	var (
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "PermissionCount",
+				},
+			},
+		}
+		ctx    = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{}}
+		args   = arguments.PermissionCount{}
+		count  int64
+	)
+	s.MockIPermission.On("Count", ctx, args).Return(count, sql.ErrNoRows)
+	actual, err := s.Permission.Count(params)
+	s.Nil(actual)
+	s.NotNil(err)
+}
+
+func (s *PermissionResolverTestSuite) TestCount_Fail2() {
+	var (
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "",
+				},
+			},
+		}
+		ctx    = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{}}
+		args   = arguments.PermissionCount{}
+		count  int64
+	)
+	s.MockIPermission.On("Count", ctx, args).Return(count, errors.New("some errors"))
+	actual, err := s.Permission.Count(params)
+	s.Nil(actual)
+	s.NotNil(err)
+}
 func (s *PermissionResolverTestSuite) TestInsert_Success() {
 	var (
-		ctx        = context.Background()
-		params     = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "PermissionInsert",
+				},
+			},
+		}
+		ctx        = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params     = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{}}
 		args       = arguments.PermissionInsert{}
 		permission models.Permission
 	)
@@ -131,8 +355,16 @@ func (s *PermissionResolverTestSuite) TestInsert_Success() {
 
 func (s *PermissionResolverTestSuite) TestInsert_Fail() {
 	var (
-		ctx        = context.Background()
-		params     = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "PermissionInsert",
+				},
+			},
+		}
+		ctx        = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params     = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{}}
 		args       = arguments.PermissionInsert{}
 		permission models.Permission
 	)
@@ -142,83 +374,43 @@ func (s *PermissionResolverTestSuite) TestInsert_Fail() {
 	s.NotNil(err)
 }
 
-func (s *PermissionResolverTestSuite) TestUpdate_Success() {
+func (s *PermissionResolverTestSuite) TestInsert_Fail1() {
 	var (
-		ctx            = context.Background()
-		sampleID int64 = 1
-		params         = graphql.ResolveParams{
-			Context: context.Background(),
-			Source:  map[string]interface{}{},
-			Args:    map[string]interface{}{"id": 1},
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "",
+				},
+			},
 		}
-		args = arguments.PermissionUpdate{
-			ID: &sampleID,
-		}
-		permission = models.Permission{}
-	)
-	// Mock for Update
-	s.MockIPermission.On("Update", ctx, args).Return(permission, nil)
-	// Mock for LoadByID
-	s.MockIPermission.On("GetByID", ctx, args).Return(permission, nil)
-	actual, err := s.Permission.Update(params)
-	s.Nil(err)
-	s.Equal(permission, actual)
-}
-
-func (s *PermissionResolverTestSuite) TestUpdate_Fail() {
-	var (
-		ctx            = context.Background()
-		sampleID int64 = 1
-		params         = graphql.ResolveParams{
-			Context: context.Background(),
-			Source:  map[string]interface{}{},
-			Args:    map[string]interface{}{"id": 1},
-		}
-		args = arguments.PermissionUpdate{
-			ID: &sampleID,
-		}
+		ctx        = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params     = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{}}
+		args       = arguments.PermissionInsert{}
 		permission models.Permission
 	)
-	s.MockIPermission.On("Update", ctx, args).Return(permission, errors.New("some errors"))
-	actual, err := s.Permission.Update(params)
+	s.MockIPermission.On("Insert", ctx, args).Return(permission, errors.New("some errors"))
+	actual, err := s.Permission.Insert(params)
 	s.Nil(actual)
 	s.NotNil(err)
 }
-
-func (s *PermissionResolverTestSuite) TestDelete_Success() {
+func (s *PermissionResolverTestSuite) TestInsert_Fail2() {
 	var (
-		ctx    = context.Background()
-		params = graphql.ResolveParams{
-			Context: context.Background(),
-			Source:  map[string]interface{}{},
-			Args:    map[string]interface{}{"id": 1},
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "PermissionInsert",
+				},
+			},
 		}
-		args = arguments.PermissionDelete{
-			ID: 1,
-		}
-		sampleID int64 = 1
+		ctx        = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params     = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{}}
+		args       = arguments.PermissionInsert{}
+		permission models.Permission
 	)
-	s.MockIPermission.On("Delete", ctx, args).Return(sampleID, nil)
-	actual, err := s.Permission.Delete(params)
-	s.Nil(err)
-	s.Equal(sampleID, actual)
-}
-
-func (s *PermissionResolverTestSuite) TestDelete_Fail() {
-	var (
-		ctx    = context.Background()
-		params = graphql.ResolveParams{
-			Context: context.Background(),
-			Source:  map[string]interface{}{},
-			Args:    map[string]interface{}{"id": 1},
-		}
-		args = arguments.PermissionDelete{
-			ID: 1,
-		}
-		sampleID int64
-	)
-	s.MockIPermission.On("Delete", ctx, args).Return(sampleID, errors.New("some errors"))
-	actual, err := s.Permission.Delete(params)
+	s.MockIPermission.On("Insert", ctx, args).Return(permission, sql.ErrNoRows)
+	actual, err := s.Permission.Insert(params)
 	s.Nil(actual)
 	s.NotNil(err)
 }

@@ -4,6 +4,7 @@ package modules
 import (
 	"context"
 
+	"github.com/graphql-go/graphql"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
 )
@@ -14,13 +15,15 @@ type ICorePermissionHandler interface {
 	Count(ctx context.Context, params arguments.PermissionCount) (int64, error)
 	List(ctx context.Context, params arguments.PermissionList) ([]models.Permission, error)
 	Insert(ctx context.Context, params arguments.PermissionInsert) (models.Permission, error)
-	Update(ctx context.Context, params arguments.PermissionUpdate) (models.Permission, error)
-	Delete(ctx context.Context, params arguments.PermissionDelete) (int64, error)
 }
 
 // ICorePermissionResolver ...
 type ICorePermissionResolver interface {
-	IResolver
+	ForwardParams(p graphql.ResolveParams) (interface{}, error)
+	GetByID(p graphql.ResolveParams) (interface{}, error)
+	Count(p graphql.ResolveParams) (interface{}, error)
+	List(p graphql.ResolveParams) (interface{}, error)
+	Insert(p graphql.ResolveParams) (interface{}, error)
 }
 
 //go:generate mockery -name=IPermissionResolver -output=mocks -case=underscore

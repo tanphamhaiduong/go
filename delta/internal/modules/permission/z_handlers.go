@@ -7,6 +7,7 @@ import (
 	"github.com/tanphamhaiduong/go/common/logger"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
+	"github.com/tanphamhaiduong/go/delta/internal/utils"
 	"github.com/tanphamhaiduong/go/delta/internal/validator"
 )
 
@@ -24,7 +25,7 @@ type ICoreRepository interface {
 // GetByID ...
 func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.PermissionGetByID) (models.Permission, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Handler GetByID of permission")
 	var (
@@ -32,7 +33,7 @@ func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.PermissionGe
 	)
 	if err := validator.Struct(params); err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler GetByID validator.Struct error of permission")
 		return permission, err
@@ -40,7 +41,7 @@ func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.PermissionGe
 	permission, err := h.permission.GetByID(ctx, params)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler GetByID h.permission.GetByID error of permission")
 		return permission, err
@@ -51,7 +52,7 @@ func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.PermissionGe
 // GetByIDs ...
 func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.PermissionGetByIDs) ([]models.Permission, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Handler GetByIDs of permission")
 	var (
@@ -59,7 +60,7 @@ func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.PermissionG
 	)
 	if err := validator.Struct(params); err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler GetByIDs validator.Struct error of permission")
 		return permissions, err
@@ -67,7 +68,7 @@ func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.PermissionG
 	permissions, err := h.permission.GetByIDs(ctx, params)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler GetByIDs h.permission.GetByIDs error of permission")
 		return permissions, err
@@ -78,7 +79,7 @@ func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.PermissionG
 // Count ...
 func (h *HandlerImpl) Count(ctx context.Context, params arguments.PermissionCount) (int64, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Handler Count of permission")
 	var (
@@ -86,7 +87,7 @@ func (h *HandlerImpl) Count(ctx context.Context, params arguments.PermissionCoun
 	)
 	if err := validator.Struct(params); err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler Count validator.Struct error of permission")
 		return count, err
@@ -94,7 +95,7 @@ func (h *HandlerImpl) Count(ctx context.Context, params arguments.PermissionCoun
 	count, err := h.permission.Count(ctx, params)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler Count h.permission.Count error of permission")
 		return count, err
@@ -105,7 +106,7 @@ func (h *HandlerImpl) Count(ctx context.Context, params arguments.PermissionCoun
 // List ...
 func (h *HandlerImpl) List(ctx context.Context, params arguments.PermissionList) ([]models.Permission, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Handler List of permission")
 	var (
@@ -113,7 +114,7 @@ func (h *HandlerImpl) List(ctx context.Context, params arguments.PermissionList)
 	)
 	if err := validator.Struct(params); err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler List validator.Struct error of permission")
 		return permissions, err
@@ -121,7 +122,7 @@ func (h *HandlerImpl) List(ctx context.Context, params arguments.PermissionList)
 	permissions, err := h.permission.List(ctx, params)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler List h.permission.List error of permission")
 		return permissions, err
@@ -132,7 +133,7 @@ func (h *HandlerImpl) List(ctx context.Context, params arguments.PermissionList)
 // Insert ...
 func (h *HandlerImpl) Insert(ctx context.Context, params arguments.PermissionInsert) (models.Permission, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Handler Insert of permission")
 	var (
@@ -140,7 +141,7 @@ func (h *HandlerImpl) Insert(ctx context.Context, params arguments.PermissionIns
 	)
 	if err := validator.Struct(params); err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler Insert validator.Struct error of permission")
 		return permission, err
@@ -148,7 +149,7 @@ func (h *HandlerImpl) Insert(ctx context.Context, params arguments.PermissionIns
 	permission, err := h.permission.Insert(ctx, params)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler Insert h.permission.Insert error of permission")
 		return permission, err
@@ -159,7 +160,7 @@ func (h *HandlerImpl) Insert(ctx context.Context, params arguments.PermissionIns
 // Update ...
 func (h *HandlerImpl) Update(ctx context.Context, params arguments.PermissionUpdate) (models.Permission, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Handler Update of permission")
 	var (
@@ -167,7 +168,7 @@ func (h *HandlerImpl) Update(ctx context.Context, params arguments.PermissionUpd
 	)
 	if err := validator.Struct(params); err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler Update validator.Struct error of permission")
 		return permission, err
@@ -175,7 +176,7 @@ func (h *HandlerImpl) Update(ctx context.Context, params arguments.PermissionUpd
 	permission, err := h.permission.Update(ctx, params)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler Update h.permission.Update error of permission")
 		return permission, err
@@ -186,7 +187,7 @@ func (h *HandlerImpl) Update(ctx context.Context, params arguments.PermissionUpd
 // Delete ...
 func (h *HandlerImpl) Delete(ctx context.Context, param arguments.PermissionDelete) (int64, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"param":   param,
 	}).Infof("Handler Delete of permission")
 	var (
@@ -194,7 +195,7 @@ func (h *HandlerImpl) Delete(ctx context.Context, param arguments.PermissionDele
 	)
 	if err := validator.Struct(param); err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler Delete validator.Struct error of permission")
 		return id, err
@@ -202,7 +203,7 @@ func (h *HandlerImpl) Delete(ctx context.Context, param arguments.PermissionDele
 	id, err := h.permission.Delete(ctx, param)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler Delete h.permission.Delete error of permission")
 		return id, err

@@ -23,12 +23,12 @@ func (f *Field) IsInt64() bool {
 	return f.GoType == gotype.Int64
 }
 
-// IsNotBoolean ...
+// IsBoolean ...
 func (f *Field) IsBoolean() bool {
 	return f.GoType == gotype.Bool
 }
 
-// IsNotIDField ...
+// IsIDField ...
 func (f *Field) IsIDField() bool {
 	return f.Name == "ID"
 }
@@ -43,15 +43,21 @@ func (f *Field) IsNullTimeField() bool {
 	return f.GoType == gotype.NullTime
 }
 
-// IsNullTimeField ...
+// IsTimeField ...
 func (f *Field) IsTimeField() bool {
 	return f.GoType == gotype.Time
 }
 
 // Module need to generate
 type Module struct {
-	Name   string
-	Fields Fields
+	Name          string
+	Fields        Fields
+	IsHaveGetByID bool
+	IsHaveCount   bool
+	IsHaveList    bool
+	IsHaveInsert  bool
+	IsHaveUpdate  bool
+	IsHaveDelete  bool
 }
 
 // Modules list of Struct

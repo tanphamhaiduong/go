@@ -44,7 +44,8 @@ func withTimeout(next http.Handler) http.Handler {
 func withTraceID(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		traceID, _ := uuid.NewRandom()
-		ctx := context.WithValue(r.Context(), "TraceID", traceID.String())
+		var traceIDKey models.ContextKey = "traceId"
+		ctx := context.WithValue(r.Context(), traceIDKey, traceID.String())
 		r = r.WithContext(ctx)
 		next.ServeHTTP(w, r)
 	})
@@ -53,24 +54,25 @@ func withTraceID(next http.Handler) http.Handler {
 func withLogging(next http.Handler) http.Handler {
 	// Only log the warning severity or above.
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var traceIDKey models.ContextKey = "traceId"
 		logger.WithFields(logger.Fields{
-			"TraceID":       r.Context().Value("TraceID"),
-			"Host":          r.Host,
-			"RemoteAddr":    r.RemoteAddr,
-			"Method":        r.Method,
-			"RequestURI":    r.RequestURI,
-			"Proto":         r.Proto,
-			"Connection":    r.Header.Get("Connection"),
-			"ContentLength": r.ContentLength,
-			"ContentType":   r.Header.Get("Content-Type"),
-			"UserAgent":     r.Header.Get("User-Agent"),
-			"URL":           r.URL,
+			"traceID":       r.Context().Value(traceIDKey),
+			"host":          r.Host,
+			"remoteAddr":    r.RemoteAddr,
+			"method":        r.Method,
+			"requestUri":    r.RequestURI,
+			"proto":         r.Proto,
+			"connection":    r.Header.Get("Connection"),
+			"contentLength": r.ContentLength,
+			"contentType":   r.Header.Get("Content-Type"),
+			"userAgent":     r.Header.Get("User-Agent"),
+			"url":           r.URL,
 		}).Infof("Logged connection from %s", r.RemoteAddr)
 		next.ServeHTTP(w, r)
 		start := time.Now()
 		duration := time.Now().Sub(start)
 		logger.WithFields(logger.Fields{
-			"TraceID":  r.Context().Value("TraceID"),
+			"traceId":  r.Context().Value(traceIDKey),
 			"Duration": duration,
 		}).Infof("Logged connection from %s", r.RemoteAddr)
 	})
@@ -92,7 +94,8 @@ func withAuth(next http.Handler) http.Handler {
 		_, _ = jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 			return jwtKey, nil
 		})
-		ctx := context.WithValue(r.Context(), "user", claims)
+		var claimsKey models.ContextKey = "claims"
+		ctx := context.WithValue(r.Context(), claimsKey, claims)
 		r = r.WithContext(ctx)
 		// Implement Get User and inject to request to here
 		next.ServeHTTP(w, r)

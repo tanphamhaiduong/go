@@ -6,20 +6,8 @@ import (
 	"github.com/tanphamhaiduong/go/delta/internal/modules/company"
 	"github.com/tanphamhaiduong/go/delta/internal/modules/permission"
 	"github.com/tanphamhaiduong/go/delta/internal/modules/role"
-	"github.com/tanphamhaiduong/go/delta/internal/modules/rolepermission"
 	"github.com/tanphamhaiduong/go/delta/internal/modules/user"
 )
-
-// IResolver ...
-type IResolver interface {
-	ForwardParams(p graphql.ResolveParams) (interface{}, error)
-	GetByID(p graphql.ResolveParams) (interface{}, error)
-	Count(p graphql.ResolveParams) (interface{}, error)
-	List(p graphql.ResolveParams) (interface{}, error)
-	Insert(p graphql.ResolveParams) (interface{}, error)
-	Update(p graphql.ResolveParams) (interface{}, error)
-	Delete(p graphql.ResolveParams) (interface{}, error)
-}
 
 // Resolver ...
 type Resolver struct {
@@ -79,12 +67,6 @@ func addToSchema(resolver Resolver) {
 		Args:        company.UpdateTypeArgs,
 		Resolve:     resolver.Company.Update,
 	})
-	rootMutation.AddFieldConfig("deleteCompany", &graphql.Field{
-		Type:        graphql.NewNonNull(graphql.Int),
-		Description: "This is delete company query",
-		Args:        company.DeleteTypeArgs,
-		Resolve:     resolver.Company.Delete,
-	})
 	rootQuery.AddFieldConfig("permission", &graphql.Field{
 		Type:        permission.Type,
 		Description: "This is GetByID for permission",
@@ -117,18 +99,6 @@ func addToSchema(resolver Resolver) {
 		Description: "This is insert permission query",
 		Args:        permission.InsertTypeArgs,
 		Resolve:     resolver.Permission.Insert,
-	})
-	rootMutation.AddFieldConfig("updatePermission", &graphql.Field{
-		Type:        permission.Type,
-		Description: "This is update permission query",
-		Args:        permission.UpdateTypeArgs,
-		Resolve:     resolver.Permission.Update,
-	})
-	rootMutation.AddFieldConfig("deletePermission", &graphql.Field{
-		Type:        graphql.NewNonNull(graphql.Int),
-		Description: "This is delete permission query",
-		Args:        permission.DeleteTypeArgs,
-		Resolve:     resolver.Permission.Delete,
 	})
 	rootQuery.AddFieldConfig("role", &graphql.Field{
 		Type:        role.Type,
@@ -169,57 +139,6 @@ func addToSchema(resolver Resolver) {
 		Args:        role.UpdateTypeArgs,
 		Resolve:     resolver.Role.Update,
 	})
-	rootMutation.AddFieldConfig("deleteRole", &graphql.Field{
-		Type:        graphql.NewNonNull(graphql.Int),
-		Description: "This is delete role query",
-		Args:        role.DeleteTypeArgs,
-		Resolve:     resolver.Role.Delete,
-	})
-	rootQuery.AddFieldConfig("rolePermission", &graphql.Field{
-		Type:        rolepermission.Type,
-		Description: "This is GetByID for rolePermission",
-		Args:        rolepermission.GetByIDTypeArgs,
-		Resolve:     resolver.RolePermission.GetByID,
-	})
-	rootQuery.AddFieldConfig("rolePermissions", &graphql.Field{
-		Type: graphql.NewObject(graphql.ObjectConfig{
-			Name:        "RolePermissions",
-			Description: "This is type rolePermissions",
-			Fields: graphql.Fields{
-				"records": &graphql.Field{
-					Type:        graphql.NewNonNull(graphql.NewList(rolepermission.Type)),
-					Description: "This is records of rolePermissions",
-					Resolve:     resolver.RolePermission.List,
-				},
-				"totalRecords": &graphql.Field{
-					Type:        graphql.NewNonNull(graphql.Int),
-					Description: "This is totalRecords of rolePermissions query",
-					Resolve:     resolver.RolePermission.Count,
-				},
-			},
-		}),
-		Description: "This is get list of rolePermission query",
-		Args:        rolepermission.ListTypeArgs,
-		Resolve:     resolver.RolePermission.ForwardParams,
-	})
-	rootMutation.AddFieldConfig("insertRolePermission", &graphql.Field{
-		Type:        rolepermission.Type,
-		Description: "This is insert rolePermission query",
-		Args:        rolepermission.InsertTypeArgs,
-		Resolve:     resolver.RolePermission.Insert,
-	})
-	rootMutation.AddFieldConfig("updateRolePermission", &graphql.Field{
-		Type:        rolepermission.Type,
-		Description: "This is update rolePermission query",
-		Args:        rolepermission.UpdateTypeArgs,
-		Resolve:     resolver.RolePermission.Update,
-	})
-	rootMutation.AddFieldConfig("deleteRolePermission", &graphql.Field{
-		Type:        graphql.NewNonNull(graphql.Int),
-		Description: "This is delete rolePermission query",
-		Args:        rolepermission.DeleteTypeArgs,
-		Resolve:     resolver.RolePermission.Delete,
-	})
 	rootQuery.AddFieldConfig("user", &graphql.Field{
 		Type:        user.Type,
 		Description: "This is GetByID for user",
@@ -258,12 +177,6 @@ func addToSchema(resolver Resolver) {
 		Description: "This is update user query",
 		Args:        user.UpdateTypeArgs,
 		Resolve:     resolver.User.Update,
-	})
-	rootMutation.AddFieldConfig("deleteUser", &graphql.Field{
-		Type:        graphql.NewNonNull(graphql.Int),
-		Description: "This is delete user query",
-		Args:        user.DeleteTypeArgs,
-		Resolve:     resolver.User.Delete,
 	})
 }
 

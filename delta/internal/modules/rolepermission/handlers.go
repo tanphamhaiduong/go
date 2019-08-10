@@ -6,6 +6,7 @@ import (
 
 	"github.com/tanphamhaiduong/go/common/logger"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
+	"github.com/tanphamhaiduong/go/delta/internal/utils"
 )
 
 // IRepository ...
@@ -29,7 +30,7 @@ func NewHandler(rolepermission IRepository) *HandlerImpl {
 // GetByRoleID ...
 func (h *HandlerImpl) GetByRoleID(ctx context.Context, roleID int64) ([]models.RolePermission, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"roleID":  roleID,
 	}).Infof("Handler GetByRoleID of rolepermission")
 	var (
@@ -38,7 +39,7 @@ func (h *HandlerImpl) GetByRoleID(ctx context.Context, roleID int64) ([]models.R
 	if roleID == 0 {
 		err := errors.New("Wrong role ID")
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler GetByRoleID validator.Struct error of rolepermission")
 		return rolepermissions, err
@@ -46,7 +47,7 @@ func (h *HandlerImpl) GetByRoleID(ctx context.Context, roleID int64) ([]models.R
 	rolepermissions, err := h.rolepermission.GetByRoleID(ctx, roleID)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler GetByRoleID h.rolepermission.GetByRoleID error of rolepermission")
 		return rolepermissions, err

@@ -4,6 +4,7 @@ package modules
 import (
 	"context"
 
+	"github.com/graphql-go/graphql"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
 )
@@ -15,12 +16,16 @@ type ICoreRoleHandler interface {
 	List(ctx context.Context, params arguments.RoleList) ([]models.Role, error)
 	Insert(ctx context.Context, params arguments.RoleInsert) (models.Role, error)
 	Update(ctx context.Context, params arguments.RoleUpdate) (models.Role, error)
-	Delete(ctx context.Context, params arguments.RoleDelete) (int64, error)
 }
 
 // ICoreRoleResolver ...
 type ICoreRoleResolver interface {
-	IResolver
+	ForwardParams(p graphql.ResolveParams) (interface{}, error)
+	GetByID(p graphql.ResolveParams) (interface{}, error)
+	Count(p graphql.ResolveParams) (interface{}, error)
+	List(p graphql.ResolveParams) (interface{}, error)
+	Insert(p graphql.ResolveParams) (interface{}, error)
+	Update(p graphql.ResolveParams) (interface{}, error)
 }
 
 //go:generate mockery -name=IRoleResolver -output=mocks -case=underscore

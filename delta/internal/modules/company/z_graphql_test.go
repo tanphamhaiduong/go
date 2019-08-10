@@ -3,12 +3,14 @@ package company
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 
 	"github.com/graphql-go/graphql"
 
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
+	"github.com/tanphamhaiduong/go/delta/internal/utils"
 )
 
 func (s *CompanyResolverTestSuite) TestForwardParams_Success() {
@@ -22,11 +24,50 @@ func (s *CompanyResolverTestSuite) TestForwardParams_Success() {
 	s.Equal(expected, actual)
 }
 
+func (s *CompanyResolverTestSuite) TestCheckPermission_True() {
+	var (
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "CompanyGetByID",
+				},
+			},
+		}
+		expected = true
+	)
+	actual := s.Company.checkPermission(*claims, "CompanyGetByID")
+	s.Equal(expected, actual)
+}
+
+func (s *CompanyResolverTestSuite) TestCheckPermission_False() {
+	var (
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "CompanyList",
+				},
+			},
+		}
+		expected = false
+	)
+	actual := s.Company.checkPermission(*claims, "CompanyGetByID")
+	s.Equal(expected, actual)
+}
 func (s *CompanyResolverTestSuite) TestGetByID_Success() {
 	var (
-		ctx            = context.Background()
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "CompanyGetByID",
+				},
+			},
+		}
 		sampleID int64 = 1
-		params         = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
+		ctx            = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params         = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
 		company  models.Company
 		args     = arguments.CompanyGetByID{
 			ID: 1,
@@ -40,9 +81,17 @@ func (s *CompanyResolverTestSuite) TestGetByID_Success() {
 
 func (s *CompanyResolverTestSuite) TestGetByID_Fail() {
 	var (
-		ctx            = context.Background()
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "CompanyGetByID",
+				},
+			},
+		}
 		sampleID int64 = 1
-		params         = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
+		ctx            = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params         = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
 		company  models.Company
 		args     = arguments.CompanyGetByID{
 			ID: 1,
@@ -54,10 +103,65 @@ func (s *CompanyResolverTestSuite) TestGetByID_Fail() {
 	s.NotNil(err)
 }
 
+func (s *CompanyResolverTestSuite) TestGetByID_Fail1() {
+	var (
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "CompanyGetByID",
+				},
+			},
+		}
+		sampleID int64 = 1
+		ctx            = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params         = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
+		company  models.Company
+		args     = arguments.CompanyGetByID{
+			ID: 1,
+		}
+	)
+	s.MockICompany.On("GetByID", ctx, args).Return(company, sql.ErrNoRows)
+	actual, err := s.Company.GetByID(params)
+	s.Nil(actual)
+	s.NotNil(err)
+}
+
+func (s *CompanyResolverTestSuite) TestGetByID_Fail2() {
+	var (
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "",
+				},
+			},
+		}
+		sampleID int64 = 1
+		ctx            = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params         = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
+		company  models.Company
+		args     = arguments.CompanyGetByID{
+			ID: 1,
+		}
+	)
+	s.MockICompany.On("GetByID", ctx, args).Return(company, sql.ErrNoRows)
+	actual, err := s.Company.GetByID(params)
+	s.Nil(actual)
+	s.NotNil(err)
+}
 func (s *CompanyResolverTestSuite) TestList_Success() {
 	var (
-		ctx       = context.Background()
-		params    = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "CompanyList",
+				},
+			},
+		}
+		ctx       = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params    = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
 		companies []models.Company
 		args      = arguments.CompanyList{
 			Page:     1,
@@ -72,8 +176,16 @@ func (s *CompanyResolverTestSuite) TestList_Success() {
 
 func (s *CompanyResolverTestSuite) TestList_Fail() {
 	var (
-		ctx       = context.Background()
-		params    = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "CompanyList",
+				},
+			},
+		}
+		ctx       = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params    = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
 		companies []models.Company
 		args      = arguments.CompanyList{
 			Page:     1,
@@ -86,10 +198,65 @@ func (s *CompanyResolverTestSuite) TestList_Fail() {
 	s.NotNil(err)
 }
 
+func (s *CompanyResolverTestSuite) TestList_Fail1() {
+	var (
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "CompanyList",
+				},
+			},
+		}
+		ctx       = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params    = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
+		companies []models.Company
+		args      = arguments.CompanyList{
+			Page:     1,
+			PageSize: 10,
+		}
+	)
+	s.MockICompany.On("List", ctx, args).Return(companies, sql.ErrNoRows)
+	actual, err := s.Company.List(params)
+	s.Nil(actual)
+	s.NotNil(err)
+}
+
+func (s *CompanyResolverTestSuite) TestList_Fail2() {
+	var (
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "",
+				},
+			},
+		}
+		ctx       = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params    = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
+		companies []models.Company
+		args      = arguments.CompanyList{
+			Page:     1,
+			PageSize: 10,
+		}
+	)
+	s.MockICompany.On("List", ctx, args).Return(companies, errors.New("some errors"))
+	actual, err := s.Company.List(params)
+	s.Nil(actual)
+	s.NotNil(err)
+}
 func (s *CompanyResolverTestSuite) TestCount_Success() {
 	var (
-		ctx    = context.Background()
-		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "CompanyCount",
+				},
+			},
+		}
+		ctx    = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{}}
 		args   = arguments.CompanyCount{}
 		count  int64
 	)
@@ -101,8 +268,16 @@ func (s *CompanyResolverTestSuite) TestCount_Success() {
 
 func (s *CompanyResolverTestSuite) TestCount_Fail() {
 	var (
-		ctx    = context.Background()
-		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "CompanyCount",
+				},
+			},
+		}
+		ctx    = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{}}
 		args   = arguments.CompanyCount{}
 		count  int64
 	)
@@ -112,10 +287,59 @@ func (s *CompanyResolverTestSuite) TestCount_Fail() {
 	s.NotNil(err)
 }
 
+func (s *CompanyResolverTestSuite) TestCount_Fail1() {
+	var (
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "CompanyCount",
+				},
+			},
+		}
+		ctx    = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{}}
+		args   = arguments.CompanyCount{}
+		count  int64
+	)
+	s.MockICompany.On("Count", ctx, args).Return(count, sql.ErrNoRows)
+	actual, err := s.Company.Count(params)
+	s.Nil(actual)
+	s.NotNil(err)
+}
+
+func (s *CompanyResolverTestSuite) TestCount_Fail2() {
+	var (
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "",
+				},
+			},
+		}
+		ctx    = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{}}
+		args   = arguments.CompanyCount{}
+		count  int64
+	)
+	s.MockICompany.On("Count", ctx, args).Return(count, errors.New("some errors"))
+	actual, err := s.Company.Count(params)
+	s.Nil(actual)
+	s.NotNil(err)
+}
 func (s *CompanyResolverTestSuite) TestInsert_Success() {
 	var (
-		ctx     = context.Background()
-		params  = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "CompanyInsert",
+				},
+			},
+		}
+		ctx     = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params  = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{}}
 		args    = arguments.CompanyInsert{}
 		company models.Company
 	)
@@ -131,8 +355,16 @@ func (s *CompanyResolverTestSuite) TestInsert_Success() {
 
 func (s *CompanyResolverTestSuite) TestInsert_Fail() {
 	var (
-		ctx     = context.Background()
-		params  = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "CompanyInsert",
+				},
+			},
+		}
+		ctx     = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params  = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{}}
 		args    = arguments.CompanyInsert{}
 		company models.Company
 	)
@@ -142,12 +374,60 @@ func (s *CompanyResolverTestSuite) TestInsert_Fail() {
 	s.NotNil(err)
 }
 
+func (s *CompanyResolverTestSuite) TestInsert_Fail1() {
+	var (
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "",
+				},
+			},
+		}
+		ctx     = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params  = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{}}
+		args    = arguments.CompanyInsert{}
+		company models.Company
+	)
+	s.MockICompany.On("Insert", ctx, args).Return(company, errors.New("some errors"))
+	actual, err := s.Company.Insert(params)
+	s.Nil(actual)
+	s.NotNil(err)
+}
+func (s *CompanyResolverTestSuite) TestInsert_Fail2() {
+	var (
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "CompanyInsert",
+				},
+			},
+		}
+		ctx     = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params  = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{}}
+		args    = arguments.CompanyInsert{}
+		company models.Company
+	)
+	s.MockICompany.On("Insert", ctx, args).Return(company, sql.ErrNoRows)
+	actual, err := s.Company.Insert(params)
+	s.Nil(actual)
+	s.NotNil(err)
+}
 func (s *CompanyResolverTestSuite) TestUpdate_Success() {
 	var (
-		ctx            = context.Background()
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "CompanyUpdate",
+				},
+			},
+		}
+		ctx            = context.WithValue(context.Background(), utils.ClaimsKey, claims)
 		sampleID int64 = 1
 		params         = graphql.ResolveParams{
-			Context: context.Background(),
+			Context: ctx,
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
@@ -167,10 +447,18 @@ func (s *CompanyResolverTestSuite) TestUpdate_Success() {
 
 func (s *CompanyResolverTestSuite) TestUpdate_Fail() {
 	var (
-		ctx            = context.Background()
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "CompanyUpdate",
+				},
+			},
+		}
+		ctx            = context.WithValue(context.Background(), utils.ClaimsKey, claims)
 		sampleID int64 = 1
 		params         = graphql.ResolveParams{
-			Context: context.Background(),
+			Context: ctx,
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
@@ -185,40 +473,58 @@ func (s *CompanyResolverTestSuite) TestUpdate_Fail() {
 	s.NotNil(err)
 }
 
-func (s *CompanyResolverTestSuite) TestDelete_Success() {
+func (s *CompanyResolverTestSuite) TestUpdate_Fail1() {
 	var (
-		ctx    = context.Background()
-		params = graphql.ResolveParams{
-			Context: context.Background(),
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "",
+				},
+			},
+		}
+		ctx            = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		sampleID int64 = 1
+		params         = graphql.ResolveParams{
+			Context: ctx,
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
-		args = arguments.CompanyDelete{
-			ID: 1,
+		args = arguments.CompanyUpdate{
+			ID: &sampleID,
 		}
-		sampleID int64 = 1
+		company models.Company
 	)
-	s.MockICompany.On("Delete", ctx, args).Return(sampleID, nil)
-	actual, err := s.Company.Delete(params)
-	s.Nil(err)
-	s.Equal(sampleID, actual)
+	s.MockICompany.On("Update", ctx, args).Return(company, errors.New("some errors"))
+	actual, err := s.Company.Update(params)
+	s.Nil(actual)
+	s.NotNil(err)
 }
 
-func (s *CompanyResolverTestSuite) TestDelete_Fail() {
+func (s *CompanyResolverTestSuite) TestUpdate_Fail2() {
 	var (
-		ctx    = context.Background()
-		params = graphql.ResolveParams{
-			Context: context.Background(),
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "CompanyUpdate",
+				},
+			},
+		}
+		ctx            = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		sampleID int64 = 1
+		params         = graphql.ResolveParams{
+			Context: ctx,
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
-		args = arguments.CompanyDelete{
-			ID: 1,
+		args = arguments.CompanyUpdate{
+			ID: &sampleID,
 		}
-		sampleID int64
+		company models.Company
 	)
-	s.MockICompany.On("Delete", ctx, args).Return(sampleID, errors.New("some errors"))
-	actual, err := s.Company.Delete(params)
+	s.MockICompany.On("Update", ctx, args).Return(company, sql.ErrNoRows)
+	actual, err := s.Company.Update(params)
 	s.Nil(actual)
 	s.NotNil(err)
 }

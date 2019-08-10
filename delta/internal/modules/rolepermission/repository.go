@@ -7,6 +7,7 @@ import (
 	"github.com/tanphamhaiduong/go/common/logger"
 	"github.com/tanphamhaiduong/go/delta/internal/database"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
+	"github.com/tanphamhaiduong/go/delta/internal/utils"
 )
 
 // IDatabase ...
@@ -31,7 +32,7 @@ func NewRepository(db database.IDB) *RepositoryImpl {
 // GetByRoleID ...
 func (r *RepositoryImpl) GetByRoleID(ctx context.Context, roleID int64) ([]models.RolePermission, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"roleID":  roleID,
 	}).Infof("Repository GetByRoleID of rolepermission")
 	var (
@@ -46,13 +47,13 @@ func (r *RepositoryImpl) GetByRoleID(ctx context.Context, roleID int64) ([]model
 	)
 	sql, args, err := selectBuilder.ToSql()
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"SQL":     sql,
 		"Args":    args,
 	}).Infof("Repository GetByRoleID build sql string of rolepermission")
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository GetByRoleID selectBuilder error of rolepermission")
 		return rolepermissions, err
@@ -60,7 +61,7 @@ func (r *RepositoryImpl) GetByRoleID(ctx context.Context, roleID int64) ([]model
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository GetByRoleID PrepareContext error of rolepermission")
 		return rolepermissions, err
@@ -69,7 +70,7 @@ func (r *RepositoryImpl) GetByRoleID(ctx context.Context, roleID int64) ([]model
 	defer rows.Close()
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository GetByRoleID QueryContext error of rolepermission")
 		return rolepermissions, err
@@ -79,7 +80,7 @@ func (r *RepositoryImpl) GetByRoleID(ctx context.Context, roleID int64) ([]model
 		err := r.scanRolePermission(rows, &rolepermission)
 		if err != nil {
 			logger.WithFields(logger.Fields{
-				"TraceID": ctx.Value("TraceID"),
+				"traceId": ctx.Value(utils.TraceIDKey),
 				"Error":   err,
 			}).Errorf("Repository GetByRoleID Scan error of rolepermission")
 			return rolepermissions, err

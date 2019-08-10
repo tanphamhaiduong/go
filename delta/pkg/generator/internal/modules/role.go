@@ -12,7 +12,12 @@ func init() {
 
 var (
 	roleModule = Module{
-		Name: "Role",
+		Name:          "Role",
+		IsHaveGetByID: true,
+		IsHaveCount:   true,
+		IsHaveList:    true,
+		IsHaveInsert:  true,
+		IsHaveUpdate:  true,
 		Fields: []Field{
 			{
 				Name:               "ID",

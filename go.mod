@@ -23,6 +23,7 @@ require (
 	github.com/graphql-go/handler v0.2.3
 	github.com/iancoleman/strcase v0.0.0-20190422225806-e506e3ef7365
 	github.com/jinzhu/inflection v0.0.0-20180308033659-04140366298a
+	github.com/kr/pretty v0.1.0
 	github.com/kr/pty v1.1.4 // indirect
 	github.com/leodido/go-urn v1.1.0 // indirect
 	github.com/lib/pq v1.1.1 // indirect

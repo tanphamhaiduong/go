@@ -12,7 +12,12 @@ func init() {
 
 var (
 	permissionModule = Module{
-		Name: "Permission",
+		Name:          "Permission",
+		IsHaveGetByID: true,
+		IsHaveCount:   true,
+		IsHaveList:    true,
+		IsHaveInsert:  true,
+		IsHaveUpdate:  false,
 		Fields: []Field{
 			{
 				Name:               "ID",

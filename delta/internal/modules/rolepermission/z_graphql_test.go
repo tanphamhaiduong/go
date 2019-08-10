@@ -3,11 +3,9 @@ package rolepermission
 
 import (
 	"context"
-	"errors"
 
 	"github.com/graphql-go/graphql"
 
-	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
 )
 
@@ -22,203 +20,34 @@ func (s *RolePermissionResolverTestSuite) TestForwardParams_Success() {
 	s.Equal(expected, actual)
 }
 
-func (s *RolePermissionResolverTestSuite) TestGetByID_Success() {
+func (s *RolePermissionResolverTestSuite) TestCheckPermission_True() {
 	var (
-		ctx                  = context.Background()
-		sampleID       int64 = 1
-		params               = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
-		rolepermission models.RolePermission
-		args           = arguments.RolePermissionGetByID{
-			ID: 1,
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "RolePermissionGetByID",
+				},
+			},
 		}
+		expected = true
 	)
-	s.MockIRolePermission.On("GetByID", ctx, args).Return(rolepermission, nil)
-	actual, err := s.RolePermission.GetByID(params)
-	s.Nil(err)
-	s.Equal(rolepermission, actual)
+	actual := s.RolePermission.checkPermission(*claims, "RolePermissionGetByID")
+	s.Equal(expected, actual)
 }
 
-func (s *RolePermissionResolverTestSuite) TestGetByID_Fail() {
+func (s *RolePermissionResolverTestSuite) TestCheckPermission_False() {
 	var (
-		ctx                  = context.Background()
-		sampleID       int64 = 1
-		params               = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
-		rolepermission models.RolePermission
-		args           = arguments.RolePermissionGetByID{
-			ID: 1,
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "RolePermissionList",
+				},
+			},
 		}
+		expected = false
 	)
-	s.MockIRolePermission.On("GetByID", ctx, args).Return(rolepermission, errors.New("some errors"))
-	actual, err := s.RolePermission.GetByID(params)
-	s.Nil(actual)
-	s.NotNil(err)
-}
-
-func (s *RolePermissionResolverTestSuite) TestList_Success() {
-	var (
-		ctx             = context.Background()
-		params          = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
-		rolepermissions []models.RolePermission
-		args            = arguments.RolePermissionList{
-			Page:     1,
-			PageSize: 10,
-		}
-	)
-	s.MockIRolePermission.On("List", ctx, args).Return(rolepermissions, nil)
-	actual, err := s.RolePermission.List(params)
-	s.Nil(err)
-	s.Equal(rolepermissions, actual)
-}
-
-func (s *RolePermissionResolverTestSuite) TestList_Fail() {
-	var (
-		ctx             = context.Background()
-		params          = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
-		rolepermissions []models.RolePermission
-		args            = arguments.RolePermissionList{
-			Page:     1,
-			PageSize: 10,
-		}
-	)
-	s.MockIRolePermission.On("List", ctx, args).Return(rolepermissions, errors.New("some errors"))
-	actual, err := s.RolePermission.List(params)
-	s.Nil(actual)
-	s.NotNil(err)
-}
-
-func (s *RolePermissionResolverTestSuite) TestCount_Success() {
-	var (
-		ctx    = context.Background()
-		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
-		args   = arguments.RolePermissionCount{}
-		count  int64
-	)
-	s.MockIRolePermission.On("Count", ctx, args).Return(count, nil)
-	actual, err := s.RolePermission.Count(params)
-	s.Nil(err)
-	s.Equal(count, actual)
-}
-
-func (s *RolePermissionResolverTestSuite) TestCount_Fail() {
-	var (
-		ctx    = context.Background()
-		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
-		args   = arguments.RolePermissionCount{}
-		count  int64
-	)
-	s.MockIRolePermission.On("Count", ctx, args).Return(count, errors.New("some errors"))
-	actual, err := s.RolePermission.Count(params)
-	s.Nil(actual)
-	s.NotNil(err)
-}
-
-func (s *RolePermissionResolverTestSuite) TestInsert_Success() {
-	var (
-		ctx            = context.Background()
-		params         = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
-		args           = arguments.RolePermissionInsert{}
-		rolepermission models.RolePermission
-	)
-	// Mock Insert
-	s.MockIRolePermission.On("Insert", ctx, args).Return(rolepermission, nil)
-	// Mock GetByID
-	s.MockIRolePermission.On("GetByID", ctx, params).Return(rolepermission, nil)
-
-	actual, err := s.RolePermission.Insert(params)
-	s.Nil(err)
-	s.Equal(rolepermission, actual)
-}
-
-func (s *RolePermissionResolverTestSuite) TestInsert_Fail() {
-	var (
-		ctx            = context.Background()
-		params         = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
-		args           = arguments.RolePermissionInsert{}
-		rolepermission models.RolePermission
-	)
-	s.MockIRolePermission.On("Insert", ctx, args).Return(rolepermission, errors.New("some errors"))
-	actual, err := s.RolePermission.Insert(params)
-	s.Nil(actual)
-	s.NotNil(err)
-}
-
-func (s *RolePermissionResolverTestSuite) TestUpdate_Success() {
-	var (
-		ctx            = context.Background()
-		sampleID int64 = 1
-		params         = graphql.ResolveParams{
-			Context: context.Background(),
-			Source:  map[string]interface{}{},
-			Args:    map[string]interface{}{"id": 1},
-		}
-		args = arguments.RolePermissionUpdate{
-			ID: &sampleID,
-		}
-		rolepermission = models.RolePermission{}
-	)
-	// Mock for Update
-	s.MockIRolePermission.On("Update", ctx, args).Return(rolepermission, nil)
-	// Mock for LoadByID
-	s.MockIRolePermission.On("GetByID", ctx, args).Return(rolepermission, nil)
-	actual, err := s.RolePermission.Update(params)
-	s.Nil(err)
-	s.Equal(rolepermission, actual)
-}
-
-func (s *RolePermissionResolverTestSuite) TestUpdate_Fail() {
-	var (
-		ctx            = context.Background()
-		sampleID int64 = 1
-		params         = graphql.ResolveParams{
-			Context: context.Background(),
-			Source:  map[string]interface{}{},
-			Args:    map[string]interface{}{"id": 1},
-		}
-		args = arguments.RolePermissionUpdate{
-			ID: &sampleID,
-		}
-		rolepermission models.RolePermission
-	)
-	s.MockIRolePermission.On("Update", ctx, args).Return(rolepermission, errors.New("some errors"))
-	actual, err := s.RolePermission.Update(params)
-	s.Nil(actual)
-	s.NotNil(err)
-}
-
-func (s *RolePermissionResolverTestSuite) TestDelete_Success() {
-	var (
-		ctx    = context.Background()
-		params = graphql.ResolveParams{
-			Context: context.Background(),
-			Source:  map[string]interface{}{},
-			Args:    map[string]interface{}{"id": 1},
-		}
-		args = arguments.RolePermissionDelete{
-			ID: 1,
-		}
-		sampleID int64 = 1
-	)
-	s.MockIRolePermission.On("Delete", ctx, args).Return(sampleID, nil)
-	actual, err := s.RolePermission.Delete(params)
-	s.Nil(err)
-	s.Equal(sampleID, actual)
-}
-
-func (s *RolePermissionResolverTestSuite) TestDelete_Fail() {
-	var (
-		ctx    = context.Background()
-		params = graphql.ResolveParams{
-			Context: context.Background(),
-			Source:  map[string]interface{}{},
-			Args:    map[string]interface{}{"id": 1},
-		}
-		args = arguments.RolePermissionDelete{
-			ID: 1,
-		}
-		sampleID int64
-	)
-	s.MockIRolePermission.On("Delete", ctx, args).Return(sampleID, errors.New("some errors"))
-	actual, err := s.RolePermission.Delete(params)
-	s.Nil(actual)
-	s.NotNil(err)
+	actual := s.RolePermission.checkPermission(*claims, "RolePermissionGetByID")
+	s.Equal(expected, actual)
 }

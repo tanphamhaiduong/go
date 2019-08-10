@@ -7,6 +7,7 @@ import (
 	"github.com/tanphamhaiduong/go/common/logger"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
+	"github.com/tanphamhaiduong/go/delta/internal/utils"
 	"github.com/tanphamhaiduong/go/delta/internal/validator"
 )
 
@@ -24,7 +25,7 @@ type ICoreRepository interface {
 // GetByID ...
 func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.CompanyGetByID) (models.Company, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Handler GetByID of company")
 	var (
@@ -32,7 +33,7 @@ func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.CompanyGetBy
 	)
 	if err := validator.Struct(params); err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler GetByID validator.Struct error of company")
 		return company, err
@@ -40,7 +41,7 @@ func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.CompanyGetBy
 	company, err := h.company.GetByID(ctx, params)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler GetByID h.company.GetByID error of company")
 		return company, err
@@ -51,7 +52,7 @@ func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.CompanyGetBy
 // GetByIDs ...
 func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.CompanyGetByIDs) ([]models.Company, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Handler GetByIDs of company")
 	var (
@@ -59,7 +60,7 @@ func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.CompanyGetB
 	)
 	if err := validator.Struct(params); err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler GetByIDs validator.Struct error of company")
 		return companies, err
@@ -67,7 +68,7 @@ func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.CompanyGetB
 	companies, err := h.company.GetByIDs(ctx, params)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler GetByIDs h.company.GetByIDs error of company")
 		return companies, err
@@ -78,7 +79,7 @@ func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.CompanyGetB
 // Count ...
 func (h *HandlerImpl) Count(ctx context.Context, params arguments.CompanyCount) (int64, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Handler Count of company")
 	var (
@@ -86,7 +87,7 @@ func (h *HandlerImpl) Count(ctx context.Context, params arguments.CompanyCount) 
 	)
 	if err := validator.Struct(params); err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler Count validator.Struct error of company")
 		return count, err
@@ -94,7 +95,7 @@ func (h *HandlerImpl) Count(ctx context.Context, params arguments.CompanyCount) 
 	count, err := h.company.Count(ctx, params)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler Count h.company.Count error of company")
 		return count, err
@@ -105,7 +106,7 @@ func (h *HandlerImpl) Count(ctx context.Context, params arguments.CompanyCount) 
 // List ...
 func (h *HandlerImpl) List(ctx context.Context, params arguments.CompanyList) ([]models.Company, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Handler List of company")
 	var (
@@ -113,7 +114,7 @@ func (h *HandlerImpl) List(ctx context.Context, params arguments.CompanyList) ([
 	)
 	if err := validator.Struct(params); err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler List validator.Struct error of company")
 		return companies, err
@@ -121,7 +122,7 @@ func (h *HandlerImpl) List(ctx context.Context, params arguments.CompanyList) ([
 	companies, err := h.company.List(ctx, params)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler List h.company.List error of company")
 		return companies, err
@@ -132,7 +133,7 @@ func (h *HandlerImpl) List(ctx context.Context, params arguments.CompanyList) ([
 // Insert ...
 func (h *HandlerImpl) Insert(ctx context.Context, params arguments.CompanyInsert) (models.Company, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Handler Insert of company")
 	var (
@@ -140,7 +141,7 @@ func (h *HandlerImpl) Insert(ctx context.Context, params arguments.CompanyInsert
 	)
 	if err := validator.Struct(params); err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler Insert validator.Struct error of company")
 		return company, err
@@ -148,7 +149,7 @@ func (h *HandlerImpl) Insert(ctx context.Context, params arguments.CompanyInsert
 	company, err := h.company.Insert(ctx, params)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler Insert h.company.Insert error of company")
 		return company, err
@@ -159,7 +160,7 @@ func (h *HandlerImpl) Insert(ctx context.Context, params arguments.CompanyInsert
 // Update ...
 func (h *HandlerImpl) Update(ctx context.Context, params arguments.CompanyUpdate) (models.Company, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Handler Update of company")
 	var (
@@ -167,7 +168,7 @@ func (h *HandlerImpl) Update(ctx context.Context, params arguments.CompanyUpdate
 	)
 	if err := validator.Struct(params); err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler Update validator.Struct error of company")
 		return company, err
@@ -175,7 +176,7 @@ func (h *HandlerImpl) Update(ctx context.Context, params arguments.CompanyUpdate
 	company, err := h.company.Update(ctx, params)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler Update h.company.Update error of company")
 		return company, err
@@ -186,7 +187,7 @@ func (h *HandlerImpl) Update(ctx context.Context, params arguments.CompanyUpdate
 // Delete ...
 func (h *HandlerImpl) Delete(ctx context.Context, param arguments.CompanyDelete) (int64, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"param":   param,
 	}).Infof("Handler Delete of company")
 	var (
@@ -194,7 +195,7 @@ func (h *HandlerImpl) Delete(ctx context.Context, param arguments.CompanyDelete)
 	)
 	if err := validator.Struct(param); err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler Delete validator.Struct error of company")
 		return id, err
@@ -202,7 +203,7 @@ func (h *HandlerImpl) Delete(ctx context.Context, param arguments.CompanyDelete)
 	id, err := h.company.Delete(ctx, param)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Handler Delete h.company.Delete error of company")
 		return id, err

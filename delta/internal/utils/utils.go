@@ -1,10 +1,36 @@
 package utils
 
 import (
+	"context"
 	"reflect"
 	"time"
 
 	"github.com/mitchellh/mapstructure"
+	"github.com/tanphamhaiduong/go/delta/internal/models"
+)
+
+/**
+* Constant Define
+ */
+const (
+	// GetByID ...
+	GetByID = "GetByID"
+	// GetByIDs ...
+	GetByIDs = "GetByIDs"
+	// Count ...
+	Count = "Count"
+	// List ...
+	List = "List"
+	// Insert ...
+	Insert = "Insert"
+	// Update ...
+	Update = "Update"
+	// Delete ...
+	Delete = "Delete"
+
+	// ClaimsKey
+	ClaimsKey  models.ContextKey = "claims"
+	TraceIDKey models.ContextKey = "traceId"
 )
 
 // Parse map to struct for graphql
@@ -21,6 +47,15 @@ func Parse(data map[string]interface{}, result interface{}) error {
 		return err
 	}
 	return dec.Decode(data)
+}
+
+// ExtractClaimsFromContext map to struct for graphql
+func ExtractClaimsFromContext(context context.Context) models.Claims {
+	var (
+		claimsContext = context.Value(ClaimsKey).(*models.Claims)
+	)
+
+	return *claimsContext
 }
 
 // StringToTimeHookFunc returns a DecodeHookFunc that converts

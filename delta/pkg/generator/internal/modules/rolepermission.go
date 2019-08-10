@@ -12,7 +12,12 @@ func init() {
 
 var (
 	rolePermissionModule = Module{
-		Name: "RolePermission",
+		Name:          "RolePermission",
+		IsHaveGetByID: false,
+		IsHaveCount:   false,
+		IsHaveList:    false,
+		IsHaveInsert:  false,
+		IsHaveUpdate:  false,
 		Fields: []Field{
 			{
 				Name:               "ID",

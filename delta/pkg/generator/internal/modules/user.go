@@ -12,7 +12,12 @@ func init() {
 
 var (
 	userModule = Module{
-		Name: "User",
+		Name:          "User",
+		IsHaveGetByID: true,
+		IsHaveCount:   true,
+		IsHaveList:    true,
+		IsHaveInsert:  true,
+		IsHaveUpdate:  true,
 		Fields: []Field{
 			{
 				Name:               "ID",

@@ -11,17 +11,6 @@ import (
 	{{- end }}
 )
 
-// IResolver ...
-type IResolver interface {
-	ForwardParams(p graphql.ResolveParams) (interface{}, error)
-	GetByID(p graphql.ResolveParams) (interface{}, error)
-	Count(p graphql.ResolveParams) (interface{}, error)
-	List(p graphql.ResolveParams) (interface{}, error)
-	Insert(p graphql.ResolveParams) (interface{}, error)
-	Update(p graphql.ResolveParams) (interface{}, error)
-	Delete(p graphql.ResolveParams) (interface{}, error)
-}
-
 // Resolver ...
 type Resolver struct {
 	{{- range $Module := $Modules }}
@@ -38,12 +27,15 @@ type Handler struct {
 
 func addToSchema(resolver Resolver){
 	{{- range $Module := $Modules }}
+		{{- if $Module.IsHaveGetByID }}
 		rootQuery.AddFieldConfig("{{ $Module.Name | ToLowerCamelCase }}", &graphql.Field{
 			Type:        {{ $Module.Name | ToLowerCase }}.Type,
 			Description: "This is GetByID for {{ $Module.Name | ToLowerCamelCase }}",
 			Args:        {{ $Module.Name | ToLowerCase }}.GetByIDTypeArgs,
 			Resolve:     resolver.{{ $Module.Name }}.GetByID,
 		})
+		{{- end }}
+		{{- if $Module.IsHaveList }}
 		rootQuery.AddFieldConfig("{{ $Module.Name | ToLowerCamelCase | ToPlural }}", &graphql.Field{
 			Type: graphql.NewObject(graphql.ObjectConfig{
 				Name:        "{{ $Module.Name | ToPlural }}",
@@ -65,24 +57,31 @@ func addToSchema(resolver Resolver){
 			Args:        {{ $Module.Name | ToLowerCase }}.ListTypeArgs,
 			Resolve:     resolver.{{ $Module.Name }}.ForwardParams,
 		})
+		{{- end }}
+		{{- if $Module.IsHaveInsert }}
 		rootMutation.AddFieldConfig("insert{{ $Module.Name }}", &graphql.Field{
 			Type:        {{ $Module.Name | ToLowerCase }}.Type,
 			Description: "This is insert {{ $Module.Name | ToLowerCamelCase }} query",
 			Args:        {{ $Module.Name | ToLowerCase }}.InsertTypeArgs,
 			Resolve:     resolver.{{ $Module.Name }}.Insert,
 		})
+		{{- end }}
+		{{- if $Module.IsHaveUpdate }}
 		rootMutation.AddFieldConfig("update{{ $Module.Name }}", &graphql.Field{
 			Type:        {{ $Module.Name | ToLowerCase }}.Type,
 			Description: "This is update {{ $Module.Name | ToLowerCamelCase }} query",
 			Args:        {{ $Module.Name | ToLowerCase }}.UpdateTypeArgs,
 			Resolve:     resolver.{{ $Module.Name }}.Update,
 		})
+		{{- end }}
+		{{- if $Module.IsHaveDelete }}
 		rootMutation.AddFieldConfig("delete{{ $Module.Name }}", &graphql.Field{
 			Type:        graphql.NewNonNull(graphql.Int),
 			Description: "This is delete {{ $Module.Name | ToLowerCamelCase }} query",
 			Args:        {{ $Module.Name | ToLowerCase }}.DeleteTypeArgs,
 			Resolve:     resolver.{{ $Module.Name }}.Delete,
 		})
+		{{- end }}
 	{{- end }}
 }
 

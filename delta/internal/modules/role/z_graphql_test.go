@@ -3,12 +3,14 @@ package role
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 
 	"github.com/graphql-go/graphql"
 
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
+	"github.com/tanphamhaiduong/go/delta/internal/utils"
 )
 
 func (s *RoleResolverTestSuite) TestForwardParams_Success() {
@@ -22,11 +24,50 @@ func (s *RoleResolverTestSuite) TestForwardParams_Success() {
 	s.Equal(expected, actual)
 }
 
+func (s *RoleResolverTestSuite) TestCheckPermission_True() {
+	var (
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "RoleGetByID",
+				},
+			},
+		}
+		expected = true
+	)
+	actual := s.Role.checkPermission(*claims, "RoleGetByID")
+	s.Equal(expected, actual)
+}
+
+func (s *RoleResolverTestSuite) TestCheckPermission_False() {
+	var (
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "RoleList",
+				},
+			},
+		}
+		expected = false
+	)
+	actual := s.Role.checkPermission(*claims, "RoleGetByID")
+	s.Equal(expected, actual)
+}
 func (s *RoleResolverTestSuite) TestGetByID_Success() {
 	var (
-		ctx            = context.Background()
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "RoleGetByID",
+				},
+			},
+		}
 		sampleID int64 = 1
-		params         = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
+		ctx            = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params         = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
 		role     models.Role
 		args     = arguments.RoleGetByID{
 			ID: 1,
@@ -40,9 +81,17 @@ func (s *RoleResolverTestSuite) TestGetByID_Success() {
 
 func (s *RoleResolverTestSuite) TestGetByID_Fail() {
 	var (
-		ctx            = context.Background()
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "RoleGetByID",
+				},
+			},
+		}
 		sampleID int64 = 1
-		params         = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
+		ctx            = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params         = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
 		role     models.Role
 		args     = arguments.RoleGetByID{
 			ID: 1,
@@ -54,10 +103,65 @@ func (s *RoleResolverTestSuite) TestGetByID_Fail() {
 	s.NotNil(err)
 }
 
+func (s *RoleResolverTestSuite) TestGetByID_Fail1() {
+	var (
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "RoleGetByID",
+				},
+			},
+		}
+		sampleID int64 = 1
+		ctx            = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params         = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
+		role     models.Role
+		args     = arguments.RoleGetByID{
+			ID: 1,
+		}
+	)
+	s.MockIRole.On("GetByID", ctx, args).Return(role, sql.ErrNoRows)
+	actual, err := s.Role.GetByID(params)
+	s.Nil(actual)
+	s.NotNil(err)
+}
+
+func (s *RoleResolverTestSuite) TestGetByID_Fail2() {
+	var (
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "",
+				},
+			},
+		}
+		sampleID int64 = 1
+		ctx            = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params         = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
+		role     models.Role
+		args     = arguments.RoleGetByID{
+			ID: 1,
+		}
+	)
+	s.MockIRole.On("GetByID", ctx, args).Return(role, sql.ErrNoRows)
+	actual, err := s.Role.GetByID(params)
+	s.Nil(actual)
+	s.NotNil(err)
+}
 func (s *RoleResolverTestSuite) TestList_Success() {
 	var (
-		ctx    = context.Background()
-		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "RoleList",
+				},
+			},
+		}
+		ctx    = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
 		roles  []models.Role
 		args   = arguments.RoleList{
 			Page:     1,
@@ -72,8 +176,16 @@ func (s *RoleResolverTestSuite) TestList_Success() {
 
 func (s *RoleResolverTestSuite) TestList_Fail() {
 	var (
-		ctx    = context.Background()
-		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "RoleList",
+				},
+			},
+		}
+		ctx    = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
 		roles  []models.Role
 		args   = arguments.RoleList{
 			Page:     1,
@@ -86,10 +198,65 @@ func (s *RoleResolverTestSuite) TestList_Fail() {
 	s.NotNil(err)
 }
 
+func (s *RoleResolverTestSuite) TestList_Fail1() {
+	var (
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "RoleList",
+				},
+			},
+		}
+		ctx    = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
+		roles  []models.Role
+		args   = arguments.RoleList{
+			Page:     1,
+			PageSize: 10,
+		}
+	)
+	s.MockIRole.On("List", ctx, args).Return(roles, sql.ErrNoRows)
+	actual, err := s.Role.List(params)
+	s.Nil(actual)
+	s.NotNil(err)
+}
+
+func (s *RoleResolverTestSuite) TestList_Fail2() {
+	var (
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "",
+				},
+			},
+		}
+		ctx    = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
+		roles  []models.Role
+		args   = arguments.RoleList{
+			Page:     1,
+			PageSize: 10,
+		}
+	)
+	s.MockIRole.On("List", ctx, args).Return(roles, errors.New("some errors"))
+	actual, err := s.Role.List(params)
+	s.Nil(actual)
+	s.NotNil(err)
+}
 func (s *RoleResolverTestSuite) TestCount_Success() {
 	var (
-		ctx    = context.Background()
-		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "RoleCount",
+				},
+			},
+		}
+		ctx    = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{}}
 		args   = arguments.RoleCount{}
 		count  int64
 	)
@@ -101,8 +268,16 @@ func (s *RoleResolverTestSuite) TestCount_Success() {
 
 func (s *RoleResolverTestSuite) TestCount_Fail() {
 	var (
-		ctx    = context.Background()
-		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "RoleCount",
+				},
+			},
+		}
+		ctx    = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{}}
 		args   = arguments.RoleCount{}
 		count  int64
 	)
@@ -112,10 +287,59 @@ func (s *RoleResolverTestSuite) TestCount_Fail() {
 	s.NotNil(err)
 }
 
+func (s *RoleResolverTestSuite) TestCount_Fail1() {
+	var (
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "RoleCount",
+				},
+			},
+		}
+		ctx    = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{}}
+		args   = arguments.RoleCount{}
+		count  int64
+	)
+	s.MockIRole.On("Count", ctx, args).Return(count, sql.ErrNoRows)
+	actual, err := s.Role.Count(params)
+	s.Nil(actual)
+	s.NotNil(err)
+}
+
+func (s *RoleResolverTestSuite) TestCount_Fail2() {
+	var (
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "",
+				},
+			},
+		}
+		ctx    = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{}}
+		args   = arguments.RoleCount{}
+		count  int64
+	)
+	s.MockIRole.On("Count", ctx, args).Return(count, errors.New("some errors"))
+	actual, err := s.Role.Count(params)
+	s.Nil(actual)
+	s.NotNil(err)
+}
 func (s *RoleResolverTestSuite) TestInsert_Success() {
 	var (
-		ctx    = context.Background()
-		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "RoleInsert",
+				},
+			},
+		}
+		ctx    = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{}}
 		args   = arguments.RoleInsert{}
 		role   models.Role
 	)
@@ -131,8 +355,16 @@ func (s *RoleResolverTestSuite) TestInsert_Success() {
 
 func (s *RoleResolverTestSuite) TestInsert_Fail() {
 	var (
-		ctx    = context.Background()
-		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "RoleInsert",
+				},
+			},
+		}
+		ctx    = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{}}
 		args   = arguments.RoleInsert{}
 		role   models.Role
 	)
@@ -142,12 +374,60 @@ func (s *RoleResolverTestSuite) TestInsert_Fail() {
 	s.NotNil(err)
 }
 
+func (s *RoleResolverTestSuite) TestInsert_Fail1() {
+	var (
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "",
+				},
+			},
+		}
+		ctx    = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{}}
+		args   = arguments.RoleInsert{}
+		role   models.Role
+	)
+	s.MockIRole.On("Insert", ctx, args).Return(role, errors.New("some errors"))
+	actual, err := s.Role.Insert(params)
+	s.Nil(actual)
+	s.NotNil(err)
+}
+func (s *RoleResolverTestSuite) TestInsert_Fail2() {
+	var (
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "RoleInsert",
+				},
+			},
+		}
+		ctx    = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		params = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{}}
+		args   = arguments.RoleInsert{}
+		role   models.Role
+	)
+	s.MockIRole.On("Insert", ctx, args).Return(role, sql.ErrNoRows)
+	actual, err := s.Role.Insert(params)
+	s.Nil(actual)
+	s.NotNil(err)
+}
 func (s *RoleResolverTestSuite) TestUpdate_Success() {
 	var (
-		ctx            = context.Background()
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "RoleUpdate",
+				},
+			},
+		}
+		ctx            = context.WithValue(context.Background(), utils.ClaimsKey, claims)
 		sampleID int64 = 1
 		params         = graphql.ResolveParams{
-			Context: context.Background(),
+			Context: ctx,
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
@@ -167,10 +447,18 @@ func (s *RoleResolverTestSuite) TestUpdate_Success() {
 
 func (s *RoleResolverTestSuite) TestUpdate_Fail() {
 	var (
-		ctx            = context.Background()
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "RoleUpdate",
+				},
+			},
+		}
+		ctx            = context.WithValue(context.Background(), utils.ClaimsKey, claims)
 		sampleID int64 = 1
 		params         = graphql.ResolveParams{
-			Context: context.Background(),
+			Context: ctx,
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
@@ -185,40 +473,58 @@ func (s *RoleResolverTestSuite) TestUpdate_Fail() {
 	s.NotNil(err)
 }
 
-func (s *RoleResolverTestSuite) TestDelete_Success() {
+func (s *RoleResolverTestSuite) TestUpdate_Fail1() {
 	var (
-		ctx    = context.Background()
-		params = graphql.ResolveParams{
-			Context: context.Background(),
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "",
+				},
+			},
+		}
+		ctx            = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		sampleID int64 = 1
+		params         = graphql.ResolveParams{
+			Context: ctx,
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
-		args = arguments.RoleDelete{
-			ID: 1,
+		args = arguments.RoleUpdate{
+			ID: &sampleID,
 		}
-		sampleID int64 = 1
+		role models.Role
 	)
-	s.MockIRole.On("Delete", ctx, args).Return(sampleID, nil)
-	actual, err := s.Role.Delete(params)
-	s.Nil(err)
-	s.Equal(sampleID, actual)
+	s.MockIRole.On("Update", ctx, args).Return(role, errors.New("some errors"))
+	actual, err := s.Role.Update(params)
+	s.Nil(actual)
+	s.NotNil(err)
 }
 
-func (s *RoleResolverTestSuite) TestDelete_Fail() {
+func (s *RoleResolverTestSuite) TestUpdate_Fail2() {
 	var (
-		ctx    = context.Background()
-		params = graphql.ResolveParams{
-			Context: context.Background(),
+		claims = &models.Claims{
+			Permissions: []models.Permission{
+				{
+					ID:   1,
+					Name: "RoleUpdate",
+				},
+			},
+		}
+		ctx            = context.WithValue(context.Background(), utils.ClaimsKey, claims)
+		sampleID int64 = 1
+		params         = graphql.ResolveParams{
+			Context: ctx,
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
-		args = arguments.RoleDelete{
-			ID: 1,
+		args = arguments.RoleUpdate{
+			ID: &sampleID,
 		}
-		sampleID int64
+		role models.Role
 	)
-	s.MockIRole.On("Delete", ctx, args).Return(sampleID, errors.New("some errors"))
-	actual, err := s.Role.Delete(params)
+	s.MockIRole.On("Update", ctx, args).Return(role, sql.ErrNoRows)
+	actual, err := s.Role.Update(params)
 	s.Nil(actual)
 	s.NotNil(err)
 }

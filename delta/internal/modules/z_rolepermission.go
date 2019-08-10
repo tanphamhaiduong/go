@@ -1,26 +1,15 @@
 // @generated
 package modules
 
-import (
-	"context"
-
-	"github.com/tanphamhaiduong/go/delta/internal/arguments"
-	"github.com/tanphamhaiduong/go/delta/internal/models"
-)
+import "github.com/graphql-go/graphql"
 
 // ICoreRolePermissionHandler ...
 type ICoreRolePermissionHandler interface {
-	GetByID(ctx context.Context, params arguments.RolePermissionGetByID) (models.RolePermission, error)
-	Count(ctx context.Context, params arguments.RolePermissionCount) (int64, error)
-	List(ctx context.Context, params arguments.RolePermissionList) ([]models.RolePermission, error)
-	Insert(ctx context.Context, params arguments.RolePermissionInsert) (models.RolePermission, error)
-	Update(ctx context.Context, params arguments.RolePermissionUpdate) (models.RolePermission, error)
-	Delete(ctx context.Context, params arguments.RolePermissionDelete) (int64, error)
 }
 
 // ICoreRolePermissionResolver ...
 type ICoreRolePermissionResolver interface {
-	IResolver
+	ForwardParams(p graphql.ResolveParams) (interface{}, error)
 }
 
 //go:generate mockery -name=IRolePermissionResolver -output=mocks -case=underscore

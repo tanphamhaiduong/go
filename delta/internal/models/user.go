@@ -12,3 +12,6 @@ type Claims struct {
 	Permissions []Permission `json:"permissions"`
 	jwt.StandardClaims
 }
+
+// ContextKey ...
+type ContextKey string

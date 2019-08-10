@@ -12,7 +12,12 @@ func init() {
 
 var (
 	companyModule = Module{
-		Name: "Company",
+		Name:          "Company",
+		IsHaveGetByID: true,
+		IsHaveCount:   true,
+		IsHaveList:    true,
+		IsHaveInsert:  true,
+		IsHaveUpdate:  true,
 		Fields: []Field{
 			{
 				Name:               "ID",

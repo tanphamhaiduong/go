@@ -29,7 +29,7 @@ func (r *RepositoryImpl) scanRole(row database.IRow, role *models.Role) error {
 // GetByID ...
 func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.RoleGetByID) (models.Role, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Repository GetByID of role")
 	var (
@@ -45,13 +45,13 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.RoleGetBy
 	)
 	sql, args, err := selectBuilder.ToSql()
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"SQL":     sql,
 		"Args":    args,
 	}).Infof("Repository GetByID build sql string of role")
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository GetByID selectBuilder error of role")
 		return role, err
@@ -59,7 +59,7 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.RoleGetBy
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository GetByID PrepareContext error of role")
 		return role, err
@@ -68,7 +68,7 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.RoleGetBy
 	err = r.scanRole(row, &role)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository GetByID Scan error of role")
 		return role, err
@@ -79,7 +79,7 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.RoleGetBy
 // GetByIDs ...
 func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.RoleGetByIDs) ([]models.Role, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Repository GetByIDs of role")
 	var (
@@ -95,13 +95,13 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.RoleGetB
 	)
 	sql, args, err := selectBuilder.ToSql()
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"SQL":     sql,
 		"Args":    args,
 	}).Infof("Repository GetByIDs build sql string of role")
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository GetByIDs selectBuilder error of role")
 		return roles, err
@@ -109,7 +109,7 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.RoleGetB
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository GetByIDs PrepareContext error of role")
 		return roles, err
@@ -118,7 +118,7 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.RoleGetB
 	defer rows.Close()
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository GetByIDs QueryContext error of role")
 		return roles, err
@@ -128,7 +128,7 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.RoleGetB
 		err := r.scanRole(rows, &role)
 		if err != nil {
 			logger.WithFields(logger.Fields{
-				"TraceID": ctx.Value("TraceID"),
+				"traceId": ctx.Value(utils.TraceIDKey),
 				"Error":   err,
 			}).Errorf("Repository GetByIDs Scan error of role")
 			return roles, err
@@ -141,7 +141,7 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.RoleGetB
 // setArgsToListSelectBuilder ...
 func (r *RepositoryImpl) setArgsToListSelectBuilder(ctx context.Context, selectBuilder sq.SelectBuilder, params arguments.RoleList) sq.SelectBuilder {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Repository setArgsToListSelectBuilder of role")
 	if params.ID != 0 {
@@ -175,7 +175,7 @@ func (r *RepositoryImpl) setArgsToListSelectBuilder(ctx context.Context, selectB
 // List ...
 func (r *RepositoryImpl) List(ctx context.Context, params arguments.RoleList) ([]models.Role, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Repository List of role")
 	var (
@@ -192,13 +192,13 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.RoleList) ([
 	selectBuilderWithArgs := r.setArgsToListSelectBuilder(ctx, selectBuilder, params)
 	sql, args, err := selectBuilderWithArgs.ToSql()
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"SQL":     sql,
 		"Args":    args,
 	}).Infof("Repository List build sql string of role")
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository List selectBuilderWithArgs error of role")
 		return roles, err
@@ -206,7 +206,7 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.RoleList) ([
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository List PrepareContext error of role")
 		return roles, err
@@ -214,7 +214,7 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.RoleList) ([
 	rows, err := stmt.QueryContext(ctx, args...)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository List QueryContext error of role")
 		return roles, err
@@ -225,7 +225,7 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.RoleList) ([
 		err := r.scanRole(rows, &role)
 		if err != nil {
 			logger.WithFields(logger.Fields{
-				"TraceID": ctx.Value("TraceID"),
+				"traceId": ctx.Value(utils.TraceIDKey),
 				"Error":   err,
 			}).Errorf("Repository List Scan error of role")
 			return roles, err
@@ -238,7 +238,7 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.RoleList) ([
 // setArgsToCountSelectBuilder ...
 func (r *RepositoryImpl) setArgsToCountSelectBuilder(ctx context.Context, selectBuilder sq.SelectBuilder, params arguments.RoleCount) sq.SelectBuilder {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Repository setArgsToCountSelectBuilder of role")
 	if params.ID != 0 {
@@ -265,7 +265,7 @@ func (r *RepositoryImpl) setArgsToCountSelectBuilder(ctx context.Context, select
 // Count ...
 func (r *RepositoryImpl) Count(ctx context.Context, params arguments.RoleCount) (int64, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Repository Count of role")
 	var (
@@ -275,13 +275,13 @@ func (r *RepositoryImpl) Count(ctx context.Context, params arguments.RoleCount) 
 	selectBuilderWithArgs := r.setArgsToCountSelectBuilder(ctx, selectBuilder, params)
 	sql, args, err := selectBuilderWithArgs.ToSql()
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"SQL":     sql,
 		"Args":    args,
 	}).Infof("Repository Count build sql string of role")
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Count selectBuilderWithArgs error of role")
 		return count, err
@@ -289,7 +289,7 @@ func (r *RepositoryImpl) Count(ctx context.Context, params arguments.RoleCount) 
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Count PrepareContext error of role")
 		return count, err
@@ -298,7 +298,7 @@ func (r *RepositoryImpl) Count(ctx context.Context, params arguments.RoleCount) 
 	err = row.Scan(&count)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Count Scan error of role")
 		return count, err
@@ -309,7 +309,7 @@ func (r *RepositoryImpl) Count(ctx context.Context, params arguments.RoleCount) 
 // Insert ...
 func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.RoleInsert) (models.Role, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Repository Insert of role")
 	var (
@@ -330,13 +330,13 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.RoleInsert
 	)
 	sql, args, err := insertBuilder.ToSql()
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"SQL":     sql,
 		"Args":    args,
 	}).Infof("Repository Insert build sql string of role")
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Insert insertBuilder error of role")
 		return role, err
@@ -344,7 +344,7 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.RoleInsert
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Insert PrepareContext error of role")
 		return role, err
@@ -352,7 +352,7 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.RoleInsert
 	row, err := stmt.ExecContext(ctx, args...)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Insert ExecContext error of role")
 		return role, err
@@ -360,7 +360,7 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.RoleInsert
 	id, err := row.LastInsertId()
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Insert LastInsertId error of role")
 		return role, err
@@ -368,7 +368,7 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.RoleInsert
 	newRole, err := r.GetByID(ctx, arguments.RoleGetByID{ID: id})
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Insert GetByID error of role")
 		return role, err
@@ -402,7 +402,7 @@ func (r *RepositoryImpl) setArgsToUpdateBuilder(ctx context.Context, updateBuild
 // Update ...
 func (r *RepositoryImpl) Update(ctx context.Context, params arguments.RoleUpdate) (models.Role, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Repository Update of role")
 	var (
@@ -413,13 +413,13 @@ func (r *RepositoryImpl) Update(ctx context.Context, params arguments.RoleUpdate
 
 	sql, args, err := updateBuilderWithArgs.ToSql()
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"SQL":     sql,
 		"Args":    args,
 	}).Infof("Repository Update build sql string of role")
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Update updateBuilderWithArgs error of role")
 		return role, err
@@ -427,7 +427,7 @@ func (r *RepositoryImpl) Update(ctx context.Context, params arguments.RoleUpdate
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Update PrepareContext error of role")
 		return role, err
@@ -435,7 +435,7 @@ func (r *RepositoryImpl) Update(ctx context.Context, params arguments.RoleUpdate
 	result, err := stmt.ExecContext(ctx, args...)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Update ExecContext error of role")
 		return role, err
@@ -443,14 +443,14 @@ func (r *RepositoryImpl) Update(ctx context.Context, params arguments.RoleUpdate
 	rowAffected, err := result.RowsAffected()
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Update RowsAffected error of role")
 		return role, err
 	}
 	if rowAffected <= 0 {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   fmt.Errorf("error when update record id %d", *params.ID),
 		}).Errorf("Repository Update rowAffected <= 0 of role")
 		return role, fmt.Errorf("error when update record id %d", *params.ID)
@@ -458,7 +458,7 @@ func (r *RepositoryImpl) Update(ctx context.Context, params arguments.RoleUpdate
 	newRole, err := r.GetByID(ctx, arguments.RoleGetByID{ID: *params.ID})
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Update GetByID error of role")
 		return role, err
@@ -469,7 +469,7 @@ func (r *RepositoryImpl) Update(ctx context.Context, params arguments.RoleUpdate
 // Delete ...
 func (r *RepositoryImpl) Delete(ctx context.Context, params arguments.RoleDelete) (int64, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Repository Delete of role")
 	var (
@@ -478,13 +478,13 @@ func (r *RepositoryImpl) Delete(ctx context.Context, params arguments.RoleDelete
 	)
 	sql, args, err := deleteBuilder.ToSql()
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
+		"traceId": ctx.Value(utils.TraceIDKey),
 		"SQL":     sql,
 		"Args":    args,
 	}).Infof("Repository Delete build sql string of role")
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Delete deleteBuilder error of role")
 		return id, err
@@ -492,7 +492,7 @@ func (r *RepositoryImpl) Delete(ctx context.Context, params arguments.RoleDelete
 	stmt, err := r.db.PrepareContext(ctx, sql)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Delete PrepareContext error of role")
 		return id, err
@@ -500,7 +500,7 @@ func (r *RepositoryImpl) Delete(ctx context.Context, params arguments.RoleDelete
 	result, err := stmt.ExecContext(ctx, args...)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Delete ExecContext error of role")
 		return id, err
@@ -508,14 +508,14 @@ func (r *RepositoryImpl) Delete(ctx context.Context, params arguments.RoleDelete
 	rowAffected, err := result.RowsAffected()
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Repository Delete RowsAffected error of role")
 		return id, err
 	}
 	if rowAffected <= 0 {
 		logger.WithFields(logger.Fields{
-			"TraceID": ctx.Value("TraceID"),
+			"traceId": ctx.Value(utils.TraceIDKey),
 			"Error":   fmt.Errorf("not found record by id %d", params.ID),
 		}).Errorf("Repository Update rowAffected <= 0 of role")
 		return id, fmt.Errorf("not found record by id %d", params.ID)

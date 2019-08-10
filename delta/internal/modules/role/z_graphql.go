@@ -3,8 +3,11 @@ package role
 
 import (
 	"context"
+	"database/sql"
+	"fmt"
 
 	"github.com/graphql-go/graphql"
+	"github.com/tanphamhaiduong/go/common/goerrors"
 	"github.com/tanphamhaiduong/go/common/logger"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
@@ -43,14 +46,12 @@ var (
 			},
 		},
 	})
-
 	// GetByIDTypeArgs ...
 	GetByIDTypeArgs = graphql.FieldConfigArgument{
 		"id": &graphql.ArgumentConfig{
 			Type: graphql.NewNonNull(graphql.Int),
 		},
 	}
-
 	// ListTypeArgs ...
 	ListTypeArgs = graphql.FieldConfigArgument{
 		"id": &graphql.ArgumentConfig{
@@ -78,8 +79,9 @@ var (
 			Description: "This is role's updatedBy",
 		},
 		"page": &graphql.ArgumentConfig{
-			Type:        graphql.NewNonNull(graphql.Int),
-			Description: "This is feature page",
+			Type:         graphql.Int,
+			Description:  "This is feature page",
+			DefaultValue: 1,
 		},
 		"pageSize": &graphql.ArgumentConfig{
 			Type:         graphql.Int,
@@ -87,7 +89,6 @@ var (
 			DefaultValue: 10,
 		},
 	}
-
 	// InsertTypeArgs ...
 	InsertTypeArgs = graphql.FieldConfigArgument{
 		"name": &graphql.ArgumentConfig{
@@ -111,7 +112,6 @@ var (
 			Description: "This is role's updatedBy",
 		},
 	}
-
 	// UpdateTypeArgs ...
 	UpdateTypeArgs = graphql.FieldConfigArgument{
 		"id": &graphql.ArgumentConfig{
@@ -138,13 +138,6 @@ var (
 			Description: "This is role's updatedBy",
 		},
 	}
-
-	// DeleteTypeArgs ...
-	DeleteTypeArgs = graphql.FieldConfigArgument{
-		"id": &graphql.ArgumentConfig{
-			Type: graphql.NewNonNull(graphql.Int),
-		},
-	}
 )
 
 // ICoreHandler ...
@@ -158,10 +151,21 @@ type ICoreHandler interface {
 	Delete(ctx context.Context, param arguments.RoleDelete) (int64, error)
 }
 
+func (r *ResolverImpl) checkPermission(claims models.Claims, method string) bool {
+	var isPermit bool
+	for _, permission := range claims.Permissions {
+		isPermit = permission.Name == method
+		if isPermit {
+			break
+		}
+	}
+	return isPermit
+}
+
 // ForwardParams ...
 func (r *ResolverImpl) ForwardParams(params graphql.ResolveParams) (interface{}, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": params.Context.Value("TraceID"),
+		"traceId": params.Context.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Resolver ForwardParams of role")
 	return params.Args, nil
@@ -170,21 +174,37 @@ func (r *ResolverImpl) ForwardParams(params graphql.ResolveParams) (interface{},
 // GetByID ...
 func (r *ResolverImpl) GetByID(param graphql.ResolveParams) (interface{}, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": param.Context.Value("TraceID"),
+		"traceId": param.Context.Value(utils.TraceIDKey),
 		"param":   param,
 	}).Infof("Resolver GetByID of role")
+	claims := utils.ExtractClaimsFromContext(param.Context)
+	isPermit := r.checkPermission(claims, fmt.Sprintf("Role%s", utils.GetByID))
+	if !isPermit {
+		logger.WithFields(logger.Fields{
+			"traceId": param.Context.Value(utils.TraceIDKey),
+			"Error":   goerrors.ErrNotAuthorized,
+		}).Errorf("Resolver GetByID !isPermit of role")
+		return nil, goerrors.ErrNotAuthorized
+	}
 	// parse param
 	args := arguments.RoleGetByID{}
 	if err := utils.Parse(param.Args, &args); err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": param.Context.Value("TraceID"),
+			"traceId": param.Context.Value(utils.TraceIDKey),
 			"Error":   err,
-		}).Errorf("Resolver Count utils.Parse role")
-		return nil, err
+		}).Errorf("Resolver GetByID utils.Parse of role")
+		return nil, goerrors.ErrInternalServerError
 	}
 	response, err := r.role.GetByID(param.Context, args)
 	if err != nil {
-		return nil, err
+		logger.WithFields(logger.Fields{
+			"traceId": param.Context.Value(utils.TraceIDKey),
+			"Error":   err,
+		}).Errorf("Resolver GetByID r.role.GetByID of role")
+		if err == sql.ErrNoRows {
+			return nil, goerrors.ErrNotFound
+		}
+		return nil, goerrors.ErrInternalServerError
 	}
 	return response, nil
 }
@@ -192,22 +212,38 @@ func (r *ResolverImpl) GetByID(param graphql.ResolveParams) (interface{}, error)
 // Count ...
 func (r *ResolverImpl) Count(params graphql.ResolveParams) (interface{}, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": params.Context.Value("TraceID"),
+		"traceId": params.Context.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Resolver Count of role")
+	claims := utils.ExtractClaimsFromContext(params.Context)
+	isPermit := r.checkPermission(claims, fmt.Sprintf("Role%s", utils.Count))
+	if !isPermit {
+		logger.WithFields(logger.Fields{
+			"traceId": params.Context.Value(utils.TraceIDKey),
+			"Error":   goerrors.ErrNotAuthorized,
+		}).Errorf("Resolver Count !isPermit of role")
+		return nil, goerrors.ErrNotAuthorized
+	}
 	// parse params
 	args := arguments.RoleCount{}
 	err := utils.Parse(params.Source.(map[string]interface{}), &args)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": params.Context.Value("TraceID"),
+			"traceId": params.Context.Value(utils.TraceIDKey),
 			"Error":   err,
-		}).Errorf("Resolver Count utils.Parse role")
-		return nil, err
+		}).Errorf("Resolver Count utils.Parse of role")
+		return nil, goerrors.ErrInternalServerError
 	}
 	response, err := r.role.Count(params.Context, args)
 	if err != nil {
-		return nil, err
+		logger.WithFields(logger.Fields{
+			"traceId": params.Context.Value(utils.TraceIDKey),
+			"Error":   err,
+		}).Errorf("Resolver Count r.role.Count of role")
+		if err == sql.ErrNoRows {
+			return nil, goerrors.ErrNotFound
+		}
+		return nil, goerrors.ErrInternalServerError
 	}
 	return response, nil
 }
@@ -215,26 +251,38 @@ func (r *ResolverImpl) Count(params graphql.ResolveParams) (interface{}, error) 
 // List ...
 func (r *ResolverImpl) List(params graphql.ResolveParams) (interface{}, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": params.Context.Value("TraceID"),
+		"traceId": params.Context.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Resolver List of role")
+	claims := utils.ExtractClaimsFromContext(params.Context)
+	isPermit := r.checkPermission(claims, fmt.Sprintf("Role%s", utils.List))
+	if !isPermit {
+		logger.WithFields(logger.Fields{
+			"traceId": params.Context.Value(utils.TraceIDKey),
+			"Error":   goerrors.ErrNotAuthorized,
+		}).Errorf("Resolver List  of role")
+		return nil, goerrors.ErrNotAuthorized
+	}
 	// parse params
 	args := arguments.RoleList{}
 	err := utils.Parse(params.Source.(map[string]interface{}), &args)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": params.Context.Value("TraceID"),
+			"traceId": params.Context.Value(utils.TraceIDKey),
 			"Error":   err,
-		}).Errorf("Resolver List utils.Parse role")
-		return nil, err
+		}).Errorf("Resolver List utils.Parse of role")
+		return nil, goerrors.ErrInternalServerError
 	}
 	response, err := r.role.List(params.Context, args)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": params.Context.Value("TraceID"),
+			"traceId": params.Context.Value(utils.TraceIDKey),
 			"Error":   err,
-		}).Errorf("Resolver List r.role.List role")
-		return nil, err
+		}).Errorf("Resolver List r.role.List of role")
+		if err == sql.ErrNoRows {
+			return nil, goerrors.ErrNotFound
+		}
+		return nil, goerrors.ErrInternalServerError
 	}
 	return response, nil
 }
@@ -242,26 +290,38 @@ func (r *ResolverImpl) List(params graphql.ResolveParams) (interface{}, error) {
 // Insert ...
 func (r *ResolverImpl) Insert(params graphql.ResolveParams) (interface{}, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": params.Context.Value("TraceID"),
+		"traceId": params.Context.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Resolver Insert of role")
+	claims := utils.ExtractClaimsFromContext(params.Context)
+	isPermit := r.checkPermission(claims, fmt.Sprintf("Role%s", utils.Insert))
+	if !isPermit {
+		logger.WithFields(logger.Fields{
+			"traceId": params.Context.Value(utils.TraceIDKey),
+			"Error":   goerrors.ErrNotAuthorized,
+		}).Errorf("Resolver Insert !isPermit of role")
+		return nil, goerrors.ErrNotAuthorized
+	}
 	// parse params
 	args := arguments.RoleInsert{}
 	err := utils.Parse(params.Args, &args)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": params.Context.Value("TraceID"),
+			"traceId": params.Context.Value(utils.TraceIDKey),
 			"Error":   err,
-		}).Errorf("Resolver Insert utils.Parse role")
-		return nil, err
+		}).Errorf("Resolver Insert utils.Parse of role")
+		return nil, goerrors.ErrInternalServerError
 	}
 	response, err := r.role.Insert(params.Context, args)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": params.Context.Value("TraceID"),
+			"traceId": params.Context.Value(utils.TraceIDKey),
 			"Error":   err,
-		}).Errorf("Resolver Insert r.role.Insert role")
-		return nil, err
+		}).Errorf("Resolver Insert r.role.Insert of role")
+		if err == sql.ErrNoRows {
+			return nil, goerrors.ErrNotFound
+		}
+		return nil, goerrors.ErrInternalServerError
 	}
 	return response, nil
 }
@@ -269,53 +329,38 @@ func (r *ResolverImpl) Insert(params graphql.ResolveParams) (interface{}, error)
 // Update ...
 func (r *ResolverImpl) Update(params graphql.ResolveParams) (interface{}, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": params.Context.Value("TraceID"),
+		"traceId": params.Context.Value(utils.TraceIDKey),
 		"params":  params,
 	}).Infof("Resolver Update of role")
+	claims := utils.ExtractClaimsFromContext(params.Context)
+	isPermit := r.checkPermission(claims, fmt.Sprintf("Role%s", utils.Update))
+	if !isPermit {
+		logger.WithFields(logger.Fields{
+			"traceId": params.Context.Value(utils.TraceIDKey),
+			"Error":   goerrors.ErrNotAuthorized,
+		}).Errorf("Resolver Update !isPermit of role")
+		return nil, goerrors.ErrNotAuthorized
+	}
 	// parse params
 	args := arguments.RoleUpdate{}
 	err := utils.Parse(params.Args, &args)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": params.Context.Value("TraceID"),
+			"traceId": params.Context.Value(utils.TraceIDKey),
 			"Error":   err,
-		}).Errorf("Resolver Update utils.Parse role")
-		return nil, err
+		}).Errorf("Resolver Update utils.Parse of role")
+		return nil, goerrors.ErrInternalServerError
 	}
 	response, err := r.role.Update(params.Context, args)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": params.Context.Value("TraceID"),
+			"traceId": params.Context.Value(utils.TraceIDKey),
 			"Error":   err,
-		}).Errorf("Resolver Update r.role.Update role")
-		return nil, err
-	}
-	return response, nil
-}
-
-// Delete ...
-func (r *ResolverImpl) Delete(param graphql.ResolveParams) (interface{}, error) {
-	logger.WithFields(logger.Fields{
-		"TraceID": param.Context.Value("TraceID"),
-		"param":   param,
-	}).Infof("Resolver Delete of role")
-	// parse param
-	args := arguments.RoleDelete{}
-	err := utils.Parse(param.Args, &args)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"TraceID": param.Context.Value("TraceID"),
-			"Error":   err,
-		}).Errorf("Resolver Delete utils.Parse role")
-		return nil, err
-	}
-	response, err := r.role.Delete(param.Context, args)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"TraceID": param.Context.Value("TraceID"),
-			"Error":   err,
-		}).Errorf("Resolver Delete r.role.Delete role")
-		return nil, err
+		}).Errorf("Resolver Update r.role.Update of role")
+		if err == sql.ErrNoRows {
+			return nil, goerrors.ErrNotFound
+		}
+		return nil, goerrors.ErrInternalServerError
 	}
 	return response, nil
 }

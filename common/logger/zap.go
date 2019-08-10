@@ -73,30 +73,37 @@ func newZapLogger(config Configuration) (Logger, error) {
 	}, nil
 }
 
+// Debugf ...
 func (l *zapLogger) Debugf(format string, args ...interface{}) {
 	l.sugaredLogger.Debugf(format, args...)
 }
 
+// Infof ...
 func (l *zapLogger) Infof(format string, args ...interface{}) {
 	l.sugaredLogger.Infof(format, args...)
 }
 
+// Warnf ...
 func (l *zapLogger) Warnf(format string, args ...interface{}) {
 	l.sugaredLogger.Warnf(format, args...)
 }
 
+// Errorf ...
 func (l *zapLogger) Errorf(format string, args ...interface{}) {
 	l.sugaredLogger.Errorf(format, args...)
 }
 
+// Fatalf ...
 func (l *zapLogger) Fatalf(format string, args ...interface{}) {
 	l.sugaredLogger.Fatalf(format, args...)
 }
 
+// Panicf ...
 func (l *zapLogger) Panicf(format string, args ...interface{}) {
 	l.sugaredLogger.Fatalf(format, args...)
 }
 
+// WithFields ...
 func (l *zapLogger) WithFields(fields Fields) Logger {
 	var f = make([]interface{}, 0)
 	for k, v := range fields {

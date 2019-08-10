@@ -2,8 +2,10 @@ package user
 
 import (
 	"context"
+	"database/sql"
 
 	"github.com/graphql-go/graphql"
+	"github.com/tanphamhaiduong/go/common/goerrors"
 	"github.com/tanphamhaiduong/go/common/logger"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/utils"
@@ -42,14 +44,14 @@ func NewResolver(user IHandler) *ResolverImpl {
 // Login ...
 func (r *ResolverImpl) Login(param graphql.ResolveParams) (interface{}, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": param.Context.Value("TraceID"),
+		"traceId": param.Context.Value(utils.TraceIDKey),
 		"param":   param,
 	}).Infof("Resolver Login of user")
 	// parse param
 	args := arguments.UserLogin{}
 	if err := utils.Parse(param.Args, &args); err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": param.Context.Value("TraceID"),
+			"traceId": param.Context.Value(utils.TraceIDKey),
 			"param":   param,
 			"err":     err,
 		}).Infof("utils.Parse of Login Resolver")
@@ -58,11 +60,14 @@ func (r *ResolverImpl) Login(param graphql.ResolveParams) (interface{}, error) {
 	response, err := r.user.Login(param.Context, args)
 	if err != nil {
 		logger.WithFields(logger.Fields{
-			"TraceID": param.Context.Value("TraceID"),
+			"traceId": param.Context.Value(utils.TraceIDKey),
 			"param":   param,
 			"err":     err,
 		}).Infof("r.user.Login of Login Resolver")
-		return nil, err
+		if err == sql.ErrNoRows {
+			return nil, goerrors.ErrNotFound
+		}
+		return nil, goerrors.ErrInternalServerError
 	}
 	return response, nil
 }
