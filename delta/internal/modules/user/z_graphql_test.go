@@ -28,7 +28,7 @@ func (s *UserResolverTestSuite) TestGetByID_Success() {
 		sampleID int64 = 1
 		params         = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
 		user     models.User
-		args     = arguments.UserGetByIDArgs{
+		args     = arguments.UserGetByID{
 			ID: 1,
 		}
 	)
@@ -44,7 +44,7 @@ func (s *UserResolverTestSuite) TestGetByID_Fail() {
 		sampleID int64 = 1
 		params         = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
 		user     models.User
-		args     = arguments.UserGetByIDArgs{
+		args     = arguments.UserGetByID{
 			ID: 1,
 		}
 	)
@@ -59,7 +59,7 @@ func (s *UserResolverTestSuite) TestList_Success() {
 		ctx    = context.Background()
 		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
 		users  []models.User
-		args   = arguments.UserListArgs{
+		args   = arguments.UserList{
 			Page:     1,
 			PageSize: 10,
 		}
@@ -75,7 +75,7 @@ func (s *UserResolverTestSuite) TestList_Fail() {
 		ctx    = context.Background()
 		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
 		users  []models.User
-		args   = arguments.UserListArgs{
+		args   = arguments.UserList{
 			Page:     1,
 			PageSize: 10,
 		}
@@ -90,7 +90,7 @@ func (s *UserResolverTestSuite) TestCount_Success() {
 	var (
 		ctx    = context.Background()
 		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
-		args   = arguments.UserCountArgs{}
+		args   = arguments.UserCount{}
 		count  int64
 	)
 	s.MockIUser.On("Count", ctx, args).Return(count, nil)
@@ -103,7 +103,7 @@ func (s *UserResolverTestSuite) TestCount_Fail() {
 	var (
 		ctx    = context.Background()
 		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
-		args   = arguments.UserCountArgs{}
+		args   = arguments.UserCount{}
 		count  int64
 	)
 	s.MockIUser.On("Count", ctx, args).Return(count, errors.New("some errors"))
@@ -116,7 +116,7 @@ func (s *UserResolverTestSuite) TestInsert_Success() {
 	var (
 		ctx    = context.Background()
 		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
-		args   = arguments.UserInsertArgs{}
+		args   = arguments.UserInsert{}
 		user   models.User
 	)
 	// Mock Insert
@@ -133,7 +133,7 @@ func (s *UserResolverTestSuite) TestInsert_Fail() {
 	var (
 		ctx    = context.Background()
 		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
-		args   = arguments.UserInsertArgs{}
+		args   = arguments.UserInsert{}
 		user   models.User
 	)
 	s.MockIUser.On("Insert", ctx, args).Return(user, errors.New("some errors"))
@@ -151,7 +151,7 @@ func (s *UserResolverTestSuite) TestUpdate_Success() {
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
-		args = arguments.UserUpdateArgs{
+		args = arguments.UserUpdate{
 			ID: &sampleID,
 		}
 		user = models.User{}
@@ -174,7 +174,7 @@ func (s *UserResolverTestSuite) TestUpdate_Fail() {
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
-		args = arguments.UserUpdateArgs{
+		args = arguments.UserUpdate{
 			ID: &sampleID,
 		}
 		user models.User
@@ -193,7 +193,7 @@ func (s *UserResolverTestSuite) TestDelete_Success() {
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
-		args = arguments.UserDeleteArgs{
+		args = arguments.UserDelete{
 			ID: 1,
 		}
 		sampleID int64 = 1
@@ -212,7 +212,7 @@ func (s *UserResolverTestSuite) TestDelete_Fail() {
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
-		args = arguments.UserDeleteArgs{
+		args = arguments.UserDelete{
 			ID: 1,
 		}
 		sampleID int64

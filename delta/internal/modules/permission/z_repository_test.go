@@ -15,7 +15,7 @@ import (
 func (s *PermissionRepositoryTestSuite) TestGetByID_Success() {
 	var (
 		ctx   = context.Background()
-		param = arguments.PermissionGetByIDArgs{
+		param = arguments.PermissionGetByID{
 			ID: 1,
 		}
 		permission models.Permission
@@ -38,7 +38,7 @@ func (s *PermissionRepositoryTestSuite) TestGetByID_Success() {
 func (s *PermissionRepositoryTestSuite) TestGetByID_Fail() {
 	var (
 		ctx   = context.Background()
-		param = arguments.PermissionGetByIDArgs{
+		param = arguments.PermissionGetByID{
 			ID: 1,
 		}
 		permission models.Permission
@@ -61,7 +61,7 @@ func (s *PermissionRepositoryTestSuite) TestGetByID_Fail() {
 func (s *PermissionRepositoryTestSuite) TestGetByID_Fail1() {
 	var (
 		ctx   = context.Background()
-		param = arguments.PermissionGetByIDArgs{
+		param = arguments.PermissionGetByID{
 			ID: 1,
 		}
 		permission models.Permission
@@ -84,7 +84,7 @@ func (s *PermissionRepositoryTestSuite) TestGetByID_Fail1() {
 func (s *PermissionRepositoryTestSuite) TestGetByIDs_Success() {
 	var (
 		ctx   = context.Background()
-		param = arguments.PermissionGetByIDsArgs{
+		param = arguments.PermissionGetByIDs{
 			IDs: []int64{1, 2},
 		}
 		permissions []models.Permission
@@ -109,7 +109,7 @@ func (s *PermissionRepositoryTestSuite) TestGetByIDs_Success() {
 func (s *PermissionRepositoryTestSuite) TestGetByIDs_Fail() {
 	var (
 		ctx   = context.Background()
-		param = arguments.PermissionGetByIDsArgs{
+		param = arguments.PermissionGetByIDs{
 			IDs: []int64{1, 2},
 		}
 		permissions []models.Permission
@@ -134,7 +134,7 @@ func (s *PermissionRepositoryTestSuite) TestGetByIDs_Fail() {
 func (s *PermissionRepositoryTestSuite) TestGetByIDs_Fail1() {
 	var (
 		ctx   = context.Background()
-		param = arguments.PermissionGetByIDsArgs{
+		param = arguments.PermissionGetByIDs{
 			IDs: []int64{1, 2},
 		}
 		permissions []models.Permission
@@ -159,7 +159,7 @@ func (s *PermissionRepositoryTestSuite) TestGetByIDs_Fail1() {
 func (s *PermissionRepositoryTestSuite) TestGetByIDs_Fail2() {
 	var (
 		ctx   = context.Background()
-		param = arguments.PermissionGetByIDsArgs{
+		param = arguments.PermissionGetByIDs{
 			IDs: []int64{1, 2},
 		}
 		permissions []models.Permission
@@ -184,7 +184,7 @@ func (s *PermissionRepositoryTestSuite) TestGetByIDs_Fail2() {
 func (s *PermissionRepositoryTestSuite) TestSetArgsToListSelectBuilder_Success() {
 	var (
 		ctx    = context.Background()
-		params = arguments.PermissionListArgs{
+		params = arguments.PermissionList{
 			ID:          1,
 			Name:        "mockString",
 			Description: "mockString",
@@ -211,7 +211,7 @@ func (s *PermissionRepositoryTestSuite) TestSetArgsToListSelectBuilder_Success()
 func (s *PermissionRepositoryTestSuite) TestList_Success() {
 	var (
 		ctx    = context.Background()
-		params = arguments.PermissionListArgs{
+		params = arguments.PermissionList{
 			ID:          1,
 			Name:        "mockString",
 			Description: "mockString",
@@ -252,7 +252,7 @@ func (s *PermissionRepositoryTestSuite) TestList_Success() {
 func (s *PermissionRepositoryTestSuite) TestList_Fail() {
 	var (
 		ctx    = context.Background()
-		params = arguments.PermissionListArgs{
+		params = arguments.PermissionList{
 			ID:          1,
 			Name:        "mockString",
 			Description: "mockString",
@@ -293,7 +293,7 @@ func (s *PermissionRepositoryTestSuite) TestList_Fail() {
 func (s *PermissionRepositoryTestSuite) TestList_Fail1() {
 	var (
 		ctx    = context.Background()
-		params = arguments.PermissionListArgs{
+		params = arguments.PermissionList{
 			ID:          1,
 			Name:        "mockString",
 			Description: "mockString",
@@ -334,7 +334,7 @@ func (s *PermissionRepositoryTestSuite) TestList_Fail1() {
 func (s *PermissionRepositoryTestSuite) TestList_Fail2() {
 	var (
 		ctx    = context.Background()
-		params = arguments.PermissionListArgs{
+		params = arguments.PermissionList{
 			ID:          1,
 			Name:        "mockString",
 			Description: "mockString",
@@ -375,7 +375,7 @@ func (s *PermissionRepositoryTestSuite) TestList_Fail2() {
 func (s *PermissionRepositoryTestSuite) TestSetArgsToCountSelectBuilder_Success() {
 	var (
 		ctx    = context.Background()
-		params = arguments.PermissionCountArgs{
+		params = arguments.PermissionCount{
 			ID:          1,
 			Name:        "mockString",
 			Description: "mockString",
@@ -399,7 +399,7 @@ func (s *PermissionRepositoryTestSuite) TestSetArgsToCountSelectBuilder_Success(
 func (s *PermissionRepositoryTestSuite) TestCount_Success() {
 	var (
 		ctx    = context.Background()
-		params = arguments.PermissionCountArgs{
+		params = arguments.PermissionCount{
 			ID:          1,
 			Name:        "mockString",
 			Description: "mockString",
@@ -427,7 +427,7 @@ func (s *PermissionRepositoryTestSuite) TestCount_Success() {
 func (s *PermissionRepositoryTestSuite) TestCount_Fail() {
 	var (
 		ctx    = context.Background()
-		params = arguments.PermissionCountArgs{
+		params = arguments.PermissionCount{
 			ID:          1,
 			Name:        "mockString",
 			Description: "mockString",
@@ -455,7 +455,7 @@ func (s *PermissionRepositoryTestSuite) TestCount_Fail() {
 func (s *PermissionRepositoryTestSuite) TestCount_Fail1() {
 	var (
 		ctx    = context.Background()
-		params = arguments.PermissionCountArgs{
+		params = arguments.PermissionCount{
 			ID:          1,
 			Name:        "mockString",
 			Description: "mockString",
@@ -483,7 +483,7 @@ func (s *PermissionRepositoryTestSuite) TestCount_Fail1() {
 func (s *PermissionRepositoryTestSuite) TestCount_Fail2() {
 	var (
 		ctx    = context.Background()
-		params = arguments.PermissionCountArgs{
+		params = arguments.PermissionCount{
 			ID:          1,
 			Name:        "mockString",
 			Description: "mockString",
@@ -512,7 +512,7 @@ func (s *PermissionRepositoryTestSuite) TestInsert_Success() {
 	var (
 		ctx            = context.Background()
 		sampleID int64 = 1
-		params         = arguments.PermissionInsertArgs{
+		params         = arguments.PermissionInsert{
 			Name:        "mockString",
 			Description: "mockString",
 			Status:      "active",
@@ -552,7 +552,7 @@ func (s *PermissionRepositoryTestSuite) TestInsert_Fail() {
 	var (
 		ctx            = context.Background()
 		sampleID int64 = 1
-		params         = arguments.PermissionInsertArgs{
+		params         = arguments.PermissionInsert{
 			Name:        "mockString",
 			Description: "mockString",
 			Status:      "active",
@@ -579,7 +579,7 @@ func (s *PermissionRepositoryTestSuite) TestInsert_Fail1() {
 	var (
 		ctx            = context.Background()
 		sampleID int64 = 1
-		params         = arguments.PermissionInsertArgs{
+		params         = arguments.PermissionInsert{
 			Name:        "mockString",
 			Description: "mockString",
 			Status:      "active",
@@ -606,7 +606,7 @@ func (s *PermissionRepositoryTestSuite) TestInsert_Fail2() {
 	var (
 		ctx            = context.Background()
 		sampleID int64 = 1
-		params         = arguments.PermissionInsertArgs{
+		params         = arguments.PermissionInsert{
 			Name:        "mockString",
 			Description: "mockString",
 			Status:      "active",
@@ -633,7 +633,7 @@ func (s *PermissionRepositoryTestSuite) TestInsert_Fail3() {
 	var (
 		ctx            = context.Background()
 		sampleID int64 = 1
-		params         = arguments.PermissionInsertArgs{
+		params         = arguments.PermissionInsert{
 			Name:        "mockString",
 			Description: "mockString",
 			Status:      "active",
@@ -675,7 +675,7 @@ func (s *PermissionRepositoryTestSuite) TestSetArgsToUpdateBuilder_Success() {
 		sampleID   int64 = 1
 		mockString       = "mockString"
 		status           = "active"
-		params           = arguments.PermissionUpdateArgs{
+		params           = arguments.PermissionUpdate{
 			ID:          &sampleID,
 			Name:        &mockString,
 			Description: &mockString,
@@ -697,7 +697,7 @@ func (s *PermissionRepositoryTestSuite) TestUpdate_Success() {
 		rowEffected int64 = 1
 		mockString        = "mockString"
 		status            = "active"
-		params            = arguments.PermissionUpdateArgs{
+		params            = arguments.PermissionUpdate{
 			ID:          &sampleID,
 			Name:        &mockString,
 			Description: &mockString,
@@ -742,7 +742,7 @@ func (s *PermissionRepositoryTestSuite) TestUpdate_Fail() {
 		rowEffected int64
 		mockString  = "mockString"
 		status      = "active"
-		params      = arguments.PermissionUpdateArgs{
+		params      = arguments.PermissionUpdate{
 			ID:          &sampleID,
 			Name:        &mockString,
 			Description: &mockString,
@@ -774,7 +774,7 @@ func (s *PermissionRepositoryTestSuite) TestUpdate_Fail1() {
 		rowEffected int64
 		mockString  = "mockString"
 		status      = "active"
-		params      = arguments.PermissionUpdateArgs{
+		params      = arguments.PermissionUpdate{
 			ID:          &sampleID,
 			Name:        &mockString,
 			Description: &mockString,
@@ -806,7 +806,7 @@ func (s *PermissionRepositoryTestSuite) TestUpdate_Fail2() {
 		rowEffected int64
 		mockString  = "mockString"
 		status      = "active"
-		params      = arguments.PermissionUpdateArgs{
+		params      = arguments.PermissionUpdate{
 			ID:          &sampleID,
 			Name:        &mockString,
 			Description: &mockString,
@@ -838,7 +838,7 @@ func (s *PermissionRepositoryTestSuite) TestUpdate_Fail3() {
 		rowEffected int64
 		mockString  = "mockString"
 		status      = "active"
-		params      = arguments.PermissionUpdateArgs{
+		params      = arguments.PermissionUpdate{
 			ID:          &sampleID,
 			Name:        &mockString,
 			Description: &mockString,
@@ -869,7 +869,7 @@ func (s *PermissionRepositoryTestSuite) TestUpdate_Fail4() {
 		sampleID   int64 = 1
 		mockString       = "mockString"
 		status           = "active"
-		params           = arguments.PermissionUpdateArgs{
+		params           = arguments.PermissionUpdate{
 			ID:          &sampleID,
 			Name:        &mockString,
 			Description: &mockString,
@@ -910,7 +910,7 @@ func (s *PermissionRepositoryTestSuite) TestUpdate_Fail4() {
 func (s *PermissionRepositoryTestSuite) TestDelete_Success() {
 	var (
 		ctx   = context.Background()
-		param = arguments.PermissionDeleteArgs{
+		param = arguments.PermissionDelete{
 			ID: 1,
 		}
 		rowEffected int64 = 1
@@ -926,7 +926,7 @@ func (s *PermissionRepositoryTestSuite) TestDelete_Success() {
 func (s *PermissionRepositoryTestSuite) TestDelete_Fail() {
 	var (
 		ctx   = context.Background()
-		param = arguments.PermissionDeleteArgs{
+		param = arguments.PermissionDelete{
 			ID: 1,
 		}
 		rowEffected int64
@@ -942,7 +942,7 @@ func (s *PermissionRepositoryTestSuite) TestDelete_Fail() {
 func (s *PermissionRepositoryTestSuite) TestDelete_Fail1() {
 	var (
 		ctx   = context.Background()
-		param = arguments.PermissionDeleteArgs{
+		param = arguments.PermissionDelete{
 			ID: 1,
 		}
 		rowEffected int64
@@ -958,7 +958,7 @@ func (s *PermissionRepositoryTestSuite) TestDelete_Fail1() {
 func (s *PermissionRepositoryTestSuite) TestDelete_Fail2() {
 	var (
 		ctx   = context.Background()
-		param = arguments.PermissionDeleteArgs{
+		param = arguments.PermissionDelete{
 			ID: 1,
 		}
 		rowEffected int64
@@ -974,7 +974,7 @@ func (s *PermissionRepositoryTestSuite) TestDelete_Fail2() {
 func (s *PermissionRepositoryTestSuite) TestDelete_Fail3() {
 	var (
 		ctx   = context.Background()
-		param = arguments.PermissionDeleteArgs{
+		param = arguments.PermissionDelete{
 			ID: 1,
 		}
 		rowEffected int64

@@ -149,13 +149,13 @@ var (
 
 // ICoreHandler ...
 type ICoreHandler interface {
-	GetByID(ctx context.Context, param arguments.RoleGetByIDArgs) (models.Role, error)
-	GetByIDs(ctx context.Context, param arguments.RoleGetByIDsArgs) ([]models.Role, error)
-	Count(ctx context.Context, params arguments.RoleCountArgs) (int64, error)
-	List(ctx context.Context, params arguments.RoleListArgs) ([]models.Role, error)
-	Insert(ctx context.Context, params arguments.RoleInsertArgs) (models.Role, error)
-	Update(ctx context.Context, params arguments.RoleUpdateArgs) (models.Role, error)
-	Delete(ctx context.Context, param arguments.RoleDeleteArgs) (int64, error)
+	GetByID(ctx context.Context, param arguments.RoleGetByID) (models.Role, error)
+	GetByIDs(ctx context.Context, param arguments.RoleGetByIDs) ([]models.Role, error)
+	Count(ctx context.Context, params arguments.RoleCount) (int64, error)
+	List(ctx context.Context, params arguments.RoleList) ([]models.Role, error)
+	Insert(ctx context.Context, params arguments.RoleInsert) (models.Role, error)
+	Update(ctx context.Context, params arguments.RoleUpdate) (models.Role, error)
+	Delete(ctx context.Context, param arguments.RoleDelete) (int64, error)
 }
 
 // ForwardParams ...
@@ -174,7 +174,7 @@ func (r *ResolverImpl) GetByID(param graphql.ResolveParams) (interface{}, error)
 		"param":   param,
 	}).Infof("Resolver GetByID of role")
 	// parse param
-	args := arguments.RoleGetByIDArgs{}
+	args := arguments.RoleGetByID{}
 	if err := utils.Parse(param.Args, &args); err != nil {
 		logger.WithFields(logger.Fields{
 			"TraceID": param.Context.Value("TraceID"),
@@ -196,7 +196,7 @@ func (r *ResolverImpl) Count(params graphql.ResolveParams) (interface{}, error) 
 		"params":  params,
 	}).Infof("Resolver Count of role")
 	// parse params
-	args := arguments.RoleCountArgs{}
+	args := arguments.RoleCount{}
 	err := utils.Parse(params.Source.(map[string]interface{}), &args)
 	if err != nil {
 		logger.WithFields(logger.Fields{
@@ -219,7 +219,7 @@ func (r *ResolverImpl) List(params graphql.ResolveParams) (interface{}, error) {
 		"params":  params,
 	}).Infof("Resolver List of role")
 	// parse params
-	args := arguments.RoleListArgs{}
+	args := arguments.RoleList{}
 	err := utils.Parse(params.Source.(map[string]interface{}), &args)
 	if err != nil {
 		logger.WithFields(logger.Fields{
@@ -246,7 +246,7 @@ func (r *ResolverImpl) Insert(params graphql.ResolveParams) (interface{}, error)
 		"params":  params,
 	}).Infof("Resolver Insert of role")
 	// parse params
-	args := arguments.RoleInsertArgs{}
+	args := arguments.RoleInsert{}
 	err := utils.Parse(params.Args, &args)
 	if err != nil {
 		logger.WithFields(logger.Fields{
@@ -273,7 +273,7 @@ func (r *ResolverImpl) Update(params graphql.ResolveParams) (interface{}, error)
 		"params":  params,
 	}).Infof("Resolver Update of role")
 	// parse params
-	args := arguments.RoleUpdateArgs{}
+	args := arguments.RoleUpdate{}
 	err := utils.Parse(params.Args, &args)
 	if err != nil {
 		logger.WithFields(logger.Fields{
@@ -300,7 +300,7 @@ func (r *ResolverImpl) Delete(param graphql.ResolveParams) (interface{}, error) 
 		"param":   param,
 	}).Infof("Resolver Delete of role")
 	// parse param
-	args := arguments.RoleDeleteArgs{}
+	args := arguments.RoleDelete{}
 	err := utils.Parse(param.Args, &args)
 	if err != nil {
 		logger.WithFields(logger.Fields{

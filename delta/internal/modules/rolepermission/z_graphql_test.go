@@ -28,7 +28,7 @@ func (s *RolePermissionResolverTestSuite) TestGetByID_Success() {
 		sampleID       int64 = 1
 		params               = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
 		rolepermission models.RolePermission
-		args           = arguments.RolePermissionGetByIDArgs{
+		args           = arguments.RolePermissionGetByID{
 			ID: 1,
 		}
 	)
@@ -44,7 +44,7 @@ func (s *RolePermissionResolverTestSuite) TestGetByID_Fail() {
 		sampleID       int64 = 1
 		params               = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
 		rolepermission models.RolePermission
-		args           = arguments.RolePermissionGetByIDArgs{
+		args           = arguments.RolePermissionGetByID{
 			ID: 1,
 		}
 	)
@@ -59,7 +59,7 @@ func (s *RolePermissionResolverTestSuite) TestList_Success() {
 		ctx             = context.Background()
 		params          = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
 		rolepermissions []models.RolePermission
-		args            = arguments.RolePermissionListArgs{
+		args            = arguments.RolePermissionList{
 			Page:     1,
 			PageSize: 10,
 		}
@@ -75,7 +75,7 @@ func (s *RolePermissionResolverTestSuite) TestList_Fail() {
 		ctx             = context.Background()
 		params          = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
 		rolepermissions []models.RolePermission
-		args            = arguments.RolePermissionListArgs{
+		args            = arguments.RolePermissionList{
 			Page:     1,
 			PageSize: 10,
 		}
@@ -90,7 +90,7 @@ func (s *RolePermissionResolverTestSuite) TestCount_Success() {
 	var (
 		ctx    = context.Background()
 		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
-		args   = arguments.RolePermissionCountArgs{}
+		args   = arguments.RolePermissionCount{}
 		count  int64
 	)
 	s.MockIRolePermission.On("Count", ctx, args).Return(count, nil)
@@ -103,7 +103,7 @@ func (s *RolePermissionResolverTestSuite) TestCount_Fail() {
 	var (
 		ctx    = context.Background()
 		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
-		args   = arguments.RolePermissionCountArgs{}
+		args   = arguments.RolePermissionCount{}
 		count  int64
 	)
 	s.MockIRolePermission.On("Count", ctx, args).Return(count, errors.New("some errors"))
@@ -116,7 +116,7 @@ func (s *RolePermissionResolverTestSuite) TestInsert_Success() {
 	var (
 		ctx            = context.Background()
 		params         = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
-		args           = arguments.RolePermissionInsertArgs{}
+		args           = arguments.RolePermissionInsert{}
 		rolepermission models.RolePermission
 	)
 	// Mock Insert
@@ -133,7 +133,7 @@ func (s *RolePermissionResolverTestSuite) TestInsert_Fail() {
 	var (
 		ctx            = context.Background()
 		params         = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
-		args           = arguments.RolePermissionInsertArgs{}
+		args           = arguments.RolePermissionInsert{}
 		rolepermission models.RolePermission
 	)
 	s.MockIRolePermission.On("Insert", ctx, args).Return(rolepermission, errors.New("some errors"))
@@ -151,7 +151,7 @@ func (s *RolePermissionResolverTestSuite) TestUpdate_Success() {
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
-		args = arguments.RolePermissionUpdateArgs{
+		args = arguments.RolePermissionUpdate{
 			ID: &sampleID,
 		}
 		rolepermission = models.RolePermission{}
@@ -174,7 +174,7 @@ func (s *RolePermissionResolverTestSuite) TestUpdate_Fail() {
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
-		args = arguments.RolePermissionUpdateArgs{
+		args = arguments.RolePermissionUpdate{
 			ID: &sampleID,
 		}
 		rolepermission models.RolePermission
@@ -193,7 +193,7 @@ func (s *RolePermissionResolverTestSuite) TestDelete_Success() {
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
-		args = arguments.RolePermissionDeleteArgs{
+		args = arguments.RolePermissionDelete{
 			ID: 1,
 		}
 		sampleID int64 = 1
@@ -212,7 +212,7 @@ func (s *RolePermissionResolverTestSuite) TestDelete_Fail() {
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
-		args = arguments.RolePermissionDeleteArgs{
+		args = arguments.RolePermissionDelete{
 			ID: 1,
 		}
 		sampleID int64

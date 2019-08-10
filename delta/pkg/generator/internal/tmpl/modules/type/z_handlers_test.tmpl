@@ -18,7 +18,7 @@ import (
 func (s *{{ $Name }}HandlerTestSuite) TestGetByID_Success() {
 	var (
 		ctx    = context.Background()
-		param = arguments.{{ $Name }}GetByIDArgs{
+		param = arguments.{{ $Name }}GetByID{
 			ID: 1,
 		}
 		{{ $name }} = models.{{ $Name }}{}
@@ -32,7 +32,7 @@ func (s *{{ $Name }}HandlerTestSuite) TestGetByID_Success() {
 func (s *{{ $Name }}HandlerTestSuite) TestGetByID_Fail() {
 	var (
 		ctx    = context.Background()
-		param = arguments.{{ $Name }}GetByIDArgs{
+		param = arguments.{{ $Name }}GetByID{
 			ID: 1,
 		}
 		{{ $name }} = models.{{ $Name }}{}
@@ -46,7 +46,7 @@ func (s *{{ $Name }}HandlerTestSuite) TestGetByID_Fail() {
 func (s *{{ $Name }}HandlerTestSuite) TestGetByID_Fail1() {
 	var (
 		ctx    = context.Background()
-		param = arguments.{{ $Name }}GetByIDArgs{
+		param = arguments.{{ $Name }}GetByID{
 			ID: 0,
 		}
 		{{ $name }} = models.{{ $Name }}{}
@@ -60,7 +60,7 @@ func (s *{{ $Name }}HandlerTestSuite) TestGetByID_Fail1() {
 func (s *{{ $Name }}HandlerTestSuite) TestGetByIDs_Success() {
 	var (
 		ctx    = context.Background()
-		param = arguments.{{ $Name }}GetByIDsArgs{
+		param = arguments.{{ $Name }}GetByIDs{
 			IDs: []int64{1, 2},
 		}
 		{{ $names }} []models.{{ $Name }}
@@ -74,7 +74,7 @@ func (s *{{ $Name }}HandlerTestSuite) TestGetByIDs_Success() {
 func (s *{{ $Name }}HandlerTestSuite) TestGetByIDs_Fail() {
 	var (
 		ctx    = context.Background()
-		param = arguments.{{ $Name }}GetByIDsArgs{
+		param = arguments.{{ $Name }}GetByIDs{
 			IDs: []int64{1, 2},
 		}
 		{{ $names }} []models.{{ $Name }}
@@ -88,7 +88,7 @@ func (s *{{ $Name }}HandlerTestSuite) TestGetByIDs_Fail() {
 func (s *{{ $Name }}HandlerTestSuite) TestGetByIDs_Fail1() {
 	var (
 		ctx    = context.Background()
-		param = arguments.{{ $Name }}GetByIDsArgs{}
+		param = arguments.{{ $Name }}GetByIDs{}
 		{{ $names }} []models.{{ $Name }}
 	)
 	s.MockI{{ $Name }}.On("GetByIDs", ctx, param).Return({{ $names }}, errors.New("some errors"))
@@ -100,7 +100,7 @@ func (s *{{ $Name }}HandlerTestSuite) TestGetByIDs_Fail1() {
 func (s *{{ $Name }}HandlerTestSuite) TestList_Success() {
 	var (
 		ctx       = context.Background()
-		params    = arguments.{{ $Name }}ListArgs{
+		params    = arguments.{{ $Name }}List{
 			{{- range $field := $fields }}
 				{{ $field.Name }}:
 				{{- if $field.IsInt64 }}1
@@ -126,7 +126,7 @@ func (s *{{ $Name }}HandlerTestSuite) TestList_Success() {
 func (s *{{ $Name }}HandlerTestSuite) TestList_Fail() {
 	var (
 		ctx    = context.Background()
-		params = arguments.{{ $Name }}ListArgs{
+		params = arguments.{{ $Name }}List{
 			{{- range $field := $fields }}
 				{{ $field.Name }}:
 				{{- if $field.IsInt64 }}1
@@ -152,7 +152,7 @@ func (s *{{ $Name }}HandlerTestSuite) TestList_Fail() {
 func (s *{{ $Name }}HandlerTestSuite) TestList_Fail1() {
 	var (
 		ctx    = context.Background()
-		params = arguments.{{ $Name }}ListArgs{
+		params = arguments.{{ $Name }}List{
 			{{- range $field := $fields }}
 				{{ $field.Name }}:
 				{{- if $field.IsInt64 }}0
@@ -178,7 +178,7 @@ func (s *{{ $Name }}HandlerTestSuite) TestList_Fail1() {
 func (s *{{ $Name }}HandlerTestSuite) TestCount_Success() {
 	var (
 		ctx    = context.Background()
-		params = arguments.{{ $Name }}CountArgs{
+		params = arguments.{{ $Name }}Count{
 			{{- range $field := $fields }}
 				{{ $field.Name }}:
 				{{- if $field.IsInt64 }}1
@@ -202,7 +202,7 @@ func (s *{{ $Name }}HandlerTestSuite) TestCount_Success() {
 func (s *{{ $Name }}HandlerTestSuite) TestCount_Fail() {
 	var (
 		ctx    = context.Background()
-		params = arguments.{{ $Name }}CountArgs{
+		params = arguments.{{ $Name }}Count{
 			{{- range $field := $fields }}
 				{{ $field.Name }}:
 				{{- if $field.IsInt64 }}1
@@ -226,7 +226,7 @@ func (s *{{ $Name }}HandlerTestSuite) TestCount_Fail() {
 func (s *{{ $Name }}HandlerTestSuite) TestCount_Fail1() {
 	var (
 		ctx    = context.Background()
-		params = arguments.{{ $Name }}CountArgs{
+		params = arguments.{{ $Name }}Count{
 			{{- range $field := $fields }}
 				{{ $field.Name }}:
 				{{- if $field.IsInt64 }}0
@@ -251,7 +251,7 @@ func (s *{{ $Name }}HandlerTestSuite) TestInsert_Success() {
 	var (
 		ctx            = context.Background()
 		sampleID int64 = 1
-		params         = arguments.{{ $Name }}InsertArgs{
+		params         = arguments.{{ $Name }}Insert{
 			{{- range $field := $fields }}
 				{{- if not $field.IsIDField }}
 					{{ $field.Name }}:
@@ -288,7 +288,7 @@ func (s *{{ $Name }}HandlerTestSuite) TestInsert_Success() {
 func (s *{{ $Name }}HandlerTestSuite) TestInsert_Fail() {
 	var (
 		ctx            = context.Background()
-		params         = arguments.{{ $Name }}InsertArgs{
+		params         = arguments.{{ $Name }}Insert{
 			{{- range $field := $fields }}
 				{{- if not $field.IsIDField }}
 					{{ $field.Name }}:
@@ -314,7 +314,7 @@ func (s *{{ $Name }}HandlerTestSuite) TestInsert_Fail() {
 func (s *{{ $Name }}HandlerTestSuite) TestInsert_Fail1() {
 	var (
 		ctx            = context.Background()
-		params         = arguments.{{ $Name }}InsertArgs{
+		params         = arguments.{{ $Name }}Insert{
 			{{- range $field := $fields }}
 				{{- if not $field.IsIDField }}
 					{{ $field.Name }}:
@@ -347,7 +347,7 @@ func (s *{{ $Name }}HandlerTestSuite) TestUpdate_Success() {
 				status = "active"
 			{{- end }}
 		{{- end }}
-		params   = arguments.{{ $Name }}UpdateArgs{
+		params   = arguments.{{ $Name }}Update{
 			{{- range $field := $fields }}
 				{{ $field.Name }}:
 				{{- if $field.IsInt64 }} &sampleID
@@ -386,7 +386,7 @@ func (s *{{ $Name }}HandlerTestSuite) TestUpdate_Fail() {
 				status = "active"
 			{{- end }}
 		{{- end }}
-		params           = arguments.{{ $Name }}UpdateArgs{
+		params           = arguments.{{ $Name }}Update{
 			{{- range $field := $fields }}
 				{{ $field.Name }}:
 				{{- if $field.IsInt64 }} &sampleID
@@ -417,7 +417,7 @@ func (s *{{ $Name }}HandlerTestSuite) TestUpdate_Fail1() {
 				status = "active"
 			{{- end }}
 		{{- end }}
-		params           = arguments.{{ $Name }}UpdateArgs{
+		params           = arguments.{{ $Name }}Update{
 			{{- range $field := $fields }}
 				{{ $field.Name }}:
 				{{- if $field.IsInt64 }} &sampleID
@@ -442,7 +442,7 @@ func (s *{{ $Name }}HandlerTestSuite) TestUpdate_Fail1() {
 func (s *{{ $Name }}HandlerTestSuite) TestDelete_Success() {
 	var (
 		ctx               = context.Background()
-		param            = arguments.{{ $Name }}DeleteArgs{
+		param            = arguments.{{ $Name }}Delete{
 			ID: 1,
 		}
 	)
@@ -455,7 +455,7 @@ func (s *{{ $Name }}HandlerTestSuite) TestDelete_Success() {
 func (s *{{ $Name }}HandlerTestSuite) TestDelete_Fail() {
 	var (
 		ctx         = context.Background()
-		param      = arguments.{{ $Name }}DeleteArgs{
+		param      = arguments.{{ $Name }}Delete{
 			ID: 1,
 		}
 		rowEffected int64
@@ -469,7 +469,7 @@ func (s *{{ $Name }}HandlerTestSuite) TestDelete_Fail() {
 func (s *{{ $Name }}HandlerTestSuite) TestDelete_Fail1() {
 	var (
 		ctx         = context.Background()
-		param      = arguments.{{ $Name }}DeleteArgs{
+		param      = arguments.{{ $Name }}Delete{
 			ID: 0,
 		}
 		rowEffected int64

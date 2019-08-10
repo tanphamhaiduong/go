@@ -27,7 +27,7 @@ func (r *RepositoryImpl) scanPermission(row database.IRow, permission *models.Pe
 }
 
 // GetByID ...
-func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.PermissionGetByIDArgs) (models.Permission, error) {
+func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.PermissionGetByID) (models.Permission, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -77,7 +77,7 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.Permissio
 }
 
 // GetByIDs ...
-func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.PermissionGetByIDsArgs) ([]models.Permission, error) {
+func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.PermissionGetByIDs) ([]models.Permission, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -139,7 +139,7 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.Permissi
 }
 
 // setArgsToListSelectBuilder ...
-func (r *RepositoryImpl) setArgsToListSelectBuilder(ctx context.Context, selectBuilder sq.SelectBuilder, params arguments.PermissionListArgs) sq.SelectBuilder {
+func (r *RepositoryImpl) setArgsToListSelectBuilder(ctx context.Context, selectBuilder sq.SelectBuilder, params arguments.PermissionList) sq.SelectBuilder {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -173,7 +173,7 @@ func (r *RepositoryImpl) setArgsToListSelectBuilder(ctx context.Context, selectB
 }
 
 // List ...
-func (r *RepositoryImpl) List(ctx context.Context, params arguments.PermissionListArgs) ([]models.Permission, error) {
+func (r *RepositoryImpl) List(ctx context.Context, params arguments.PermissionList) ([]models.Permission, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -236,7 +236,7 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.PermissionLi
 }
 
 // setArgsToCountSelectBuilder ...
-func (r *RepositoryImpl) setArgsToCountSelectBuilder(ctx context.Context, selectBuilder sq.SelectBuilder, params arguments.PermissionCountArgs) sq.SelectBuilder {
+func (r *RepositoryImpl) setArgsToCountSelectBuilder(ctx context.Context, selectBuilder sq.SelectBuilder, params arguments.PermissionCount) sq.SelectBuilder {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -263,7 +263,7 @@ func (r *RepositoryImpl) setArgsToCountSelectBuilder(ctx context.Context, select
 }
 
 // Count ...
-func (r *RepositoryImpl) Count(ctx context.Context, params arguments.PermissionCountArgs) (int64, error) {
+func (r *RepositoryImpl) Count(ctx context.Context, params arguments.PermissionCount) (int64, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -307,7 +307,7 @@ func (r *RepositoryImpl) Count(ctx context.Context, params arguments.PermissionC
 }
 
 // Insert ...
-func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.PermissionInsertArgs) (models.Permission, error) {
+func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.PermissionInsert) (models.Permission, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -365,7 +365,7 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.Permission
 		}).Errorf("Repository Insert LastInsertId error of permission")
 		return permission, err
 	}
-	newPermission, err := r.GetByID(ctx, arguments.PermissionGetByIDArgs{ID: id})
+	newPermission, err := r.GetByID(ctx, arguments.PermissionGetByID{ID: id})
 	if err != nil {
 		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
@@ -377,7 +377,7 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.Permission
 }
 
 // setArgsToUpdateBuilder ...
-func (r *RepositoryImpl) setArgsToUpdateBuilder(ctx context.Context, updateBuilder sq.UpdateBuilder, params arguments.PermissionUpdateArgs) sq.UpdateBuilder {
+func (r *RepositoryImpl) setArgsToUpdateBuilder(ctx context.Context, updateBuilder sq.UpdateBuilder, params arguments.PermissionUpdate) sq.UpdateBuilder {
 	logger.WithFields(logger.Fields{
 		"params": params,
 	}).Infof("Repository setArgsToUpdateBuilder of permission")
@@ -400,7 +400,7 @@ func (r *RepositoryImpl) setArgsToUpdateBuilder(ctx context.Context, updateBuild
 }
 
 // Update ...
-func (r *RepositoryImpl) Update(ctx context.Context, params arguments.PermissionUpdateArgs) (models.Permission, error) {
+func (r *RepositoryImpl) Update(ctx context.Context, params arguments.PermissionUpdate) (models.Permission, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -455,7 +455,7 @@ func (r *RepositoryImpl) Update(ctx context.Context, params arguments.Permission
 		}).Errorf("Repository Update rowAffected <= 0 of permission")
 		return permission, fmt.Errorf("error when update record id %d", *params.ID)
 	}
-	newPermission, err := r.GetByID(ctx, arguments.PermissionGetByIDArgs{ID: *params.ID})
+	newPermission, err := r.GetByID(ctx, arguments.PermissionGetByID{ID: *params.ID})
 	if err != nil {
 		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
@@ -467,7 +467,7 @@ func (r *RepositoryImpl) Update(ctx context.Context, params arguments.Permission
 }
 
 // Delete ...
-func (r *RepositoryImpl) Delete(ctx context.Context, params arguments.PermissionDeleteArgs) (int64, error) {
+func (r *RepositoryImpl) Delete(ctx context.Context, params arguments.PermissionDelete) (int64, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,

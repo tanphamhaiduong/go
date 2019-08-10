@@ -10,12 +10,12 @@ import (
 
 // ICoreRolePermissionHandler ...
 type ICoreRolePermissionHandler interface {
-	GetByID(ctx context.Context, params arguments.RolePermissionGetByIDArgs) (models.RolePermission, error)
-	Count(ctx context.Context, params arguments.RolePermissionCountArgs) (int64, error)
-	List(ctx context.Context, params arguments.RolePermissionListArgs) ([]models.RolePermission, error)
-	Insert(ctx context.Context, params arguments.RolePermissionInsertArgs) (models.RolePermission, error)
-	Update(ctx context.Context, params arguments.RolePermissionUpdateArgs) (models.RolePermission, error)
-	Delete(ctx context.Context, params arguments.RolePermissionDeleteArgs) (int64, error)
+	GetByID(ctx context.Context, params arguments.RolePermissionGetByID) (models.RolePermission, error)
+	Count(ctx context.Context, params arguments.RolePermissionCount) (int64, error)
+	List(ctx context.Context, params arguments.RolePermissionList) ([]models.RolePermission, error)
+	Insert(ctx context.Context, params arguments.RolePermissionInsert) (models.RolePermission, error)
+	Update(ctx context.Context, params arguments.RolePermissionUpdate) (models.RolePermission, error)
+	Delete(ctx context.Context, params arguments.RolePermissionDelete) (int64, error)
 }
 
 // ICoreRolePermissionResolver ...

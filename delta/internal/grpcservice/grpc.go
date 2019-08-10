@@ -28,7 +28,7 @@ func (d *DeltaServiceImpl) Register(server *grpc.Server) {
 
 // CompanyList ...
 func (d *DeltaServiceImpl) CompanyList(ctx context.Context, req *pb.CompanyListRequest) (*pb.CompanyListResponse, error) {
-	params := arguments.CompanyListArgs{
+	params := arguments.CompanyList{
 		ID:        req.Id,
 		Name:      req.Name,
 		Status:    req.Status,

@@ -133,13 +133,13 @@ var (
 
 // ICoreHandler ...
 type ICoreHandler interface {
-	GetByID(ctx context.Context, param arguments.RolePermissionGetByIDArgs) (models.RolePermission, error)
-	GetByIDs(ctx context.Context, param arguments.RolePermissionGetByIDsArgs) ([]models.RolePermission, error)
-	Count(ctx context.Context, params arguments.RolePermissionCountArgs) (int64, error)
-	List(ctx context.Context, params arguments.RolePermissionListArgs) ([]models.RolePermission, error)
-	Insert(ctx context.Context, params arguments.RolePermissionInsertArgs) (models.RolePermission, error)
-	Update(ctx context.Context, params arguments.RolePermissionUpdateArgs) (models.RolePermission, error)
-	Delete(ctx context.Context, param arguments.RolePermissionDeleteArgs) (int64, error)
+	GetByID(ctx context.Context, param arguments.RolePermissionGetByID) (models.RolePermission, error)
+	GetByIDs(ctx context.Context, param arguments.RolePermissionGetByIDs) ([]models.RolePermission, error)
+	Count(ctx context.Context, params arguments.RolePermissionCount) (int64, error)
+	List(ctx context.Context, params arguments.RolePermissionList) ([]models.RolePermission, error)
+	Insert(ctx context.Context, params arguments.RolePermissionInsert) (models.RolePermission, error)
+	Update(ctx context.Context, params arguments.RolePermissionUpdate) (models.RolePermission, error)
+	Delete(ctx context.Context, param arguments.RolePermissionDelete) (int64, error)
 }
 
 // ForwardParams ...
@@ -158,7 +158,7 @@ func (r *ResolverImpl) GetByID(param graphql.ResolveParams) (interface{}, error)
 		"param":   param,
 	}).Infof("Resolver GetByID of rolepermission")
 	// parse param
-	args := arguments.RolePermissionGetByIDArgs{}
+	args := arguments.RolePermissionGetByID{}
 	if err := utils.Parse(param.Args, &args); err != nil {
 		logger.WithFields(logger.Fields{
 			"TraceID": param.Context.Value("TraceID"),
@@ -180,7 +180,7 @@ func (r *ResolverImpl) Count(params graphql.ResolveParams) (interface{}, error) 
 		"params":  params,
 	}).Infof("Resolver Count of rolepermission")
 	// parse params
-	args := arguments.RolePermissionCountArgs{}
+	args := arguments.RolePermissionCount{}
 	err := utils.Parse(params.Source.(map[string]interface{}), &args)
 	if err != nil {
 		logger.WithFields(logger.Fields{
@@ -203,7 +203,7 @@ func (r *ResolverImpl) List(params graphql.ResolveParams) (interface{}, error) {
 		"params":  params,
 	}).Infof("Resolver List of rolepermission")
 	// parse params
-	args := arguments.RolePermissionListArgs{}
+	args := arguments.RolePermissionList{}
 	err := utils.Parse(params.Source.(map[string]interface{}), &args)
 	if err != nil {
 		logger.WithFields(logger.Fields{
@@ -230,7 +230,7 @@ func (r *ResolverImpl) Insert(params graphql.ResolveParams) (interface{}, error)
 		"params":  params,
 	}).Infof("Resolver Insert of rolepermission")
 	// parse params
-	args := arguments.RolePermissionInsertArgs{}
+	args := arguments.RolePermissionInsert{}
 	err := utils.Parse(params.Args, &args)
 	if err != nil {
 		logger.WithFields(logger.Fields{
@@ -257,7 +257,7 @@ func (r *ResolverImpl) Update(params graphql.ResolveParams) (interface{}, error)
 		"params":  params,
 	}).Infof("Resolver Update of rolepermission")
 	// parse params
-	args := arguments.RolePermissionUpdateArgs{}
+	args := arguments.RolePermissionUpdate{}
 	err := utils.Parse(params.Args, &args)
 	if err != nil {
 		logger.WithFields(logger.Fields{
@@ -284,7 +284,7 @@ func (r *ResolverImpl) Delete(param graphql.ResolveParams) (interface{}, error) 
 		"param":   param,
 	}).Infof("Resolver Delete of rolepermission")
 	// parse param
-	args := arguments.RolePermissionDeleteArgs{}
+	args := arguments.RolePermissionDelete{}
 	err := utils.Parse(param.Args, &args)
 	if err != nil {
 		logger.WithFields(logger.Fields{

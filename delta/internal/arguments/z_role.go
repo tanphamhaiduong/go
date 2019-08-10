@@ -1,18 +1,18 @@
 // @generated
 package arguments
 
-// RoleGetByIDArgs ...
-type RoleGetByIDArgs struct {
+// RoleGetByID ...
+type RoleGetByID struct {
 	ID int64 `graphql:"id" validate:"required,min=1"`
 }
 
-// RoleGetByIDsArgs ...
-type RoleGetByIDsArgs struct {
+// RoleGetByIDs ...
+type RoleGetByIDs struct {
 	IDs []int64 `graphql:"ids" validate:"required"`
 }
 
-// RoleCountArgs ...
-type RoleCountArgs struct {
+// RoleCount ...
+type RoleCount struct {
 	ID        int64  `graphql:"id" validate:"omitempty,min=1"`
 	Name      string `graphql:"name" validate:"omitempty"`
 	CompanyID int64  `graphql:"companyId" validate:"omitempty,min=1"`
@@ -21,8 +21,8 @@ type RoleCountArgs struct {
 	UpdatedBy string `graphql:"updatedBy" validate:"omitempty"`
 }
 
-// RoleListArgs ...
-type RoleListArgs struct {
+// RoleList ...
+type RoleList struct {
 	ID        int64  `graphql:"id" validate:"omitempty,min=1"`
 	Name      string `graphql:"name" validate:"omitempty"`
 	CompanyID int64  `graphql:"companyId" validate:"omitempty,min=1"`
@@ -33,8 +33,8 @@ type RoleListArgs struct {
 	PageSize  int64  `graphql:"pageSize" validate:"required,min=1,max=40"`
 }
 
-// RoleInsertArgs ...
-type RoleInsertArgs struct {
+// RoleInsert ...
+type RoleInsert struct {
 	Name      string `graphql:"name" validate:"omitempty"`
 	CompanyID int64  `graphql:"companyId" validate:"omitempty,min=1"`
 	Status    string `graphql:"status" validate:"omitempty,oneof=active inactive"`
@@ -42,8 +42,8 @@ type RoleInsertArgs struct {
 	UpdatedBy string `graphql:"updatedBy" validate:"omitempty"`
 }
 
-// RoleUpdateArgs ...
-type RoleUpdateArgs struct {
+// RoleUpdate ...
+type RoleUpdate struct {
 	ID        *int64  `graphql:"id" validate:"required,min=1"`
 	Name      *string `graphql:"name" validate:"omitempty"`
 	CompanyID *int64  `graphql:"companyId" validate:"omitempty,min=1"`
@@ -52,7 +52,7 @@ type RoleUpdateArgs struct {
 	UpdatedBy *string `graphql:"updatedBy" validate:"omitempty"`
 }
 
-// RoleDeleteArgs ...
-type RoleDeleteArgs struct {
+// RoleDelete ...
+type RoleDelete struct {
 	ID int64 `graphql:"id" validate:"required,min=1"`
 }

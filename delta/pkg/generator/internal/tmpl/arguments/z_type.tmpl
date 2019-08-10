@@ -7,19 +7,19 @@ import (
 	"context"
 )
 
-// {{ $Name }}GetByIDArgs ...
-type {{ $Name }}GetByIDArgs struct {
+// {{ $Name }}GetByID ...
+type {{ $Name }}GetByID struct {
 	ID int64 `graphql:"id" validate:"required,min=1"`
 }
 
-// {{ $Name }}GetByIDsArgs ...
-type {{ $Name }}GetByIDsArgs struct {
+// {{ $Name }}GetByIDs ...
+type {{ $Name }}GetByIDs struct {
 	IDs []int64 `graphql:"ids" validate:"required"`
 }
 
 
-// {{ $Name }}CountArgs ...
-type {{ $Name }}CountArgs struct {
+// {{ $Name }}Count ...
+type {{ $Name }}Count struct {
 	ID int64 `graphql:"id" validate:"omitempty,min=1"`
 	{{- range $field := $fields }}
 		{{- if not $field.IsIDField }}
@@ -28,8 +28,8 @@ type {{ $Name }}CountArgs struct {
 	{{- end }}
 }
 
-// {{ $Name }}ListArgs ...
-type {{ $Name }}ListArgs struct {
+// {{ $Name }}List ...
+type {{ $Name }}List struct {
 	ID int64 `graphql:"id" validate:"omitempty,min=1"`
 	{{- range $field := $fields }}
 		{{- if not $field.IsIDField }}
@@ -40,8 +40,8 @@ type {{ $Name }}ListArgs struct {
 	PageSize int64 `graphql:"pageSize" validate:"required,min=1,max=40"`
 }
 
-// {{ $Name }}InsertArgs ...
-type {{ $Name }}InsertArgs struct {
+// {{ $Name }}Insert ...
+type {{ $Name }}Insert struct {
 	{{- range $field := $fields }}
 		{{- if not $field.IsIDField }}
 			{{ $field.Name }} {{ $field.GoType }} `graphql:"{{ $field.Name | ToLowerCamelCase }}" {{ $field.Validate }}`
@@ -49,14 +49,14 @@ type {{ $Name }}InsertArgs struct {
 	{{- end }}
 }
 
-// {{ $Name }}UpdateArgs ...
-type {{ $Name }}UpdateArgs struct {
+// {{ $Name }}Update ...
+type {{ $Name }}Update struct {
 	{{- range $field := $fields }}
 		{{ $field.Name }} *{{ $field.GoType }} `graphql:"{{ $field.Name | ToLowerCamelCase }}" {{ $field.Validate }}`
 	{{- end }}
 }
 
-// {{ $Name }}DeleteArgs ...
-type {{ $Name }}DeleteArgs struct {
+// {{ $Name }}Delete ...
+type {{ $Name }}Delete struct {
 	ID int64 `graphql:"id" validate:"required,min=1"`
 }

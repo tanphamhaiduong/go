@@ -14,18 +14,18 @@ type IRepository struct {
 }
 
 // Count provides a mock function with given fields: ctx, params
-func (_m *IRepository) Count(ctx context.Context, params arguments.CompanyCountArgs) (int64, error) {
+func (_m *IRepository) Count(ctx context.Context, params arguments.CompanyCount) (int64, error) {
 	ret := _m.Called(ctx, params)
 
 	var r0 int64
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.CompanyCountArgs) int64); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.CompanyCount) int64); ok {
 		r0 = rf(ctx, params)
 	} else {
 		r0 = ret.Get(0).(int64)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.CompanyCountArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.CompanyCount) error); ok {
 		r1 = rf(ctx, params)
 	} else {
 		r1 = ret.Error(1)
@@ -34,20 +34,20 @@ func (_m *IRepository) Count(ctx context.Context, params arguments.CompanyCountA
 	return r0, r1
 }
 
-// Delete provides a mock function with given fields: ctx, params
-func (_m *IRepository) Delete(ctx context.Context, params arguments.CompanyDeleteArgs) (int64, error) {
-	ret := _m.Called(ctx, params)
+// Delete provides a mock function with given fields: ctx, param
+func (_m *IRepository) Delete(ctx context.Context, param arguments.CompanyDelete) (int64, error) {
+	ret := _m.Called(ctx, param)
 
 	var r0 int64
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.CompanyDeleteArgs) int64); ok {
-		r0 = rf(ctx, params)
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.CompanyDelete) int64); ok {
+		r0 = rf(ctx, param)
 	} else {
 		r0 = ret.Get(0).(int64)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.CompanyDeleteArgs) error); ok {
-		r1 = rf(ctx, params)
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.CompanyDelete) error); ok {
+		r1 = rf(ctx, param)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -55,20 +55,20 @@ func (_m *IRepository) Delete(ctx context.Context, params arguments.CompanyDelet
 	return r0, r1
 }
 
-// GetByID provides a mock function with given fields: ctx, params
-func (_m *IRepository) GetByID(ctx context.Context, params arguments.CompanyGetByIDArgs) (models.Company, error) {
-	ret := _m.Called(ctx, params)
+// GetByID provides a mock function with given fields: ctx, param
+func (_m *IRepository) GetByID(ctx context.Context, param arguments.CompanyGetByID) (models.Company, error) {
+	ret := _m.Called(ctx, param)
 
 	var r0 models.Company
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.CompanyGetByIDArgs) models.Company); ok {
-		r0 = rf(ctx, params)
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.CompanyGetByID) models.Company); ok {
+		r0 = rf(ctx, param)
 	} else {
 		r0 = ret.Get(0).(models.Company)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.CompanyGetByIDArgs) error); ok {
-		r1 = rf(ctx, params)
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.CompanyGetByID) error); ok {
+		r1 = rf(ctx, param)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -76,13 +76,13 @@ func (_m *IRepository) GetByID(ctx context.Context, params arguments.CompanyGetB
 	return r0, r1
 }
 
-// GetByIDs provides a mock function with given fields: ctx, params
-func (_m *IRepository) GetByIDs(ctx context.Context, params arguments.CompanyGetByIDsArgs) ([]models.Company, error) {
-	ret := _m.Called(ctx, params)
+// GetByIDs provides a mock function with given fields: ctx, param
+func (_m *IRepository) GetByIDs(ctx context.Context, param arguments.CompanyGetByIDs) ([]models.Company, error) {
+	ret := _m.Called(ctx, param)
 
 	var r0 []models.Company
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.CompanyGetByIDsArgs) []models.Company); ok {
-		r0 = rf(ctx, params)
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.CompanyGetByIDs) []models.Company); ok {
+		r0 = rf(ctx, param)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]models.Company)
@@ -90,8 +90,8 @@ func (_m *IRepository) GetByIDs(ctx context.Context, params arguments.CompanyGet
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.CompanyGetByIDsArgs) error); ok {
-		r1 = rf(ctx, params)
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.CompanyGetByIDs) error); ok {
+		r1 = rf(ctx, param)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -100,18 +100,18 @@ func (_m *IRepository) GetByIDs(ctx context.Context, params arguments.CompanyGet
 }
 
 // Insert provides a mock function with given fields: ctx, params
-func (_m *IRepository) Insert(ctx context.Context, params arguments.CompanyInsertArgs) (models.Company, error) {
+func (_m *IRepository) Insert(ctx context.Context, params arguments.CompanyInsert) (models.Company, error) {
 	ret := _m.Called(ctx, params)
 
 	var r0 models.Company
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.CompanyInsertArgs) models.Company); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.CompanyInsert) models.Company); ok {
 		r0 = rf(ctx, params)
 	} else {
 		r0 = ret.Get(0).(models.Company)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.CompanyInsertArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.CompanyInsert) error); ok {
 		r1 = rf(ctx, params)
 	} else {
 		r1 = ret.Error(1)
@@ -121,11 +121,11 @@ func (_m *IRepository) Insert(ctx context.Context, params arguments.CompanyInser
 }
 
 // List provides a mock function with given fields: ctx, params
-func (_m *IRepository) List(ctx context.Context, params arguments.CompanyListArgs) ([]models.Company, error) {
+func (_m *IRepository) List(ctx context.Context, params arguments.CompanyList) ([]models.Company, error) {
 	ret := _m.Called(ctx, params)
 
 	var r0 []models.Company
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.CompanyListArgs) []models.Company); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.CompanyList) []models.Company); ok {
 		r0 = rf(ctx, params)
 	} else {
 		if ret.Get(0) != nil {
@@ -134,7 +134,7 @@ func (_m *IRepository) List(ctx context.Context, params arguments.CompanyListArg
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.CompanyListArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.CompanyList) error); ok {
 		r1 = rf(ctx, params)
 	} else {
 		r1 = ret.Error(1)
@@ -144,18 +144,18 @@ func (_m *IRepository) List(ctx context.Context, params arguments.CompanyListArg
 }
 
 // Update provides a mock function with given fields: ctx, params
-func (_m *IRepository) Update(ctx context.Context, params arguments.CompanyUpdateArgs) (models.Company, error) {
+func (_m *IRepository) Update(ctx context.Context, params arguments.CompanyUpdate) (models.Company, error) {
 	ret := _m.Called(ctx, params)
 
 	var r0 models.Company
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.CompanyUpdateArgs) models.Company); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.CompanyUpdate) models.Company); ok {
 		r0 = rf(ctx, params)
 	} else {
 		r0 = ret.Get(0).(models.Company)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.CompanyUpdateArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.CompanyUpdate) error); ok {
 		r1 = rf(ctx, params)
 	} else {
 		r1 = ret.Error(1)

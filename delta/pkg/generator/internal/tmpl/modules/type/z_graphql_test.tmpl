@@ -31,7 +31,7 @@ func (s *{{ $Name }}ResolverTestSuite) TestGetByID_Success() {
 		sampleID    int64 = 1
 		params        = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
 		{{ $name }} models.{{ $Name }}
-    args = arguments.{{ $Name }}GetByIDArgs{
+    args = arguments.{{ $Name }}GetByID{
 		  ID: 1,
 		}
 	)
@@ -47,7 +47,7 @@ func (s *{{ $Name }}ResolverTestSuite) TestGetByID_Fail() {
 		sampleID    int64 = 1
 		params        = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
 		{{ $name }} models.{{ $Name }}
-		args = arguments.{{ $Name }}GetByIDArgs{
+		args = arguments.{{ $Name }}GetByID{
 		 ID: 1,
 		}
 	)
@@ -62,7 +62,7 @@ func (s *{{ $Name }}ResolverTestSuite) TestList_Success() {
 		ctx       = context.Background()
 		params    = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
 		{{ $names }} []models.{{ $Name }}
-		args = arguments.{{ $Name }}ListArgs{
+		args = arguments.{{ $Name }}List{
 		  Page: 1,
       PageSize: 10,
 		}
@@ -78,7 +78,7 @@ func (s *{{ $Name }}ResolverTestSuite) TestList_Fail() {
 		ctx       = context.Background()
 		params    = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
 		{{ $names }} []models.{{ $Name }}
-		args = arguments.{{ $Name }}ListArgs{
+		args = arguments.{{ $Name }}List{
 		  Page: 1,
 		  PageSize: 10,
 		}
@@ -93,7 +93,7 @@ func (s *{{ $Name }}ResolverTestSuite) TestCount_Success() {
 	var (
 		ctx    = context.Background()
 		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
-		args = arguments.{{ $Name }}CountArgs{}
+		args = arguments.{{ $Name }}Count{}
 		count  int64
 	)
 	s.MockI{{ $Name }}.On("Count", ctx, args).Return(count, nil)
@@ -106,7 +106,7 @@ func (s *{{ $Name }}ResolverTestSuite) TestCount_Fail() {
 	var (
 		ctx    = context.Background()
 		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
-		args = arguments.{{ $Name }}CountArgs{}
+		args = arguments.{{ $Name }}Count{}
 		count  int64
 	)
 	s.MockI{{ $Name }}.On("Count", ctx, args).Return(count, errors.New("some errors"))
@@ -119,7 +119,7 @@ func (s *{{ $Name }}ResolverTestSuite) TestInsert_Success() {
 	var (
 		ctx            = context.Background()
 		params         = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
-		args = arguments.{{ $Name }}InsertArgs{}
+		args = arguments.{{ $Name }}Insert{}
 		{{ $name }}  models.{{ $Name }}
 	)
 	// Mock Insert
@@ -136,7 +136,7 @@ func (s *{{ $Name }}ResolverTestSuite) TestInsert_Fail() {
 	var (
 		ctx            = context.Background()
 		params         = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
-		args = arguments.{{ $Name }}InsertArgs{}
+		args = arguments.{{ $Name }}Insert{}
 		{{ $name }}  models.{{ $Name }}
 	)
 	s.MockI{{ $Name }}.On("Insert", ctx, args).Return({{ $name }}, errors.New("some errors"))
@@ -154,7 +154,7 @@ func (s *{{ $Name }}ResolverTestSuite) TestUpdate_Success() {
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
-		args = arguments.{{ $Name }}UpdateArgs{
+		args = arguments.{{ $Name }}Update{
       ID: &sampleID,
     }
 		{{ $name }}  =   models.{{ $Name }} {}
@@ -177,7 +177,7 @@ func (s *{{ $Name }}ResolverTestSuite) TestUpdate_Fail() {
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
-		args = arguments.{{ $Name }}UpdateArgs{
+		args = arguments.{{ $Name }}Update{
 		 ID: &sampleID,
 		}
 		{{ $name }} models.{{ $Name }}
@@ -196,7 +196,7 @@ func (s *{{ $Name }}ResolverTestSuite) TestDelete_Success() {
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
-		args = arguments.{{ $Name }}DeleteArgs{
+		args = arguments.{{ $Name }}Delete{
 		  ID: 1,
 		}
 		sampleID  int64 = 1
@@ -215,7 +215,7 @@ func (s *{{ $Name }}ResolverTestSuite) TestDelete_Fail() {
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
-	  args = arguments.{{ $Name }}DeleteArgs{
+	  args = arguments.{{ $Name }}Delete{
 	    ID: 1,
 	  }
 		sampleID int64

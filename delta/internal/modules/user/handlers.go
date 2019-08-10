@@ -16,7 +16,7 @@ import (
 // IRepository ...
 type IRepository interface {
 	ICoreRepository
-	GetByUsername(ctx context.Context, param arguments.GetByUsernameArgs) (models.User, error)
+	GetByUsername(ctx context.Context, param arguments.UserGetByUsername) (models.User, error)
 }
 
 // HandlerImpl ...
@@ -31,12 +31,12 @@ func NewHandler(user IRepository) *HandlerImpl {
 	}
 }
 
-func (h *HandlerImpl) fetchUser(ctx context.Context, param arguments.UserLoginArgs) (models.User, error) {
+func (h *HandlerImpl) fetchUser(ctx context.Context, param arguments.UserLogin) (models.User, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"param":   param,
 	}).Infof("fetchUser")
-	getByUsernameArgs := arguments.GetByUsernameArgs{Username: param.Username}
+	getByUsernameArgs := arguments.UserGetByUsername{Username: param.Username}
 	user, err := h.user.GetByUsername(ctx, getByUsernameArgs)
 	if err != nil {
 		return models.User{}, err
@@ -44,7 +44,7 @@ func (h *HandlerImpl) fetchUser(ctx context.Context, param arguments.UserLoginAr
 	return user, nil
 }
 
-func (h *HandlerImpl) validateUser(ctx context.Context, user models.User, param arguments.UserLoginArgs) bool {
+func (h *HandlerImpl) validateUser(ctx context.Context, user models.User, param arguments.UserLogin) bool {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"param":   param,
@@ -57,7 +57,7 @@ func (h *HandlerImpl) validateUser(ctx context.Context, user models.User, param 
 	return isValidUser
 }
 
-func (h *HandlerImpl) signTokens(user models.User, param arguments.UserLoginArgs) (string, error) {
+func (h *HandlerImpl) signTokens(user models.User, param arguments.UserLogin) (string, error) {
 	var (
 		jwtKey              = []byte("test")
 		expirationTokenTime = time.Now().Add(5 * time.Minute)
@@ -75,7 +75,7 @@ func (h *HandlerImpl) signTokens(user models.User, param arguments.UserLoginArgs
 }
 
 // Login ...
-func (h *HandlerImpl) Login(ctx context.Context, param arguments.UserLoginArgs) (string, error) {
+func (h *HandlerImpl) Login(ctx context.Context, param arguments.UserLogin) (string, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID":  ctx.Value("TraceID"),
 		"Username": param.Username,

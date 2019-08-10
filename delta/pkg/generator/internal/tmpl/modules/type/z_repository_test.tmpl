@@ -19,7 +19,7 @@ import (
 func (s *{{ $Name }}RepositoryTestSuite) TestGetByID_Success() {
 	var (
 		ctx    = context.Background()
-		param = arguments.{{ $Name }}GetByIDArgs{
+		param = arguments.{{ $Name }}GetByID{
 			ID: 1,
 		}
 		{{ $name }} models.{{ $Name }}
@@ -39,7 +39,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestGetByID_Success() {
 func (s *{{ $Name }}RepositoryTestSuite) TestGetByID_Fail() {
 	var (
 		ctx    = context.Background()
-		param = arguments.{{ $Name }}GetByIDArgs{
+		param = arguments.{{ $Name }}GetByID{
 			ID: 1,
 		}
 		{{ $name }} models.{{ $Name }}
@@ -59,7 +59,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestGetByID_Fail() {
 func (s *{{ $Name }}RepositoryTestSuite) TestGetByID_Fail1() {
 	var (
 		ctx    = context.Background()
-		param = arguments.{{ $Name }}GetByIDArgs{
+		param = arguments.{{ $Name }}GetByID{
 			ID: 1,
 		}
 		{{ $name }} models.{{ $Name }}
@@ -79,7 +79,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestGetByID_Fail1() {
 func (s *{{ $Name }}RepositoryTestSuite) TestGetByIDs_Success() {
 	var (
 		ctx    = context.Background()
-		param = arguments.{{ $Name }}GetByIDsArgs{
+		param = arguments.{{ $Name }}GetByIDs{
 			IDs: []int64{1, 2},
 		}
 		{{ $names }} []models.{{ $Name }}
@@ -101,7 +101,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestGetByIDs_Success() {
 func (s *{{ $Name }}RepositoryTestSuite) TestGetByIDs_Fail() {
 	var (
 		ctx    = context.Background()
-		param = arguments.{{ $Name }}GetByIDsArgs{
+		param = arguments.{{ $Name }}GetByIDs{
 			IDs: []int64{1, 2},
 		}
 		{{ $names }} []models.{{ $Name }}
@@ -123,7 +123,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestGetByIDs_Fail() {
 func (s *{{ $Name }}RepositoryTestSuite) TestGetByIDs_Fail1() {
 	var (
 		ctx    = context.Background()
-		param = arguments.{{ $Name }}GetByIDsArgs{
+		param = arguments.{{ $Name }}GetByIDs{
 			IDs: []int64{1, 2},
 		}
 		{{ $names }} []models.{{ $Name }}
@@ -145,7 +145,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestGetByIDs_Fail1() {
 func (s *{{ $Name }}RepositoryTestSuite) TestGetByIDs_Fail2() {
 	var (
 		ctx    = context.Background()
-		param = arguments.{{ $Name }}GetByIDsArgs{
+		param = arguments.{{ $Name }}GetByIDs{
 			IDs: []int64{1, 2},
 		}
 		{{ $names }} []models.{{ $Name }}
@@ -167,7 +167,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestGetByIDs_Fail2() {
 func (s *{{ $Name }}RepositoryTestSuite) TestSetArgsToListSelectBuilder_Success() {
 	var (
 		ctx = context.Background()
-		params = arguments.{{ $Name }}ListArgs{
+		params = arguments.{{ $Name }}List{
 			{{- range $field := $fields }}
 				{{ $field.Name }}:
 				{{- if $field.IsInt64 }}1
@@ -199,7 +199,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestSetArgsToListSelectBuilder_Success(
 func (s *{{ $Name }}RepositoryTestSuite) TestList_Success() {
 	var (
 		ctx    = context.Background()
-		params = arguments.{{ $Name }}ListArgs{
+		params = arguments.{{ $Name }}List{
 			{{- range $field := $fields }}
 				{{ $field.Name }}:
 				{{- if $field.IsInt64 }}1
@@ -243,7 +243,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestList_Success() {
 func (s *{{ $Name }}RepositoryTestSuite) TestList_Fail() {
 	var (
 		ctx    = context.Background()
-		params = arguments.{{ $Name }}ListArgs{
+		params = arguments.{{ $Name }}List{
 			{{- range $field := $fields }}
 				{{ $field.Name }}:
 				{{- if $field.IsInt64 }}1
@@ -287,7 +287,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestList_Fail() {
 func (s *{{ $Name }}RepositoryTestSuite) TestList_Fail1() {
 	var (
 		ctx    = context.Background()
-		params = arguments.{{ $Name }}ListArgs{
+		params = arguments.{{ $Name }}List{
 			{{- range $field := $fields }}
 				{{ $field.Name }}:
 				{{- if $field.IsInt64 }}1
@@ -331,7 +331,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestList_Fail1() {
 func (s *{{ $Name }}RepositoryTestSuite) TestList_Fail2() {
 	var (
 		ctx    = context.Background()
-		params = arguments.{{ $Name }}ListArgs{
+		params = arguments.{{ $Name }}List{
 			{{- range $field := $fields }}
 				{{ $field.Name }}:
 				{{- if $field.IsInt64 }}1
@@ -375,7 +375,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestList_Fail2() {
 func (s *{{ $Name }}RepositoryTestSuite) TestSetArgsToCountSelectBuilder_Success() {
 	var (
 		ctx = context.Background()
-		params = arguments.{{ $Name }}CountArgs{
+		params = arguments.{{ $Name }}Count{
 			{{- range $field := $fields }}
 				{{ $field.Name }}:
 				{{- if $field.IsInt64 }}1
@@ -404,7 +404,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestSetArgsToCountSelectBuilder_Success
 func (s *{{ $Name }}RepositoryTestSuite) TestCount_Success() {
 	var (
 		ctx    = context.Background()
-		params = arguments.{{ $Name }}CountArgs{
+		params = arguments.{{ $Name }}Count{
 			{{- range $field := $fields }}
 				{{ $field.Name }}:
 				{{- if $field.IsInt64 }}1
@@ -438,7 +438,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestCount_Success() {
 func (s *{{ $Name }}RepositoryTestSuite) TestCount_Fail() {
 	var (
 		ctx    = context.Background()
-		params = arguments.{{ $Name }}CountArgs{
+		params = arguments.{{ $Name }}Count{
 			{{- range $field := $fields }}
 				{{ $field.Name }}:
 				{{- if $field.IsInt64 }}1
@@ -472,7 +472,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestCount_Fail() {
 func (s *{{ $Name }}RepositoryTestSuite) TestCount_Fail1() {
 	var (
 		ctx    = context.Background()
-		params = arguments.{{ $Name }}CountArgs{
+		params = arguments.{{ $Name }}Count{
 			{{- range $field := $fields }}
 				{{ $field.Name }}:
 				{{- if $field.IsInt64 }}1
@@ -506,7 +506,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestCount_Fail1() {
 func (s *{{ $Name }}RepositoryTestSuite) TestCount_Fail2() {
 	var (
 		ctx    = context.Background()
-		params = arguments.{{ $Name }}CountArgs{
+		params = arguments.{{ $Name }}Count{
 			{{- range $field := $fields }}
 				{{ $field.Name }}:
 				{{- if $field.IsInt64 }}1
@@ -541,7 +541,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestInsert_Success() {
 	var (
 		ctx            = context.Background()
 		sampleID int64 = 1
-		params         = arguments.{{ $Name }}InsertArgs{
+		params         = arguments.{{ $Name }}Insert{
 			{{- range $field := $fields }}
 				{{- if not $field.IsIDField }}
 					{{ $field.Name }}:
@@ -586,7 +586,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestInsert_Fail() {
 	var (
 		ctx            = context.Background()
 		sampleID int64 = 1
-		params         = arguments.{{ $Name }}InsertArgs{
+		params         = arguments.{{ $Name }}Insert{
     {{- range $field := $fields }}
       {{- if not $field.IsIDField }}
         {{ $field.Name }}:
@@ -621,7 +621,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestInsert_Fail1() {
 	var (
 		ctx            = context.Background()
 		sampleID int64 = 1
-		params         = arguments.{{ $Name }}InsertArgs{
+		params         = arguments.{{ $Name }}Insert{
     {{- range $field := $fields }}
       {{- if not $field.IsIDField }}
         {{ $field.Name }}:
@@ -656,7 +656,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestInsert_Fail2() {
 	var (
 		ctx            = context.Background()
 		sampleID int64 = 1
-		params         = arguments.{{ $Name }}InsertArgs{
+		params         = arguments.{{ $Name }}Insert{
     {{- range $field := $fields }}
       {{- if not $field.IsIDField }}
         {{ $field.Name }}:
@@ -691,7 +691,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestInsert_Fail3() {
 	var (
 		ctx            = context.Background()
 		sampleID int64 = 1
-		params         = arguments.{{ $Name }}InsertArgs{
+		params         = arguments.{{ $Name }}Insert{
 			{{- range $field := $fields }}
 				{{- if not $field.IsIDField }}
 					{{ $field.Name }}:
@@ -742,7 +742,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestSetArgsToUpdateBuilder_Success() {
 				status = "active"
 			{{- end }}
 		{{- end }}
-		params = arguments.{{ $Name }}UpdateArgs{
+		params = arguments.{{ $Name }}Update{
 			{{- range $field := $fields }}
 				{{ $field.Name }}:
 				{{- if $field.IsInt64 }} &sampleID
@@ -773,7 +773,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestUpdate_Success() {
 				status = "active"
 			{{- end }}
 		{{- end }}
-		params   = arguments.{{ $Name }}UpdateArgs{
+		params   = arguments.{{ $Name }}Update{
 			{{- range $field := $fields }}
 				{{ $field.Name }}:
 				{{- if $field.IsInt64 }} &sampleID
@@ -824,7 +824,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestUpdate_Fail() {
 				status = "active"
 			{{- end }}
 		{{- end }}
-		params           = arguments.{{ $Name }}UpdateArgs{
+		params           = arguments.{{ $Name }}Update{
 			{{- range $field := $fields }}
 				{{ $field.Name }}:
 					{{- if $field.IsInt64 }}&sampleID
@@ -865,7 +865,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestUpdate_Fail1() {
 				status = "active"
 			{{- end }}
 		{{- end }}
-		params = arguments.{{ $Name }}UpdateArgs{
+		params = arguments.{{ $Name }}Update{
 			{{- range $field := $fields }}
 				{{ $field.Name }}:
 					{{- if $field.IsInt64 }}&sampleID
@@ -906,7 +906,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestUpdate_Fail2() {
 				status = "active"
 			{{- end }}
 		{{- end }}
-		params = arguments.{{ $Name }}UpdateArgs{
+		params = arguments.{{ $Name }}Update{
 			{{- range $field := $fields }}
 				{{ $field.Name }}:
 					{{- if $field.IsInt64 }}&sampleID
@@ -947,7 +947,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestUpdate_Fail3() {
 				status = "active"
 			{{- end }}
 		{{- end }}
-		params = arguments.{{ $Name }}UpdateArgs{
+		params = arguments.{{ $Name }}Update{
 			{{- range $field := $fields }}
 				{{ $field.Name }}:
 					{{- if $field.IsInt64 }}&sampleID
@@ -987,7 +987,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestUpdate_Fail4() {
 				status = "active"
 			{{- end }}
 		{{- end }}
-		params   = arguments.{{ $Name }}UpdateArgs{
+		params   = arguments.{{ $Name }}Update{
 			{{- range $field := $fields }}
 				{{ $field.Name }}:
 				{{- if $field.IsInt64 }} &sampleID
@@ -1030,7 +1030,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestUpdate_Fail4() {
 func (s *{{ $Name }}RepositoryTestSuite) TestDelete_Success() {
 	var (
 		ctx               = context.Background()
-		param            = arguments.{{ $Name }}DeleteArgs{
+		param            = arguments.{{ $Name }}Delete{
 			ID: 1,
 		}
 		rowEffected int64 = 1
@@ -1046,7 +1046,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestDelete_Success() {
 func (s *{{ $Name }}RepositoryTestSuite) TestDelete_Fail() {
 	var (
 		ctx         = context.Background()
-		param      = arguments.{{ $Name }}DeleteArgs{
+		param      = arguments.{{ $Name }}Delete{
 			ID: 1,
 		}
 		rowEffected int64
@@ -1062,7 +1062,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestDelete_Fail() {
 func (s *{{ $Name }}RepositoryTestSuite) TestDelete_Fail1() {
 	var (
 		ctx         = context.Background()
-		param      = arguments.{{ $Name }}DeleteArgs{
+		param      = arguments.{{ $Name }}Delete{
 			ID: 1,
 		}
 		rowEffected int64
@@ -1078,7 +1078,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestDelete_Fail1() {
 func (s *{{ $Name }}RepositoryTestSuite) TestDelete_Fail2() {
 	var (
 		ctx         = context.Background()
-		param      = arguments.{{ $Name }}DeleteArgs{
+		param      = arguments.{{ $Name }}Delete{
 			ID: 1,
 		}
 		rowEffected int64
@@ -1094,7 +1094,7 @@ func (s *{{ $Name }}RepositoryTestSuite) TestDelete_Fail2() {
 func (s *{{ $Name }}RepositoryTestSuite) TestDelete_Fail3() {
 	var (
 		ctx         = context.Background()
-		param      = arguments.{{ $Name }}DeleteArgs{
+		param      = arguments.{{ $Name }}Delete{
 			ID: 1,
 		}
 		rowEffected int64

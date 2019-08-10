@@ -12,7 +12,7 @@ import (
 func (s *PermissionHandlerTestSuite) TestGetByID_Success() {
 	var (
 		ctx   = context.Background()
-		param = arguments.PermissionGetByIDArgs{
+		param = arguments.PermissionGetByID{
 			ID: 1,
 		}
 		permission = models.Permission{}
@@ -26,7 +26,7 @@ func (s *PermissionHandlerTestSuite) TestGetByID_Success() {
 func (s *PermissionHandlerTestSuite) TestGetByID_Fail() {
 	var (
 		ctx   = context.Background()
-		param = arguments.PermissionGetByIDArgs{
+		param = arguments.PermissionGetByID{
 			ID: 1,
 		}
 		permission = models.Permission{}
@@ -40,7 +40,7 @@ func (s *PermissionHandlerTestSuite) TestGetByID_Fail() {
 func (s *PermissionHandlerTestSuite) TestGetByID_Fail1() {
 	var (
 		ctx   = context.Background()
-		param = arguments.PermissionGetByIDArgs{
+		param = arguments.PermissionGetByID{
 			ID: 0,
 		}
 		permission = models.Permission{}
@@ -54,7 +54,7 @@ func (s *PermissionHandlerTestSuite) TestGetByID_Fail1() {
 func (s *PermissionHandlerTestSuite) TestGetByIDs_Success() {
 	var (
 		ctx   = context.Background()
-		param = arguments.PermissionGetByIDsArgs{
+		param = arguments.PermissionGetByIDs{
 			IDs: []int64{1, 2},
 		}
 		permissions []models.Permission
@@ -68,7 +68,7 @@ func (s *PermissionHandlerTestSuite) TestGetByIDs_Success() {
 func (s *PermissionHandlerTestSuite) TestGetByIDs_Fail() {
 	var (
 		ctx   = context.Background()
-		param = arguments.PermissionGetByIDsArgs{
+		param = arguments.PermissionGetByIDs{
 			IDs: []int64{1, 2},
 		}
 		permissions []models.Permission
@@ -82,7 +82,7 @@ func (s *PermissionHandlerTestSuite) TestGetByIDs_Fail() {
 func (s *PermissionHandlerTestSuite) TestGetByIDs_Fail1() {
 	var (
 		ctx         = context.Background()
-		param       = arguments.PermissionGetByIDsArgs{}
+		param       = arguments.PermissionGetByIDs{}
 		permissions []models.Permission
 	)
 	s.MockIPermission.On("GetByIDs", ctx, param).Return(permissions, errors.New("some errors"))
@@ -94,7 +94,7 @@ func (s *PermissionHandlerTestSuite) TestGetByIDs_Fail1() {
 func (s *PermissionHandlerTestSuite) TestList_Success() {
 	var (
 		ctx    = context.Background()
-		params = arguments.PermissionListArgs{
+		params = arguments.PermissionList{
 			ID:          1,
 			Name:        "mockString",
 			Description: "mockString",
@@ -115,7 +115,7 @@ func (s *PermissionHandlerTestSuite) TestList_Success() {
 func (s *PermissionHandlerTestSuite) TestList_Fail() {
 	var (
 		ctx    = context.Background()
-		params = arguments.PermissionListArgs{
+		params = arguments.PermissionList{
 			ID:          1,
 			Name:        "mockString",
 			Description: "mockString",
@@ -136,7 +136,7 @@ func (s *PermissionHandlerTestSuite) TestList_Fail() {
 func (s *PermissionHandlerTestSuite) TestList_Fail1() {
 	var (
 		ctx    = context.Background()
-		params = arguments.PermissionListArgs{
+		params = arguments.PermissionList{
 			ID:          0,
 			Name:        "mockString",
 			Description: "mockString",
@@ -157,7 +157,7 @@ func (s *PermissionHandlerTestSuite) TestList_Fail1() {
 func (s *PermissionHandlerTestSuite) TestCount_Success() {
 	var (
 		ctx    = context.Background()
-		params = arguments.PermissionCountArgs{
+		params = arguments.PermissionCount{
 			ID:          1,
 			Name:        "mockString",
 			Description: "mockString",
@@ -176,7 +176,7 @@ func (s *PermissionHandlerTestSuite) TestCount_Success() {
 func (s *PermissionHandlerTestSuite) TestCount_Fail() {
 	var (
 		ctx    = context.Background()
-		params = arguments.PermissionCountArgs{
+		params = arguments.PermissionCount{
 			ID:          1,
 			Name:        "mockString",
 			Description: "mockString",
@@ -195,7 +195,7 @@ func (s *PermissionHandlerTestSuite) TestCount_Fail() {
 func (s *PermissionHandlerTestSuite) TestCount_Fail1() {
 	var (
 		ctx    = context.Background()
-		params = arguments.PermissionCountArgs{
+		params = arguments.PermissionCount{
 			ID:          0,
 			Name:        "mockString",
 			Description: "mockString",
@@ -215,7 +215,7 @@ func (s *PermissionHandlerTestSuite) TestInsert_Success() {
 	var (
 		ctx            = context.Background()
 		sampleID int64 = 1
-		params         = arguments.PermissionInsertArgs{
+		params         = arguments.PermissionInsert{
 			Name:        "mockString",
 			Description: "mockString",
 			Status:      "active",
@@ -244,7 +244,7 @@ func (s *PermissionHandlerTestSuite) TestInsert_Success() {
 func (s *PermissionHandlerTestSuite) TestInsert_Fail() {
 	var (
 		ctx    = context.Background()
-		params = arguments.PermissionInsertArgs{
+		params = arguments.PermissionInsert{
 			Name:        "mockString",
 			Description: "mockString",
 			Status:      "active",
@@ -262,7 +262,7 @@ func (s *PermissionHandlerTestSuite) TestInsert_Fail() {
 func (s *PermissionHandlerTestSuite) TestInsert_Fail1() {
 	var (
 		ctx    = context.Background()
-		params = arguments.PermissionInsertArgs{
+		params = arguments.PermissionInsert{
 			Name:        "mockString",
 			Description: "mockString",
 			Status:      "active",
@@ -283,7 +283,7 @@ func (s *PermissionHandlerTestSuite) TestUpdate_Success() {
 		sampleID   int64 = 1
 		mockString       = "mockString"
 		status           = "active"
-		params           = arguments.PermissionUpdateArgs{
+		params           = arguments.PermissionUpdate{
 			ID:          &sampleID,
 			Name:        &mockString,
 			Description: &mockString,
@@ -316,7 +316,7 @@ func (s *PermissionHandlerTestSuite) TestUpdate_Fail() {
 		sampleID   int64 = 1
 		mockString       = "mockString"
 		status           = "active"
-		params           = arguments.PermissionUpdateArgs{
+		params           = arguments.PermissionUpdate{
 			ID:          &sampleID,
 			Name:        &mockString,
 			Description: &mockString,
@@ -338,7 +338,7 @@ func (s *PermissionHandlerTestSuite) TestUpdate_Fail1() {
 		sampleID   int64
 		mockString = "mockString"
 		status     = "active"
-		params     = arguments.PermissionUpdateArgs{
+		params     = arguments.PermissionUpdate{
 			ID:          &sampleID,
 			Name:        &mockString,
 			Description: &mockString,
@@ -357,7 +357,7 @@ func (s *PermissionHandlerTestSuite) TestUpdate_Fail1() {
 func (s *PermissionHandlerTestSuite) TestDelete_Success() {
 	var (
 		ctx   = context.Background()
-		param = arguments.PermissionDeleteArgs{
+		param = arguments.PermissionDelete{
 			ID: 1,
 		}
 	)
@@ -370,7 +370,7 @@ func (s *PermissionHandlerTestSuite) TestDelete_Success() {
 func (s *PermissionHandlerTestSuite) TestDelete_Fail() {
 	var (
 		ctx   = context.Background()
-		param = arguments.PermissionDeleteArgs{
+		param = arguments.PermissionDelete{
 			ID: 1,
 		}
 		rowEffected int64
@@ -384,7 +384,7 @@ func (s *PermissionHandlerTestSuite) TestDelete_Fail() {
 func (s *PermissionHandlerTestSuite) TestDelete_Fail1() {
 	var (
 		ctx   = context.Background()
-		param = arguments.PermissionDeleteArgs{
+		param = arguments.PermissionDelete{
 			ID: 0,
 		}
 		rowEffected int64

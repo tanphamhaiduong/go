@@ -1,12 +1,12 @@
 package arguments
 
-// UserLoginArgs ...
-type UserLoginArgs struct {
+// UserLogin ...
+type UserLogin struct {
 	Username string `graphql:"username" validate:"required"`
 	Password string `graphql:"password" validate:"required"`
 }
 
-// GetByUsernameArgs ...
-type GetByUsernameArgs struct {
+// UserGetByUsername ...
+type UserGetByUsername struct {
 	Username string `graphql:"username" validate:"required"`
 }

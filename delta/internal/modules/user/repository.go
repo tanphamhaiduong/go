@@ -30,7 +30,7 @@ func NewRepository(db database.IDB) *RepositoryImpl {
 }
 
 // GetByUsername ...
-func (r *RepositoryImpl) GetByUsername(ctx context.Context, params arguments.GetByUsernameArgs) (models.User, error) {
+func (r *RepositoryImpl) GetByUsername(ctx context.Context, params arguments.UserGetByUsername) (models.User, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,

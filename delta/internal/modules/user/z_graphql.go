@@ -342,13 +342,13 @@ var (
 
 // ICoreHandler ...
 type ICoreHandler interface {
-	GetByID(ctx context.Context, param arguments.UserGetByIDArgs) (models.User, error)
-	GetByIDs(ctx context.Context, param arguments.UserGetByIDsArgs) ([]models.User, error)
-	Count(ctx context.Context, params arguments.UserCountArgs) (int64, error)
-	List(ctx context.Context, params arguments.UserListArgs) ([]models.User, error)
-	Insert(ctx context.Context, params arguments.UserInsertArgs) (models.User, error)
-	Update(ctx context.Context, params arguments.UserUpdateArgs) (models.User, error)
-	Delete(ctx context.Context, param arguments.UserDeleteArgs) (int64, error)
+	GetByID(ctx context.Context, param arguments.UserGetByID) (models.User, error)
+	GetByIDs(ctx context.Context, param arguments.UserGetByIDs) ([]models.User, error)
+	Count(ctx context.Context, params arguments.UserCount) (int64, error)
+	List(ctx context.Context, params arguments.UserList) ([]models.User, error)
+	Insert(ctx context.Context, params arguments.UserInsert) (models.User, error)
+	Update(ctx context.Context, params arguments.UserUpdate) (models.User, error)
+	Delete(ctx context.Context, param arguments.UserDelete) (int64, error)
 }
 
 // ForwardParams ...
@@ -367,7 +367,7 @@ func (r *ResolverImpl) GetByID(param graphql.ResolveParams) (interface{}, error)
 		"param":   param,
 	}).Infof("Resolver GetByID of user")
 	// parse param
-	args := arguments.UserGetByIDArgs{}
+	args := arguments.UserGetByID{}
 	if err := utils.Parse(param.Args, &args); err != nil {
 		logger.WithFields(logger.Fields{
 			"TraceID": param.Context.Value("TraceID"),
@@ -389,7 +389,7 @@ func (r *ResolverImpl) Count(params graphql.ResolveParams) (interface{}, error) 
 		"params":  params,
 	}).Infof("Resolver Count of user")
 	// parse params
-	args := arguments.UserCountArgs{}
+	args := arguments.UserCount{}
 	err := utils.Parse(params.Source.(map[string]interface{}), &args)
 	if err != nil {
 		logger.WithFields(logger.Fields{
@@ -412,7 +412,7 @@ func (r *ResolverImpl) List(params graphql.ResolveParams) (interface{}, error) {
 		"params":  params,
 	}).Infof("Resolver List of user")
 	// parse params
-	args := arguments.UserListArgs{}
+	args := arguments.UserList{}
 	err := utils.Parse(params.Source.(map[string]interface{}), &args)
 	if err != nil {
 		logger.WithFields(logger.Fields{
@@ -439,7 +439,7 @@ func (r *ResolverImpl) Insert(params graphql.ResolveParams) (interface{}, error)
 		"params":  params,
 	}).Infof("Resolver Insert of user")
 	// parse params
-	args := arguments.UserInsertArgs{}
+	args := arguments.UserInsert{}
 	err := utils.Parse(params.Args, &args)
 	if err != nil {
 		logger.WithFields(logger.Fields{
@@ -466,7 +466,7 @@ func (r *ResolverImpl) Update(params graphql.ResolveParams) (interface{}, error)
 		"params":  params,
 	}).Infof("Resolver Update of user")
 	// parse params
-	args := arguments.UserUpdateArgs{}
+	args := arguments.UserUpdate{}
 	err := utils.Parse(params.Args, &args)
 	if err != nil {
 		logger.WithFields(logger.Fields{
@@ -493,7 +493,7 @@ func (r *ResolverImpl) Delete(param graphql.ResolveParams) (interface{}, error) 
 		"param":   param,
 	}).Infof("Resolver Delete of user")
 	// parse param
-	args := arguments.UserDeleteArgs{}
+	args := arguments.UserDelete{}
 	err := utils.Parse(param.Args, &args)
 	if err != nil {
 		logger.WithFields(logger.Fields{

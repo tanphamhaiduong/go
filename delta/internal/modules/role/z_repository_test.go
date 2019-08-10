@@ -15,7 +15,7 @@ import (
 func (s *RoleRepositoryTestSuite) TestGetByID_Success() {
 	var (
 		ctx   = context.Background()
-		param = arguments.RoleGetByIDArgs{
+		param = arguments.RoleGetByID{
 			ID: 1,
 		}
 		role models.Role
@@ -38,7 +38,7 @@ func (s *RoleRepositoryTestSuite) TestGetByID_Success() {
 func (s *RoleRepositoryTestSuite) TestGetByID_Fail() {
 	var (
 		ctx   = context.Background()
-		param = arguments.RoleGetByIDArgs{
+		param = arguments.RoleGetByID{
 			ID: 1,
 		}
 		role models.Role
@@ -61,7 +61,7 @@ func (s *RoleRepositoryTestSuite) TestGetByID_Fail() {
 func (s *RoleRepositoryTestSuite) TestGetByID_Fail1() {
 	var (
 		ctx   = context.Background()
-		param = arguments.RoleGetByIDArgs{
+		param = arguments.RoleGetByID{
 			ID: 1,
 		}
 		role models.Role
@@ -84,7 +84,7 @@ func (s *RoleRepositoryTestSuite) TestGetByID_Fail1() {
 func (s *RoleRepositoryTestSuite) TestGetByIDs_Success() {
 	var (
 		ctx   = context.Background()
-		param = arguments.RoleGetByIDsArgs{
+		param = arguments.RoleGetByIDs{
 			IDs: []int64{1, 2},
 		}
 		roles []models.Role
@@ -109,7 +109,7 @@ func (s *RoleRepositoryTestSuite) TestGetByIDs_Success() {
 func (s *RoleRepositoryTestSuite) TestGetByIDs_Fail() {
 	var (
 		ctx   = context.Background()
-		param = arguments.RoleGetByIDsArgs{
+		param = arguments.RoleGetByIDs{
 			IDs: []int64{1, 2},
 		}
 		roles []models.Role
@@ -134,7 +134,7 @@ func (s *RoleRepositoryTestSuite) TestGetByIDs_Fail() {
 func (s *RoleRepositoryTestSuite) TestGetByIDs_Fail1() {
 	var (
 		ctx   = context.Background()
-		param = arguments.RoleGetByIDsArgs{
+		param = arguments.RoleGetByIDs{
 			IDs: []int64{1, 2},
 		}
 		roles []models.Role
@@ -159,7 +159,7 @@ func (s *RoleRepositoryTestSuite) TestGetByIDs_Fail1() {
 func (s *RoleRepositoryTestSuite) TestGetByIDs_Fail2() {
 	var (
 		ctx   = context.Background()
-		param = arguments.RoleGetByIDsArgs{
+		param = arguments.RoleGetByIDs{
 			IDs: []int64{1, 2},
 		}
 		roles []models.Role
@@ -184,7 +184,7 @@ func (s *RoleRepositoryTestSuite) TestGetByIDs_Fail2() {
 func (s *RoleRepositoryTestSuite) TestSetArgsToListSelectBuilder_Success() {
 	var (
 		ctx    = context.Background()
-		params = arguments.RoleListArgs{
+		params = arguments.RoleList{
 			ID:        1,
 			Name:      "mockString",
 			CompanyID: 1,
@@ -211,7 +211,7 @@ func (s *RoleRepositoryTestSuite) TestSetArgsToListSelectBuilder_Success() {
 func (s *RoleRepositoryTestSuite) TestList_Success() {
 	var (
 		ctx    = context.Background()
-		params = arguments.RoleListArgs{
+		params = arguments.RoleList{
 			ID:        1,
 			Name:      "mockString",
 			CompanyID: 1,
@@ -252,7 +252,7 @@ func (s *RoleRepositoryTestSuite) TestList_Success() {
 func (s *RoleRepositoryTestSuite) TestList_Fail() {
 	var (
 		ctx    = context.Background()
-		params = arguments.RoleListArgs{
+		params = arguments.RoleList{
 			ID:        1,
 			Name:      "mockString",
 			CompanyID: 1,
@@ -293,7 +293,7 @@ func (s *RoleRepositoryTestSuite) TestList_Fail() {
 func (s *RoleRepositoryTestSuite) TestList_Fail1() {
 	var (
 		ctx    = context.Background()
-		params = arguments.RoleListArgs{
+		params = arguments.RoleList{
 			ID:        1,
 			Name:      "mockString",
 			CompanyID: 1,
@@ -334,7 +334,7 @@ func (s *RoleRepositoryTestSuite) TestList_Fail1() {
 func (s *RoleRepositoryTestSuite) TestList_Fail2() {
 	var (
 		ctx    = context.Background()
-		params = arguments.RoleListArgs{
+		params = arguments.RoleList{
 			ID:        1,
 			Name:      "mockString",
 			CompanyID: 1,
@@ -375,7 +375,7 @@ func (s *RoleRepositoryTestSuite) TestList_Fail2() {
 func (s *RoleRepositoryTestSuite) TestSetArgsToCountSelectBuilder_Success() {
 	var (
 		ctx    = context.Background()
-		params = arguments.RoleCountArgs{
+		params = arguments.RoleCount{
 			ID:        1,
 			Name:      "mockString",
 			CompanyID: 1,
@@ -399,7 +399,7 @@ func (s *RoleRepositoryTestSuite) TestSetArgsToCountSelectBuilder_Success() {
 func (s *RoleRepositoryTestSuite) TestCount_Success() {
 	var (
 		ctx    = context.Background()
-		params = arguments.RoleCountArgs{
+		params = arguments.RoleCount{
 			ID:        1,
 			Name:      "mockString",
 			CompanyID: 1,
@@ -427,7 +427,7 @@ func (s *RoleRepositoryTestSuite) TestCount_Success() {
 func (s *RoleRepositoryTestSuite) TestCount_Fail() {
 	var (
 		ctx    = context.Background()
-		params = arguments.RoleCountArgs{
+		params = arguments.RoleCount{
 			ID:        1,
 			Name:      "mockString",
 			CompanyID: 1,
@@ -455,7 +455,7 @@ func (s *RoleRepositoryTestSuite) TestCount_Fail() {
 func (s *RoleRepositoryTestSuite) TestCount_Fail1() {
 	var (
 		ctx    = context.Background()
-		params = arguments.RoleCountArgs{
+		params = arguments.RoleCount{
 			ID:        1,
 			Name:      "mockString",
 			CompanyID: 1,
@@ -483,7 +483,7 @@ func (s *RoleRepositoryTestSuite) TestCount_Fail1() {
 func (s *RoleRepositoryTestSuite) TestCount_Fail2() {
 	var (
 		ctx    = context.Background()
-		params = arguments.RoleCountArgs{
+		params = arguments.RoleCount{
 			ID:        1,
 			Name:      "mockString",
 			CompanyID: 1,
@@ -512,7 +512,7 @@ func (s *RoleRepositoryTestSuite) TestInsert_Success() {
 	var (
 		ctx            = context.Background()
 		sampleID int64 = 1
-		params         = arguments.RoleInsertArgs{
+		params         = arguments.RoleInsert{
 			Name:      "mockString",
 			CompanyID: 1,
 			Status:    "active",
@@ -552,7 +552,7 @@ func (s *RoleRepositoryTestSuite) TestInsert_Fail() {
 	var (
 		ctx            = context.Background()
 		sampleID int64 = 1
-		params         = arguments.RoleInsertArgs{
+		params         = arguments.RoleInsert{
 			Name:      "mockString",
 			CompanyID: 1,
 			Status:    "active",
@@ -579,7 +579,7 @@ func (s *RoleRepositoryTestSuite) TestInsert_Fail1() {
 	var (
 		ctx            = context.Background()
 		sampleID int64 = 1
-		params         = arguments.RoleInsertArgs{
+		params         = arguments.RoleInsert{
 			Name:      "mockString",
 			CompanyID: 1,
 			Status:    "active",
@@ -606,7 +606,7 @@ func (s *RoleRepositoryTestSuite) TestInsert_Fail2() {
 	var (
 		ctx            = context.Background()
 		sampleID int64 = 1
-		params         = arguments.RoleInsertArgs{
+		params         = arguments.RoleInsert{
 			Name:      "mockString",
 			CompanyID: 1,
 			Status:    "active",
@@ -633,7 +633,7 @@ func (s *RoleRepositoryTestSuite) TestInsert_Fail3() {
 	var (
 		ctx            = context.Background()
 		sampleID int64 = 1
-		params         = arguments.RoleInsertArgs{
+		params         = arguments.RoleInsert{
 			Name:      "mockString",
 			CompanyID: 1,
 			Status:    "active",
@@ -675,7 +675,7 @@ func (s *RoleRepositoryTestSuite) TestSetArgsToUpdateBuilder_Success() {
 		sampleID   int64 = 1
 		mockString       = "mockString"
 		status           = "active"
-		params           = arguments.RoleUpdateArgs{
+		params           = arguments.RoleUpdate{
 			ID:        &sampleID,
 			Name:      &mockString,
 			CompanyID: &sampleID,
@@ -697,7 +697,7 @@ func (s *RoleRepositoryTestSuite) TestUpdate_Success() {
 		rowEffected int64 = 1
 		mockString        = "mockString"
 		status            = "active"
-		params            = arguments.RoleUpdateArgs{
+		params            = arguments.RoleUpdate{
 			ID:        &sampleID,
 			Name:      &mockString,
 			CompanyID: &sampleID,
@@ -742,7 +742,7 @@ func (s *RoleRepositoryTestSuite) TestUpdate_Fail() {
 		rowEffected int64
 		mockString  = "mockString"
 		status      = "active"
-		params      = arguments.RoleUpdateArgs{
+		params      = arguments.RoleUpdate{
 			ID:        &sampleID,
 			Name:      &mockString,
 			CompanyID: &sampleID,
@@ -774,7 +774,7 @@ func (s *RoleRepositoryTestSuite) TestUpdate_Fail1() {
 		rowEffected int64
 		mockString  = "mockString"
 		status      = "active"
-		params      = arguments.RoleUpdateArgs{
+		params      = arguments.RoleUpdate{
 			ID:        &sampleID,
 			Name:      &mockString,
 			CompanyID: &sampleID,
@@ -806,7 +806,7 @@ func (s *RoleRepositoryTestSuite) TestUpdate_Fail2() {
 		rowEffected int64
 		mockString  = "mockString"
 		status      = "active"
-		params      = arguments.RoleUpdateArgs{
+		params      = arguments.RoleUpdate{
 			ID:        &sampleID,
 			Name:      &mockString,
 			CompanyID: &sampleID,
@@ -838,7 +838,7 @@ func (s *RoleRepositoryTestSuite) TestUpdate_Fail3() {
 		rowEffected int64
 		mockString  = "mockString"
 		status      = "active"
-		params      = arguments.RoleUpdateArgs{
+		params      = arguments.RoleUpdate{
 			ID:        &sampleID,
 			Name:      &mockString,
 			CompanyID: &sampleID,
@@ -869,7 +869,7 @@ func (s *RoleRepositoryTestSuite) TestUpdate_Fail4() {
 		sampleID   int64 = 1
 		mockString       = "mockString"
 		status           = "active"
-		params           = arguments.RoleUpdateArgs{
+		params           = arguments.RoleUpdate{
 			ID:        &sampleID,
 			Name:      &mockString,
 			CompanyID: &sampleID,
@@ -910,7 +910,7 @@ func (s *RoleRepositoryTestSuite) TestUpdate_Fail4() {
 func (s *RoleRepositoryTestSuite) TestDelete_Success() {
 	var (
 		ctx   = context.Background()
-		param = arguments.RoleDeleteArgs{
+		param = arguments.RoleDelete{
 			ID: 1,
 		}
 		rowEffected int64 = 1
@@ -926,7 +926,7 @@ func (s *RoleRepositoryTestSuite) TestDelete_Success() {
 func (s *RoleRepositoryTestSuite) TestDelete_Fail() {
 	var (
 		ctx   = context.Background()
-		param = arguments.RoleDeleteArgs{
+		param = arguments.RoleDelete{
 			ID: 1,
 		}
 		rowEffected int64
@@ -942,7 +942,7 @@ func (s *RoleRepositoryTestSuite) TestDelete_Fail() {
 func (s *RoleRepositoryTestSuite) TestDelete_Fail1() {
 	var (
 		ctx   = context.Background()
-		param = arguments.RoleDeleteArgs{
+		param = arguments.RoleDelete{
 			ID: 1,
 		}
 		rowEffected int64
@@ -958,7 +958,7 @@ func (s *RoleRepositoryTestSuite) TestDelete_Fail1() {
 func (s *RoleRepositoryTestSuite) TestDelete_Fail2() {
 	var (
 		ctx   = context.Background()
-		param = arguments.RoleDeleteArgs{
+		param = arguments.RoleDelete{
 			ID: 1,
 		}
 		rowEffected int64
@@ -974,7 +974,7 @@ func (s *RoleRepositoryTestSuite) TestDelete_Fail2() {
 func (s *RoleRepositoryTestSuite) TestDelete_Fail3() {
 	var (
 		ctx   = context.Background()
-		param = arguments.RoleDeleteArgs{
+		param = arguments.RoleDelete{
 			ID: 1,
 		}
 		rowEffected int64

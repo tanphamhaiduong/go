@@ -12,17 +12,17 @@ import (
 
 // ICoreRepository ...
 type ICoreRepository interface {
-	GetByID(ctx context.Context, param arguments.CompanyGetByIDArgs) (models.Company, error)
-	GetByIDs(ctx context.Context, param arguments.CompanyGetByIDsArgs) ([]models.Company, error)
-	List(ctx context.Context, params arguments.CompanyListArgs) ([]models.Company, error)
-	Count(ctx context.Context, params arguments.CompanyCountArgs) (int64, error)
-	Insert(ctx context.Context, params arguments.CompanyInsertArgs) (models.Company, error)
-	Update(ctx context.Context, params arguments.CompanyUpdateArgs) (models.Company, error)
-	Delete(ctx context.Context, param arguments.CompanyDeleteArgs) (int64, error)
+	GetByID(ctx context.Context, param arguments.CompanyGetByID) (models.Company, error)
+	GetByIDs(ctx context.Context, param arguments.CompanyGetByIDs) ([]models.Company, error)
+	List(ctx context.Context, params arguments.CompanyList) ([]models.Company, error)
+	Count(ctx context.Context, params arguments.CompanyCount) (int64, error)
+	Insert(ctx context.Context, params arguments.CompanyInsert) (models.Company, error)
+	Update(ctx context.Context, params arguments.CompanyUpdate) (models.Company, error)
+	Delete(ctx context.Context, param arguments.CompanyDelete) (int64, error)
 }
 
 // GetByID ...
-func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.CompanyGetByIDArgs) (models.Company, error) {
+func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.CompanyGetByID) (models.Company, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -49,7 +49,7 @@ func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.CompanyGetBy
 }
 
 // GetByIDs ...
-func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.CompanyGetByIDsArgs) ([]models.Company, error) {
+func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.CompanyGetByIDs) ([]models.Company, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -76,7 +76,7 @@ func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.CompanyGetB
 }
 
 // Count ...
-func (h *HandlerImpl) Count(ctx context.Context, params arguments.CompanyCountArgs) (int64, error) {
+func (h *HandlerImpl) Count(ctx context.Context, params arguments.CompanyCount) (int64, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -103,7 +103,7 @@ func (h *HandlerImpl) Count(ctx context.Context, params arguments.CompanyCountAr
 }
 
 // List ...
-func (h *HandlerImpl) List(ctx context.Context, params arguments.CompanyListArgs) ([]models.Company, error) {
+func (h *HandlerImpl) List(ctx context.Context, params arguments.CompanyList) ([]models.Company, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -130,7 +130,7 @@ func (h *HandlerImpl) List(ctx context.Context, params arguments.CompanyListArgs
 }
 
 // Insert ...
-func (h *HandlerImpl) Insert(ctx context.Context, params arguments.CompanyInsertArgs) (models.Company, error) {
+func (h *HandlerImpl) Insert(ctx context.Context, params arguments.CompanyInsert) (models.Company, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -157,7 +157,7 @@ func (h *HandlerImpl) Insert(ctx context.Context, params arguments.CompanyInsert
 }
 
 // Update ...
-func (h *HandlerImpl) Update(ctx context.Context, params arguments.CompanyUpdateArgs) (models.Company, error) {
+func (h *HandlerImpl) Update(ctx context.Context, params arguments.CompanyUpdate) (models.Company, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -184,7 +184,7 @@ func (h *HandlerImpl) Update(ctx context.Context, params arguments.CompanyUpdate
 }
 
 // Delete ...
-func (h *HandlerImpl) Delete(ctx context.Context, param arguments.CompanyDeleteArgs) (int64, error) {
+func (h *HandlerImpl) Delete(ctx context.Context, param arguments.CompanyDelete) (int64, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"param":   param,

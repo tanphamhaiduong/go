@@ -17,7 +17,7 @@ import (
 func (s *UserRepositoryTestSuite) TestGetByID_Success() {
 	var (
 		ctx   = context.Background()
-		param = arguments.UserGetByIDArgs{
+		param = arguments.UserGetByID{
 			ID: 1,
 		}
 		user models.User
@@ -52,7 +52,7 @@ func (s *UserRepositoryTestSuite) TestGetByID_Success() {
 func (s *UserRepositoryTestSuite) TestGetByID_Fail() {
 	var (
 		ctx   = context.Background()
-		param = arguments.UserGetByIDArgs{
+		param = arguments.UserGetByID{
 			ID: 1,
 		}
 		user models.User
@@ -87,7 +87,7 @@ func (s *UserRepositoryTestSuite) TestGetByID_Fail() {
 func (s *UserRepositoryTestSuite) TestGetByID_Fail1() {
 	var (
 		ctx   = context.Background()
-		param = arguments.UserGetByIDArgs{
+		param = arguments.UserGetByID{
 			ID: 1,
 		}
 		user models.User
@@ -122,7 +122,7 @@ func (s *UserRepositoryTestSuite) TestGetByID_Fail1() {
 func (s *UserRepositoryTestSuite) TestGetByIDs_Success() {
 	var (
 		ctx   = context.Background()
-		param = arguments.UserGetByIDsArgs{
+		param = arguments.UserGetByIDs{
 			IDs: []int64{1, 2},
 		}
 		users []models.User
@@ -159,7 +159,7 @@ func (s *UserRepositoryTestSuite) TestGetByIDs_Success() {
 func (s *UserRepositoryTestSuite) TestGetByIDs_Fail() {
 	var (
 		ctx   = context.Background()
-		param = arguments.UserGetByIDsArgs{
+		param = arguments.UserGetByIDs{
 			IDs: []int64{1, 2},
 		}
 		users []models.User
@@ -196,7 +196,7 @@ func (s *UserRepositoryTestSuite) TestGetByIDs_Fail() {
 func (s *UserRepositoryTestSuite) TestGetByIDs_Fail1() {
 	var (
 		ctx   = context.Background()
-		param = arguments.UserGetByIDsArgs{
+		param = arguments.UserGetByIDs{
 			IDs: []int64{1, 2},
 		}
 		users []models.User
@@ -233,7 +233,7 @@ func (s *UserRepositoryTestSuite) TestGetByIDs_Fail1() {
 func (s *UserRepositoryTestSuite) TestGetByIDs_Fail2() {
 	var (
 		ctx   = context.Background()
-		param = arguments.UserGetByIDsArgs{
+		param = arguments.UserGetByIDs{
 			IDs: []int64{1, 2},
 		}
 		users []models.User
@@ -270,7 +270,7 @@ func (s *UserRepositoryTestSuite) TestGetByIDs_Fail2() {
 func (s *UserRepositoryTestSuite) TestSetArgsToListSelectBuilder_Success() {
 	var (
 		ctx    = context.Background()
-		params = arguments.UserListArgs{
+		params = arguments.UserList{
 			ID:       1,
 			Username: "mockString",
 			Password: "mockString",
@@ -312,7 +312,7 @@ func (s *UserRepositoryTestSuite) TestSetArgsToListSelectBuilder_Success() {
 func (s *UserRepositoryTestSuite) TestList_Success() {
 	var (
 		ctx    = context.Background()
-		params = arguments.UserListArgs{
+		params = arguments.UserList{
 			ID:       1,
 			Username: "mockString",
 			Password: "mockString",
@@ -392,7 +392,7 @@ func (s *UserRepositoryTestSuite) TestList_Success() {
 func (s *UserRepositoryTestSuite) TestList_Fail() {
 	var (
 		ctx    = context.Background()
-		params = arguments.UserListArgs{
+		params = arguments.UserList{
 			ID:       1,
 			Username: "mockString",
 			Password: "mockString",
@@ -472,7 +472,7 @@ func (s *UserRepositoryTestSuite) TestList_Fail() {
 func (s *UserRepositoryTestSuite) TestList_Fail1() {
 	var (
 		ctx    = context.Background()
-		params = arguments.UserListArgs{
+		params = arguments.UserList{
 			ID:       1,
 			Username: "mockString",
 			Password: "mockString",
@@ -552,7 +552,7 @@ func (s *UserRepositoryTestSuite) TestList_Fail1() {
 func (s *UserRepositoryTestSuite) TestList_Fail2() {
 	var (
 		ctx    = context.Background()
-		params = arguments.UserListArgs{
+		params = arguments.UserList{
 			ID:       1,
 			Username: "mockString",
 			Password: "mockString",
@@ -632,7 +632,7 @@ func (s *UserRepositoryTestSuite) TestList_Fail2() {
 func (s *UserRepositoryTestSuite) TestSetArgsToCountSelectBuilder_Success() {
 	var (
 		ctx    = context.Background()
-		params = arguments.UserCountArgs{
+		params = arguments.UserCount{
 			ID:       1,
 			Username: "mockString",
 			Password: "mockString",
@@ -671,7 +671,7 @@ func (s *UserRepositoryTestSuite) TestSetArgsToCountSelectBuilder_Success() {
 func (s *UserRepositoryTestSuite) TestCount_Success() {
 	var (
 		ctx    = context.Background()
-		params = arguments.UserCountArgs{
+		params = arguments.UserCount{
 			ID:       1,
 			Username: "mockString",
 			Password: "mockString",
@@ -726,7 +726,7 @@ func (s *UserRepositoryTestSuite) TestCount_Success() {
 func (s *UserRepositoryTestSuite) TestCount_Fail() {
 	var (
 		ctx    = context.Background()
-		params = arguments.UserCountArgs{
+		params = arguments.UserCount{
 			ID:       1,
 			Username: "mockString",
 			Password: "mockString",
@@ -781,7 +781,7 @@ func (s *UserRepositoryTestSuite) TestCount_Fail() {
 func (s *UserRepositoryTestSuite) TestCount_Fail1() {
 	var (
 		ctx    = context.Background()
-		params = arguments.UserCountArgs{
+		params = arguments.UserCount{
 			ID:       1,
 			Username: "mockString",
 			Password: "mockString",
@@ -836,7 +836,7 @@ func (s *UserRepositoryTestSuite) TestCount_Fail1() {
 func (s *UserRepositoryTestSuite) TestCount_Fail2() {
 	var (
 		ctx    = context.Background()
-		params = arguments.UserCountArgs{
+		params = arguments.UserCount{
 			ID:       1,
 			Username: "mockString",
 			Password: "mockString",
@@ -892,7 +892,7 @@ func (s *UserRepositoryTestSuite) TestInsert_Success() {
 	var (
 		ctx            = context.Background()
 		sampleID int64 = 1
-		params         = arguments.UserInsertArgs{
+		params         = arguments.UserInsert{
 			Username: "mockString",
 			Password: "mockString",
 			Name:     "mockString",
@@ -971,7 +971,7 @@ func (s *UserRepositoryTestSuite) TestInsert_Fail() {
 	var (
 		ctx            = context.Background()
 		sampleID int64 = 1
-		params         = arguments.UserInsertArgs{
+		params         = arguments.UserInsert{
 			Username: "mockString",
 			Password: "mockString",
 			Name:     "mockString",
@@ -1025,7 +1025,7 @@ func (s *UserRepositoryTestSuite) TestInsert_Fail1() {
 	var (
 		ctx            = context.Background()
 		sampleID int64 = 1
-		params         = arguments.UserInsertArgs{
+		params         = arguments.UserInsert{
 			Username: "mockString",
 			Password: "mockString",
 			Name:     "mockString",
@@ -1079,7 +1079,7 @@ func (s *UserRepositoryTestSuite) TestInsert_Fail2() {
 	var (
 		ctx            = context.Background()
 		sampleID int64 = 1
-		params         = arguments.UserInsertArgs{
+		params         = arguments.UserInsert{
 			Username: "mockString",
 			Password: "mockString",
 			Name:     "mockString",
@@ -1133,7 +1133,7 @@ func (s *UserRepositoryTestSuite) TestInsert_Fail3() {
 	var (
 		ctx            = context.Background()
 		sampleID int64 = 1
-		params         = arguments.UserInsertArgs{
+		params         = arguments.UserInsert{
 			Username: "mockString",
 			Password: "mockString",
 			Name:     "mockString",
@@ -1214,7 +1214,7 @@ func (s *UserRepositoryTestSuite) TestSetArgsToUpdateBuilder_Success() {
 		sampleID   int64 = 1
 		mockString       = "mockString"
 		status           = "active"
-		params           = arguments.UserUpdateArgs{
+		params           = arguments.UserUpdate{
 			ID:       &sampleID,
 			Username: &mockString,
 			Password: &mockString,
@@ -1251,7 +1251,7 @@ func (s *UserRepositoryTestSuite) TestUpdate_Success() {
 		rowEffected int64 = 1
 		mockString        = "mockString"
 		status            = "active"
-		params            = arguments.UserUpdateArgs{
+		params            = arguments.UserUpdate{
 			ID:       &sampleID,
 			Username: &mockString,
 			Password: &mockString,
@@ -1335,7 +1335,7 @@ func (s *UserRepositoryTestSuite) TestUpdate_Fail() {
 		rowEffected int64
 		mockString  = "mockString"
 		status      = "active"
-		params      = arguments.UserUpdateArgs{
+		params      = arguments.UserUpdate{
 			ID:       &sampleID,
 			Username: &mockString,
 			Password: &mockString,
@@ -1394,7 +1394,7 @@ func (s *UserRepositoryTestSuite) TestUpdate_Fail1() {
 		rowEffected int64
 		mockString  = "mockString"
 		status      = "active"
-		params      = arguments.UserUpdateArgs{
+		params      = arguments.UserUpdate{
 			ID:       &sampleID,
 			Username: &mockString,
 			Password: &mockString,
@@ -1453,7 +1453,7 @@ func (s *UserRepositoryTestSuite) TestUpdate_Fail2() {
 		rowEffected int64
 		mockString  = "mockString"
 		status      = "active"
-		params      = arguments.UserUpdateArgs{
+		params      = arguments.UserUpdate{
 			ID:       &sampleID,
 			Username: &mockString,
 			Password: &mockString,
@@ -1512,7 +1512,7 @@ func (s *UserRepositoryTestSuite) TestUpdate_Fail3() {
 		rowEffected int64
 		mockString  = "mockString"
 		status      = "active"
-		params      = arguments.UserUpdateArgs{
+		params      = arguments.UserUpdate{
 			ID:       &sampleID,
 			Username: &mockString,
 			Password: &mockString,
@@ -1570,7 +1570,7 @@ func (s *UserRepositoryTestSuite) TestUpdate_Fail4() {
 		sampleID   int64 = 1
 		mockString       = "mockString"
 		status           = "active"
-		params           = arguments.UserUpdateArgs{
+		params           = arguments.UserUpdate{
 			ID:       &sampleID,
 			Username: &mockString,
 			Password: &mockString,
@@ -1650,7 +1650,7 @@ func (s *UserRepositoryTestSuite) TestUpdate_Fail4() {
 func (s *UserRepositoryTestSuite) TestDelete_Success() {
 	var (
 		ctx   = context.Background()
-		param = arguments.UserDeleteArgs{
+		param = arguments.UserDelete{
 			ID: 1,
 		}
 		rowEffected int64 = 1
@@ -1666,7 +1666,7 @@ func (s *UserRepositoryTestSuite) TestDelete_Success() {
 func (s *UserRepositoryTestSuite) TestDelete_Fail() {
 	var (
 		ctx   = context.Background()
-		param = arguments.UserDeleteArgs{
+		param = arguments.UserDelete{
 			ID: 1,
 		}
 		rowEffected int64
@@ -1682,7 +1682,7 @@ func (s *UserRepositoryTestSuite) TestDelete_Fail() {
 func (s *UserRepositoryTestSuite) TestDelete_Fail1() {
 	var (
 		ctx   = context.Background()
-		param = arguments.UserDeleteArgs{
+		param = arguments.UserDelete{
 			ID: 1,
 		}
 		rowEffected int64
@@ -1698,7 +1698,7 @@ func (s *UserRepositoryTestSuite) TestDelete_Fail1() {
 func (s *UserRepositoryTestSuite) TestDelete_Fail2() {
 	var (
 		ctx   = context.Background()
-		param = arguments.UserDeleteArgs{
+		param = arguments.UserDelete{
 			ID: 1,
 		}
 		rowEffected int64
@@ -1714,7 +1714,7 @@ func (s *UserRepositoryTestSuite) TestDelete_Fail2() {
 func (s *UserRepositoryTestSuite) TestDelete_Fail3() {
 	var (
 		ctx   = context.Background()
-		param = arguments.UserDeleteArgs{
+		param = arguments.UserDelete{
 			ID: 1,
 		}
 		rowEffected int64

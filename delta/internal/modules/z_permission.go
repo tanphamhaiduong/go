@@ -10,12 +10,12 @@ import (
 
 // ICorePermissionHandler ...
 type ICorePermissionHandler interface {
-	GetByID(ctx context.Context, params arguments.PermissionGetByIDArgs) (models.Permission, error)
-	Count(ctx context.Context, params arguments.PermissionCountArgs) (int64, error)
-	List(ctx context.Context, params arguments.PermissionListArgs) ([]models.Permission, error)
-	Insert(ctx context.Context, params arguments.PermissionInsertArgs) (models.Permission, error)
-	Update(ctx context.Context, params arguments.PermissionUpdateArgs) (models.Permission, error)
-	Delete(ctx context.Context, params arguments.PermissionDeleteArgs) (int64, error)
+	GetByID(ctx context.Context, params arguments.PermissionGetByID) (models.Permission, error)
+	Count(ctx context.Context, params arguments.PermissionCount) (int64, error)
+	List(ctx context.Context, params arguments.PermissionList) ([]models.Permission, error)
+	Insert(ctx context.Context, params arguments.PermissionInsert) (models.Permission, error)
+	Update(ctx context.Context, params arguments.PermissionUpdate) (models.Permission, error)
+	Delete(ctx context.Context, params arguments.PermissionDelete) (int64, error)
 }
 
 // ICorePermissionResolver ...

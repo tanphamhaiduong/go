@@ -13,18 +13,18 @@ type IHandler struct {
 }
 
 // Count provides a mock function with given fields: ctx, params
-func (_m *IHandler) Count(ctx context.Context, params arguments.PermissionCountArgs) (int64, error) {
+func (_m *IHandler) Count(ctx context.Context, params arguments.PermissionCount) (int64, error) {
 	ret := _m.Called(ctx, params)
 
 	var r0 int64
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.PermissionCountArgs) int64); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.PermissionCount) int64); ok {
 		r0 = rf(ctx, params)
 	} else {
 		r0 = ret.Get(0).(int64)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.PermissionCountArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.PermissionCount) error); ok {
 		r1 = rf(ctx, params)
 	} else {
 		r1 = ret.Error(1)
@@ -33,20 +33,20 @@ func (_m *IHandler) Count(ctx context.Context, params arguments.PermissionCountA
 	return r0, r1
 }
 
-// Delete provides a mock function with given fields: ctx, params
-func (_m *IHandler) Delete(ctx context.Context, params arguments.PermissionDeleteArgs) (int64, error) {
-	ret := _m.Called(ctx, params)
+// Delete provides a mock function with given fields: ctx, param
+func (_m *IHandler) Delete(ctx context.Context, param arguments.PermissionDelete) (int64, error) {
+	ret := _m.Called(ctx, param)
 
 	var r0 int64
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.PermissionDeleteArgs) int64); ok {
-		r0 = rf(ctx, params)
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.PermissionDelete) int64); ok {
+		r0 = rf(ctx, param)
 	} else {
 		r0 = ret.Get(0).(int64)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.PermissionDeleteArgs) error); ok {
-		r1 = rf(ctx, params)
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.PermissionDelete) error); ok {
+		r1 = rf(ctx, param)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -54,20 +54,20 @@ func (_m *IHandler) Delete(ctx context.Context, params arguments.PermissionDelet
 	return r0, r1
 }
 
-// GetByID provides a mock function with given fields: ctx, params
-func (_m *IHandler) GetByID(ctx context.Context, params arguments.PermissionGetByIDArgs) (models.Permission, error) {
-	ret := _m.Called(ctx, params)
+// GetByID provides a mock function with given fields: ctx, param
+func (_m *IHandler) GetByID(ctx context.Context, param arguments.PermissionGetByID) (models.Permission, error) {
+	ret := _m.Called(ctx, param)
 
 	var r0 models.Permission
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.PermissionGetByIDArgs) models.Permission); ok {
-		r0 = rf(ctx, params)
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.PermissionGetByID) models.Permission); ok {
+		r0 = rf(ctx, param)
 	} else {
 		r0 = ret.Get(0).(models.Permission)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.PermissionGetByIDArgs) error); ok {
-		r1 = rf(ctx, params)
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.PermissionGetByID) error); ok {
+		r1 = rf(ctx, param)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -75,13 +75,13 @@ func (_m *IHandler) GetByID(ctx context.Context, params arguments.PermissionGetB
 	return r0, r1
 }
 
-// GetByIDs provides a mock function with given fields: ctx, params
-func (_m *IHandler) GetByIDs(ctx context.Context, params arguments.PermissionGetByIDsArgs) ([]models.Permission, error) {
-	ret := _m.Called(ctx, params)
+// GetByIDs provides a mock function with given fields: ctx, param
+func (_m *IHandler) GetByIDs(ctx context.Context, param arguments.PermissionGetByIDs) ([]models.Permission, error) {
+	ret := _m.Called(ctx, param)
 
 	var r0 []models.Permission
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.PermissionGetByIDsArgs) []models.Permission); ok {
-		r0 = rf(ctx, params)
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.PermissionGetByIDs) []models.Permission); ok {
+		r0 = rf(ctx, param)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]models.Permission)
@@ -89,8 +89,8 @@ func (_m *IHandler) GetByIDs(ctx context.Context, params arguments.PermissionGet
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.PermissionGetByIDsArgs) error); ok {
-		r1 = rf(ctx, params)
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.PermissionGetByIDs) error); ok {
+		r1 = rf(ctx, param)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -99,18 +99,18 @@ func (_m *IHandler) GetByIDs(ctx context.Context, params arguments.PermissionGet
 }
 
 // Insert provides a mock function with given fields: ctx, params
-func (_m *IHandler) Insert(ctx context.Context, params arguments.PermissionInsertArgs) (models.Permission, error) {
+func (_m *IHandler) Insert(ctx context.Context, params arguments.PermissionInsert) (models.Permission, error) {
 	ret := _m.Called(ctx, params)
 
 	var r0 models.Permission
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.PermissionInsertArgs) models.Permission); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.PermissionInsert) models.Permission); ok {
 		r0 = rf(ctx, params)
 	} else {
 		r0 = ret.Get(0).(models.Permission)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.PermissionInsertArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.PermissionInsert) error); ok {
 		r1 = rf(ctx, params)
 	} else {
 		r1 = ret.Error(1)
@@ -120,11 +120,11 @@ func (_m *IHandler) Insert(ctx context.Context, params arguments.PermissionInser
 }
 
 // List provides a mock function with given fields: ctx, params
-func (_m *IHandler) List(ctx context.Context, params arguments.PermissionListArgs) ([]models.Permission, error) {
+func (_m *IHandler) List(ctx context.Context, params arguments.PermissionList) ([]models.Permission, error) {
 	ret := _m.Called(ctx, params)
 
 	var r0 []models.Permission
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.PermissionListArgs) []models.Permission); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.PermissionList) []models.Permission); ok {
 		r0 = rf(ctx, params)
 	} else {
 		if ret.Get(0) != nil {
@@ -133,7 +133,7 @@ func (_m *IHandler) List(ctx context.Context, params arguments.PermissionListArg
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.PermissionListArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.PermissionList) error); ok {
 		r1 = rf(ctx, params)
 	} else {
 		r1 = ret.Error(1)
@@ -143,18 +143,18 @@ func (_m *IHandler) List(ctx context.Context, params arguments.PermissionListArg
 }
 
 // Update provides a mock function with given fields: ctx, params
-func (_m *IHandler) Update(ctx context.Context, params arguments.PermissionUpdateArgs) (models.Permission, error) {
+func (_m *IHandler) Update(ctx context.Context, params arguments.PermissionUpdate) (models.Permission, error) {
 	ret := _m.Called(ctx, params)
 
 	var r0 models.Permission
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.PermissionUpdateArgs) models.Permission); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.PermissionUpdate) models.Permission); ok {
 		r0 = rf(ctx, params)
 	} else {
 		r0 = ret.Get(0).(models.Permission)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.PermissionUpdateArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.PermissionUpdate) error); ok {
 		r1 = rf(ctx, params)
 	} else {
 		r1 = ret.Error(1)

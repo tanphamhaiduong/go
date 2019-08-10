@@ -12,17 +12,17 @@ import (
 
 // ICoreRepository ...
 type ICoreRepository interface {
-	GetByID(ctx context.Context, param arguments.RoleGetByIDArgs) (models.Role, error)
-	GetByIDs(ctx context.Context, param arguments.RoleGetByIDsArgs) ([]models.Role, error)
-	List(ctx context.Context, params arguments.RoleListArgs) ([]models.Role, error)
-	Count(ctx context.Context, params arguments.RoleCountArgs) (int64, error)
-	Insert(ctx context.Context, params arguments.RoleInsertArgs) (models.Role, error)
-	Update(ctx context.Context, params arguments.RoleUpdateArgs) (models.Role, error)
-	Delete(ctx context.Context, param arguments.RoleDeleteArgs) (int64, error)
+	GetByID(ctx context.Context, param arguments.RoleGetByID) (models.Role, error)
+	GetByIDs(ctx context.Context, param arguments.RoleGetByIDs) ([]models.Role, error)
+	List(ctx context.Context, params arguments.RoleList) ([]models.Role, error)
+	Count(ctx context.Context, params arguments.RoleCount) (int64, error)
+	Insert(ctx context.Context, params arguments.RoleInsert) (models.Role, error)
+	Update(ctx context.Context, params arguments.RoleUpdate) (models.Role, error)
+	Delete(ctx context.Context, param arguments.RoleDelete) (int64, error)
 }
 
 // GetByID ...
-func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.RoleGetByIDArgs) (models.Role, error) {
+func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.RoleGetByID) (models.Role, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -49,7 +49,7 @@ func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.RoleGetByIDA
 }
 
 // GetByIDs ...
-func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.RoleGetByIDsArgs) ([]models.Role, error) {
+func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.RoleGetByIDs) ([]models.Role, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -76,7 +76,7 @@ func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.RoleGetByID
 }
 
 // Count ...
-func (h *HandlerImpl) Count(ctx context.Context, params arguments.RoleCountArgs) (int64, error) {
+func (h *HandlerImpl) Count(ctx context.Context, params arguments.RoleCount) (int64, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -103,7 +103,7 @@ func (h *HandlerImpl) Count(ctx context.Context, params arguments.RoleCountArgs)
 }
 
 // List ...
-func (h *HandlerImpl) List(ctx context.Context, params arguments.RoleListArgs) ([]models.Role, error) {
+func (h *HandlerImpl) List(ctx context.Context, params arguments.RoleList) ([]models.Role, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -130,7 +130,7 @@ func (h *HandlerImpl) List(ctx context.Context, params arguments.RoleListArgs) (
 }
 
 // Insert ...
-func (h *HandlerImpl) Insert(ctx context.Context, params arguments.RoleInsertArgs) (models.Role, error) {
+func (h *HandlerImpl) Insert(ctx context.Context, params arguments.RoleInsert) (models.Role, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -157,7 +157,7 @@ func (h *HandlerImpl) Insert(ctx context.Context, params arguments.RoleInsertArg
 }
 
 // Update ...
-func (h *HandlerImpl) Update(ctx context.Context, params arguments.RoleUpdateArgs) (models.Role, error) {
+func (h *HandlerImpl) Update(ctx context.Context, params arguments.RoleUpdate) (models.Role, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -184,7 +184,7 @@ func (h *HandlerImpl) Update(ctx context.Context, params arguments.RoleUpdateArg
 }
 
 // Delete ...
-func (h *HandlerImpl) Delete(ctx context.Context, param arguments.RoleDeleteArgs) (int64, error) {
+func (h *HandlerImpl) Delete(ctx context.Context, param arguments.RoleDelete) (int64, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"param":   param,

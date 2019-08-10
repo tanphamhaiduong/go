@@ -24,7 +24,7 @@ var (
 // IHandler ...
 type IHandler interface {
 	ICoreHandler
-	Login(ctx context.Context, param arguments.UserLoginArgs) (string, error)
+	Login(ctx context.Context, param arguments.UserLogin) (string, error)
 }
 
 // ResolverImpl ...
@@ -46,7 +46,7 @@ func (r *ResolverImpl) Login(param graphql.ResolveParams) (interface{}, error) {
 		"param":   param,
 	}).Infof("Resolver Login of user")
 	// parse param
-	args := arguments.UserLoginArgs{}
+	args := arguments.UserLogin{}
 	if err := utils.Parse(param.Args, &args); err != nil {
 		logger.WithFields(logger.Fields{
 			"TraceID": param.Context.Value("TraceID"),

@@ -28,7 +28,7 @@ func (s *CompanyResolverTestSuite) TestGetByID_Success() {
 		sampleID int64 = 1
 		params         = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
 		company  models.Company
-		args     = arguments.CompanyGetByIDArgs{
+		args     = arguments.CompanyGetByID{
 			ID: 1,
 		}
 	)
@@ -44,7 +44,7 @@ func (s *CompanyResolverTestSuite) TestGetByID_Fail() {
 		sampleID int64 = 1
 		params         = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
 		company  models.Company
-		args     = arguments.CompanyGetByIDArgs{
+		args     = arguments.CompanyGetByID{
 			ID: 1,
 		}
 	)
@@ -59,7 +59,7 @@ func (s *CompanyResolverTestSuite) TestList_Success() {
 		ctx       = context.Background()
 		params    = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
 		companies []models.Company
-		args      = arguments.CompanyListArgs{
+		args      = arguments.CompanyList{
 			Page:     1,
 			PageSize: 10,
 		}
@@ -75,7 +75,7 @@ func (s *CompanyResolverTestSuite) TestList_Fail() {
 		ctx       = context.Background()
 		params    = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
 		companies []models.Company
-		args      = arguments.CompanyListArgs{
+		args      = arguments.CompanyList{
 			Page:     1,
 			PageSize: 10,
 		}
@@ -90,7 +90,7 @@ func (s *CompanyResolverTestSuite) TestCount_Success() {
 	var (
 		ctx    = context.Background()
 		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
-		args   = arguments.CompanyCountArgs{}
+		args   = arguments.CompanyCount{}
 		count  int64
 	)
 	s.MockICompany.On("Count", ctx, args).Return(count, nil)
@@ -103,7 +103,7 @@ func (s *CompanyResolverTestSuite) TestCount_Fail() {
 	var (
 		ctx    = context.Background()
 		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
-		args   = arguments.CompanyCountArgs{}
+		args   = arguments.CompanyCount{}
 		count  int64
 	)
 	s.MockICompany.On("Count", ctx, args).Return(count, errors.New("some errors"))
@@ -116,7 +116,7 @@ func (s *CompanyResolverTestSuite) TestInsert_Success() {
 	var (
 		ctx     = context.Background()
 		params  = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
-		args    = arguments.CompanyInsertArgs{}
+		args    = arguments.CompanyInsert{}
 		company models.Company
 	)
 	// Mock Insert
@@ -133,7 +133,7 @@ func (s *CompanyResolverTestSuite) TestInsert_Fail() {
 	var (
 		ctx     = context.Background()
 		params  = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
-		args    = arguments.CompanyInsertArgs{}
+		args    = arguments.CompanyInsert{}
 		company models.Company
 	)
 	s.MockICompany.On("Insert", ctx, args).Return(company, errors.New("some errors"))
@@ -151,7 +151,7 @@ func (s *CompanyResolverTestSuite) TestUpdate_Success() {
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
-		args = arguments.CompanyUpdateArgs{
+		args = arguments.CompanyUpdate{
 			ID: &sampleID,
 		}
 		company = models.Company{}
@@ -174,7 +174,7 @@ func (s *CompanyResolverTestSuite) TestUpdate_Fail() {
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
-		args = arguments.CompanyUpdateArgs{
+		args = arguments.CompanyUpdate{
 			ID: &sampleID,
 		}
 		company models.Company
@@ -193,7 +193,7 @@ func (s *CompanyResolverTestSuite) TestDelete_Success() {
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
-		args = arguments.CompanyDeleteArgs{
+		args = arguments.CompanyDelete{
 			ID: 1,
 		}
 		sampleID int64 = 1
@@ -212,7 +212,7 @@ func (s *CompanyResolverTestSuite) TestDelete_Fail() {
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
-		args = arguments.CompanyDeleteArgs{
+		args = arguments.CompanyDelete{
 			ID: 1,
 		}
 		sampleID int64

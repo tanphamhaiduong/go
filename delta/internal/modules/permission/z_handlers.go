@@ -12,17 +12,17 @@ import (
 
 // ICoreRepository ...
 type ICoreRepository interface {
-	GetByID(ctx context.Context, param arguments.PermissionGetByIDArgs) (models.Permission, error)
-	GetByIDs(ctx context.Context, param arguments.PermissionGetByIDsArgs) ([]models.Permission, error)
-	List(ctx context.Context, params arguments.PermissionListArgs) ([]models.Permission, error)
-	Count(ctx context.Context, params arguments.PermissionCountArgs) (int64, error)
-	Insert(ctx context.Context, params arguments.PermissionInsertArgs) (models.Permission, error)
-	Update(ctx context.Context, params arguments.PermissionUpdateArgs) (models.Permission, error)
-	Delete(ctx context.Context, param arguments.PermissionDeleteArgs) (int64, error)
+	GetByID(ctx context.Context, param arguments.PermissionGetByID) (models.Permission, error)
+	GetByIDs(ctx context.Context, param arguments.PermissionGetByIDs) ([]models.Permission, error)
+	List(ctx context.Context, params arguments.PermissionList) ([]models.Permission, error)
+	Count(ctx context.Context, params arguments.PermissionCount) (int64, error)
+	Insert(ctx context.Context, params arguments.PermissionInsert) (models.Permission, error)
+	Update(ctx context.Context, params arguments.PermissionUpdate) (models.Permission, error)
+	Delete(ctx context.Context, param arguments.PermissionDelete) (int64, error)
 }
 
 // GetByID ...
-func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.PermissionGetByIDArgs) (models.Permission, error) {
+func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.PermissionGetByID) (models.Permission, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -49,7 +49,7 @@ func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.PermissionGe
 }
 
 // GetByIDs ...
-func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.PermissionGetByIDsArgs) ([]models.Permission, error) {
+func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.PermissionGetByIDs) ([]models.Permission, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -76,7 +76,7 @@ func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.PermissionG
 }
 
 // Count ...
-func (h *HandlerImpl) Count(ctx context.Context, params arguments.PermissionCountArgs) (int64, error) {
+func (h *HandlerImpl) Count(ctx context.Context, params arguments.PermissionCount) (int64, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -103,7 +103,7 @@ func (h *HandlerImpl) Count(ctx context.Context, params arguments.PermissionCoun
 }
 
 // List ...
-func (h *HandlerImpl) List(ctx context.Context, params arguments.PermissionListArgs) ([]models.Permission, error) {
+func (h *HandlerImpl) List(ctx context.Context, params arguments.PermissionList) ([]models.Permission, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -130,7 +130,7 @@ func (h *HandlerImpl) List(ctx context.Context, params arguments.PermissionListA
 }
 
 // Insert ...
-func (h *HandlerImpl) Insert(ctx context.Context, params arguments.PermissionInsertArgs) (models.Permission, error) {
+func (h *HandlerImpl) Insert(ctx context.Context, params arguments.PermissionInsert) (models.Permission, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -157,7 +157,7 @@ func (h *HandlerImpl) Insert(ctx context.Context, params arguments.PermissionIns
 }
 
 // Update ...
-func (h *HandlerImpl) Update(ctx context.Context, params arguments.PermissionUpdateArgs) (models.Permission, error) {
+func (h *HandlerImpl) Update(ctx context.Context, params arguments.PermissionUpdate) (models.Permission, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -184,7 +184,7 @@ func (h *HandlerImpl) Update(ctx context.Context, params arguments.PermissionUpd
 }
 
 // Delete ...
-func (h *HandlerImpl) Delete(ctx context.Context, param arguments.PermissionDeleteArgs) (int64, error) {
+func (h *HandlerImpl) Delete(ctx context.Context, param arguments.PermissionDelete) (int64, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"param":   param,

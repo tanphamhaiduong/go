@@ -28,7 +28,7 @@ func (r *RepositoryImpl) scan{{ $Name }}(row database.IRow, {{ $name }} *models.
 }
 
 // GetByID ...
-func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.{{ $Name }}GetByIDArgs) (models.{{ $Name }}, error) {
+func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.{{ $Name }}GetByID) (models.{{ $Name }}, error) {
   logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params": params,
@@ -75,7 +75,7 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.{{ $Name 
 }
 
 // GetByIDs ...
-func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.{{ $Name }}GetByIDsArgs) ([]models.{{- $Name -}}, error) {
+func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.{{ $Name }}GetByIDs) ([]models.{{- $Name -}}, error) {
   logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params": params,
@@ -134,7 +134,7 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.{{ $Name
 }
 
 // setArgsToListSelectBuilder ...
-func (r *RepositoryImpl) setArgsToListSelectBuilder(ctx context.Context,selectBuilder sq.SelectBuilder, params arguments.{{ $Name }}ListArgs) sq.SelectBuilder {
+func (r *RepositoryImpl) setArgsToListSelectBuilder(ctx context.Context,selectBuilder sq.SelectBuilder, params arguments.{{ $Name }}List) sq.SelectBuilder {
   logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params": params,
@@ -163,7 +163,7 @@ func (r *RepositoryImpl) setArgsToListSelectBuilder(ctx context.Context,selectBu
 }
 
 // List ...
-func (r *RepositoryImpl) List(ctx context.Context, params arguments.{{- $Name }}ListArgs) ([]models.{{ $Name }}, error) {
+func (r *RepositoryImpl) List(ctx context.Context, params arguments.{{- $Name }}List) ([]models.{{ $Name }}, error) {
   logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params": params,
@@ -223,7 +223,7 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.{{- $Name }}
 }
 
 // setArgsToCountSelectBuilder ...
-func (r *RepositoryImpl) setArgsToCountSelectBuilder(ctx context.Context,selectBuilder sq.SelectBuilder, params arguments.{{ $Name }}CountArgs) sq.SelectBuilder {
+func (r *RepositoryImpl) setArgsToCountSelectBuilder(ctx context.Context,selectBuilder sq.SelectBuilder, params arguments.{{ $Name }}Count) sq.SelectBuilder {
   logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params": params,
@@ -245,7 +245,7 @@ func (r *RepositoryImpl) setArgsToCountSelectBuilder(ctx context.Context,selectB
 }
 
 // Count ...
-func (r *RepositoryImpl) Count(ctx context.Context, params arguments.{{- $Name }}CountArgs) (int64, error) {
+func (r *RepositoryImpl) Count(ctx context.Context, params arguments.{{- $Name }}Count) (int64, error) {
   logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params": params,
@@ -289,7 +289,7 @@ func (r *RepositoryImpl) Count(ctx context.Context, params arguments.{{- $Name }
 }
 
 // Insert ...
-func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.{{ $Name }}InsertArgs) (models.{{ $Name }}, error) {
+func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.{{ $Name }}Insert) (models.{{ $Name }}, error) {
   logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params": params,
@@ -347,7 +347,7 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.{{ $Name }
 		}).Errorf("Repository Insert LastInsertId error of {{ $name }}")
 		return {{ $name }}, err
 	}
-	new{{ $Name }}, err := r.GetByID(ctx, arguments.{{ $Name }}GetByIDArgs{ID: id})
+	new{{ $Name }}, err := r.GetByID(ctx, arguments.{{ $Name }}GetByID{ID: id})
 	if err != nil {
     logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
@@ -359,7 +359,7 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.{{ $Name }
 }
 
 // setArgsToUpdateBuilder ...
-func (r *RepositoryImpl) setArgsToUpdateBuilder(ctx context.Context, updateBuilder sq.UpdateBuilder, params arguments.{{ $Name }}UpdateArgs) sq.UpdateBuilder {
+func (r *RepositoryImpl) setArgsToUpdateBuilder(ctx context.Context, updateBuilder sq.UpdateBuilder, params arguments.{{ $Name }}Update) sq.UpdateBuilder {
   logger.WithFields(logger.Fields{
 		"params": params,
 	}).Infof("Repository setArgsToUpdateBuilder of {{ $name }}")
@@ -379,7 +379,7 @@ func (r *RepositoryImpl) setArgsToUpdateBuilder(ctx context.Context, updateBuild
 }
 
 // Update ...
-func (r *RepositoryImpl) Update(ctx context.Context, params arguments.{{ $Name }}UpdateArgs) (models.{{ $Name }}, error) {
+func (r *RepositoryImpl) Update(ctx context.Context, params arguments.{{ $Name }}Update) (models.{{ $Name }}, error) {
   logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params": params,
@@ -434,7 +434,7 @@ func (r *RepositoryImpl) Update(ctx context.Context, params arguments.{{ $Name }
 		}).Errorf("Repository Update rowAffected <= 0 of {{ $name }}")
 		return {{ $name }}, fmt.Errorf("error when update record id %d", *params.ID)
 	}
-	new{{ $Name }}, err := r.GetByID(ctx, arguments.{{ $Name }}GetByIDArgs{ID: *params.ID})
+	new{{ $Name }}, err := r.GetByID(ctx, arguments.{{ $Name }}GetByID{ID: *params.ID})
 	if err != nil {
     logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
@@ -446,7 +446,7 @@ func (r *RepositoryImpl) Update(ctx context.Context, params arguments.{{ $Name }
 }
 
 // Delete ...
-func (r *RepositoryImpl) Delete(ctx context.Context, params arguments.{{ $Name }}DeleteArgs) (int64, error) {
+func (r *RepositoryImpl) Delete(ctx context.Context, params arguments.{{ $Name }}Delete) (int64, error) {
   logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params": params,

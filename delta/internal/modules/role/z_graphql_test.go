@@ -28,7 +28,7 @@ func (s *RoleResolverTestSuite) TestGetByID_Success() {
 		sampleID int64 = 1
 		params         = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
 		role     models.Role
-		args     = arguments.RoleGetByIDArgs{
+		args     = arguments.RoleGetByID{
 			ID: 1,
 		}
 	)
@@ -44,7 +44,7 @@ func (s *RoleResolverTestSuite) TestGetByID_Fail() {
 		sampleID int64 = 1
 		params         = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
 		role     models.Role
-		args     = arguments.RoleGetByIDArgs{
+		args     = arguments.RoleGetByID{
 			ID: 1,
 		}
 	)
@@ -59,7 +59,7 @@ func (s *RoleResolverTestSuite) TestList_Success() {
 		ctx    = context.Background()
 		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
 		roles  []models.Role
-		args   = arguments.RoleListArgs{
+		args   = arguments.RoleList{
 			Page:     1,
 			PageSize: 10,
 		}
@@ -75,7 +75,7 @@ func (s *RoleResolverTestSuite) TestList_Fail() {
 		ctx    = context.Background()
 		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
 		roles  []models.Role
-		args   = arguments.RoleListArgs{
+		args   = arguments.RoleList{
 			Page:     1,
 			PageSize: 10,
 		}
@@ -90,7 +90,7 @@ func (s *RoleResolverTestSuite) TestCount_Success() {
 	var (
 		ctx    = context.Background()
 		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
-		args   = arguments.RoleCountArgs{}
+		args   = arguments.RoleCount{}
 		count  int64
 	)
 	s.MockIRole.On("Count", ctx, args).Return(count, nil)
@@ -103,7 +103,7 @@ func (s *RoleResolverTestSuite) TestCount_Fail() {
 	var (
 		ctx    = context.Background()
 		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
-		args   = arguments.RoleCountArgs{}
+		args   = arguments.RoleCount{}
 		count  int64
 	)
 	s.MockIRole.On("Count", ctx, args).Return(count, errors.New("some errors"))
@@ -116,7 +116,7 @@ func (s *RoleResolverTestSuite) TestInsert_Success() {
 	var (
 		ctx    = context.Background()
 		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
-		args   = arguments.RoleInsertArgs{}
+		args   = arguments.RoleInsert{}
 		role   models.Role
 	)
 	// Mock Insert
@@ -133,7 +133,7 @@ func (s *RoleResolverTestSuite) TestInsert_Fail() {
 	var (
 		ctx    = context.Background()
 		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
-		args   = arguments.RoleInsertArgs{}
+		args   = arguments.RoleInsert{}
 		role   models.Role
 	)
 	s.MockIRole.On("Insert", ctx, args).Return(role, errors.New("some errors"))
@@ -151,7 +151,7 @@ func (s *RoleResolverTestSuite) TestUpdate_Success() {
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
-		args = arguments.RoleUpdateArgs{
+		args = arguments.RoleUpdate{
 			ID: &sampleID,
 		}
 		role = models.Role{}
@@ -174,7 +174,7 @@ func (s *RoleResolverTestSuite) TestUpdate_Fail() {
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
-		args = arguments.RoleUpdateArgs{
+		args = arguments.RoleUpdate{
 			ID: &sampleID,
 		}
 		role models.Role
@@ -193,7 +193,7 @@ func (s *RoleResolverTestSuite) TestDelete_Success() {
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
-		args = arguments.RoleDeleteArgs{
+		args = arguments.RoleDelete{
 			ID: 1,
 		}
 		sampleID int64 = 1
@@ -212,7 +212,7 @@ func (s *RoleResolverTestSuite) TestDelete_Fail() {
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
-		args = arguments.RoleDeleteArgs{
+		args = arguments.RoleDelete{
 			ID: 1,
 		}
 		sampleID int64

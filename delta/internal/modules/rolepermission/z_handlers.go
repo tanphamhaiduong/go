@@ -12,17 +12,17 @@ import (
 
 // ICoreRepository ...
 type ICoreRepository interface {
-	GetByID(ctx context.Context, param arguments.RolePermissionGetByIDArgs) (models.RolePermission, error)
-	GetByIDs(ctx context.Context, param arguments.RolePermissionGetByIDsArgs) ([]models.RolePermission, error)
-	List(ctx context.Context, params arguments.RolePermissionListArgs) ([]models.RolePermission, error)
-	Count(ctx context.Context, params arguments.RolePermissionCountArgs) (int64, error)
-	Insert(ctx context.Context, params arguments.RolePermissionInsertArgs) (models.RolePermission, error)
-	Update(ctx context.Context, params arguments.RolePermissionUpdateArgs) (models.RolePermission, error)
-	Delete(ctx context.Context, param arguments.RolePermissionDeleteArgs) (int64, error)
+	GetByID(ctx context.Context, param arguments.RolePermissionGetByID) (models.RolePermission, error)
+	GetByIDs(ctx context.Context, param arguments.RolePermissionGetByIDs) ([]models.RolePermission, error)
+	List(ctx context.Context, params arguments.RolePermissionList) ([]models.RolePermission, error)
+	Count(ctx context.Context, params arguments.RolePermissionCount) (int64, error)
+	Insert(ctx context.Context, params arguments.RolePermissionInsert) (models.RolePermission, error)
+	Update(ctx context.Context, params arguments.RolePermissionUpdate) (models.RolePermission, error)
+	Delete(ctx context.Context, param arguments.RolePermissionDelete) (int64, error)
 }
 
 // GetByID ...
-func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.RolePermissionGetByIDArgs) (models.RolePermission, error) {
+func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.RolePermissionGetByID) (models.RolePermission, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -49,7 +49,7 @@ func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.RolePermissi
 }
 
 // GetByIDs ...
-func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.RolePermissionGetByIDsArgs) ([]models.RolePermission, error) {
+func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.RolePermissionGetByIDs) ([]models.RolePermission, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -76,7 +76,7 @@ func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.RolePermiss
 }
 
 // Count ...
-func (h *HandlerImpl) Count(ctx context.Context, params arguments.RolePermissionCountArgs) (int64, error) {
+func (h *HandlerImpl) Count(ctx context.Context, params arguments.RolePermissionCount) (int64, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -103,7 +103,7 @@ func (h *HandlerImpl) Count(ctx context.Context, params arguments.RolePermission
 }
 
 // List ...
-func (h *HandlerImpl) List(ctx context.Context, params arguments.RolePermissionListArgs) ([]models.RolePermission, error) {
+func (h *HandlerImpl) List(ctx context.Context, params arguments.RolePermissionList) ([]models.RolePermission, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -130,7 +130,7 @@ func (h *HandlerImpl) List(ctx context.Context, params arguments.RolePermissionL
 }
 
 // Insert ...
-func (h *HandlerImpl) Insert(ctx context.Context, params arguments.RolePermissionInsertArgs) (models.RolePermission, error) {
+func (h *HandlerImpl) Insert(ctx context.Context, params arguments.RolePermissionInsert) (models.RolePermission, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -157,7 +157,7 @@ func (h *HandlerImpl) Insert(ctx context.Context, params arguments.RolePermissio
 }
 
 // Update ...
-func (h *HandlerImpl) Update(ctx context.Context, params arguments.RolePermissionUpdateArgs) (models.RolePermission, error) {
+func (h *HandlerImpl) Update(ctx context.Context, params arguments.RolePermissionUpdate) (models.RolePermission, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -184,7 +184,7 @@ func (h *HandlerImpl) Update(ctx context.Context, params arguments.RolePermissio
 }
 
 // Delete ...
-func (h *HandlerImpl) Delete(ctx context.Context, param arguments.RolePermissionDeleteArgs) (int64, error) {
+func (h *HandlerImpl) Delete(ctx context.Context, param arguments.RolePermissionDelete) (int64, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"param":   param,

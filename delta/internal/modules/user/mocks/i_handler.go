@@ -13,18 +13,18 @@ type IHandler struct {
 }
 
 // Count provides a mock function with given fields: ctx, params
-func (_m *IHandler) Count(ctx context.Context, params arguments.UserCountArgs) (int64, error) {
+func (_m *IHandler) Count(ctx context.Context, params arguments.UserCount) (int64, error) {
 	ret := _m.Called(ctx, params)
 
 	var r0 int64
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserCountArgs) int64); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserCount) int64); ok {
 		r0 = rf(ctx, params)
 	} else {
 		r0 = ret.Get(0).(int64)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserCountArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserCount) error); ok {
 		r1 = rf(ctx, params)
 	} else {
 		r1 = ret.Error(1)
@@ -34,18 +34,18 @@ func (_m *IHandler) Count(ctx context.Context, params arguments.UserCountArgs) (
 }
 
 // Delete provides a mock function with given fields: ctx, param
-func (_m *IHandler) Delete(ctx context.Context, param arguments.UserDeleteArgs) (int64, error) {
+func (_m *IHandler) Delete(ctx context.Context, param arguments.UserDelete) (int64, error) {
 	ret := _m.Called(ctx, param)
 
 	var r0 int64
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserDeleteArgs) int64); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserDelete) int64); ok {
 		r0 = rf(ctx, param)
 	} else {
 		r0 = ret.Get(0).(int64)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserDeleteArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserDelete) error); ok {
 		r1 = rf(ctx, param)
 	} else {
 		r1 = ret.Error(1)
@@ -55,18 +55,18 @@ func (_m *IHandler) Delete(ctx context.Context, param arguments.UserDeleteArgs) 
 }
 
 // GetByID provides a mock function with given fields: ctx, param
-func (_m *IHandler) GetByID(ctx context.Context, param arguments.UserGetByIDArgs) (models.User, error) {
+func (_m *IHandler) GetByID(ctx context.Context, param arguments.UserGetByID) (models.User, error) {
 	ret := _m.Called(ctx, param)
 
 	var r0 models.User
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserGetByIDArgs) models.User); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserGetByID) models.User); ok {
 		r0 = rf(ctx, param)
 	} else {
 		r0 = ret.Get(0).(models.User)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserGetByIDArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserGetByID) error); ok {
 		r1 = rf(ctx, param)
 	} else {
 		r1 = ret.Error(1)
@@ -76,11 +76,11 @@ func (_m *IHandler) GetByID(ctx context.Context, param arguments.UserGetByIDArgs
 }
 
 // GetByIDs provides a mock function with given fields: ctx, param
-func (_m *IHandler) GetByIDs(ctx context.Context, param arguments.UserGetByIDsArgs) ([]models.User, error) {
+func (_m *IHandler) GetByIDs(ctx context.Context, param arguments.UserGetByIDs) ([]models.User, error) {
 	ret := _m.Called(ctx, param)
 
 	var r0 []models.User
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserGetByIDsArgs) []models.User); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserGetByIDs) []models.User); ok {
 		r0 = rf(ctx, param)
 	} else {
 		if ret.Get(0) != nil {
@@ -89,7 +89,7 @@ func (_m *IHandler) GetByIDs(ctx context.Context, param arguments.UserGetByIDsAr
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserGetByIDsArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserGetByIDs) error); ok {
 		r1 = rf(ctx, param)
 	} else {
 		r1 = ret.Error(1)
@@ -99,18 +99,18 @@ func (_m *IHandler) GetByIDs(ctx context.Context, param arguments.UserGetByIDsAr
 }
 
 // Insert provides a mock function with given fields: ctx, params
-func (_m *IHandler) Insert(ctx context.Context, params arguments.UserInsertArgs) (models.User, error) {
+func (_m *IHandler) Insert(ctx context.Context, params arguments.UserInsert) (models.User, error) {
 	ret := _m.Called(ctx, params)
 
 	var r0 models.User
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserInsertArgs) models.User); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserInsert) models.User); ok {
 		r0 = rf(ctx, params)
 	} else {
 		r0 = ret.Get(0).(models.User)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserInsertArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserInsert) error); ok {
 		r1 = rf(ctx, params)
 	} else {
 		r1 = ret.Error(1)
@@ -120,11 +120,11 @@ func (_m *IHandler) Insert(ctx context.Context, params arguments.UserInsertArgs)
 }
 
 // List provides a mock function with given fields: ctx, params
-func (_m *IHandler) List(ctx context.Context, params arguments.UserListArgs) ([]models.User, error) {
+func (_m *IHandler) List(ctx context.Context, params arguments.UserList) ([]models.User, error) {
 	ret := _m.Called(ctx, params)
 
 	var r0 []models.User
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserListArgs) []models.User); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserList) []models.User); ok {
 		r0 = rf(ctx, params)
 	} else {
 		if ret.Get(0) != nil {
@@ -133,7 +133,7 @@ func (_m *IHandler) List(ctx context.Context, params arguments.UserListArgs) ([]
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserListArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserList) error); ok {
 		r1 = rf(ctx, params)
 	} else {
 		r1 = ret.Error(1)
@@ -143,18 +143,18 @@ func (_m *IHandler) List(ctx context.Context, params arguments.UserListArgs) ([]
 }
 
 // Login provides a mock function with given fields: ctx, param
-func (_m *IHandler) Login(ctx context.Context, param arguments.UserLoginArgs) (string, error) {
+func (_m *IHandler) Login(ctx context.Context, param arguments.UserLogin) (string, error) {
 	ret := _m.Called(ctx, param)
 
 	var r0 string
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserLoginArgs) string); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserLogin) string); ok {
 		r0 = rf(ctx, param)
 	} else {
 		r0 = ret.Get(0).(string)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserLoginArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserLogin) error); ok {
 		r1 = rf(ctx, param)
 	} else {
 		r1 = ret.Error(1)
@@ -164,18 +164,18 @@ func (_m *IHandler) Login(ctx context.Context, param arguments.UserLoginArgs) (s
 }
 
 // Update provides a mock function with given fields: ctx, params
-func (_m *IHandler) Update(ctx context.Context, params arguments.UserUpdateArgs) (models.User, error) {
+func (_m *IHandler) Update(ctx context.Context, params arguments.UserUpdate) (models.User, error) {
 	ret := _m.Called(ctx, params)
 
 	var r0 models.User
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserUpdateArgs) models.User); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserUpdate) models.User); ok {
 		r0 = rf(ctx, params)
 	} else {
 		r0 = ret.Get(0).(models.User)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserUpdateArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserUpdate) error); ok {
 		r1 = rf(ctx, params)
 	} else {
 		r1 = ret.Error(1)

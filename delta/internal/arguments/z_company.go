@@ -1,18 +1,18 @@
 // @generated
 package arguments
 
-// CompanyGetByIDArgs ...
-type CompanyGetByIDArgs struct {
+// CompanyGetByID ...
+type CompanyGetByID struct {
 	ID int64 `graphql:"id" validate:"required,min=1"`
 }
 
-// CompanyGetByIDsArgs ...
-type CompanyGetByIDsArgs struct {
+// CompanyGetByIDs ...
+type CompanyGetByIDs struct {
 	IDs []int64 `graphql:"ids" validate:"required"`
 }
 
-// CompanyCountArgs ...
-type CompanyCountArgs struct {
+// CompanyCount ...
+type CompanyCount struct {
 	ID           int64  `graphql:"id" validate:"omitempty,min=1"`
 	Name         string `graphql:"name" validate:"omitempty"`
 	CompanyCode  string `graphql:"companyCode" validate:"omitempty"`
@@ -22,8 +22,8 @@ type CompanyCountArgs struct {
 	ApiSecretKey string `graphql:"apiSecretKey" validate:"omitempty"`
 }
 
-// CompanyListArgs ...
-type CompanyListArgs struct {
+// CompanyList ...
+type CompanyList struct {
 	ID           int64  `graphql:"id" validate:"omitempty,min=1"`
 	Name         string `graphql:"name" validate:"omitempty"`
 	CompanyCode  string `graphql:"companyCode" validate:"omitempty"`
@@ -35,8 +35,8 @@ type CompanyListArgs struct {
 	PageSize     int64  `graphql:"pageSize" validate:"required,min=1,max=40"`
 }
 
-// CompanyInsertArgs ...
-type CompanyInsertArgs struct {
+// CompanyInsert ...
+type CompanyInsert struct {
 	Name         string `graphql:"name" validate:"omitempty"`
 	CompanyCode  string `graphql:"companyCode" validate:"omitempty"`
 	Status       string `graphql:"status" validate:"omitempty,oneof=active inactive"`
@@ -45,8 +45,8 @@ type CompanyInsertArgs struct {
 	ApiSecretKey string `graphql:"apiSecretKey" validate:"omitempty"`
 }
 
-// CompanyUpdateArgs ...
-type CompanyUpdateArgs struct {
+// CompanyUpdate ...
+type CompanyUpdate struct {
 	ID           *int64  `graphql:"id" validate:"required,min=1"`
 	Name         *string `graphql:"name" validate:"omitempty"`
 	CompanyCode  *string `graphql:"companyCode" validate:"omitempty"`
@@ -56,7 +56,7 @@ type CompanyUpdateArgs struct {
 	ApiSecretKey *string `graphql:"apiSecretKey" validate:"omitempty"`
 }
 
-// CompanyDeleteArgs ...
-type CompanyDeleteArgs struct {
+// CompanyDelete ...
+type CompanyDelete struct {
 	ID int64 `graphql:"id" validate:"required,min=1"`
 }

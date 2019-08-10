@@ -13,18 +13,18 @@ type IHandler struct {
 }
 
 // Count provides a mock function with given fields: ctx, params
-func (_m *IHandler) Count(ctx context.Context, params arguments.RolePermissionCountArgs) (int64, error) {
+func (_m *IHandler) Count(ctx context.Context, params arguments.RolePermissionCount) (int64, error) {
 	ret := _m.Called(ctx, params)
 
 	var r0 int64
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.RolePermissionCountArgs) int64); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.RolePermissionCount) int64); ok {
 		r0 = rf(ctx, params)
 	} else {
 		r0 = ret.Get(0).(int64)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.RolePermissionCountArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.RolePermissionCount) error); ok {
 		r1 = rf(ctx, params)
 	} else {
 		r1 = ret.Error(1)
@@ -33,20 +33,20 @@ func (_m *IHandler) Count(ctx context.Context, params arguments.RolePermissionCo
 	return r0, r1
 }
 
-// Delete provides a mock function with given fields: ctx, params
-func (_m *IHandler) Delete(ctx context.Context, params arguments.RolePermissionDeleteArgs) (int64, error) {
-	ret := _m.Called(ctx, params)
+// Delete provides a mock function with given fields: ctx, param
+func (_m *IHandler) Delete(ctx context.Context, param arguments.RolePermissionDelete) (int64, error) {
+	ret := _m.Called(ctx, param)
 
 	var r0 int64
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.RolePermissionDeleteArgs) int64); ok {
-		r0 = rf(ctx, params)
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.RolePermissionDelete) int64); ok {
+		r0 = rf(ctx, param)
 	} else {
 		r0 = ret.Get(0).(int64)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.RolePermissionDeleteArgs) error); ok {
-		r1 = rf(ctx, params)
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.RolePermissionDelete) error); ok {
+		r1 = rf(ctx, param)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -54,20 +54,20 @@ func (_m *IHandler) Delete(ctx context.Context, params arguments.RolePermissionD
 	return r0, r1
 }
 
-// GetByID provides a mock function with given fields: ctx, params
-func (_m *IHandler) GetByID(ctx context.Context, params arguments.RolePermissionGetByIDArgs) (models.RolePermission, error) {
-	ret := _m.Called(ctx, params)
+// GetByID provides a mock function with given fields: ctx, param
+func (_m *IHandler) GetByID(ctx context.Context, param arguments.RolePermissionGetByID) (models.RolePermission, error) {
+	ret := _m.Called(ctx, param)
 
 	var r0 models.RolePermission
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.RolePermissionGetByIDArgs) models.RolePermission); ok {
-		r0 = rf(ctx, params)
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.RolePermissionGetByID) models.RolePermission); ok {
+		r0 = rf(ctx, param)
 	} else {
 		r0 = ret.Get(0).(models.RolePermission)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.RolePermissionGetByIDArgs) error); ok {
-		r1 = rf(ctx, params)
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.RolePermissionGetByID) error); ok {
+		r1 = rf(ctx, param)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -75,13 +75,13 @@ func (_m *IHandler) GetByID(ctx context.Context, params arguments.RolePermission
 	return r0, r1
 }
 
-// GetByIDs provides a mock function with given fields: ctx, params
-func (_m *IHandler) GetByIDs(ctx context.Context, params arguments.RolePermissionGetByIDsArgs) ([]models.RolePermission, error) {
-	ret := _m.Called(ctx, params)
+// GetByIDs provides a mock function with given fields: ctx, param
+func (_m *IHandler) GetByIDs(ctx context.Context, param arguments.RolePermissionGetByIDs) ([]models.RolePermission, error) {
+	ret := _m.Called(ctx, param)
 
 	var r0 []models.RolePermission
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.RolePermissionGetByIDsArgs) []models.RolePermission); ok {
-		r0 = rf(ctx, params)
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.RolePermissionGetByIDs) []models.RolePermission); ok {
+		r0 = rf(ctx, param)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]models.RolePermission)
@@ -89,8 +89,8 @@ func (_m *IHandler) GetByIDs(ctx context.Context, params arguments.RolePermissio
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.RolePermissionGetByIDsArgs) error); ok {
-		r1 = rf(ctx, params)
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.RolePermissionGetByIDs) error); ok {
+		r1 = rf(ctx, param)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -99,18 +99,18 @@ func (_m *IHandler) GetByIDs(ctx context.Context, params arguments.RolePermissio
 }
 
 // Insert provides a mock function with given fields: ctx, params
-func (_m *IHandler) Insert(ctx context.Context, params arguments.RolePermissionInsertArgs) (models.RolePermission, error) {
+func (_m *IHandler) Insert(ctx context.Context, params arguments.RolePermissionInsert) (models.RolePermission, error) {
 	ret := _m.Called(ctx, params)
 
 	var r0 models.RolePermission
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.RolePermissionInsertArgs) models.RolePermission); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.RolePermissionInsert) models.RolePermission); ok {
 		r0 = rf(ctx, params)
 	} else {
 		r0 = ret.Get(0).(models.RolePermission)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.RolePermissionInsertArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.RolePermissionInsert) error); ok {
 		r1 = rf(ctx, params)
 	} else {
 		r1 = ret.Error(1)
@@ -120,11 +120,11 @@ func (_m *IHandler) Insert(ctx context.Context, params arguments.RolePermissionI
 }
 
 // List provides a mock function with given fields: ctx, params
-func (_m *IHandler) List(ctx context.Context, params arguments.RolePermissionListArgs) ([]models.RolePermission, error) {
+func (_m *IHandler) List(ctx context.Context, params arguments.RolePermissionList) ([]models.RolePermission, error) {
 	ret := _m.Called(ctx, params)
 
 	var r0 []models.RolePermission
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.RolePermissionListArgs) []models.RolePermission); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.RolePermissionList) []models.RolePermission); ok {
 		r0 = rf(ctx, params)
 	} else {
 		if ret.Get(0) != nil {
@@ -133,7 +133,7 @@ func (_m *IHandler) List(ctx context.Context, params arguments.RolePermissionLis
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.RolePermissionListArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.RolePermissionList) error); ok {
 		r1 = rf(ctx, params)
 	} else {
 		r1 = ret.Error(1)
@@ -143,18 +143,18 @@ func (_m *IHandler) List(ctx context.Context, params arguments.RolePermissionLis
 }
 
 // Update provides a mock function with given fields: ctx, params
-func (_m *IHandler) Update(ctx context.Context, params arguments.RolePermissionUpdateArgs) (models.RolePermission, error) {
+func (_m *IHandler) Update(ctx context.Context, params arguments.RolePermissionUpdate) (models.RolePermission, error) {
 	ret := _m.Called(ctx, params)
 
 	var r0 models.RolePermission
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.RolePermissionUpdateArgs) models.RolePermission); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.RolePermissionUpdate) models.RolePermission); ok {
 		r0 = rf(ctx, params)
 	} else {
 		r0 = ret.Get(0).(models.RolePermission)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.RolePermissionUpdateArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.RolePermissionUpdate) error); ok {
 		r1 = rf(ctx, params)
 	} else {
 		r1 = ret.Error(1)

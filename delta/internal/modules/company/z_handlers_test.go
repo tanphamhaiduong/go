@@ -12,7 +12,7 @@ import (
 func (s *CompanyHandlerTestSuite) TestGetByID_Success() {
 	var (
 		ctx   = context.Background()
-		param = arguments.CompanyGetByIDArgs{
+		param = arguments.CompanyGetByID{
 			ID: 1,
 		}
 		company = models.Company{}
@@ -26,7 +26,7 @@ func (s *CompanyHandlerTestSuite) TestGetByID_Success() {
 func (s *CompanyHandlerTestSuite) TestGetByID_Fail() {
 	var (
 		ctx   = context.Background()
-		param = arguments.CompanyGetByIDArgs{
+		param = arguments.CompanyGetByID{
 			ID: 1,
 		}
 		company = models.Company{}
@@ -40,7 +40,7 @@ func (s *CompanyHandlerTestSuite) TestGetByID_Fail() {
 func (s *CompanyHandlerTestSuite) TestGetByID_Fail1() {
 	var (
 		ctx   = context.Background()
-		param = arguments.CompanyGetByIDArgs{
+		param = arguments.CompanyGetByID{
 			ID: 0,
 		}
 		company = models.Company{}
@@ -54,7 +54,7 @@ func (s *CompanyHandlerTestSuite) TestGetByID_Fail1() {
 func (s *CompanyHandlerTestSuite) TestGetByIDs_Success() {
 	var (
 		ctx   = context.Background()
-		param = arguments.CompanyGetByIDsArgs{
+		param = arguments.CompanyGetByIDs{
 			IDs: []int64{1, 2},
 		}
 		companies []models.Company
@@ -68,7 +68,7 @@ func (s *CompanyHandlerTestSuite) TestGetByIDs_Success() {
 func (s *CompanyHandlerTestSuite) TestGetByIDs_Fail() {
 	var (
 		ctx   = context.Background()
-		param = arguments.CompanyGetByIDsArgs{
+		param = arguments.CompanyGetByIDs{
 			IDs: []int64{1, 2},
 		}
 		companies []models.Company
@@ -82,7 +82,7 @@ func (s *CompanyHandlerTestSuite) TestGetByIDs_Fail() {
 func (s *CompanyHandlerTestSuite) TestGetByIDs_Fail1() {
 	var (
 		ctx       = context.Background()
-		param     = arguments.CompanyGetByIDsArgs{}
+		param     = arguments.CompanyGetByIDs{}
 		companies []models.Company
 	)
 	s.MockICompany.On("GetByIDs", ctx, param).Return(companies, errors.New("some errors"))
@@ -94,7 +94,7 @@ func (s *CompanyHandlerTestSuite) TestGetByIDs_Fail1() {
 func (s *CompanyHandlerTestSuite) TestList_Success() {
 	var (
 		ctx    = context.Background()
-		params = arguments.CompanyListArgs{
+		params = arguments.CompanyList{
 			ID:           1,
 			Name:         "mockString",
 			CompanyCode:  "mockString",
@@ -116,7 +116,7 @@ func (s *CompanyHandlerTestSuite) TestList_Success() {
 func (s *CompanyHandlerTestSuite) TestList_Fail() {
 	var (
 		ctx    = context.Background()
-		params = arguments.CompanyListArgs{
+		params = arguments.CompanyList{
 			ID:           1,
 			Name:         "mockString",
 			CompanyCode:  "mockString",
@@ -138,7 +138,7 @@ func (s *CompanyHandlerTestSuite) TestList_Fail() {
 func (s *CompanyHandlerTestSuite) TestList_Fail1() {
 	var (
 		ctx    = context.Background()
-		params = arguments.CompanyListArgs{
+		params = arguments.CompanyList{
 			ID:           0,
 			Name:         "mockString",
 			CompanyCode:  "mockString",
@@ -160,7 +160,7 @@ func (s *CompanyHandlerTestSuite) TestList_Fail1() {
 func (s *CompanyHandlerTestSuite) TestCount_Success() {
 	var (
 		ctx    = context.Background()
-		params = arguments.CompanyCountArgs{
+		params = arguments.CompanyCount{
 			ID:           1,
 			Name:         "mockString",
 			CompanyCode:  "mockString",
@@ -180,7 +180,7 @@ func (s *CompanyHandlerTestSuite) TestCount_Success() {
 func (s *CompanyHandlerTestSuite) TestCount_Fail() {
 	var (
 		ctx    = context.Background()
-		params = arguments.CompanyCountArgs{
+		params = arguments.CompanyCount{
 			ID:           1,
 			Name:         "mockString",
 			CompanyCode:  "mockString",
@@ -200,7 +200,7 @@ func (s *CompanyHandlerTestSuite) TestCount_Fail() {
 func (s *CompanyHandlerTestSuite) TestCount_Fail1() {
 	var (
 		ctx    = context.Background()
-		params = arguments.CompanyCountArgs{
+		params = arguments.CompanyCount{
 			ID:           0,
 			Name:         "mockString",
 			CompanyCode:  "mockString",
@@ -221,7 +221,7 @@ func (s *CompanyHandlerTestSuite) TestInsert_Success() {
 	var (
 		ctx            = context.Background()
 		sampleID int64 = 1
-		params         = arguments.CompanyInsertArgs{
+		params         = arguments.CompanyInsert{
 			Name:         "mockString",
 			CompanyCode:  "mockString",
 			Status:       "active",
@@ -252,7 +252,7 @@ func (s *CompanyHandlerTestSuite) TestInsert_Success() {
 func (s *CompanyHandlerTestSuite) TestInsert_Fail() {
 	var (
 		ctx    = context.Background()
-		params = arguments.CompanyInsertArgs{
+		params = arguments.CompanyInsert{
 			Name:         "mockString",
 			CompanyCode:  "mockString",
 			Status:       "active",
@@ -271,7 +271,7 @@ func (s *CompanyHandlerTestSuite) TestInsert_Fail() {
 func (s *CompanyHandlerTestSuite) TestInsert_Fail1() {
 	var (
 		ctx    = context.Background()
-		params = arguments.CompanyInsertArgs{
+		params = arguments.CompanyInsert{
 			Name:         "mockString",
 			CompanyCode:  "mockString",
 			Status:       "active",
@@ -293,7 +293,7 @@ func (s *CompanyHandlerTestSuite) TestUpdate_Success() {
 		sampleID   int64 = 1
 		mockString       = "mockString"
 		status           = "active"
-		params           = arguments.CompanyUpdateArgs{
+		params           = arguments.CompanyUpdate{
 			ID:           &sampleID,
 			Name:         &mockString,
 			CompanyCode:  &mockString,
@@ -328,7 +328,7 @@ func (s *CompanyHandlerTestSuite) TestUpdate_Fail() {
 		sampleID   int64 = 1
 		mockString       = "mockString"
 		status           = "active"
-		params           = arguments.CompanyUpdateArgs{
+		params           = arguments.CompanyUpdate{
 			ID:           &sampleID,
 			Name:         &mockString,
 			CompanyCode:  &mockString,
@@ -351,7 +351,7 @@ func (s *CompanyHandlerTestSuite) TestUpdate_Fail1() {
 		sampleID   int64
 		mockString = "mockString"
 		status     = "active"
-		params     = arguments.CompanyUpdateArgs{
+		params     = arguments.CompanyUpdate{
 			ID:           &sampleID,
 			Name:         &mockString,
 			CompanyCode:  &mockString,
@@ -371,7 +371,7 @@ func (s *CompanyHandlerTestSuite) TestUpdate_Fail1() {
 func (s *CompanyHandlerTestSuite) TestDelete_Success() {
 	var (
 		ctx   = context.Background()
-		param = arguments.CompanyDeleteArgs{
+		param = arguments.CompanyDelete{
 			ID: 1,
 		}
 	)
@@ -384,7 +384,7 @@ func (s *CompanyHandlerTestSuite) TestDelete_Success() {
 func (s *CompanyHandlerTestSuite) TestDelete_Fail() {
 	var (
 		ctx   = context.Background()
-		param = arguments.CompanyDeleteArgs{
+		param = arguments.CompanyDelete{
 			ID: 1,
 		}
 		rowEffected int64
@@ -398,7 +398,7 @@ func (s *CompanyHandlerTestSuite) TestDelete_Fail() {
 func (s *CompanyHandlerTestSuite) TestDelete_Fail1() {
 	var (
 		ctx   = context.Background()
-		param = arguments.CompanyDeleteArgs{
+		param = arguments.CompanyDelete{
 			ID: 0,
 		}
 		rowEffected int64

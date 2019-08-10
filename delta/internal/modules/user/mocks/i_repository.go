@@ -13,18 +13,18 @@ type IRepository struct {
 }
 
 // Count provides a mock function with given fields: ctx, params
-func (_m *IRepository) Count(ctx context.Context, params arguments.UserCountArgs) (int64, error) {
+func (_m *IRepository) Count(ctx context.Context, params arguments.UserCount) (int64, error) {
 	ret := _m.Called(ctx, params)
 
 	var r0 int64
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserCountArgs) int64); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserCount) int64); ok {
 		r0 = rf(ctx, params)
 	} else {
 		r0 = ret.Get(0).(int64)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserCountArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserCount) error); ok {
 		r1 = rf(ctx, params)
 	} else {
 		r1 = ret.Error(1)
@@ -34,18 +34,18 @@ func (_m *IRepository) Count(ctx context.Context, params arguments.UserCountArgs
 }
 
 // Delete provides a mock function with given fields: ctx, param
-func (_m *IRepository) Delete(ctx context.Context, param arguments.UserDeleteArgs) (int64, error) {
+func (_m *IRepository) Delete(ctx context.Context, param arguments.UserDelete) (int64, error) {
 	ret := _m.Called(ctx, param)
 
 	var r0 int64
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserDeleteArgs) int64); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserDelete) int64); ok {
 		r0 = rf(ctx, param)
 	} else {
 		r0 = ret.Get(0).(int64)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserDeleteArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserDelete) error); ok {
 		r1 = rf(ctx, param)
 	} else {
 		r1 = ret.Error(1)
@@ -55,18 +55,18 @@ func (_m *IRepository) Delete(ctx context.Context, param arguments.UserDeleteArg
 }
 
 // GetByID provides a mock function with given fields: ctx, param
-func (_m *IRepository) GetByID(ctx context.Context, param arguments.UserGetByIDArgs) (models.User, error) {
+func (_m *IRepository) GetByID(ctx context.Context, param arguments.UserGetByID) (models.User, error) {
 	ret := _m.Called(ctx, param)
 
 	var r0 models.User
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserGetByIDArgs) models.User); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserGetByID) models.User); ok {
 		r0 = rf(ctx, param)
 	} else {
 		r0 = ret.Get(0).(models.User)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserGetByIDArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserGetByID) error); ok {
 		r1 = rf(ctx, param)
 	} else {
 		r1 = ret.Error(1)
@@ -76,11 +76,11 @@ func (_m *IRepository) GetByID(ctx context.Context, param arguments.UserGetByIDA
 }
 
 // GetByIDs provides a mock function with given fields: ctx, param
-func (_m *IRepository) GetByIDs(ctx context.Context, param arguments.UserGetByIDsArgs) ([]models.User, error) {
+func (_m *IRepository) GetByIDs(ctx context.Context, param arguments.UserGetByIDs) ([]models.User, error) {
 	ret := _m.Called(ctx, param)
 
 	var r0 []models.User
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserGetByIDsArgs) []models.User); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserGetByIDs) []models.User); ok {
 		r0 = rf(ctx, param)
 	} else {
 		if ret.Get(0) != nil {
@@ -89,7 +89,7 @@ func (_m *IRepository) GetByIDs(ctx context.Context, param arguments.UserGetByID
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserGetByIDsArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserGetByIDs) error); ok {
 		r1 = rf(ctx, param)
 	} else {
 		r1 = ret.Error(1)
@@ -99,18 +99,18 @@ func (_m *IRepository) GetByIDs(ctx context.Context, param arguments.UserGetByID
 }
 
 // GetByUsername provides a mock function with given fields: ctx, param
-func (_m *IRepository) GetByUsername(ctx context.Context, param arguments.GetByUsernameArgs) (models.User, error) {
+func (_m *IRepository) GetByUsername(ctx context.Context, param arguments.UserGetByUsername) (models.User, error) {
 	ret := _m.Called(ctx, param)
 
 	var r0 models.User
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.GetByUsernameArgs) models.User); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserGetByUsername) models.User); ok {
 		r0 = rf(ctx, param)
 	} else {
 		r0 = ret.Get(0).(models.User)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.GetByUsernameArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserGetByUsername) error); ok {
 		r1 = rf(ctx, param)
 	} else {
 		r1 = ret.Error(1)
@@ -120,18 +120,18 @@ func (_m *IRepository) GetByUsername(ctx context.Context, param arguments.GetByU
 }
 
 // Insert provides a mock function with given fields: ctx, params
-func (_m *IRepository) Insert(ctx context.Context, params arguments.UserInsertArgs) (models.User, error) {
+func (_m *IRepository) Insert(ctx context.Context, params arguments.UserInsert) (models.User, error) {
 	ret := _m.Called(ctx, params)
 
 	var r0 models.User
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserInsertArgs) models.User); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserInsert) models.User); ok {
 		r0 = rf(ctx, params)
 	} else {
 		r0 = ret.Get(0).(models.User)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserInsertArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserInsert) error); ok {
 		r1 = rf(ctx, params)
 	} else {
 		r1 = ret.Error(1)
@@ -141,11 +141,11 @@ func (_m *IRepository) Insert(ctx context.Context, params arguments.UserInsertAr
 }
 
 // List provides a mock function with given fields: ctx, params
-func (_m *IRepository) List(ctx context.Context, params arguments.UserListArgs) ([]models.User, error) {
+func (_m *IRepository) List(ctx context.Context, params arguments.UserList) ([]models.User, error) {
 	ret := _m.Called(ctx, params)
 
 	var r0 []models.User
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserListArgs) []models.User); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserList) []models.User); ok {
 		r0 = rf(ctx, params)
 	} else {
 		if ret.Get(0) != nil {
@@ -154,7 +154,7 @@ func (_m *IRepository) List(ctx context.Context, params arguments.UserListArgs) 
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserListArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserList) error); ok {
 		r1 = rf(ctx, params)
 	} else {
 		r1 = ret.Error(1)
@@ -164,18 +164,18 @@ func (_m *IRepository) List(ctx context.Context, params arguments.UserListArgs) 
 }
 
 // Update provides a mock function with given fields: ctx, params
-func (_m *IRepository) Update(ctx context.Context, params arguments.UserUpdateArgs) (models.User, error) {
+func (_m *IRepository) Update(ctx context.Context, params arguments.UserUpdate) (models.User, error) {
 	ret := _m.Called(ctx, params)
 
 	var r0 models.User
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserUpdateArgs) models.User); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserUpdate) models.User); ok {
 		r0 = rf(ctx, params)
 	} else {
 		r0 = ret.Get(0).(models.User)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserUpdateArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserUpdate) error); ok {
 		r1 = rf(ctx, params)
 	} else {
 		r1 = ret.Error(1)

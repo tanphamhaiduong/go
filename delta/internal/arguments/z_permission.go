@@ -1,18 +1,18 @@
 // @generated
 package arguments
 
-// PermissionGetByIDArgs ...
-type PermissionGetByIDArgs struct {
+// PermissionGetByID ...
+type PermissionGetByID struct {
 	ID int64 `graphql:"id" validate:"required,min=1"`
 }
 
-// PermissionGetByIDsArgs ...
-type PermissionGetByIDsArgs struct {
+// PermissionGetByIDs ...
+type PermissionGetByIDs struct {
 	IDs []int64 `graphql:"ids" validate:"required"`
 }
 
-// PermissionCountArgs ...
-type PermissionCountArgs struct {
+// PermissionCount ...
+type PermissionCount struct {
 	ID          int64  `graphql:"id" validate:"omitempty,min=1"`
 	Name        string `graphql:"name" validate:"omitempty"`
 	Description string `graphql:"description" validate:"omitempty"`
@@ -21,8 +21,8 @@ type PermissionCountArgs struct {
 	UpdatedBy   string `graphql:"updatedBy" validate:"omitempty"`
 }
 
-// PermissionListArgs ...
-type PermissionListArgs struct {
+// PermissionList ...
+type PermissionList struct {
 	ID          int64  `graphql:"id" validate:"omitempty,min=1"`
 	Name        string `graphql:"name" validate:"omitempty"`
 	Description string `graphql:"description" validate:"omitempty"`
@@ -33,8 +33,8 @@ type PermissionListArgs struct {
 	PageSize    int64  `graphql:"pageSize" validate:"required,min=1,max=40"`
 }
 
-// PermissionInsertArgs ...
-type PermissionInsertArgs struct {
+// PermissionInsert ...
+type PermissionInsert struct {
 	Name        string `graphql:"name" validate:"omitempty"`
 	Description string `graphql:"description" validate:"omitempty"`
 	Status      string `graphql:"status" validate:"omitempty,oneof=active inactive"`
@@ -42,8 +42,8 @@ type PermissionInsertArgs struct {
 	UpdatedBy   string `graphql:"updatedBy" validate:"omitempty"`
 }
 
-// PermissionUpdateArgs ...
-type PermissionUpdateArgs struct {
+// PermissionUpdate ...
+type PermissionUpdate struct {
 	ID          *int64  `graphql:"id" validate:"required,min=1"`
 	Name        *string `graphql:"name" validate:"omitempty"`
 	Description *string `graphql:"description" validate:"omitempty"`
@@ -52,7 +52,7 @@ type PermissionUpdateArgs struct {
 	UpdatedBy   *string `graphql:"updatedBy" validate:"omitempty"`
 }
 
-// PermissionDeleteArgs ...
-type PermissionDeleteArgs struct {
+// PermissionDelete ...
+type PermissionDelete struct {
 	ID int64 `graphql:"id" validate:"required,min=1"`
 }

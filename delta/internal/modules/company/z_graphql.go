@@ -165,13 +165,13 @@ var (
 
 // ICoreHandler ...
 type ICoreHandler interface {
-	GetByID(ctx context.Context, param arguments.CompanyGetByIDArgs) (models.Company, error)
-	GetByIDs(ctx context.Context, param arguments.CompanyGetByIDsArgs) ([]models.Company, error)
-	Count(ctx context.Context, params arguments.CompanyCountArgs) (int64, error)
-	List(ctx context.Context, params arguments.CompanyListArgs) ([]models.Company, error)
-	Insert(ctx context.Context, params arguments.CompanyInsertArgs) (models.Company, error)
-	Update(ctx context.Context, params arguments.CompanyUpdateArgs) (models.Company, error)
-	Delete(ctx context.Context, param arguments.CompanyDeleteArgs) (int64, error)
+	GetByID(ctx context.Context, param arguments.CompanyGetByID) (models.Company, error)
+	GetByIDs(ctx context.Context, param arguments.CompanyGetByIDs) ([]models.Company, error)
+	Count(ctx context.Context, params arguments.CompanyCount) (int64, error)
+	List(ctx context.Context, params arguments.CompanyList) ([]models.Company, error)
+	Insert(ctx context.Context, params arguments.CompanyInsert) (models.Company, error)
+	Update(ctx context.Context, params arguments.CompanyUpdate) (models.Company, error)
+	Delete(ctx context.Context, param arguments.CompanyDelete) (int64, error)
 }
 
 // ForwardParams ...
@@ -190,7 +190,7 @@ func (r *ResolverImpl) GetByID(param graphql.ResolveParams) (interface{}, error)
 		"param":   param,
 	}).Infof("Resolver GetByID of company")
 	// parse param
-	args := arguments.CompanyGetByIDArgs{}
+	args := arguments.CompanyGetByID{}
 	if err := utils.Parse(param.Args, &args); err != nil {
 		logger.WithFields(logger.Fields{
 			"TraceID": param.Context.Value("TraceID"),
@@ -212,7 +212,7 @@ func (r *ResolverImpl) Count(params graphql.ResolveParams) (interface{}, error) 
 		"params":  params,
 	}).Infof("Resolver Count of company")
 	// parse params
-	args := arguments.CompanyCountArgs{}
+	args := arguments.CompanyCount{}
 	err := utils.Parse(params.Source.(map[string]interface{}), &args)
 	if err != nil {
 		logger.WithFields(logger.Fields{
@@ -235,7 +235,7 @@ func (r *ResolverImpl) List(params graphql.ResolveParams) (interface{}, error) {
 		"params":  params,
 	}).Infof("Resolver List of company")
 	// parse params
-	args := arguments.CompanyListArgs{}
+	args := arguments.CompanyList{}
 	err := utils.Parse(params.Source.(map[string]interface{}), &args)
 	if err != nil {
 		logger.WithFields(logger.Fields{
@@ -262,7 +262,7 @@ func (r *ResolverImpl) Insert(params graphql.ResolveParams) (interface{}, error)
 		"params":  params,
 	}).Infof("Resolver Insert of company")
 	// parse params
-	args := arguments.CompanyInsertArgs{}
+	args := arguments.CompanyInsert{}
 	err := utils.Parse(params.Args, &args)
 	if err != nil {
 		logger.WithFields(logger.Fields{
@@ -289,7 +289,7 @@ func (r *ResolverImpl) Update(params graphql.ResolveParams) (interface{}, error)
 		"params":  params,
 	}).Infof("Resolver Update of company")
 	// parse params
-	args := arguments.CompanyUpdateArgs{}
+	args := arguments.CompanyUpdate{}
 	err := utils.Parse(params.Args, &args)
 	if err != nil {
 		logger.WithFields(logger.Fields{
@@ -316,7 +316,7 @@ func (r *ResolverImpl) Delete(param graphql.ResolveParams) (interface{}, error) 
 		"param":   param,
 	}).Infof("Resolver Delete of company")
 	// parse param
-	args := arguments.CompanyDeleteArgs{}
+	args := arguments.CompanyDelete{}
 	err := utils.Parse(param.Args, &args)
 	if err != nil {
 		logger.WithFields(logger.Fields{

@@ -3,18 +3,18 @@ package arguments
 
 import "github.com/go-sql-driver/mysql"
 
-// UserGetByIDArgs ...
-type UserGetByIDArgs struct {
+// UserGetByID ...
+type UserGetByID struct {
 	ID int64 `graphql:"id" validate:"required,min=1"`
 }
 
-// UserGetByIDsArgs ...
-type UserGetByIDsArgs struct {
+// UserGetByIDs ...
+type UserGetByIDs struct {
 	IDs []int64 `graphql:"ids" validate:"required"`
 }
 
-// UserCountArgs ...
-type UserCountArgs struct {
+// UserCount ...
+type UserCount struct {
 	ID            int64          `graphql:"id" validate:"omitempty,min=1"`
 	Username      string         `graphql:"username" validate:"omitempty"`
 	Password      string         `graphql:"password" validate:"omitempty"`
@@ -35,8 +35,8 @@ type UserCountArgs struct {
 	UpdatedBy     string         `graphql:"updatedBy" validate:"omitempty"`
 }
 
-// UserListArgs ...
-type UserListArgs struct {
+// UserList ...
+type UserList struct {
 	ID            int64          `graphql:"id" validate:"omitempty,min=1"`
 	Username      string         `graphql:"username" validate:"omitempty"`
 	Password      string         `graphql:"password" validate:"omitempty"`
@@ -59,8 +59,8 @@ type UserListArgs struct {
 	PageSize      int64          `graphql:"pageSize" validate:"required,min=1,max=40"`
 }
 
-// UserInsertArgs ...
-type UserInsertArgs struct {
+// UserInsert ...
+type UserInsert struct {
 	Username      string         `graphql:"username" validate:"omitempty"`
 	Password      string         `graphql:"password" validate:"omitempty"`
 	Name          string         `graphql:"name" validate:"omitempty"`
@@ -80,8 +80,8 @@ type UserInsertArgs struct {
 	UpdatedBy     string         `graphql:"updatedBy" validate:"omitempty"`
 }
 
-// UserUpdateArgs ...
-type UserUpdateArgs struct {
+// UserUpdate ...
+type UserUpdate struct {
 	ID            *int64          `graphql:"id" validate:"required,min=1"`
 	Username      *string         `graphql:"username" validate:"omitempty"`
 	Password      *string         `graphql:"password" validate:"omitempty"`
@@ -102,7 +102,7 @@ type UserUpdateArgs struct {
 	UpdatedBy     *string         `graphql:"updatedBy" validate:"omitempty"`
 }
 
-// UserDeleteArgs ...
-type UserDeleteArgs struct {
+// UserDelete ...
+type UserDelete struct {
 	ID int64 `graphql:"id" validate:"required,min=1"`
 }

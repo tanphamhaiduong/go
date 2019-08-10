@@ -1,18 +1,18 @@
 // @generated
 package arguments
 
-// RolePermissionGetByIDArgs ...
-type RolePermissionGetByIDArgs struct {
+// RolePermissionGetByID ...
+type RolePermissionGetByID struct {
 	ID int64 `graphql:"id" validate:"required,min=1"`
 }
 
-// RolePermissionGetByIDsArgs ...
-type RolePermissionGetByIDsArgs struct {
+// RolePermissionGetByIDs ...
+type RolePermissionGetByIDs struct {
 	IDs []int64 `graphql:"ids" validate:"required"`
 }
 
-// RolePermissionCountArgs ...
-type RolePermissionCountArgs struct {
+// RolePermissionCount ...
+type RolePermissionCount struct {
 	ID           int64  `graphql:"id" validate:"omitempty,min=1"`
 	RoleID       int64  `graphql:"roleId" validate:"omitempty,min=1"`
 	PermissionID int64  `graphql:"permissionId" validate:"omitempty,min=1"`
@@ -20,8 +20,8 @@ type RolePermissionCountArgs struct {
 	UpdatedBy    string `graphql:"updatedBy" validate:"omitempty"`
 }
 
-// RolePermissionListArgs ...
-type RolePermissionListArgs struct {
+// RolePermissionList ...
+type RolePermissionList struct {
 	ID           int64  `graphql:"id" validate:"omitempty,min=1"`
 	RoleID       int64  `graphql:"roleId" validate:"omitempty,min=1"`
 	PermissionID int64  `graphql:"permissionId" validate:"omitempty,min=1"`
@@ -31,16 +31,16 @@ type RolePermissionListArgs struct {
 	PageSize     int64  `graphql:"pageSize" validate:"required,min=1,max=40"`
 }
 
-// RolePermissionInsertArgs ...
-type RolePermissionInsertArgs struct {
+// RolePermissionInsert ...
+type RolePermissionInsert struct {
 	RoleID       int64  `graphql:"roleId" validate:"omitempty,min=1"`
 	PermissionID int64  `graphql:"permissionId" validate:"omitempty,min=1"`
 	CreatedBy    string `graphql:"createdBy" validate:"omitempty"`
 	UpdatedBy    string `graphql:"updatedBy" validate:"omitempty"`
 }
 
-// RolePermissionUpdateArgs ...
-type RolePermissionUpdateArgs struct {
+// RolePermissionUpdate ...
+type RolePermissionUpdate struct {
 	ID           *int64  `graphql:"id" validate:"required,min=1"`
 	RoleID       *int64  `graphql:"roleId" validate:"omitempty,min=1"`
 	PermissionID *int64  `graphql:"permissionId" validate:"omitempty,min=1"`
@@ -48,7 +48,7 @@ type RolePermissionUpdateArgs struct {
 	UpdatedBy    *string `graphql:"updatedBy" validate:"omitempty"`
 }
 
-// RolePermissionDeleteArgs ...
-type RolePermissionDeleteArgs struct {
+// RolePermissionDelete ...
+type RolePermissionDelete struct {
 	ID int64 `graphql:"id" validate:"required,min=1"`
 }

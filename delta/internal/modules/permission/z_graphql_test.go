@@ -28,7 +28,7 @@ func (s *PermissionResolverTestSuite) TestGetByID_Success() {
 		sampleID   int64 = 1
 		params           = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
 		permission models.Permission
-		args       = arguments.PermissionGetByIDArgs{
+		args       = arguments.PermissionGetByID{
 			ID: 1,
 		}
 	)
@@ -44,7 +44,7 @@ func (s *PermissionResolverTestSuite) TestGetByID_Fail() {
 		sampleID   int64 = 1
 		params           = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
 		permission models.Permission
-		args       = arguments.PermissionGetByIDArgs{
+		args       = arguments.PermissionGetByID{
 			ID: 1,
 		}
 	)
@@ -59,7 +59,7 @@ func (s *PermissionResolverTestSuite) TestList_Success() {
 		ctx         = context.Background()
 		params      = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
 		permissions []models.Permission
-		args        = arguments.PermissionListArgs{
+		args        = arguments.PermissionList{
 			Page:     1,
 			PageSize: 10,
 		}
@@ -75,7 +75,7 @@ func (s *PermissionResolverTestSuite) TestList_Fail() {
 		ctx         = context.Background()
 		params      = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
 		permissions []models.Permission
-		args        = arguments.PermissionListArgs{
+		args        = arguments.PermissionList{
 			Page:     1,
 			PageSize: 10,
 		}
@@ -90,7 +90,7 @@ func (s *PermissionResolverTestSuite) TestCount_Success() {
 	var (
 		ctx    = context.Background()
 		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
-		args   = arguments.PermissionCountArgs{}
+		args   = arguments.PermissionCount{}
 		count  int64
 	)
 	s.MockIPermission.On("Count", ctx, args).Return(count, nil)
@@ -103,7 +103,7 @@ func (s *PermissionResolverTestSuite) TestCount_Fail() {
 	var (
 		ctx    = context.Background()
 		params = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
-		args   = arguments.PermissionCountArgs{}
+		args   = arguments.PermissionCount{}
 		count  int64
 	)
 	s.MockIPermission.On("Count", ctx, args).Return(count, errors.New("some errors"))
@@ -116,7 +116,7 @@ func (s *PermissionResolverTestSuite) TestInsert_Success() {
 	var (
 		ctx        = context.Background()
 		params     = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
-		args       = arguments.PermissionInsertArgs{}
+		args       = arguments.PermissionInsert{}
 		permission models.Permission
 	)
 	// Mock Insert
@@ -133,7 +133,7 @@ func (s *PermissionResolverTestSuite) TestInsert_Fail() {
 	var (
 		ctx        = context.Background()
 		params     = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{}}
-		args       = arguments.PermissionInsertArgs{}
+		args       = arguments.PermissionInsert{}
 		permission models.Permission
 	)
 	s.MockIPermission.On("Insert", ctx, args).Return(permission, errors.New("some errors"))
@@ -151,7 +151,7 @@ func (s *PermissionResolverTestSuite) TestUpdate_Success() {
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
-		args = arguments.PermissionUpdateArgs{
+		args = arguments.PermissionUpdate{
 			ID: &sampleID,
 		}
 		permission = models.Permission{}
@@ -174,7 +174,7 @@ func (s *PermissionResolverTestSuite) TestUpdate_Fail() {
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
-		args = arguments.PermissionUpdateArgs{
+		args = arguments.PermissionUpdate{
 			ID: &sampleID,
 		}
 		permission models.Permission
@@ -193,7 +193,7 @@ func (s *PermissionResolverTestSuite) TestDelete_Success() {
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
-		args = arguments.PermissionDeleteArgs{
+		args = arguments.PermissionDelete{
 			ID: 1,
 		}
 		sampleID int64 = 1
@@ -212,7 +212,7 @@ func (s *PermissionResolverTestSuite) TestDelete_Fail() {
 			Source:  map[string]interface{}{},
 			Args:    map[string]interface{}{"id": 1},
 		}
-		args = arguments.PermissionDeleteArgs{
+		args = arguments.PermissionDelete{
 			ID: 1,
 		}
 		sampleID int64

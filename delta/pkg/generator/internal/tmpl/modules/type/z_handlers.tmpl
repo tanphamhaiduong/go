@@ -15,17 +15,17 @@ import (
 
 // ICoreRepository ...
 type ICoreRepository interface {
-	GetByID(ctx context.Context, param arguments.{{ $Name }}GetByIDArgs) (models.{{ $Name }}, error)
-	GetByIDs(ctx context.Context, param arguments.{{ $Name }}GetByIDsArgs) ([]models.{{ $Name }}, error)
-	List(ctx context.Context, params arguments.{{ $Name }}ListArgs) ([]models.{{ $Name }}, error)
-	Count(ctx context.Context, params arguments.{{ $Name }}CountArgs) (int64, error)
-	Insert(ctx context.Context, params arguments.{{ $Name }}InsertArgs) (models.{{ $Name }}, error)
-	Update(ctx context.Context, params arguments.{{ $Name }}UpdateArgs) (models.{{ $Name }}, error)
-	Delete(ctx context.Context, param arguments.{{ $Name }}DeleteArgs) (int64, error)
+	GetByID(ctx context.Context, param arguments.{{ $Name }}GetByID) (models.{{ $Name }}, error)
+	GetByIDs(ctx context.Context, param arguments.{{ $Name }}GetByIDs) ([]models.{{ $Name }}, error)
+	List(ctx context.Context, params arguments.{{ $Name }}List) ([]models.{{ $Name }}, error)
+	Count(ctx context.Context, params arguments.{{ $Name }}Count) (int64, error)
+	Insert(ctx context.Context, params arguments.{{ $Name }}Insert) (models.{{ $Name }}, error)
+	Update(ctx context.Context, params arguments.{{ $Name }}Update) (models.{{ $Name }}, error)
+	Delete(ctx context.Context, param arguments.{{ $Name }}Delete) (int64, error)
 }
 
 // GetByID ...
-func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.{{ $Name }}GetByIDArgs) (models.{{ $Name }}, error) {
+func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.{{ $Name }}GetByID) (models.{{ $Name }}, error) {
   logger.WithFields(logger.Fields{
 		"TraceID":ctx.Value("TraceID"),
 		"params": params,
@@ -52,7 +52,7 @@ func (h *HandlerImpl) GetByID(ctx context.Context, params arguments.{{ $Name }}G
 }
 
 // GetByIDs ...
-func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.{{ $Name }}GetByIDsArgs) ([]models.{{ $Name }}, error) {
+func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.{{ $Name }}GetByIDs) ([]models.{{ $Name }}, error) {
   logger.WithFields(logger.Fields{
 		"TraceID":ctx.Value("TraceID"),
 		"params": params,
@@ -79,7 +79,7 @@ func (h *HandlerImpl) GetByIDs(ctx context.Context, params arguments.{{ $Name }}
 }
 
 // Count ...
-func (h *HandlerImpl) Count(ctx context.Context, params arguments.{{ $Name }}CountArgs) (int64, error) {
+func (h *HandlerImpl) Count(ctx context.Context, params arguments.{{ $Name }}Count) (int64, error) {
   logger.WithFields(logger.Fields{
 		"TraceID":ctx.Value("TraceID"),
 		"params": params,
@@ -106,7 +106,7 @@ func (h *HandlerImpl) Count(ctx context.Context, params arguments.{{ $Name }}Cou
 }
 
 // List ...
-func (h *HandlerImpl) List(ctx context.Context, params arguments.{{ $Name }}ListArgs) ([]models.{{ $Name }}, error) {
+func (h *HandlerImpl) List(ctx context.Context, params arguments.{{ $Name }}List) ([]models.{{ $Name }}, error) {
   logger.WithFields(logger.Fields{
 		"TraceID":ctx.Value("TraceID"),
 		"params": params,
@@ -133,7 +133,7 @@ func (h *HandlerImpl) List(ctx context.Context, params arguments.{{ $Name }}List
 }
 
 // Insert ...
-func (h *HandlerImpl) Insert(ctx context.Context, params arguments.{{ $Name }}InsertArgs) (models.{{ $Name }}, error) {
+func (h *HandlerImpl) Insert(ctx context.Context, params arguments.{{ $Name }}Insert) (models.{{ $Name }}, error) {
   logger.WithFields(logger.Fields{
 		"TraceID":ctx.Value("TraceID"),
 		"params": params,
@@ -160,7 +160,7 @@ func (h *HandlerImpl) Insert(ctx context.Context, params arguments.{{ $Name }}In
 }
 
 // Update ...
-func (h *HandlerImpl) Update(ctx context.Context, params arguments.{{ $Name }}UpdateArgs) (models.{{ $Name }}, error) {
+func (h *HandlerImpl) Update(ctx context.Context, params arguments.{{ $Name }}Update) (models.{{ $Name }}, error) {
   logger.WithFields(logger.Fields{
 		"TraceID":ctx.Value("TraceID"),
 		"params": params,
@@ -187,7 +187,7 @@ func (h *HandlerImpl) Update(ctx context.Context, params arguments.{{ $Name }}Up
 }
 
 // Delete ...
-func (h *HandlerImpl) Delete(ctx context.Context, param arguments.{{ $Name }}DeleteArgs) (int64, error) {
+func (h *HandlerImpl) Delete(ctx context.Context, param arguments.{{ $Name }}Delete) (int64, error) {
   logger.WithFields(logger.Fields{
 		"TraceID":ctx.Value("TraceID"),
 		"param": param,

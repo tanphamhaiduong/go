@@ -28,7 +28,7 @@ func (r *RepositoryImpl) scanCompany(row database.IRow, company *models.Company)
 }
 
 // GetByID ...
-func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.CompanyGetByIDArgs) (models.Company, error) {
+func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.CompanyGetByID) (models.Company, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -79,7 +79,7 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.CompanyGe
 }
 
 // GetByIDs ...
-func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.CompanyGetByIDsArgs) ([]models.Company, error) {
+func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.CompanyGetByIDs) ([]models.Company, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -142,7 +142,7 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.CompanyG
 }
 
 // setArgsToListSelectBuilder ...
-func (r *RepositoryImpl) setArgsToListSelectBuilder(ctx context.Context, selectBuilder sq.SelectBuilder, params arguments.CompanyListArgs) sq.SelectBuilder {
+func (r *RepositoryImpl) setArgsToListSelectBuilder(ctx context.Context, selectBuilder sq.SelectBuilder, params arguments.CompanyList) sq.SelectBuilder {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -179,7 +179,7 @@ func (r *RepositoryImpl) setArgsToListSelectBuilder(ctx context.Context, selectB
 }
 
 // List ...
-func (r *RepositoryImpl) List(ctx context.Context, params arguments.CompanyListArgs) ([]models.Company, error) {
+func (r *RepositoryImpl) List(ctx context.Context, params arguments.CompanyList) ([]models.Company, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -243,7 +243,7 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.CompanyListA
 }
 
 // setArgsToCountSelectBuilder ...
-func (r *RepositoryImpl) setArgsToCountSelectBuilder(ctx context.Context, selectBuilder sq.SelectBuilder, params arguments.CompanyCountArgs) sq.SelectBuilder {
+func (r *RepositoryImpl) setArgsToCountSelectBuilder(ctx context.Context, selectBuilder sq.SelectBuilder, params arguments.CompanyCount) sq.SelectBuilder {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -273,7 +273,7 @@ func (r *RepositoryImpl) setArgsToCountSelectBuilder(ctx context.Context, select
 }
 
 // Count ...
-func (r *RepositoryImpl) Count(ctx context.Context, params arguments.CompanyCountArgs) (int64, error) {
+func (r *RepositoryImpl) Count(ctx context.Context, params arguments.CompanyCount) (int64, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -317,7 +317,7 @@ func (r *RepositoryImpl) Count(ctx context.Context, params arguments.CompanyCoun
 }
 
 // Insert ...
-func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.CompanyInsertArgs) (models.Company, error) {
+func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.CompanyInsert) (models.Company, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -377,7 +377,7 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.CompanyIns
 		}).Errorf("Repository Insert LastInsertId error of company")
 		return company, err
 	}
-	newCompany, err := r.GetByID(ctx, arguments.CompanyGetByIDArgs{ID: id})
+	newCompany, err := r.GetByID(ctx, arguments.CompanyGetByID{ID: id})
 	if err != nil {
 		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
@@ -389,7 +389,7 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.CompanyIns
 }
 
 // setArgsToUpdateBuilder ...
-func (r *RepositoryImpl) setArgsToUpdateBuilder(ctx context.Context, updateBuilder sq.UpdateBuilder, params arguments.CompanyUpdateArgs) sq.UpdateBuilder {
+func (r *RepositoryImpl) setArgsToUpdateBuilder(ctx context.Context, updateBuilder sq.UpdateBuilder, params arguments.CompanyUpdate) sq.UpdateBuilder {
 	logger.WithFields(logger.Fields{
 		"params": params,
 	}).Infof("Repository setArgsToUpdateBuilder of company")
@@ -415,7 +415,7 @@ func (r *RepositoryImpl) setArgsToUpdateBuilder(ctx context.Context, updateBuild
 }
 
 // Update ...
-func (r *RepositoryImpl) Update(ctx context.Context, params arguments.CompanyUpdateArgs) (models.Company, error) {
+func (r *RepositoryImpl) Update(ctx context.Context, params arguments.CompanyUpdate) (models.Company, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -470,7 +470,7 @@ func (r *RepositoryImpl) Update(ctx context.Context, params arguments.CompanyUpd
 		}).Errorf("Repository Update rowAffected <= 0 of company")
 		return company, fmt.Errorf("error when update record id %d", *params.ID)
 	}
-	newCompany, err := r.GetByID(ctx, arguments.CompanyGetByIDArgs{ID: *params.ID})
+	newCompany, err := r.GetByID(ctx, arguments.CompanyGetByID{ID: *params.ID})
 	if err != nil {
 		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
@@ -482,7 +482,7 @@ func (r *RepositoryImpl) Update(ctx context.Context, params arguments.CompanyUpd
 }
 
 // Delete ...
-func (r *RepositoryImpl) Delete(ctx context.Context, params arguments.CompanyDeleteArgs) (int64, error) {
+func (r *RepositoryImpl) Delete(ctx context.Context, params arguments.CompanyDelete) (int64, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,

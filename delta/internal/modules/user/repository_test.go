@@ -1,11 +1,16 @@
 package user
 
 import (
+	"context"
+	"errors"
 	"testing"
 
+	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"github.com/tanphamhaiduong/go/common/logger"
+	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	mocksDB "github.com/tanphamhaiduong/go/delta/internal/database/mocks"
+	"github.com/tanphamhaiduong/go/delta/internal/models"
 	"github.com/tanphamhaiduong/go/delta/internal/modules/user/mocks"
 )
 
@@ -36,4 +41,109 @@ func (s *UserRepositoryTestSuite) SetupTest() {
 	s.Repository = *repository
 	logConfig := logger.Configuration{}
 	logger.NewLogger(logConfig, logger.InstanceZapLogger)
+}
+
+func (s *UserRepositoryTestSuite) TestGetByUsername_Success() {
+	var (
+		ctx   = context.Background()
+		param = arguments.UserGetByUsername{
+			Username: "developer",
+		}
+		user models.User
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("QueryRowContext", ctx, param.Username).Return(s.MockIRow)
+	s.MockIRow.On("Scan",
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+	).Return(nil)
+	actual, err := s.Repository.GetByUsername(ctx, param)
+	s.Nil(err)
+	s.Equal(user, actual)
+}
+
+func (s *UserRepositoryTestSuite) TestGetByUsername_Fail() {
+	var (
+		ctx   = context.Background()
+		param = arguments.UserGetByUsername{
+			Username: "developer",
+		}
+		user models.User
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, errors.New("some errors"))
+	s.MockIStmt.On("QueryRowContext", ctx, param.Username).Return(s.MockIRow)
+	s.MockIRow.On("Scan",
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+	).Return(errors.New("some errors"))
+	actual, err := s.Repository.GetByUsername(ctx, param)
+	s.Equal(user, actual)
+	s.NotNil(err)
+}
+
+func (s *UserRepositoryTestSuite) TestGetByUsername_Fail1() {
+	var (
+		ctx   = context.Background()
+		param = arguments.UserGetByUsername{
+			Username: "developer",
+		}
+		user models.User
+	)
+	s.MockIDB.On("PrepareContext", ctx, mock.Anything).Return(s.MockIStmt, nil)
+	s.MockIStmt.On("QueryRowContext", ctx, param.Username).Return(s.MockIRow)
+	s.MockIRow.On("Scan",
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+	).Return(errors.New("some errors"))
+	actual, err := s.Repository.GetByUsername(ctx, param)
+	s.Equal(user, actual)
+	s.NotNil(err)
 }

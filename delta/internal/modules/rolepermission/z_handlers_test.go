@@ -12,7 +12,7 @@ import (
 func (s *RolePermissionHandlerTestSuite) TestGetByID_Success() {
 	var (
 		ctx   = context.Background()
-		param = arguments.RolePermissionGetByIDArgs{
+		param = arguments.RolePermissionGetByID{
 			ID: 1,
 		}
 		rolepermission = models.RolePermission{}
@@ -26,7 +26,7 @@ func (s *RolePermissionHandlerTestSuite) TestGetByID_Success() {
 func (s *RolePermissionHandlerTestSuite) TestGetByID_Fail() {
 	var (
 		ctx   = context.Background()
-		param = arguments.RolePermissionGetByIDArgs{
+		param = arguments.RolePermissionGetByID{
 			ID: 1,
 		}
 		rolepermission = models.RolePermission{}
@@ -40,7 +40,7 @@ func (s *RolePermissionHandlerTestSuite) TestGetByID_Fail() {
 func (s *RolePermissionHandlerTestSuite) TestGetByID_Fail1() {
 	var (
 		ctx   = context.Background()
-		param = arguments.RolePermissionGetByIDArgs{
+		param = arguments.RolePermissionGetByID{
 			ID: 0,
 		}
 		rolepermission = models.RolePermission{}
@@ -54,7 +54,7 @@ func (s *RolePermissionHandlerTestSuite) TestGetByID_Fail1() {
 func (s *RolePermissionHandlerTestSuite) TestGetByIDs_Success() {
 	var (
 		ctx   = context.Background()
-		param = arguments.RolePermissionGetByIDsArgs{
+		param = arguments.RolePermissionGetByIDs{
 			IDs: []int64{1, 2},
 		}
 		rolepermissions []models.RolePermission
@@ -68,7 +68,7 @@ func (s *RolePermissionHandlerTestSuite) TestGetByIDs_Success() {
 func (s *RolePermissionHandlerTestSuite) TestGetByIDs_Fail() {
 	var (
 		ctx   = context.Background()
-		param = arguments.RolePermissionGetByIDsArgs{
+		param = arguments.RolePermissionGetByIDs{
 			IDs: []int64{1, 2},
 		}
 		rolepermissions []models.RolePermission
@@ -82,7 +82,7 @@ func (s *RolePermissionHandlerTestSuite) TestGetByIDs_Fail() {
 func (s *RolePermissionHandlerTestSuite) TestGetByIDs_Fail1() {
 	var (
 		ctx             = context.Background()
-		param           = arguments.RolePermissionGetByIDsArgs{}
+		param           = arguments.RolePermissionGetByIDs{}
 		rolepermissions []models.RolePermission
 	)
 	s.MockIRolePermission.On("GetByIDs", ctx, param).Return(rolepermissions, errors.New("some errors"))
@@ -94,7 +94,7 @@ func (s *RolePermissionHandlerTestSuite) TestGetByIDs_Fail1() {
 func (s *RolePermissionHandlerTestSuite) TestList_Success() {
 	var (
 		ctx    = context.Background()
-		params = arguments.RolePermissionListArgs{
+		params = arguments.RolePermissionList{
 			ID:           1,
 			RoleID:       1,
 			PermissionID: 1,
@@ -114,7 +114,7 @@ func (s *RolePermissionHandlerTestSuite) TestList_Success() {
 func (s *RolePermissionHandlerTestSuite) TestList_Fail() {
 	var (
 		ctx    = context.Background()
-		params = arguments.RolePermissionListArgs{
+		params = arguments.RolePermissionList{
 			ID:           1,
 			RoleID:       1,
 			PermissionID: 1,
@@ -134,7 +134,7 @@ func (s *RolePermissionHandlerTestSuite) TestList_Fail() {
 func (s *RolePermissionHandlerTestSuite) TestList_Fail1() {
 	var (
 		ctx    = context.Background()
-		params = arguments.RolePermissionListArgs{
+		params = arguments.RolePermissionList{
 			ID:           0,
 			RoleID:       0,
 			PermissionID: 0,
@@ -154,7 +154,7 @@ func (s *RolePermissionHandlerTestSuite) TestList_Fail1() {
 func (s *RolePermissionHandlerTestSuite) TestCount_Success() {
 	var (
 		ctx    = context.Background()
-		params = arguments.RolePermissionCountArgs{
+		params = arguments.RolePermissionCount{
 			ID:           1,
 			RoleID:       1,
 			PermissionID: 1,
@@ -172,7 +172,7 @@ func (s *RolePermissionHandlerTestSuite) TestCount_Success() {
 func (s *RolePermissionHandlerTestSuite) TestCount_Fail() {
 	var (
 		ctx    = context.Background()
-		params = arguments.RolePermissionCountArgs{
+		params = arguments.RolePermissionCount{
 			ID:           1,
 			RoleID:       1,
 			PermissionID: 1,
@@ -190,7 +190,7 @@ func (s *RolePermissionHandlerTestSuite) TestCount_Fail() {
 func (s *RolePermissionHandlerTestSuite) TestCount_Fail1() {
 	var (
 		ctx    = context.Background()
-		params = arguments.RolePermissionCountArgs{
+		params = arguments.RolePermissionCount{
 			ID:           0,
 			RoleID:       0,
 			PermissionID: 0,
@@ -209,7 +209,7 @@ func (s *RolePermissionHandlerTestSuite) TestInsert_Success() {
 	var (
 		ctx            = context.Background()
 		sampleID int64 = 1
-		params         = arguments.RolePermissionInsertArgs{
+		params         = arguments.RolePermissionInsert{
 			RoleID:       1,
 			PermissionID: 1,
 			CreatedBy:    "mockString",
@@ -236,7 +236,7 @@ func (s *RolePermissionHandlerTestSuite) TestInsert_Success() {
 func (s *RolePermissionHandlerTestSuite) TestInsert_Fail() {
 	var (
 		ctx    = context.Background()
-		params = arguments.RolePermissionInsertArgs{
+		params = arguments.RolePermissionInsert{
 			RoleID:       1,
 			PermissionID: 1,
 			CreatedBy:    "mockString",
@@ -253,7 +253,7 @@ func (s *RolePermissionHandlerTestSuite) TestInsert_Fail() {
 func (s *RolePermissionHandlerTestSuite) TestInsert_Fail1() {
 	var (
 		ctx    = context.Background()
-		params = arguments.RolePermissionInsertArgs{
+		params = arguments.RolePermissionInsert{
 			RoleID:       0,
 			PermissionID: 0,
 			CreatedBy:    "mockString",
@@ -272,7 +272,7 @@ func (s *RolePermissionHandlerTestSuite) TestUpdate_Success() {
 		ctx              = context.Background()
 		sampleID   int64 = 1
 		mockString       = "mockString"
-		params           = arguments.RolePermissionUpdateArgs{
+		params           = arguments.RolePermissionUpdate{
 			ID:           &sampleID,
 			RoleID:       &sampleID,
 			PermissionID: &sampleID,
@@ -302,7 +302,7 @@ func (s *RolePermissionHandlerTestSuite) TestUpdate_Fail() {
 		ctx              = context.Background()
 		sampleID   int64 = 1
 		mockString       = "mockString"
-		params           = arguments.RolePermissionUpdateArgs{
+		params           = arguments.RolePermissionUpdate{
 			ID:           &sampleID,
 			RoleID:       &sampleID,
 			PermissionID: &sampleID,
@@ -322,7 +322,7 @@ func (s *RolePermissionHandlerTestSuite) TestUpdate_Fail1() {
 		ctx        = context.Background()
 		sampleID   int64
 		mockString = "mockString"
-		params     = arguments.RolePermissionUpdateArgs{
+		params     = arguments.RolePermissionUpdate{
 			ID:           &sampleID,
 			RoleID:       &sampleID,
 			PermissionID: &sampleID,
@@ -340,7 +340,7 @@ func (s *RolePermissionHandlerTestSuite) TestUpdate_Fail1() {
 func (s *RolePermissionHandlerTestSuite) TestDelete_Success() {
 	var (
 		ctx   = context.Background()
-		param = arguments.RolePermissionDeleteArgs{
+		param = arguments.RolePermissionDelete{
 			ID: 1,
 		}
 	)
@@ -353,7 +353,7 @@ func (s *RolePermissionHandlerTestSuite) TestDelete_Success() {
 func (s *RolePermissionHandlerTestSuite) TestDelete_Fail() {
 	var (
 		ctx   = context.Background()
-		param = arguments.RolePermissionDeleteArgs{
+		param = arguments.RolePermissionDelete{
 			ID: 1,
 		}
 		rowEffected int64
@@ -367,7 +367,7 @@ func (s *RolePermissionHandlerTestSuite) TestDelete_Fail() {
 func (s *RolePermissionHandlerTestSuite) TestDelete_Fail1() {
 	var (
 		ctx   = context.Background()
-		param = arguments.RolePermissionDeleteArgs{
+		param = arguments.RolePermissionDelete{
 			ID: 0,
 		}
 		rowEffected int64

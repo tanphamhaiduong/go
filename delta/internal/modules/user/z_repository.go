@@ -39,7 +39,7 @@ func (r *RepositoryImpl) scanUser(row database.IRow, user *models.User) error {
 }
 
 // GetByID ...
-func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.UserGetByIDArgs) (models.User, error) {
+func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.UserGetByID) (models.User, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -101,7 +101,7 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.UserGetBy
 }
 
 // GetByIDs ...
-func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.UserGetByIDsArgs) ([]models.User, error) {
+func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.UserGetByIDs) ([]models.User, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -175,7 +175,7 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.UserGetB
 }
 
 // setArgsToListSelectBuilder ...
-func (r *RepositoryImpl) setArgsToListSelectBuilder(ctx context.Context, selectBuilder sq.SelectBuilder, params arguments.UserListArgs) sq.SelectBuilder {
+func (r *RepositoryImpl) setArgsToListSelectBuilder(ctx context.Context, selectBuilder sq.SelectBuilder, params arguments.UserList) sq.SelectBuilder {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -245,7 +245,7 @@ func (r *RepositoryImpl) setArgsToListSelectBuilder(ctx context.Context, selectB
 }
 
 // List ...
-func (r *RepositoryImpl) List(ctx context.Context, params arguments.UserListArgs) ([]models.User, error) {
+func (r *RepositoryImpl) List(ctx context.Context, params arguments.UserList) ([]models.User, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -320,7 +320,7 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.UserListArgs
 }
 
 // setArgsToCountSelectBuilder ...
-func (r *RepositoryImpl) setArgsToCountSelectBuilder(ctx context.Context, selectBuilder sq.SelectBuilder, params arguments.UserCountArgs) sq.SelectBuilder {
+func (r *RepositoryImpl) setArgsToCountSelectBuilder(ctx context.Context, selectBuilder sq.SelectBuilder, params arguments.UserCount) sq.SelectBuilder {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -383,7 +383,7 @@ func (r *RepositoryImpl) setArgsToCountSelectBuilder(ctx context.Context, select
 }
 
 // Count ...
-func (r *RepositoryImpl) Count(ctx context.Context, params arguments.UserCountArgs) (int64, error) {
+func (r *RepositoryImpl) Count(ctx context.Context, params arguments.UserCount) (int64, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -427,7 +427,7 @@ func (r *RepositoryImpl) Count(ctx context.Context, params arguments.UserCountAr
 }
 
 // Insert ...
-func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.UserInsertArgs) (models.User, error) {
+func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.UserInsert) (models.User, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -509,7 +509,7 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.UserInsert
 		}).Errorf("Repository Insert LastInsertId error of user")
 		return user, err
 	}
-	newUser, err := r.GetByID(ctx, arguments.UserGetByIDArgs{ID: id})
+	newUser, err := r.GetByID(ctx, arguments.UserGetByID{ID: id})
 	if err != nil {
 		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
@@ -521,7 +521,7 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.UserInsert
 }
 
 // setArgsToUpdateBuilder ...
-func (r *RepositoryImpl) setArgsToUpdateBuilder(ctx context.Context, updateBuilder sq.UpdateBuilder, params arguments.UserUpdateArgs) sq.UpdateBuilder {
+func (r *RepositoryImpl) setArgsToUpdateBuilder(ctx context.Context, updateBuilder sq.UpdateBuilder, params arguments.UserUpdate) sq.UpdateBuilder {
 	logger.WithFields(logger.Fields{
 		"params": params,
 	}).Infof("Repository setArgsToUpdateBuilder of user")
@@ -580,7 +580,7 @@ func (r *RepositoryImpl) setArgsToUpdateBuilder(ctx context.Context, updateBuild
 }
 
 // Update ...
-func (r *RepositoryImpl) Update(ctx context.Context, params arguments.UserUpdateArgs) (models.User, error) {
+func (r *RepositoryImpl) Update(ctx context.Context, params arguments.UserUpdate) (models.User, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,
@@ -635,7 +635,7 @@ func (r *RepositoryImpl) Update(ctx context.Context, params arguments.UserUpdate
 		}).Errorf("Repository Update rowAffected <= 0 of user")
 		return user, fmt.Errorf("error when update record id %d", *params.ID)
 	}
-	newUser, err := r.GetByID(ctx, arguments.UserGetByIDArgs{ID: *params.ID})
+	newUser, err := r.GetByID(ctx, arguments.UserGetByID{ID: *params.ID})
 	if err != nil {
 		logger.WithFields(logger.Fields{
 			"TraceID": ctx.Value("TraceID"),
@@ -647,7 +647,7 @@ func (r *RepositoryImpl) Update(ctx context.Context, params arguments.UserUpdate
 }
 
 // Delete ...
-func (r *RepositoryImpl) Delete(ctx context.Context, params arguments.UserDeleteArgs) (int64, error) {
+func (r *RepositoryImpl) Delete(ctx context.Context, params arguments.UserDelete) (int64, error) {
 	logger.WithFields(logger.Fields{
 		"TraceID": ctx.Value("TraceID"),
 		"params":  params,

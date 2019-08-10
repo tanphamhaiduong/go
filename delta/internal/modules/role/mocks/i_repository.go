@@ -13,18 +13,18 @@ type IRepository struct {
 }
 
 // Count provides a mock function with given fields: ctx, params
-func (_m *IRepository) Count(ctx context.Context, params arguments.RoleCountArgs) (int64, error) {
+func (_m *IRepository) Count(ctx context.Context, params arguments.RoleCount) (int64, error) {
 	ret := _m.Called(ctx, params)
 
 	var r0 int64
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.RoleCountArgs) int64); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.RoleCount) int64); ok {
 		r0 = rf(ctx, params)
 	} else {
 		r0 = ret.Get(0).(int64)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.RoleCountArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.RoleCount) error); ok {
 		r1 = rf(ctx, params)
 	} else {
 		r1 = ret.Error(1)
@@ -33,20 +33,20 @@ func (_m *IRepository) Count(ctx context.Context, params arguments.RoleCountArgs
 	return r0, r1
 }
 
-// Delete provides a mock function with given fields: ctx, params
-func (_m *IRepository) Delete(ctx context.Context, params arguments.RoleDeleteArgs) (int64, error) {
-	ret := _m.Called(ctx, params)
+// Delete provides a mock function with given fields: ctx, param
+func (_m *IRepository) Delete(ctx context.Context, param arguments.RoleDelete) (int64, error) {
+	ret := _m.Called(ctx, param)
 
 	var r0 int64
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.RoleDeleteArgs) int64); ok {
-		r0 = rf(ctx, params)
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.RoleDelete) int64); ok {
+		r0 = rf(ctx, param)
 	} else {
 		r0 = ret.Get(0).(int64)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.RoleDeleteArgs) error); ok {
-		r1 = rf(ctx, params)
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.RoleDelete) error); ok {
+		r1 = rf(ctx, param)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -54,20 +54,20 @@ func (_m *IRepository) Delete(ctx context.Context, params arguments.RoleDeleteAr
 	return r0, r1
 }
 
-// GetByID provides a mock function with given fields: ctx, params
-func (_m *IRepository) GetByID(ctx context.Context, params arguments.RoleGetByIDArgs) (models.Role, error) {
-	ret := _m.Called(ctx, params)
+// GetByID provides a mock function with given fields: ctx, param
+func (_m *IRepository) GetByID(ctx context.Context, param arguments.RoleGetByID) (models.Role, error) {
+	ret := _m.Called(ctx, param)
 
 	var r0 models.Role
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.RoleGetByIDArgs) models.Role); ok {
-		r0 = rf(ctx, params)
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.RoleGetByID) models.Role); ok {
+		r0 = rf(ctx, param)
 	} else {
 		r0 = ret.Get(0).(models.Role)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.RoleGetByIDArgs) error); ok {
-		r1 = rf(ctx, params)
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.RoleGetByID) error); ok {
+		r1 = rf(ctx, param)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -75,13 +75,13 @@ func (_m *IRepository) GetByID(ctx context.Context, params arguments.RoleGetByID
 	return r0, r1
 }
 
-// GetByIDs provides a mock function with given fields: ctx, params
-func (_m *IRepository) GetByIDs(ctx context.Context, params arguments.RoleGetByIDsArgs) ([]models.Role, error) {
-	ret := _m.Called(ctx, params)
+// GetByIDs provides a mock function with given fields: ctx, param
+func (_m *IRepository) GetByIDs(ctx context.Context, param arguments.RoleGetByIDs) ([]models.Role, error) {
+	ret := _m.Called(ctx, param)
 
 	var r0 []models.Role
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.RoleGetByIDsArgs) []models.Role); ok {
-		r0 = rf(ctx, params)
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.RoleGetByIDs) []models.Role); ok {
+		r0 = rf(ctx, param)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]models.Role)
@@ -89,8 +89,8 @@ func (_m *IRepository) GetByIDs(ctx context.Context, params arguments.RoleGetByI
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.RoleGetByIDsArgs) error); ok {
-		r1 = rf(ctx, params)
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.RoleGetByIDs) error); ok {
+		r1 = rf(ctx, param)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -99,18 +99,18 @@ func (_m *IRepository) GetByIDs(ctx context.Context, params arguments.RoleGetByI
 }
 
 // Insert provides a mock function with given fields: ctx, params
-func (_m *IRepository) Insert(ctx context.Context, params arguments.RoleInsertArgs) (models.Role, error) {
+func (_m *IRepository) Insert(ctx context.Context, params arguments.RoleInsert) (models.Role, error) {
 	ret := _m.Called(ctx, params)
 
 	var r0 models.Role
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.RoleInsertArgs) models.Role); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.RoleInsert) models.Role); ok {
 		r0 = rf(ctx, params)
 	} else {
 		r0 = ret.Get(0).(models.Role)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.RoleInsertArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.RoleInsert) error); ok {
 		r1 = rf(ctx, params)
 	} else {
 		r1 = ret.Error(1)
@@ -120,11 +120,11 @@ func (_m *IRepository) Insert(ctx context.Context, params arguments.RoleInsertAr
 }
 
 // List provides a mock function with given fields: ctx, params
-func (_m *IRepository) List(ctx context.Context, params arguments.RoleListArgs) ([]models.Role, error) {
+func (_m *IRepository) List(ctx context.Context, params arguments.RoleList) ([]models.Role, error) {
 	ret := _m.Called(ctx, params)
 
 	var r0 []models.Role
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.RoleListArgs) []models.Role); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.RoleList) []models.Role); ok {
 		r0 = rf(ctx, params)
 	} else {
 		if ret.Get(0) != nil {
@@ -133,7 +133,7 @@ func (_m *IRepository) List(ctx context.Context, params arguments.RoleListArgs) 
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.RoleListArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.RoleList) error); ok {
 		r1 = rf(ctx, params)
 	} else {
 		r1 = ret.Error(1)
@@ -143,18 +143,18 @@ func (_m *IRepository) List(ctx context.Context, params arguments.RoleListArgs) 
 }
 
 // Update provides a mock function with given fields: ctx, params
-func (_m *IRepository) Update(ctx context.Context, params arguments.RoleUpdateArgs) (models.Role, error) {
+func (_m *IRepository) Update(ctx context.Context, params arguments.RoleUpdate) (models.Role, error) {
 	ret := _m.Called(ctx, params)
 
 	var r0 models.Role
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.RoleUpdateArgs) models.Role); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, arguments.RoleUpdate) models.Role); ok {
 		r0 = rf(ctx, params)
 	} else {
 		r0 = ret.Get(0).(models.Role)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.RoleUpdateArgs) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, arguments.RoleUpdate) error); ok {
 		r1 = rf(ctx, params)
 	} else {
 		r1 = ret.Error(1)
