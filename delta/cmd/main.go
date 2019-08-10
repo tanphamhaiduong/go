@@ -188,7 +188,7 @@ func main() {
 	rolepermissionResolver := rolepermission.NewResolver(rolepermissionHandler)
 	// User
 	userRepository := user.NewRepository(db)
-	userHandler := user.NewHandler(userRepository)
+	userHandler := user.NewHandler(userRepository, permissionHandler, rolepermissionHandler)
 	userResolver := user.NewResolver(userHandler)
 	// Init Resolvers
 	resolvers := modules.NewResolver(

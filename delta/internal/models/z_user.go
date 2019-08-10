@@ -17,8 +17,8 @@ type User struct {
 	Extension     string
 	TelProvider   string
 	TelApi        string
-	SupervisorId  int64
-	RoleId        int64
+	SupervisorID  int64
+	RoleID        int64
 	CompanyID     int64
 	Status        string
 	CreatedBy     string

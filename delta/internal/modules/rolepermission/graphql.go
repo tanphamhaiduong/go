@@ -1,8 +1,15 @@
 package rolepermission
 
+import (
+	"context"
+
+	"github.com/tanphamhaiduong/go/delta/internal/models"
+)
+
 // IHandler ...
 type IHandler interface {
 	ICoreHandler
+	GetByRoleID(ctx context.Context, roleID int64) ([]models.RolePermission, error)
 }
 
 // ResolverImpl ...

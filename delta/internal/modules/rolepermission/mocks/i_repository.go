@@ -98,6 +98,29 @@ func (_m *IRepository) GetByIDs(ctx context.Context, param arguments.RolePermiss
 	return r0, r1
 }
 
+// GetByRoleID provides a mock function with given fields: ctx, roleID
+func (_m *IRepository) GetByRoleID(ctx context.Context, roleID int64) ([]models.RolePermission, error) {
+	ret := _m.Called(ctx, roleID)
+
+	var r0 []models.RolePermission
+	if rf, ok := ret.Get(0).(func(context.Context, int64) []models.RolePermission); ok {
+		r0 = rf(ctx, roleID)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]models.RolePermission)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, int64) error); ok {
+		r1 = rf(ctx, roleID)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // Insert provides a mock function with given fields: ctx, params
 func (_m *IRepository) Insert(ctx context.Context, params arguments.RolePermissionInsert) (models.RolePermission, error) {
 	ret := _m.Called(ctx, params)

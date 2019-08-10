@@ -5,7 +5,6 @@ import (
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/tanphamhaiduong/go/common/logger"
-	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/database"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
 )
@@ -30,10 +29,10 @@ func NewRepository(db database.IDB) *RepositoryImpl {
 }
 
 // GetByUsername ...
-func (r *RepositoryImpl) GetByUsername(ctx context.Context, params arguments.UserGetByUsername) (models.User, error) {
+func (r *RepositoryImpl) GetByUsername(ctx context.Context, username string) (models.User, error) {
 	logger.WithFields(logger.Fields{
-		"TraceID": ctx.Value("TraceID"),
-		"params":  params,
+		"TraceID":  ctx.Value("TraceID"),
+		"username": username,
 	}).Infof("Repository GetByUsername of user")
 	var (
 		user          models.User
@@ -56,7 +55,7 @@ func (r *RepositoryImpl) GetByUsername(ctx context.Context, params arguments.Use
 			"status",
 			"created_by",
 			"updated_by",
-		).From("user").Where(sq.Eq{"username": params.Username})
+		).From("user").Where(sq.And{sq.Eq{"username": username}, sq.Eq{"status": "active"}})
 	)
 	sql, args, err := selectBuilder.ToSql()
 	logger.WithFields(logger.Fields{

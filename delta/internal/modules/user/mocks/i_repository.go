@@ -98,20 +98,20 @@ func (_m *IRepository) GetByIDs(ctx context.Context, param arguments.UserGetByID
 	return r0, r1
 }
 
-// GetByUsername provides a mock function with given fields: ctx, param
-func (_m *IRepository) GetByUsername(ctx context.Context, param arguments.UserGetByUsername) (models.User, error) {
-	ret := _m.Called(ctx, param)
+// GetByUsername provides a mock function with given fields: ctx, username
+func (_m *IRepository) GetByUsername(ctx context.Context, username string) (models.User, error) {
+	ret := _m.Called(ctx, username)
 
 	var r0 models.User
-	if rf, ok := ret.Get(0).(func(context.Context, arguments.UserGetByUsername) models.User); ok {
-		r0 = rf(ctx, param)
+	if rf, ok := ret.Get(0).(func(context.Context, string) models.User); ok {
+		r0 = rf(ctx, username)
 	} else {
 		r0 = ret.Get(0).(models.User)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, arguments.UserGetByUsername) error); ok {
-		r1 = rf(ctx, param)
+	if rf, ok := ret.Get(1).(func(context.Context, string) error); ok {
+		r1 = rf(ctx, username)
 	} else {
 		r1 = ret.Error(1)
 	}

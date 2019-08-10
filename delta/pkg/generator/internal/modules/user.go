@@ -123,7 +123,7 @@ var (
 				Validate:           `validate:"omitempty"`,
 			},
 			{
-				Name:               "SupervisorId",
+				Name:               "SupervisorID",
 				GoType:             gotype.Int64,
 				QueryType:          querytype.Equal,
 				GraphQLType:        graphqltype.Int,
@@ -132,11 +132,11 @@ var (
 				Validate:           `validate:"omitempty"`,
 			},
 			{
-				Name:               "RoleId",
+				Name:               "RoleID",
 				GoType:             gotype.Int64,
 				QueryType:          querytype.Equal,
 				GraphQLType:        graphqltype.Int,
-				GraphQLDescription: "This is user's tel roleId",
+				GraphQLDescription: "This is user's tel RoleID",
 				GraphQLRequired:    true,
 				Validate:           `validate:"omitempty"`,
 			},

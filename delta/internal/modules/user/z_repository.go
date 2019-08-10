@@ -28,8 +28,8 @@ func (r *RepositoryImpl) scanUser(row database.IRow, user *models.User) error {
 		&user.Extension,
 		&user.TelProvider,
 		&user.TelApi,
-		&user.SupervisorId,
-		&user.RoleId,
+		&user.SupervisorID,
+		&user.RoleID,
 		&user.CompanyID,
 		&user.Status,
 		&user.CreatedBy,
@@ -216,11 +216,11 @@ func (r *RepositoryImpl) setArgsToListSelectBuilder(ctx context.Context, selectB
 	if params.TelApi != "" {
 		selectBuilder = selectBuilder.Where(sq.Eq{"tel_api": params.TelApi})
 	}
-	if params.SupervisorId != 0 {
-		selectBuilder = selectBuilder.Where(sq.Eq{"supervisor_id": params.SupervisorId})
+	if params.SupervisorID != 0 {
+		selectBuilder = selectBuilder.Where(sq.Eq{"supervisor_id": params.SupervisorID})
 	}
-	if params.RoleId != 0 {
-		selectBuilder = selectBuilder.Where(sq.Eq{"role_id": params.RoleId})
+	if params.RoleID != 0 {
+		selectBuilder = selectBuilder.Where(sq.Eq{"role_id": params.RoleID})
 	}
 	if params.CompanyID != 0 {
 		selectBuilder = selectBuilder.Where(sq.Eq{"company_id": params.CompanyID})
@@ -361,11 +361,11 @@ func (r *RepositoryImpl) setArgsToCountSelectBuilder(ctx context.Context, select
 	if params.TelApi != "" {
 		selectBuilder = selectBuilder.Where(sq.Eq{"tel_api": params.TelApi})
 	}
-	if params.SupervisorId != 0 {
-		selectBuilder = selectBuilder.Where(sq.Eq{"supervisor_id": params.SupervisorId})
+	if params.SupervisorID != 0 {
+		selectBuilder = selectBuilder.Where(sq.Eq{"supervisor_id": params.SupervisorID})
 	}
-	if params.RoleId != 0 {
-		selectBuilder = selectBuilder.Where(sq.Eq{"role_id": params.RoleId})
+	if params.RoleID != 0 {
+		selectBuilder = selectBuilder.Where(sq.Eq{"role_id": params.RoleID})
 	}
 	if params.CompanyID != 0 {
 		selectBuilder = selectBuilder.Where(sq.Eq{"company_id": params.CompanyID})
@@ -464,8 +464,8 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.UserInsert
 			params.Extension,
 			params.TelProvider,
 			params.TelApi,
-			params.SupervisorId,
-			params.RoleId,
+			params.SupervisorID,
+			params.RoleID,
 			params.CompanyID,
 			params.Status,
 			params.CreatedBy,
@@ -558,11 +558,11 @@ func (r *RepositoryImpl) setArgsToUpdateBuilder(ctx context.Context, updateBuild
 	if params.TelApi != nil {
 		updateBuilder = updateBuilder.Set("tel_api", *params.TelApi)
 	}
-	if params.SupervisorId != nil {
-		updateBuilder = updateBuilder.Set("supervisor_id", *params.SupervisorId)
+	if params.SupervisorID != nil {
+		updateBuilder = updateBuilder.Set("supervisor_id", *params.SupervisorID)
 	}
-	if params.RoleId != nil {
-		updateBuilder = updateBuilder.Set("role_id", *params.RoleId)
+	if params.RoleID != nil {
+		updateBuilder = updateBuilder.Set("role_id", *params.RoleID)
 	}
 	if params.CompanyID != nil {
 		updateBuilder = updateBuilder.Set("company_id", *params.CompanyID)

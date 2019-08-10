@@ -72,7 +72,7 @@ var (
 			},
 			"roleId": &graphql.Field{
 				Type:        graphql.NewNonNull(graphql.Int),
-				Description: "This is user's tel roleId",
+				Description: "This is user's tel RoleID",
 			},
 			"companyId": &graphql.Field{
 				Type:        graphql.NewNonNull(graphql.Int),
@@ -156,7 +156,7 @@ var (
 		},
 		"roleId": &graphql.ArgumentConfig{
 			Type:        graphql.Int,
-			Description: "This is user's tel roleId",
+			Description: "This is user's tel RoleID",
 		},
 		"companyId": &graphql.ArgumentConfig{
 			Type:        graphql.Int,
@@ -237,7 +237,7 @@ var (
 		},
 		"roleId": &graphql.ArgumentConfig{
 			Type:        graphql.NewNonNull(graphql.Int),
-			Description: "This is user's tel roleId",
+			Description: "This is user's tel RoleID",
 		},
 		"companyId": &graphql.ArgumentConfig{
 			Type:        graphql.NewNonNull(graphql.Int),
@@ -312,7 +312,7 @@ var (
 		},
 		"roleId": &graphql.ArgumentConfig{
 			Type:        graphql.Int,
-			Description: "This is user's tel roleId",
+			Description: "This is user's tel RoleID",
 		},
 		"companyId": &graphql.ArgumentConfig{
 			Type:        graphql.Int,

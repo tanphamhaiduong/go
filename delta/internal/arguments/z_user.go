@@ -27,8 +27,8 @@ type UserCount struct {
 	Extension     string         `graphql:"extension" validate:"omitempty"`
 	TelProvider   string         `graphql:"telProvider" validate:"omitempty"`
 	TelApi        string         `graphql:"telApi" validate:"omitempty"`
-	SupervisorId  int64          `graphql:"supervisorId" validate:"omitempty"`
-	RoleId        int64          `graphql:"roleId" validate:"omitempty"`
+	SupervisorID  int64          `graphql:"supervisorId" validate:"omitempty"`
+	RoleID        int64          `graphql:"roleId" validate:"omitempty"`
 	CompanyID     int64          `graphql:"companyId" validate:"omitempty,min=1"`
 	Status        string         `graphql:"status" validate:"omitempty,oneof=active inactive"`
 	CreatedBy     string         `graphql:"createdBy" validate:"omitempty"`
@@ -49,8 +49,8 @@ type UserList struct {
 	Extension     string         `graphql:"extension" validate:"omitempty"`
 	TelProvider   string         `graphql:"telProvider" validate:"omitempty"`
 	TelApi        string         `graphql:"telApi" validate:"omitempty"`
-	SupervisorId  int64          `graphql:"supervisorId" validate:"omitempty"`
-	RoleId        int64          `graphql:"roleId" validate:"omitempty"`
+	SupervisorID  int64          `graphql:"supervisorId" validate:"omitempty"`
+	RoleID        int64          `graphql:"roleId" validate:"omitempty"`
 	CompanyID     int64          `graphql:"companyId" validate:"omitempty,min=1"`
 	Status        string         `graphql:"status" validate:"omitempty,oneof=active inactive"`
 	CreatedBy     string         `graphql:"createdBy" validate:"omitempty"`
@@ -72,8 +72,8 @@ type UserInsert struct {
 	Extension     string         `graphql:"extension" validate:"omitempty"`
 	TelProvider   string         `graphql:"telProvider" validate:"omitempty"`
 	TelApi        string         `graphql:"telApi" validate:"omitempty"`
-	SupervisorId  int64          `graphql:"supervisorId" validate:"omitempty"`
-	RoleId        int64          `graphql:"roleId" validate:"omitempty"`
+	SupervisorID  int64          `graphql:"supervisorId" validate:"omitempty"`
+	RoleID        int64          `graphql:"roleId" validate:"omitempty"`
 	CompanyID     int64          `graphql:"companyId" validate:"omitempty,min=1"`
 	Status        string         `graphql:"status" validate:"omitempty,oneof=active inactive"`
 	CreatedBy     string         `graphql:"createdBy" validate:"omitempty"`
@@ -94,8 +94,8 @@ type UserUpdate struct {
 	Extension     *string         `graphql:"extension" validate:"omitempty"`
 	TelProvider   *string         `graphql:"telProvider" validate:"omitempty"`
 	TelApi        *string         `graphql:"telApi" validate:"omitempty"`
-	SupervisorId  *int64          `graphql:"supervisorId" validate:"omitempty"`
-	RoleId        *int64          `graphql:"roleId" validate:"omitempty"`
+	SupervisorID  *int64          `graphql:"supervisorId" validate:"omitempty"`
+	RoleID        *int64          `graphql:"roleId" validate:"omitempty"`
 	CompanyID     *int64          `graphql:"companyId" validate:"omitempty,min=1"`
 	Status        *string         `graphql:"status" validate:"omitempty,oneof=active inactive"`
 	CreatedBy     *string         `graphql:"createdBy" validate:"omitempty"`

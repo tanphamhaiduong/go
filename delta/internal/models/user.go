@@ -4,13 +4,11 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
+// Claims ...
 type Claims struct {
-	User
-	jwt.StandardClaims
-	Permission Permission
-}
-
-type RefreshClaims struct {
-	ID int64
+	ID          int64        `json:"id"`
+	Username    string       `json:"username"`
+	CompanyID   int64        `json:"companyId"`
+	Permissions []Permission `json:"permissions"`
 	jwt.StandardClaims
 }
