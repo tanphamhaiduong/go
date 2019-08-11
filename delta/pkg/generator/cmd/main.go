@@ -25,11 +25,13 @@ func main() {
 		workingDir = utils.ProjectDir()
 		mods       = modules.GetModules()
 		funcMap    = template.FuncMap{
-			"ToCamelCase":      utils.ToCamelCase,
-			"ToLowerCamelCase": utils.ToLowerCamelCase,
-			"ToSnakeCase":      utils.ToSnakeCase,
-			"ToLowerCase":      utils.ToLowerCase,
-			"ToPlural":         utils.ToPlural,
+			"ToCamelCase":         utils.ToCamelCase,
+			"ToLowerCamelCase":    utils.ToLowerCamelCase,
+			"ToSnakeCase":         utils.ToSnakeCase,
+			"ToLowerCase":         utils.ToLowerCase,
+			"ToPlural":            utils.ToPlural,
+			"Add":                 utils.Add,
+			"ToCamelCaseExceptID": utils.ToCamelCaseExceptID,
 		}
 	)
 

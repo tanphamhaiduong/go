@@ -1,0 +1,102 @@
+// @generated
+{{- $Modules := .Modules }}
+syntax = "proto3";
+
+option go_package = "pb";
+
+{{- range $Module := $Modules }}
+{{- $Name := $Module.Name }}
+{{- $name := $Module.Name | ToLowerCamelCase }}
+{{- $fields := $Module.Fields }}
+{{- $one := 1 }}
+message {{ $Name }} {
+{{- range $index, $field := $fields }}
+{{- if $field.IsNullTimeField }}
+  string {{ $field.Name | ToLowerCamelCase }} = {{ Add $index $one }};
+{{- else }}
+  {{ $field.GoType }} {{ $field.Name | ToLowerCamelCase }} = {{ Add $index $one }};
+{{- end }}
+{{- end }}
+}
+// GetByID
+message {{ $Name }}GetByIDRequest {
+  int64 id = 1;
+}
+message {{ $Name }}GetByIDResponse {
+  {{ $Name }} {{ $name }} = 1;
+}
+
+// List
+message {{ $Name }}ListRequest {
+{{- range $index, $field := $fields }}
+{{- if $field.IsNullTimeField }}
+  string {{ $field.Name | ToLowerCamelCase }} = {{ Add $index $one }};
+{{- else }}
+  {{ $field.GoType }} {{ $field.Name | ToLowerCamelCase }} = {{ Add $index $one }};
+{{- end }}
+{{- end }}
+}
+message {{ $Name }}ListResponse {
+  repeated {{ $Name }} {{ $name }} = 1;
+}
+
+// Insert
+message {{ $Name }}InsertRequest {
+{{- range $index, $field := $fields }}
+{{- if not $field.IsIDField }}
+{{- if $field.IsNullTimeField }}
+  string {{ $field.Name | ToLowerCamelCase }} = {{ Add $index $one }};
+{{- else }}
+  {{ $field.GoType }} {{ $field.Name | ToLowerCamelCase }} = {{ Add $index $one }};
+{{- end }}
+{{- end }}
+{{- end }}
+}
+message {{ $Name }}InsertResponse {
+  {{ $Name }} {{ $name }} = 1;
+}
+
+// Update
+message {{ $Name }}UpdateRequest {
+{{- range $index, $field := $fields }}
+{{- if $field.IsNullTimeField }}
+  string {{ $field.Name | ToLowerCamelCase }} = {{ Add $index $one }};
+{{- else }}
+  {{ $field.GoType }} {{ $field.Name | ToLowerCamelCase }} = {{ Add $index $one }};
+{{- end }}
+{{- end }}
+}
+message {{ $Name }}UpdateResponse {
+  {{ $Name }} {{ $name }} = 1;
+}
+
+// Delete
+message {{ $Name }}DeleteRequest {
+  int64 id = 1;
+}
+message {{ $Name }}DeleteResponse {
+  int64 id = 1;
+}
+{{- end }}
+
+
+service DeltaService {
+{{- range $Module := $Modules }}
+{{- $Name := $Module.Name }}
+{{- if $Module.IsHaveGetByID }}
+  rpc {{ $Name }}GetByID ({{ $Name }}GetByIDRequest) returns ({{ $Name }}GetByIDResponse);
+{{- end }}
+{{- if $Module.IsHaveList }}
+  rpc {{ $Name }}List ({{ $Name }}ListRequest) returns ({{ $Name }}ListResponse);
+{{- end }}
+{{- if $Module.IsHaveInsert }}
+  rpc {{ $Name }}Insert ({{ $Name }}InsertRequest) returns ({{ $Name }}InsertResponse);
+{{- end }}
+{{- if $Module.IsHaveUpdate }}
+  rpc {{ $Name }}Update ({{ $Name }}UpdateRequest) returns ({{ $Name }}UpdateResponse);
+{{- end }}
+{{- if $Module.IsHaveDelete }}
+  rpc {{ $Name }}Delete ({{ $Name }}DeleteRequest) returns ({{ $Name }}DeleteResponse);
+{{- end }}
+{{- end }}
+}

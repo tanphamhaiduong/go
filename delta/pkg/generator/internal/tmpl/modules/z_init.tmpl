@@ -90,7 +90,7 @@ func NewResolver({{- range $Module := $Modules }}{{ $Module.Name | ToLowerCase }
 	return Resolver{
 		{{- range $Module := $Modules }}
 		  {{ $Module.Name }}: {{ $Module.Name | ToLowerCase }},
-        {{- end }}
+		{{- end }}
 	}
 }
 
@@ -99,6 +99,6 @@ func NewHandler({{- range $Module := $Modules }}{{ $Module.Name | ToLowerCase }}
 	return Handler{
 		{{- range $Module := $Modules }}
 		  {{ $Module.Name }}: {{ $Module.Name | ToLowerCase }},
-        {{- end }}
+		{{- end }}
 	}
 }

@@ -9,6 +9,7 @@ start:
 
 gen:
 	@protoc -I ./pb ./pb/message.proto --go_out=plugins=grpc:./pb
+	@protoc -I ./pb ./pb/z_message.proto --go_out=plugins=grpc:./pb
 	@go run pkg/generator/cmd/*.go
 	@goimports -w ./
 	@gofmt -s -w ./

@@ -30,5 +30,7 @@ var (
 		{Source: "pkg/generator/internal/tmpl/arguments/z_type.tmpl", Destination: "internal/arguments/z_{{module}}.go", IsOverWrite: true},
 		{Source: "pkg/generator/internal/tmpl/arguments/type.tmpl", Destination: "internal/arguments/{{module}}.go", IsOverWrite: false},
 		{Source: "pkg/generator/internal/tmpl/models/z_type.tmpl", Destination: "internal/models/z_{{module}}.go", IsOverWrite: true},
+		{Source: "pkg/generator/grpcservice/z_grpc.tmpl", Destination: "internal/grpcservice/z_grpc.go", IsOverWrite: true},
+		{Source: "pkg/generator/pb/z_message.tmpl", Destination: "pb/z_message.proto", IsOverWrite: true},
 	}
 )

@@ -21,6 +21,18 @@ func ToCamelCase(value string) string {
 	return strcase.ToCamel(value)
 }
 
+// ToCamelCaseExceptID ...
+func ToCamelCaseExceptID(value string) string {
+	if value == "ID" {
+		return "Id"
+	}
+	valueCamelCase := strcase.ToCamel(value)
+	if regIDExt.MatchString(valueCamelCase) {
+		valueCamelCase = regIDExt.ReplaceAllString(valueCamelCase, `${1}Id`)
+	}
+	return valueCamelCase
+}
+
 // ToLowerCamelCase ...
 func ToLowerCamelCase(value string) string {
 	if value == "ID" {
@@ -28,6 +40,18 @@ func ToLowerCamelCase(value string) string {
 	}
 	if value == "URL" {
 		return "url"
+	}
+	valueLowerCamelCase := strcase.ToLowerCamel(value)
+	if regIDExt.MatchString(valueLowerCamelCase) {
+		valueLowerCamelCase = regIDExt.ReplaceAllString(valueLowerCamelCase, `${1}Id`)
+	}
+	return valueLowerCamelCase
+}
+
+// ToLowerCamelCaseExceptID ...
+func ToLowerCamelCaseExceptID(value string) string {
+	if value == "ID" {
+		return "Id"
 	}
 	valueLowerCamelCase := strcase.ToLowerCamel(value)
 	if regIDExt.MatchString(valueLowerCamelCase) {
@@ -64,4 +88,9 @@ func FileExists(path string) bool {
 		}
 	}
 	return true
+}
+
+// Add ...
+func Add(a int, b int) int {
+	return a + b
 }

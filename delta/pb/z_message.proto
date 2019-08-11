@@ -1,0 +1,376 @@
+// @generated
+syntax = "proto3";
+
+option go_package = "pb";
+message Company {
+  int64 id = 1;
+  string name = 2;
+  string companyCode = 3;
+  string status = 4;
+  string createdBy = 5;
+  string updatedBy = 6;
+  string apiSecretKey = 7;
+}
+// GetByID
+message CompanyGetByIDRequest {
+  int64 id = 1;
+}
+message CompanyGetByIDResponse {
+  Company company = 1;
+}
+
+// List
+message CompanyListRequest {
+  int64 id = 1;
+  string name = 2;
+  string companyCode = 3;
+  string status = 4;
+  string createdBy = 5;
+  string updatedBy = 6;
+  string apiSecretKey = 7;
+}
+message CompanyListResponse {
+  repeated Company company = 1;
+}
+
+// Insert
+message CompanyInsertRequest {
+  string name = 2;
+  string companyCode = 3;
+  string status = 4;
+  string createdBy = 5;
+  string updatedBy = 6;
+  string apiSecretKey = 7;
+}
+message CompanyInsertResponse {
+  Company company = 1;
+}
+
+// Update
+message CompanyUpdateRequest {
+  int64 id = 1;
+  string name = 2;
+  string companyCode = 3;
+  string status = 4;
+  string createdBy = 5;
+  string updatedBy = 6;
+  string apiSecretKey = 7;
+}
+message CompanyUpdateResponse {
+  Company company = 1;
+}
+
+// Delete
+message CompanyDeleteRequest {
+  int64 id = 1;
+}
+message CompanyDeleteResponse {
+  int64 id = 1;
+}
+message Permission {
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  string status = 4;
+  string createdBy = 5;
+  string updatedBy = 6;
+}
+// GetByID
+message PermissionGetByIDRequest {
+  int64 id = 1;
+}
+message PermissionGetByIDResponse {
+  Permission permission = 1;
+}
+
+// List
+message PermissionListRequest {
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  string status = 4;
+  string createdBy = 5;
+  string updatedBy = 6;
+}
+message PermissionListResponse {
+  repeated Permission permission = 1;
+}
+
+// Insert
+message PermissionInsertRequest {
+  string name = 2;
+  string description = 3;
+  string status = 4;
+  string createdBy = 5;
+  string updatedBy = 6;
+}
+message PermissionInsertResponse {
+  Permission permission = 1;
+}
+
+// Update
+message PermissionUpdateRequest {
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  string status = 4;
+  string createdBy = 5;
+  string updatedBy = 6;
+}
+message PermissionUpdateResponse {
+  Permission permission = 1;
+}
+
+// Delete
+message PermissionDeleteRequest {
+  int64 id = 1;
+}
+message PermissionDeleteResponse {
+  int64 id = 1;
+}
+message Role {
+  int64 id = 1;
+  string name = 2;
+  int64 companyId = 3;
+  string status = 4;
+  string createdBy = 5;
+  string updatedBy = 6;
+}
+// GetByID
+message RoleGetByIDRequest {
+  int64 id = 1;
+}
+message RoleGetByIDResponse {
+  Role role = 1;
+}
+
+// List
+message RoleListRequest {
+  int64 id = 1;
+  string name = 2;
+  int64 companyId = 3;
+  string status = 4;
+  string createdBy = 5;
+  string updatedBy = 6;
+}
+message RoleListResponse {
+  repeated Role role = 1;
+}
+
+// Insert
+message RoleInsertRequest {
+  string name = 2;
+  int64 companyId = 3;
+  string status = 4;
+  string createdBy = 5;
+  string updatedBy = 6;
+}
+message RoleInsertResponse {
+  Role role = 1;
+}
+
+// Update
+message RoleUpdateRequest {
+  int64 id = 1;
+  string name = 2;
+  int64 companyId = 3;
+  string status = 4;
+  string createdBy = 5;
+  string updatedBy = 6;
+}
+message RoleUpdateResponse {
+  Role role = 1;
+}
+
+// Delete
+message RoleDeleteRequest {
+  int64 id = 1;
+}
+message RoleDeleteResponse {
+  int64 id = 1;
+}
+message RolePermission {
+  int64 id = 1;
+  int64 roleId = 2;
+  int64 permissionId = 3;
+  string createdBy = 4;
+  string updatedBy = 5;
+}
+// GetByID
+message RolePermissionGetByIDRequest {
+  int64 id = 1;
+}
+message RolePermissionGetByIDResponse {
+  RolePermission rolePermission = 1;
+}
+
+// List
+message RolePermissionListRequest {
+  int64 id = 1;
+  int64 roleId = 2;
+  int64 permissionId = 3;
+  string createdBy = 4;
+  string updatedBy = 5;
+}
+message RolePermissionListResponse {
+  repeated RolePermission rolePermission = 1;
+}
+
+// Insert
+message RolePermissionInsertRequest {
+  int64 roleId = 2;
+  int64 permissionId = 3;
+  string createdBy = 4;
+  string updatedBy = 5;
+}
+message RolePermissionInsertResponse {
+  RolePermission rolePermission = 1;
+}
+
+// Update
+message RolePermissionUpdateRequest {
+  int64 id = 1;
+  int64 roleId = 2;
+  int64 permissionId = 3;
+  string createdBy = 4;
+  string updatedBy = 5;
+}
+message RolePermissionUpdateResponse {
+  RolePermission rolePermission = 1;
+}
+
+// Delete
+message RolePermissionDeleteRequest {
+  int64 id = 1;
+}
+message RolePermissionDeleteResponse {
+  int64 id = 1;
+}
+message User {
+  int64 id = 1;
+  string username = 2;
+  string password = 3;
+  string name = 4;
+  string dateOfBirth = 5;
+  string reference = 6;
+  string avatarUrl = 7;
+  string licenseNumber = 8;
+  string phoneNumber = 9;
+  string extension = 10;
+  string telProvider = 11;
+  string telApi = 12;
+  int64 supervisorId = 13;
+  int64 roleId = 14;
+  int64 companyId = 15;
+  string status = 16;
+  string createdBy = 17;
+  string updatedBy = 18;
+}
+// GetByID
+message UserGetByIDRequest {
+  int64 id = 1;
+}
+message UserGetByIDResponse {
+  User user = 1;
+}
+
+// List
+message UserListRequest {
+  int64 id = 1;
+  string username = 2;
+  string password = 3;
+  string name = 4;
+  string dateOfBirth = 5;
+  string reference = 6;
+  string avatarUrl = 7;
+  string licenseNumber = 8;
+  string phoneNumber = 9;
+  string extension = 10;
+  string telProvider = 11;
+  string telApi = 12;
+  int64 supervisorId = 13;
+  int64 roleId = 14;
+  int64 companyId = 15;
+  string status = 16;
+  string createdBy = 17;
+  string updatedBy = 18;
+}
+message UserListResponse {
+  repeated User user = 1;
+}
+
+// Insert
+message UserInsertRequest {
+  string username = 2;
+  string password = 3;
+  string name = 4;
+  string dateOfBirth = 5;
+  string reference = 6;
+  string avatarUrl = 7;
+  string licenseNumber = 8;
+  string phoneNumber = 9;
+  string extension = 10;
+  string telProvider = 11;
+  string telApi = 12;
+  int64 supervisorId = 13;
+  int64 roleId = 14;
+  int64 companyId = 15;
+  string status = 16;
+  string createdBy = 17;
+  string updatedBy = 18;
+}
+message UserInsertResponse {
+  User user = 1;
+}
+
+// Update
+message UserUpdateRequest {
+  int64 id = 1;
+  string username = 2;
+  string password = 3;
+  string name = 4;
+  string dateOfBirth = 5;
+  string reference = 6;
+  string avatarUrl = 7;
+  string licenseNumber = 8;
+  string phoneNumber = 9;
+  string extension = 10;
+  string telProvider = 11;
+  string telApi = 12;
+  int64 supervisorId = 13;
+  int64 roleId = 14;
+  int64 companyId = 15;
+  string status = 16;
+  string createdBy = 17;
+  string updatedBy = 18;
+}
+message UserUpdateResponse {
+  User user = 1;
+}
+
+// Delete
+message UserDeleteRequest {
+  int64 id = 1;
+}
+message UserDeleteResponse {
+  int64 id = 1;
+}
+
+
+service DeltaService {
+  rpc CompanyGetByID (CompanyGetByIDRequest) returns (CompanyGetByIDResponse);
+  rpc CompanyList (CompanyListRequest) returns (CompanyListResponse);
+  rpc CompanyInsert (CompanyInsertRequest) returns (CompanyInsertResponse);
+  rpc CompanyUpdate (CompanyUpdateRequest) returns (CompanyUpdateResponse);
+  rpc PermissionGetByID (PermissionGetByIDRequest) returns (PermissionGetByIDResponse);
+  rpc PermissionList (PermissionListRequest) returns (PermissionListResponse);
+  rpc PermissionInsert (PermissionInsertRequest) returns (PermissionInsertResponse);
+  rpc RoleGetByID (RoleGetByIDRequest) returns (RoleGetByIDResponse);
+  rpc RoleList (RoleListRequest) returns (RoleListResponse);
+  rpc RoleInsert (RoleInsertRequest) returns (RoleInsertResponse);
+  rpc RoleUpdate (RoleUpdateRequest) returns (RoleUpdateResponse);
+  rpc UserGetByID (UserGetByIDRequest) returns (UserGetByIDResponse);
+  rpc UserList (UserListRequest) returns (UserListResponse);
+  rpc UserInsert (UserInsertRequest) returns (UserInsertResponse);
+  rpc UserUpdate (UserUpdateRequest) returns (UserUpdateResponse);
+}

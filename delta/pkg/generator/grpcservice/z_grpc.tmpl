@@ -1,0 +1,190 @@
+// @generated
+{{- $Modules := .Modules }}
+package grpcservice
+
+import (
+	"context"
+	"time"
+
+	"github.com/go-sql-driver/mysql"
+	"github.com/tanphamhaiduong/go/delta/internal/arguments"
+	"github.com/tanphamhaiduong/go/delta/pb"
+)
+
+{{- range $Module := $Modules }}
+{{- $Name := $Module.Name }}
+{{- $name := $Module.Name | ToLowerCamelCase }}
+{{- $fields := $Module.Fields }}
+{{- if $Module.IsHaveList }}
+// {{ $Name }}List ...
+func (d *DeltaServiceImpl) {{ $Name }}List(ctx context.Context, req *pb.{{ $Name }}ListRequest) (*pb.{{ $Name }}ListResponse, error) {
+	{{- range $field := $fields }}
+		{{- if $field.IsNullTimeField }}
+			{{ $field.Name | ToLowerCamelCase }}, err := time.Parse(time.RFC3339, req.{{ $field.Name | ToCamelCaseExceptID }})
+			if err != nil {
+				return nil, err
+			}
+		{{- end }}
+	{{- end }}
+	params := arguments.{{ $Name }}List{
+		{{- range $field := $fields }}
+			{{- if $field.IsNullTimeField }}
+				{{ $field.Name }}: mysql.NullTime{
+					Time:  {{ $field.Name | ToLowerCamelCase }},
+					Valid: true,
+				},
+			{{- else }}
+				{{ $field.Name }}: req.{{ $field.Name | ToCamelCaseExceptID }},
+			{{- end }}
+		{{- end }}
+	}
+	{{ $name | ToPlural }}, err := d.handlers.{{ $Name }}.List(ctx, params)
+	if err != nil {
+		return nil, err
+	}
+	result := pb.{{ $Name }}ListResponse{}
+	for _, {{ $name }} := range {{ $name | ToPlural }} {
+		result.{{ $Name }} = append(result.{{ $Name }}, &pb.{{ $Name }}{
+			{{- range $field := $fields }}
+				{{- if $field.IsNullTimeField }}
+					{{ $field.Name | ToCamelCaseExceptID }}: {{ $name }}.{{ $field.Name }}.Time.String(),
+				{{- else }}
+					{{ $field.Name | ToCamelCaseExceptID }}: {{ $name }}.{{ $field.Name }},
+				{{- end }}
+			{{- end }}
+		})
+	}
+	return &result, nil
+}
+{{- end }}
+
+{{- if $Module.IsHaveGetByID }}
+// {{ $Name }}GetByID ...
+func (d *DeltaServiceImpl) {{ $Name }}GetByID(ctx context.Context, req *pb.{{ $Name }}GetByIDRequest) (*pb.{{ $Name }}GetByIDResponse, error) {
+	params := arguments.{{ $Name }}GetByID{
+		ID:           req.Id,
+	}
+	{{ $name }}, err := d.handlers.{{ $Name }}.GetByID(ctx, params)
+	if err != nil {
+		return nil, err
+	}
+	result := pb.{{ $Name }}GetByIDResponse{
+		{{ $Name }}: &pb.{{ $Name }}{
+			{{- range $field := $fields }}
+				{{- if $field.IsNullTimeField }}
+					{{ $field.Name | ToCamelCaseExceptID }}: {{ $name }}.{{ $field.Name }}.Time.String(),
+				{{- else }}
+					{{ $field.Name | ToCamelCaseExceptID }}: {{ $name }}.{{ $field.Name }},
+				{{- end }}
+			{{- end }}
+		},
+	}
+	return &result, nil
+}
+{{- end }}
+
+{{- if $Module.IsHaveInsert }}
+// {{ $Name }}Insert ...
+func (d *DeltaServiceImpl) {{ $Name }}Insert(ctx context.Context, req *pb.{{ $Name }}InsertRequest) (*pb.{{ $Name }}InsertResponse, error) {
+	{{- range $field := $fields }}
+		{{- if $field.IsNullTimeField }}
+			{{ $field.Name | ToLowerCamelCase }}, err := time.Parse(time.RFC3339, req.{{ $field.Name | ToCamelCaseExceptID }})
+			if err != nil {
+				return nil, err
+			}
+		{{- end }}
+	{{- end }}
+	params := arguments.{{ $Name }}Insert{
+	{{- range $field := $fields }}
+		{{- if not $field.IsIDField }}
+			{{- if $field.IsNullTimeField }}
+					{{ $field.Name }}: mysql.NullTime{
+					Time:  {{ $field.Name | ToLowerCamelCase }},
+					Valid: true,
+				},
+			{{- else }}
+				{{ $field.Name }}: req.{{ $field.Name | ToCamelCaseExceptID }},
+			{{- end }}
+		{{- end }}
+	{{- end }}
+	}
+	{{ $name }}, err := d.handlers.{{ $Name }}.Insert(ctx, params)
+	if err != nil {
+		return nil, err
+	}
+	result := pb.{{ $Name }}InsertResponse{
+		{{ $Name }}: &pb.{{ $Name }}{
+			{{- range $field := $fields }}
+				{{- if $field.IsNullTimeField }}
+					{{ $field.Name | ToCamelCaseExceptID }}: {{ $name }}.{{ $field.Name }}.Time.String(),
+				{{- else }}
+					{{ $field.Name | ToCamelCaseExceptID }}: {{ $name }}.{{ $field.Name }},
+				{{- end }}
+			{{- end }}
+		},
+	}
+	return &result, nil
+}
+{{- end }}
+
+{{- if $Module.IsHaveUpdate }}
+// {{ $Name }}Update ...
+func (d *DeltaServiceImpl) {{ $Name }}Update(ctx context.Context, req *pb.{{ $Name }}UpdateRequest) (*pb.{{ $Name }}UpdateResponse, error) {
+	{{- range $field := $fields }}
+		{{- if $field.IsNullTimeField }}
+			{{ $field.Name | ToLowerCamelCase }}, err := time.Parse(time.RFC3339, req.{{ $field.Name | ToCamelCaseExceptID }})
+			if err != nil {
+				return nil, err
+			}
+		{{- end }}
+	{{- end }}
+	params := arguments.{{ $Name }}Update{
+	{{- range $field := $fields }}
+		{{- if $field.IsNullTimeField }}
+			{{ $field.Name }}: &mysql.NullTime{
+				Time:  {{ $field.Name | ToLowerCamelCase }},
+				Valid: true,
+			},
+		{{- else }}
+			{{ $field.Name }}: &req.{{ $field.Name | ToCamelCaseExceptID }},
+		{{- end }}
+	{{- end }}
+	}
+	{{ $name }}, err := d.handlers.{{ $Name }}.Update(ctx, params)
+	if err != nil {
+		return nil, err
+	}
+	result := pb.{{ $Name }}UpdateResponse{
+		{{ $Name }}: &pb.{{ $Name }}{
+			{{- range $field := $fields }}
+				{{- if $field.IsNullTimeField }}
+					{{ $field.Name | ToCamelCaseExceptID }}: {{ $name }}.{{ $field.Name }}.Time.String(),
+				{{- else }}
+					{{ $field.Name | ToCamelCaseExceptID }}: {{ $name }}.{{ $field.Name }},
+				{{- end }}
+			{{- end }}
+		},
+	}
+	return &result, nil
+}
+{{- end }}
+
+{{- if $Module.IsHaveDelete }}
+// {{ $Name }}Delete ...
+func (d *DeltaServiceImpl) {{ $Name }}Delete(ctx context.Context, req *pb.{{ $Name }}DeleteRequest) (*pb.{{ $Name }}DeleteResponse, error) {
+	params := arguments.{{ $Name }}Delete{
+		ID: req.Id,
+	}
+	{{ $name }}, err := d.handlers.{{ $Name }}.Delete(ctx, params)
+	if err != nil {
+		return nil, err
+	}
+	result := pb.{{ $Name }}DeleteResponse{
+		{{ $Name }}: &pb.{{ $Name }}{
+			Id: {{ $name }}.ID,
+		},
+	}
+	return &result, nil
+}
+{{- end }}
+{{- end }}
