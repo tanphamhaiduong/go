@@ -36,7 +36,7 @@ func main() {
 
 // CompanyList ...
 func CompanyList(client pb.DeltaServiceClient) {
-	res, err := client.CompanyList(context.Background(), &pb.CompanyListRequest{Page: 1, PageSize: 20})
+	res, err := client.CompanyList(context.Background(), &pb.CompanyListRequest{})
 	if err != nil {
 		log.Fatal(err)
 	}

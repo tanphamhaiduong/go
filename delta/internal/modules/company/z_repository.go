@@ -18,11 +18,9 @@ func (r *RepositoryImpl) scanCompany(row database.IRow, company *models.Company)
 	err := row.Scan(
 		&company.ID,
 		&company.Name,
-		&company.CompanyCode,
 		&company.Status,
 		&company.CreatedBy,
 		&company.UpdatedBy,
-		&company.ApiSecretKey,
 	)
 	return err
 }
@@ -38,11 +36,9 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.CompanyGe
 		selectBuilder = sq.Select(
 			"id",
 			"name",
-			"company_code",
 			"status",
 			"created_by",
 			"updated_by",
-			"api_secret_key",
 		).From("company").Where(sq.Eq{"id": params.ID})
 	)
 	sql, args, err := selectBuilder.ToSql()
@@ -89,11 +85,9 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.CompanyG
 		selectBuilder = sq.Select(
 			"id",
 			"name",
-			"company_code",
 			"status",
 			"created_by",
 			"updated_by",
-			"api_secret_key",
 		).From("company").Where(sq.Eq{"id": params.IDs})
 	)
 	sql, args, err := selectBuilder.ToSql()
@@ -153,9 +147,6 @@ func (r *RepositoryImpl) setArgsToListSelectBuilder(ctx context.Context, selectB
 	if params.Name != "" {
 		selectBuilder = selectBuilder.Where(sq.Like{"name": params.Name})
 	}
-	if params.CompanyCode != "" {
-		selectBuilder = selectBuilder.Where(sq.Eq{"company_code": params.CompanyCode})
-	}
 	if params.Status != "" {
 		selectBuilder = selectBuilder.Where(sq.Eq{"status": params.Status})
 	}
@@ -165,15 +156,12 @@ func (r *RepositoryImpl) setArgsToListSelectBuilder(ctx context.Context, selectB
 	if params.UpdatedBy != "" {
 		selectBuilder = selectBuilder.Where(sq.Eq{"updated_by": params.UpdatedBy})
 	}
-	if params.ApiSecretKey != "" {
-		selectBuilder = selectBuilder.Where(sq.Eq{"api_secret_key": params.ApiSecretKey})
-	}
 	if params.PageSize != 0 {
 		selectBuilder = selectBuilder.Limit(uint64(params.PageSize))
 	}
 	if params.Page != 0 {
 		offset := utils.CalculateOffsetForPage(params.Page, params.PageSize)
-		selectBuilder = selectBuilder.Offset(uint64(offset))
+		selectBuilder = selectBuilder.Where(sq.Gt{"id": uint64(offset)})
 	}
 	return selectBuilder
 }
@@ -189,11 +177,9 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.CompanyList)
 		selectBuilder = sq.Select(
 			"id",
 			"name",
-			"company_code",
 			"status",
 			"created_by",
 			"updated_by",
-			"api_secret_key",
 		).From("company")
 	)
 	selectBuilderWithArgs := r.setArgsToListSelectBuilder(ctx, selectBuilder, params)
@@ -254,9 +240,6 @@ func (r *RepositoryImpl) setArgsToCountSelectBuilder(ctx context.Context, select
 	if params.Name != "" {
 		selectBuilder = selectBuilder.Where(sq.Like{"name": params.Name})
 	}
-	if params.CompanyCode != "" {
-		selectBuilder = selectBuilder.Where(sq.Eq{"company_code": params.CompanyCode})
-	}
 	if params.Status != "" {
 		selectBuilder = selectBuilder.Where(sq.Eq{"status": params.Status})
 	}
@@ -265,9 +248,6 @@ func (r *RepositoryImpl) setArgsToCountSelectBuilder(ctx context.Context, select
 	}
 	if params.UpdatedBy != "" {
 		selectBuilder = selectBuilder.Where(sq.Eq{"updated_by": params.UpdatedBy})
-	}
-	if params.ApiSecretKey != "" {
-		selectBuilder = selectBuilder.Where(sq.Eq{"api_secret_key": params.ApiSecretKey})
 	}
 	return selectBuilder
 }
@@ -326,18 +306,14 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.CompanyIns
 		company       models.Company
 		insertBuilder = sq.Insert("company").Columns(
 			"name",
-			"company_code",
 			"status",
 			"created_by",
 			"updated_by",
-			"api_secret_key",
 		).Values(
 			params.Name,
-			params.CompanyCode,
 			params.Status,
 			params.CreatedBy,
 			params.UpdatedBy,
-			params.ApiSecretKey,
 		)
 	)
 	sql, args, err := insertBuilder.ToSql()
@@ -396,9 +372,6 @@ func (r *RepositoryImpl) setArgsToUpdateBuilder(ctx context.Context, updateBuild
 	if params.Name != nil {
 		updateBuilder = updateBuilder.Set("name", *params.Name)
 	}
-	if params.CompanyCode != nil {
-		updateBuilder = updateBuilder.Set("company_code", *params.CompanyCode)
-	}
 	if params.Status != nil {
 		updateBuilder = updateBuilder.Set("status", *params.Status)
 	}
@@ -407,9 +380,6 @@ func (r *RepositoryImpl) setArgsToUpdateBuilder(ctx context.Context, updateBuild
 	}
 	if params.UpdatedBy != nil {
 		updateBuilder = updateBuilder.Set("updated_by", *params.UpdatedBy)
-	}
-	if params.ApiSecretKey != nil {
-		updateBuilder = updateBuilder.Set("api_secret_key", *params.ApiSecretKey)
 	}
 	return updateBuilder
 }

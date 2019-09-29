@@ -34,7 +34,6 @@ type ICore{{ $Name }}Handler interface {
 
 // ICore{{ $Name }}Resolver ...
 type ICore{{ $Name }}Resolver interface {
-  ForwardParams(p graphql.ResolveParams) (interface{}, error)
 	{{- if $Module.IsHaveGetByID }}
 		GetByID(p graphql.ResolveParams) (interface{}, error)
 	{{- end }}

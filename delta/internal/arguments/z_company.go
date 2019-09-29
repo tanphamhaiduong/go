@@ -13,47 +13,39 @@ type CompanyGetByIDs struct {
 
 // CompanyCount ...
 type CompanyCount struct {
-	ID           int64  `graphql:"id" validate:"omitempty,min=1"`
-	Name         string `graphql:"name" validate:"omitempty"`
-	CompanyCode  string `graphql:"companyCode" validate:"omitempty"`
-	Status       string `graphql:"status" validate:"omitempty,oneof=active inactive"`
-	CreatedBy    string `graphql:"createdBy" validate:"omitempty"`
-	UpdatedBy    string `graphql:"updatedBy" validate:"omitempty"`
-	ApiSecretKey string `graphql:"apiSecretKey" validate:"omitempty"`
+	ID        int64  `graphql:"id" validate:"omitempty,min=1"`
+	Name      string `graphql:"name" validate:"omitempty"`
+	Status    string `graphql:"status" validate:"omitempty,oneof=active inactive"`
+	CreatedBy string `graphql:"createdBy" validate:"omitempty"`
+	UpdatedBy string `graphql:"updatedBy" validate:"omitempty"`
 }
 
 // CompanyList ...
 type CompanyList struct {
-	ID           int64  `graphql:"id" validate:"omitempty,min=1"`
-	Name         string `graphql:"name" validate:"omitempty"`
-	CompanyCode  string `graphql:"companyCode" validate:"omitempty"`
-	Status       string `graphql:"status" validate:"omitempty,oneof=active inactive"`
-	CreatedBy    string `graphql:"createdBy" validate:"omitempty"`
-	UpdatedBy    string `graphql:"updatedBy" validate:"omitempty"`
-	ApiSecretKey string `graphql:"apiSecretKey" validate:"omitempty"`
-	Page         int64  `graphql:"page" validate:"required,min=1"`
-	PageSize     int64  `graphql:"pageSize" validate:"required,min=1,max=40"`
+	ID        int64  `graphql:"id" validate:"omitempty,min=1"`
+	Name      string `graphql:"name" validate:"omitempty"`
+	Status    string `graphql:"status" validate:"omitempty,oneof=active inactive"`
+	CreatedBy string `graphql:"createdBy" validate:"omitempty"`
+	UpdatedBy string `graphql:"updatedBy" validate:"omitempty"`
+	Page      int64  `graphql:"page" validate:"required,min=1"`
+	PageSize  int64  `graphql:"pageSize" validate:"required,min=1,max=40"`
 }
 
 // CompanyInsert ...
 type CompanyInsert struct {
-	Name         string `graphql:"name" validate:"omitempty"`
-	CompanyCode  string `graphql:"companyCode" validate:"omitempty"`
-	Status       string `graphql:"status" validate:"omitempty,oneof=active inactive"`
-	CreatedBy    string `graphql:"createdBy" validate:"omitempty"`
-	UpdatedBy    string `graphql:"updatedBy" validate:"omitempty"`
-	ApiSecretKey string `graphql:"apiSecretKey" validate:"omitempty"`
+	Name      string `graphql:"name" validate:"omitempty"`
+	Status    string `graphql:"status" validate:"omitempty,oneof=active inactive"`
+	CreatedBy string `graphql:"createdBy" validate:"omitempty"`
+	UpdatedBy string `graphql:"updatedBy" validate:"omitempty"`
 }
 
 // CompanyUpdate ...
 type CompanyUpdate struct {
-	ID           *int64  `graphql:"id" validate:"required,min=1"`
-	Name         *string `graphql:"name" validate:"omitempty"`
-	CompanyCode  *string `graphql:"companyCode" validate:"omitempty"`
-	Status       *string `graphql:"status" validate:"omitempty,oneof=active inactive"`
-	CreatedBy    *string `graphql:"createdBy" validate:"omitempty"`
-	UpdatedBy    *string `graphql:"updatedBy" validate:"omitempty"`
-	ApiSecretKey *string `graphql:"apiSecretKey" validate:"omitempty"`
+	ID        *int64  `graphql:"id" validate:"required,min=1"`
+	Name      *string `graphql:"name" validate:"omitempty"`
+	Status    *string `graphql:"status" validate:"omitempty,oneof=active inactive"`
+	CreatedBy *string `graphql:"createdBy" validate:"omitempty"`
+	UpdatedBy *string `graphql:"updatedBy" validate:"omitempty"`
 }
 
 // CompanyDelete ...

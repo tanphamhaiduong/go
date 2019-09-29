@@ -20,7 +20,6 @@ type ICoreUserHandler interface {
 
 // ICoreUserResolver ...
 type ICoreUserResolver interface {
-	ForwardParams(p graphql.ResolveParams) (interface{}, error)
 	GetByID(p graphql.ResolveParams) (interface{}, error)
 	Count(p graphql.ResolveParams) (interface{}, error)
 	List(p graphql.ResolveParams) (interface{}, error)

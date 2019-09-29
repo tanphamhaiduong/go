@@ -5,10 +5,8 @@ import (
 	"context"
 
 	"github.com/graphql-go/graphql"
-	"github.com/tanphamhaiduong/go/common/logger"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
-	"github.com/tanphamhaiduong/go/delta/internal/utils"
 )
 
 var (
@@ -61,15 +59,6 @@ func (r *ResolverImpl) checkPermission(claims models.Claims, method string) bool
 		}
 	}
 	return isPermit
-}
-
-// ForwardParams ...
-func (r *ResolverImpl) ForwardParams(params graphql.ResolveParams) (interface{}, error) {
-	logger.WithFields(logger.Fields{
-		"traceId": params.Context.Value(utils.TraceIDKey),
-		"params":  params,
-	}).Infof("Resolver ForwardParams of rolepermission")
-	return params.Args, nil
 }
 
 //go:generate mockery -name=IHandler -output=mocks -case=underscore

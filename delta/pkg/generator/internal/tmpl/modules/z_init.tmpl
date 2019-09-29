@@ -37,25 +37,10 @@ func addToSchema(resolver Resolver){
 		{{- end }}
 		{{- if $Module.IsHaveList }}
 		rootQuery.AddFieldConfig("{{ $Module.Name | ToLowerCamelCase | ToPlural }}", &graphql.Field{
-			Type: graphql.NewObject(graphql.ObjectConfig{
-				Name:        "{{ $Module.Name | ToPlural }}",
-				Description: "This is type {{ $Module.Name | ToLowerCamelCase | ToPlural }}",
-				Fields: graphql.Fields{
-					"records": &graphql.Field{
-						Type:        graphql.NewNonNull(graphql.NewList({{ $Module.Name | ToLowerCase }}.Type)),
-						Description: "This is records of {{ $Module.Name | ToLowerCamelCase | ToPlural }}",
-						Resolve:     resolver.{{ $Module.Name }}.List,
-					},
-					"totalRecords": &graphql.Field{
-						Type:        graphql.NewNonNull(graphql.Int),
-						Description: "This is totalRecords of {{ $Module.Name | ToLowerCamelCase | ToPlural }} query",
-						Resolve:     resolver.{{ $Module.Name }}.Count,
-					},
-				},
-			}),
+			Type: graphql.NewNonNull(graphql.NewList({{ $Module.Name | ToLowerCase }}.Type)),
 			Description: "This is get list of {{ $Module.Name | ToLowerCamelCase }} query",
 			Args:        {{ $Module.Name | ToLowerCase }}.ListTypeArgs,
-			Resolve:     resolver.{{ $Module.Name }}.ForwardParams,
+			Resolve:     resolver.{{ $Module.Name }}.List,
 		})
 		{{- end }}
 		{{- if $Module.IsHaveInsert }}

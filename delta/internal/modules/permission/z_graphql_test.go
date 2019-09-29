@@ -13,17 +13,6 @@ import (
 	"github.com/tanphamhaiduong/go/delta/internal/utils"
 )
 
-func (s *PermissionResolverTestSuite) TestForwardParams_Success() {
-	var (
-		sampleID int64 = 1
-		params         = graphql.ResolveParams{Context: context.Background(), Source: map[string]interface{}{}, Args: map[string]interface{}{"id": sampleID}}
-		expected       = map[string]interface{}(map[string]interface{}{"id": sampleID})
-	)
-	actual, err := s.Permission.ForwardParams(params)
-	s.Nil(err)
-	s.Equal(expected, actual)
-}
-
 func (s *PermissionResolverTestSuite) TestCheckPermission_True() {
 	var (
 		claims = &models.Claims{

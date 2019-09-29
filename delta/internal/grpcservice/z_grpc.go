@@ -13,13 +13,11 @@ import (
 // CompanyList ...
 func (d *DeltaServiceImpl) CompanyList(ctx context.Context, req *pb.CompanyListRequest) (*pb.CompanyListResponse, error) {
 	params := arguments.CompanyList{
-		ID:           req.Id,
-		Name:         req.Name,
-		CompanyCode:  req.CompanyCode,
-		Status:       req.Status,
-		CreatedBy:    req.CreatedBy,
-		UpdatedBy:    req.UpdatedBy,
-		ApiSecretKey: req.ApiSecretKey,
+		ID:        req.Id,
+		Name:      req.Name,
+		Status:    req.Status,
+		CreatedBy: req.CreatedBy,
+		UpdatedBy: req.UpdatedBy,
 	}
 	companies, err := d.handlers.Company.List(ctx, params)
 	if err != nil {
@@ -28,13 +26,11 @@ func (d *DeltaServiceImpl) CompanyList(ctx context.Context, req *pb.CompanyListR
 	result := pb.CompanyListResponse{}
 	for _, company := range companies {
 		result.Company = append(result.Company, &pb.Company{
-			Id:           company.ID,
-			Name:         company.Name,
-			CompanyCode:  company.CompanyCode,
-			Status:       company.Status,
-			CreatedBy:    company.CreatedBy,
-			UpdatedBy:    company.UpdatedBy,
-			ApiSecretKey: company.ApiSecretKey,
+			Id:        company.ID,
+			Name:      company.Name,
+			Status:    company.Status,
+			CreatedBy: company.CreatedBy,
+			UpdatedBy: company.UpdatedBy,
 		})
 	}
 	return &result, nil
@@ -51,13 +47,11 @@ func (d *DeltaServiceImpl) CompanyGetByID(ctx context.Context, req *pb.CompanyGe
 	}
 	result := pb.CompanyGetByIDResponse{
 		Company: &pb.Company{
-			Id:           company.ID,
-			Name:         company.Name,
-			CompanyCode:  company.CompanyCode,
-			Status:       company.Status,
-			CreatedBy:    company.CreatedBy,
-			UpdatedBy:    company.UpdatedBy,
-			ApiSecretKey: company.ApiSecretKey,
+			Id:        company.ID,
+			Name:      company.Name,
+			Status:    company.Status,
+			CreatedBy: company.CreatedBy,
+			UpdatedBy: company.UpdatedBy,
 		},
 	}
 	return &result, nil
@@ -66,12 +60,10 @@ func (d *DeltaServiceImpl) CompanyGetByID(ctx context.Context, req *pb.CompanyGe
 // CompanyInsert ...
 func (d *DeltaServiceImpl) CompanyInsert(ctx context.Context, req *pb.CompanyInsertRequest) (*pb.CompanyInsertResponse, error) {
 	params := arguments.CompanyInsert{
-		Name:         req.Name,
-		CompanyCode:  req.CompanyCode,
-		Status:       req.Status,
-		CreatedBy:    req.CreatedBy,
-		UpdatedBy:    req.UpdatedBy,
-		ApiSecretKey: req.ApiSecretKey,
+		Name:      req.Name,
+		Status:    req.Status,
+		CreatedBy: req.CreatedBy,
+		UpdatedBy: req.UpdatedBy,
 	}
 	company, err := d.handlers.Company.Insert(ctx, params)
 	if err != nil {
@@ -79,13 +71,11 @@ func (d *DeltaServiceImpl) CompanyInsert(ctx context.Context, req *pb.CompanyIns
 	}
 	result := pb.CompanyInsertResponse{
 		Company: &pb.Company{
-			Id:           company.ID,
-			Name:         company.Name,
-			CompanyCode:  company.CompanyCode,
-			Status:       company.Status,
-			CreatedBy:    company.CreatedBy,
-			UpdatedBy:    company.UpdatedBy,
-			ApiSecretKey: company.ApiSecretKey,
+			Id:        company.ID,
+			Name:      company.Name,
+			Status:    company.Status,
+			CreatedBy: company.CreatedBy,
+			UpdatedBy: company.UpdatedBy,
 		},
 	}
 	return &result, nil
@@ -94,13 +84,11 @@ func (d *DeltaServiceImpl) CompanyInsert(ctx context.Context, req *pb.CompanyIns
 // CompanyUpdate ...
 func (d *DeltaServiceImpl) CompanyUpdate(ctx context.Context, req *pb.CompanyUpdateRequest) (*pb.CompanyUpdateResponse, error) {
 	params := arguments.CompanyUpdate{
-		ID:           &req.Id,
-		Name:         &req.Name,
-		CompanyCode:  &req.CompanyCode,
-		Status:       &req.Status,
-		CreatedBy:    &req.CreatedBy,
-		UpdatedBy:    &req.UpdatedBy,
-		ApiSecretKey: &req.ApiSecretKey,
+		ID:        &req.Id,
+		Name:      &req.Name,
+		Status:    &req.Status,
+		CreatedBy: &req.CreatedBy,
+		UpdatedBy: &req.UpdatedBy,
 	}
 	company, err := d.handlers.Company.Update(ctx, params)
 	if err != nil {
@@ -108,13 +96,11 @@ func (d *DeltaServiceImpl) CompanyUpdate(ctx context.Context, req *pb.CompanyUpd
 	}
 	result := pb.CompanyUpdateResponse{
 		Company: &pb.Company{
-			Id:           company.ID,
-			Name:         company.Name,
-			CompanyCode:  company.CompanyCode,
-			Status:       company.Status,
-			CreatedBy:    company.CreatedBy,
-			UpdatedBy:    company.UpdatedBy,
-			ApiSecretKey: company.ApiSecretKey,
+			Id:        company.ID,
+			Name:      company.Name,
+			Status:    company.Status,
+			CreatedBy: company.CreatedBy,
+			UpdatedBy: company.UpdatedBy,
 		},
 	}
 	return &result, nil

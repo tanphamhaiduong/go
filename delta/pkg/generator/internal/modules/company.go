@@ -38,15 +38,6 @@ var (
 				Validate:           `validate:"omitempty"`,
 			},
 			{
-				Name:               "CompanyCode",
-				GoType:             gotype.String,
-				QueryType:          querytype.Equal,
-				GraphQLType:        graphqltype.String,
-				GraphQLDescription: "This is company's code",
-				GraphQLRequired:    true,
-				Validate:           `validate:"omitempty"`,
-			},
-			{
 				Name:               "Status",
 				GoType:             gotype.String,
 				QueryType:          querytype.Equal,
@@ -66,15 +57,6 @@ var (
 			},
 			{
 				Name:               "UpdatedBy",
-				GoType:             gotype.String,
-				QueryType:          querytype.Equal,
-				GraphQLType:        graphqltype.String,
-				GraphQLDescription: "This is company's updatedBy",
-				GraphQLRequired:    false,
-				Validate:           `validate:"omitempty"`,
-			},
-			{
-				Name:               "ApiSecretKey",
 				GoType:             gotype.String,
 				QueryType:          querytype.Equal,
 				GraphQLType:        graphqltype.String,

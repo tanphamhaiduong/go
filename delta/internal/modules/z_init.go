@@ -35,25 +35,10 @@ func addToSchema(resolver Resolver) {
 		Resolve:     resolver.Company.GetByID,
 	})
 	rootQuery.AddFieldConfig("companies", &graphql.Field{
-		Type: graphql.NewObject(graphql.ObjectConfig{
-			Name:        "Companies",
-			Description: "This is type companies",
-			Fields: graphql.Fields{
-				"records": &graphql.Field{
-					Type:        graphql.NewNonNull(graphql.NewList(company.Type)),
-					Description: "This is records of companies",
-					Resolve:     resolver.Company.List,
-				},
-				"totalRecords": &graphql.Field{
-					Type:        graphql.NewNonNull(graphql.Int),
-					Description: "This is totalRecords of companies query",
-					Resolve:     resolver.Company.Count,
-				},
-			},
-		}),
+		Type:        graphql.NewNonNull(graphql.NewList(company.Type)),
 		Description: "This is get list of company query",
 		Args:        company.ListTypeArgs,
-		Resolve:     resolver.Company.ForwardParams,
+		Resolve:     resolver.Company.List,
 	})
 	rootMutation.AddFieldConfig("insertCompany", &graphql.Field{
 		Type:        company.Type,
@@ -74,25 +59,10 @@ func addToSchema(resolver Resolver) {
 		Resolve:     resolver.Permission.GetByID,
 	})
 	rootQuery.AddFieldConfig("permissions", &graphql.Field{
-		Type: graphql.NewObject(graphql.ObjectConfig{
-			Name:        "Permissions",
-			Description: "This is type permissions",
-			Fields: graphql.Fields{
-				"records": &graphql.Field{
-					Type:        graphql.NewNonNull(graphql.NewList(permission.Type)),
-					Description: "This is records of permissions",
-					Resolve:     resolver.Permission.List,
-				},
-				"totalRecords": &graphql.Field{
-					Type:        graphql.NewNonNull(graphql.Int),
-					Description: "This is totalRecords of permissions query",
-					Resolve:     resolver.Permission.Count,
-				},
-			},
-		}),
+		Type:        graphql.NewNonNull(graphql.NewList(permission.Type)),
 		Description: "This is get list of permission query",
 		Args:        permission.ListTypeArgs,
-		Resolve:     resolver.Permission.ForwardParams,
+		Resolve:     resolver.Permission.List,
 	})
 	rootMutation.AddFieldConfig("insertPermission", &graphql.Field{
 		Type:        permission.Type,
@@ -107,25 +77,10 @@ func addToSchema(resolver Resolver) {
 		Resolve:     resolver.Role.GetByID,
 	})
 	rootQuery.AddFieldConfig("roles", &graphql.Field{
-		Type: graphql.NewObject(graphql.ObjectConfig{
-			Name:        "Roles",
-			Description: "This is type roles",
-			Fields: graphql.Fields{
-				"records": &graphql.Field{
-					Type:        graphql.NewNonNull(graphql.NewList(role.Type)),
-					Description: "This is records of roles",
-					Resolve:     resolver.Role.List,
-				},
-				"totalRecords": &graphql.Field{
-					Type:        graphql.NewNonNull(graphql.Int),
-					Description: "This is totalRecords of roles query",
-					Resolve:     resolver.Role.Count,
-				},
-			},
-		}),
+		Type:        graphql.NewNonNull(graphql.NewList(role.Type)),
 		Description: "This is get list of role query",
 		Args:        role.ListTypeArgs,
-		Resolve:     resolver.Role.ForwardParams,
+		Resolve:     resolver.Role.List,
 	})
 	rootMutation.AddFieldConfig("insertRole", &graphql.Field{
 		Type:        role.Type,
@@ -146,25 +101,10 @@ func addToSchema(resolver Resolver) {
 		Resolve:     resolver.User.GetByID,
 	})
 	rootQuery.AddFieldConfig("users", &graphql.Field{
-		Type: graphql.NewObject(graphql.ObjectConfig{
-			Name:        "Users",
-			Description: "This is type users",
-			Fields: graphql.Fields{
-				"records": &graphql.Field{
-					Type:        graphql.NewNonNull(graphql.NewList(user.Type)),
-					Description: "This is records of users",
-					Resolve:     resolver.User.List,
-				},
-				"totalRecords": &graphql.Field{
-					Type:        graphql.NewNonNull(graphql.Int),
-					Description: "This is totalRecords of users query",
-					Resolve:     resolver.User.Count,
-				},
-			},
-		}),
+		Type:        graphql.NewNonNull(graphql.NewList(user.Type)),
 		Description: "This is get list of user query",
 		Args:        user.ListTypeArgs,
-		Resolve:     resolver.User.ForwardParams,
+		Resolve:     resolver.User.List,
 	})
 	rootMutation.AddFieldConfig("insertUser", &graphql.Field{
 		Type:        user.Type,

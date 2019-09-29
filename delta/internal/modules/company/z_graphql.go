@@ -28,10 +28,6 @@ var (
 				Type:        graphql.NewNonNull(graphql.String),
 				Description: "This is company's name",
 			},
-			"companyCode": &graphql.Field{
-				Type:        graphql.NewNonNull(graphql.String),
-				Description: "This is company's code",
-			},
 			"status": &graphql.Field{
 				Type:        graphql.NewNonNull(graphql.String),
 				Description: "This is company's status",
@@ -41,10 +37,6 @@ var (
 				Description: "This is company's createdBy",
 			},
 			"updatedBy": &graphql.Field{
-				Type:        graphql.String,
-				Description: "This is company's updatedBy",
-			},
-			"apiSecretKey": &graphql.Field{
 				Type:        graphql.String,
 				Description: "This is company's updatedBy",
 			},
@@ -66,10 +58,6 @@ var (
 			Type:        graphql.String,
 			Description: "This is company's name",
 		},
-		"companyCode": &graphql.ArgumentConfig{
-			Type:        graphql.String,
-			Description: "This is company's code",
-		},
 		"status": &graphql.ArgumentConfig{
 			Type:        graphql.String,
 			Description: "This is company's status",
@@ -79,10 +67,6 @@ var (
 			Description: "This is company's createdBy",
 		},
 		"updatedBy": &graphql.ArgumentConfig{
-			Type:        graphql.String,
-			Description: "This is company's updatedBy",
-		},
-		"apiSecretKey": &graphql.ArgumentConfig{
 			Type:        graphql.String,
 			Description: "This is company's updatedBy",
 		},
@@ -103,10 +87,6 @@ var (
 			Type:        graphql.NewNonNull(graphql.String),
 			Description: "This is company's name",
 		},
-		"companyCode": &graphql.ArgumentConfig{
-			Type:        graphql.NewNonNull(graphql.String),
-			Description: "This is company's code",
-		},
 		"status": &graphql.ArgumentConfig{
 			Type:        graphql.NewNonNull(graphql.String),
 			Description: "This is company's status",
@@ -116,10 +96,6 @@ var (
 			Description: "This is company's createdBy",
 		},
 		"updatedBy": &graphql.ArgumentConfig{
-			Type:        graphql.String,
-			Description: "This is company's updatedBy",
-		},
-		"apiSecretKey": &graphql.ArgumentConfig{
 			Type:        graphql.String,
 			Description: "This is company's updatedBy",
 		},
@@ -133,10 +109,6 @@ var (
 			Type:        graphql.String,
 			Description: "This is company's name",
 		},
-		"companyCode": &graphql.ArgumentConfig{
-			Type:        graphql.String,
-			Description: "This is company's code",
-		},
 		"status": &graphql.ArgumentConfig{
 			Type:        graphql.String,
 			Description: "This is company's status",
@@ -146,10 +118,6 @@ var (
 			Description: "This is company's createdBy",
 		},
 		"updatedBy": &graphql.ArgumentConfig{
-			Type:        graphql.String,
-			Description: "This is company's updatedBy",
-		},
-		"apiSecretKey": &graphql.ArgumentConfig{
 			Type:        graphql.String,
 			Description: "This is company's updatedBy",
 		},
@@ -178,15 +146,6 @@ func (r *ResolverImpl) checkPermission(claims models.Claims, method string) bool
 	return isPermit
 }
 
-// ForwardParams ...
-func (r *ResolverImpl) ForwardParams(params graphql.ResolveParams) (interface{}, error) {
-	logger.WithFields(logger.Fields{
-		"traceId": params.Context.Value(utils.TraceIDKey),
-		"params":  params,
-	}).Infof("Resolver ForwardParams of company")
-	return params.Args, nil
-}
-
 // GetByID ...
 func (r *ResolverImpl) GetByID(param graphql.ResolveParams) (interface{}, error) {
 	logger.WithFields(logger.Fields{
@@ -198,9 +157,9 @@ func (r *ResolverImpl) GetByID(param graphql.ResolveParams) (interface{}, error)
 	if !isPermit {
 		logger.WithFields(logger.Fields{
 			"traceId": param.Context.Value(utils.TraceIDKey),
-			"Error":   goerrors.ErrNotAuthorized,
+			"Error":   goerrors.ErrNotAuthorized(param.Context.Value(utils.TraceIDKey)),
 		}).Errorf("Resolver GetByID !isPermit of company")
-		return nil, goerrors.ErrNotAuthorized
+		return nil, goerrors.ErrNotAuthorized(param.Context.Value(utils.TraceIDKey))
 	}
 	// parse param
 	args := arguments.CompanyGetByID{}
@@ -209,7 +168,7 @@ func (r *ResolverImpl) GetByID(param graphql.ResolveParams) (interface{}, error)
 			"traceId": param.Context.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Resolver GetByID utils.Parse of company")
-		return nil, goerrors.ErrInternalServerError
+		return nil, goerrors.ErrInternalServerError(param.Context.Value(utils.TraceIDKey))
 	}
 	response, err := r.company.GetByID(param.Context, args)
 	if err != nil {
@@ -218,9 +177,9 @@ func (r *ResolverImpl) GetByID(param graphql.ResolveParams) (interface{}, error)
 			"Error":   err,
 		}).Errorf("Resolver GetByID r.company.GetByID of company")
 		if err == sql.ErrNoRows {
-			return nil, goerrors.ErrNotFound
+			return nil, goerrors.ErrNotFound(param.Context.Value(utils.TraceIDKey))
 		}
-		return nil, goerrors.ErrInternalServerError
+		return nil, goerrors.ErrInternalServerError(param.Context.Value(utils.TraceIDKey))
 	}
 	return response, nil
 }
@@ -236,9 +195,9 @@ func (r *ResolverImpl) Count(params graphql.ResolveParams) (interface{}, error) 
 	if !isPermit {
 		logger.WithFields(logger.Fields{
 			"traceId": params.Context.Value(utils.TraceIDKey),
-			"Error":   goerrors.ErrNotAuthorized,
+			"Error":   goerrors.ErrNotAuthorized(params.Context.Value(utils.TraceIDKey)),
 		}).Errorf("Resolver Count !isPermit of company")
-		return nil, goerrors.ErrNotAuthorized
+		return nil, goerrors.ErrNotAuthorized(params.Context.Value(utils.TraceIDKey))
 	}
 	// parse params
 	args := arguments.CompanyCount{}
@@ -248,7 +207,7 @@ func (r *ResolverImpl) Count(params graphql.ResolveParams) (interface{}, error) 
 			"traceId": params.Context.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Resolver Count utils.Parse of company")
-		return nil, goerrors.ErrInternalServerError
+		return nil, goerrors.ErrInternalServerError(params.Context.Value(utils.TraceIDKey))
 	}
 	response, err := r.company.Count(params.Context, args)
 	if err != nil {
@@ -257,9 +216,9 @@ func (r *ResolverImpl) Count(params graphql.ResolveParams) (interface{}, error) 
 			"Error":   err,
 		}).Errorf("Resolver Count r.company.Count of company")
 		if err == sql.ErrNoRows {
-			return nil, goerrors.ErrNotFound
+			return nil, goerrors.ErrNotFound(params.Context.Value(utils.TraceIDKey))
 		}
-		return nil, goerrors.ErrInternalServerError
+		return nil, goerrors.ErrInternalServerError(params.Context.Value(utils.TraceIDKey))
 	}
 	return response, nil
 }
@@ -275,9 +234,9 @@ func (r *ResolverImpl) List(params graphql.ResolveParams) (interface{}, error) {
 	if !isPermit {
 		logger.WithFields(logger.Fields{
 			"traceId": params.Context.Value(utils.TraceIDKey),
-			"Error":   goerrors.ErrNotAuthorized,
+			"Error":   goerrors.ErrNotAuthorized(params.Context.Value(utils.TraceIDKey)),
 		}).Errorf("Resolver List  of company")
-		return nil, goerrors.ErrNotAuthorized
+		return nil, goerrors.ErrNotAuthorized(params.Context.Value(utils.TraceIDKey))
 	}
 	// parse params
 	args := arguments.CompanyList{}
@@ -287,7 +246,7 @@ func (r *ResolverImpl) List(params graphql.ResolveParams) (interface{}, error) {
 			"traceId": params.Context.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Resolver List utils.Parse of company")
-		return nil, goerrors.ErrInternalServerError
+		return nil, goerrors.ErrInternalServerError(params.Context.Value(utils.TraceIDKey))
 	}
 	response, err := r.company.List(params.Context, args)
 	if err != nil {
@@ -296,9 +255,9 @@ func (r *ResolverImpl) List(params graphql.ResolveParams) (interface{}, error) {
 			"Error":   err,
 		}).Errorf("Resolver List r.company.List of company")
 		if err == sql.ErrNoRows {
-			return nil, goerrors.ErrNotFound
+			return nil, goerrors.ErrNotFound(params.Context.Value(utils.TraceIDKey))
 		}
-		return nil, goerrors.ErrInternalServerError
+		return nil, goerrors.ErrInternalServerError(params.Context.Value(utils.TraceIDKey))
 	}
 	return response, nil
 }
@@ -314,9 +273,9 @@ func (r *ResolverImpl) Insert(params graphql.ResolveParams) (interface{}, error)
 	if !isPermit {
 		logger.WithFields(logger.Fields{
 			"traceId": params.Context.Value(utils.TraceIDKey),
-			"Error":   goerrors.ErrNotAuthorized,
+			"Error":   goerrors.ErrNotAuthorized(params.Context.Value(utils.TraceIDKey)),
 		}).Errorf("Resolver Insert !isPermit of company")
-		return nil, goerrors.ErrNotAuthorized
+		return nil, goerrors.ErrNotAuthorized(params.Context.Value(utils.TraceIDKey))
 	}
 	// parse params
 	args := arguments.CompanyInsert{}
@@ -326,7 +285,7 @@ func (r *ResolverImpl) Insert(params graphql.ResolveParams) (interface{}, error)
 			"traceId": params.Context.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Resolver Insert utils.Parse of company")
-		return nil, goerrors.ErrInternalServerError
+		return nil, goerrors.ErrInternalServerError(params.Context.Value(utils.TraceIDKey))
 	}
 	response, err := r.company.Insert(params.Context, args)
 	if err != nil {
@@ -335,9 +294,9 @@ func (r *ResolverImpl) Insert(params graphql.ResolveParams) (interface{}, error)
 			"Error":   err,
 		}).Errorf("Resolver Insert r.company.Insert of company")
 		if err == sql.ErrNoRows {
-			return nil, goerrors.ErrNotFound
+			return nil, goerrors.ErrNotFound(params.Context.Value(utils.TraceIDKey))
 		}
-		return nil, goerrors.ErrInternalServerError
+		return nil, goerrors.ErrInternalServerError(params.Context.Value(utils.TraceIDKey))
 	}
 	return response, nil
 }
@@ -353,9 +312,9 @@ func (r *ResolverImpl) Update(params graphql.ResolveParams) (interface{}, error)
 	if !isPermit {
 		logger.WithFields(logger.Fields{
 			"traceId": params.Context.Value(utils.TraceIDKey),
-			"Error":   goerrors.ErrNotAuthorized,
+			"Error":   goerrors.ErrNotAuthorized(params.Context.Value(utils.TraceIDKey)),
 		}).Errorf("Resolver Update !isPermit of company")
-		return nil, goerrors.ErrNotAuthorized
+		return nil, goerrors.ErrNotAuthorized(params.Context.Value(utils.TraceIDKey))
 	}
 	// parse params
 	args := arguments.CompanyUpdate{}
@@ -365,7 +324,7 @@ func (r *ResolverImpl) Update(params graphql.ResolveParams) (interface{}, error)
 			"traceId": params.Context.Value(utils.TraceIDKey),
 			"Error":   err,
 		}).Errorf("Resolver Update utils.Parse of company")
-		return nil, goerrors.ErrInternalServerError
+		return nil, goerrors.ErrInternalServerError(params.Context.Value(utils.TraceIDKey))
 	}
 	response, err := r.company.Update(params.Context, args)
 	if err != nil {
@@ -374,9 +333,9 @@ func (r *ResolverImpl) Update(params graphql.ResolveParams) (interface{}, error)
 			"Error":   err,
 		}).Errorf("Resolver Update r.company.Update of company")
 		if err == sql.ErrNoRows {
-			return nil, goerrors.ErrNotFound
+			return nil, goerrors.ErrNotFound(params.Context.Value(utils.TraceIDKey))
 		}
-		return nil, goerrors.ErrInternalServerError
+		return nil, goerrors.ErrInternalServerError(params.Context.Value(utils.TraceIDKey))
 	}
 	return response, nil
 }

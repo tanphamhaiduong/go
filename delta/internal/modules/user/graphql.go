@@ -65,9 +65,9 @@ func (r *ResolverImpl) Login(param graphql.ResolveParams) (interface{}, error) {
 			"err":     err,
 		}).Infof("r.user.Login of Login Resolver")
 		if err == sql.ErrNoRows {
-			return nil, goerrors.ErrNotFound
+			return nil, goerrors.ErrNotFound(param.Context.Value(utils.TraceIDKey))
 		}
-		return nil, goerrors.ErrInternalServerError
+		return nil, goerrors.ErrInternalServerError(param.Context.Value(utils.TraceIDKey))
 	}
 	return response, nil
 }

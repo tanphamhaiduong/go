@@ -1,22 +1,57 @@
 package goerrors
 
 import (
-	"errors"
+	"fmt"
 )
 
 var (
-	// ErrBadRquestError ...
-	ErrBadRquestError = errors.New("[E4000] Bad Request")
-	// ErrNotAuthorized ...
-	ErrNotAuthorized = errors.New("[E4010] Not Authorized")
-	// ErrForBidden ...
-	ErrForBidden = errors.New("[E4030] Forbidden")
-	// ErrNotFound ...
-	ErrNotFound = errors.New("[E4040] Not Found")
-	// ErrRequestTimeout ...
-	ErrRequestTimeout = errors.New("[E4080] Request Timeout")
-	// ErrInternalServerError ...
-	ErrInternalServerError = errors.New("[E5000] Internal Server Error")
-	// ErrGatewayTimeout ...
-	ErrGatewayTimeout = errors.New("[E5040] Gateway Timeout")
+	// ErrMessageBadRquestError ...
+	ErrMessageBadRquestError = "[E4000] Bad Request"
+	// ErrMessageNotAuthorized ...
+	ErrMessageNotAuthorized = "[E4010] Not Authorized"
+	// ErrMessageForBidden ...
+	ErrMessageForBidden = "[E4030] Forbidden"
+	// ErrMessageNotFound ...
+	ErrMessageNotFound = "[E4040] Not Found"
+	// ErrMessageRequestTimeout ...
+	ErrMessageRequestTimeout = "[E4080] Request Timeout"
+	// ErrMessageInternalServerError ...
+	ErrMessageInternalServerError = "[E5000] Internal Server Error"
+	// ErrMessageGatewayTimeout ...
+	ErrMessageGatewayTimeout = "[E5040] Gateway Timeout"
 )
+
+// ErrBadRquestError ...
+func ErrBadRquestError(traceID interface{}) error {
+	return fmt.Errorf("%s %s", ErrMessageBadRquestError, traceID)
+}
+
+// ErrNotAuthorized ...
+func ErrNotAuthorized(traceID interface{}) error {
+	return fmt.Errorf("%s %s", ErrMessageNotAuthorized, traceID)
+}
+
+// ErrForBidden ...
+func ErrForBidden(traceID interface{}) error {
+	return fmt.Errorf("%s %s", ErrMessageForBidden, traceID)
+}
+
+// ErrNotFound ...
+func ErrNotFound(traceID interface{}) error {
+	return fmt.Errorf("%s %s", ErrMessageNotFound, traceID)
+}
+
+// ErrRequestTimeout ...
+func ErrRequestTimeout(traceID interface{}) error {
+	return fmt.Errorf("%s %s", ErrMessageRequestTimeout, traceID)
+}
+
+// ErrInternalServerError ...
+func ErrInternalServerError(traceID interface{}) error {
+	return fmt.Errorf("%s %s", ErrMessageInternalServerError, traceID)
+}
+
+// ErrGatewayTimeout ...
+func ErrGatewayTimeout(traceID interface{}) error {
+	return fmt.Errorf("%s %s", ErrMessageInternalServerError, traceID)
+}

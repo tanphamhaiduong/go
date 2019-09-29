@@ -95,15 +95,13 @@ func (s *CompanyHandlerTestSuite) TestList_Success() {
 	var (
 		ctx    = context.Background()
 		params = arguments.CompanyList{
-			ID:           1,
-			Name:         "mockString",
-			CompanyCode:  "mockString",
-			Status:       "active",
-			CreatedBy:    "mockString",
-			UpdatedBy:    "mockString",
-			ApiSecretKey: "mockString",
-			Page:         1,
-			PageSize:     10,
+			ID:        1,
+			Name:      "mockString",
+			Status:    "active",
+			CreatedBy: "mockString",
+			UpdatedBy: "mockString",
+			Page:      1,
+			PageSize:  10,
 		}
 		companies []models.Company
 	)
@@ -117,15 +115,13 @@ func (s *CompanyHandlerTestSuite) TestList_Fail() {
 	var (
 		ctx    = context.Background()
 		params = arguments.CompanyList{
-			ID:           1,
-			Name:         "mockString",
-			CompanyCode:  "mockString",
-			Status:       "active",
-			CreatedBy:    "mockString",
-			UpdatedBy:    "mockString",
-			ApiSecretKey: "mockString",
-			Page:         1,
-			PageSize:     10,
+			ID:        1,
+			Name:      "mockString",
+			Status:    "active",
+			CreatedBy: "mockString",
+			UpdatedBy: "mockString",
+			Page:      1,
+			PageSize:  10,
 		}
 		companies []models.Company
 	)
@@ -139,15 +135,13 @@ func (s *CompanyHandlerTestSuite) TestList_Fail1() {
 	var (
 		ctx    = context.Background()
 		params = arguments.CompanyList{
-			ID:           0,
-			Name:         "mockString",
-			CompanyCode:  "mockString",
-			Status:       "active",
-			CreatedBy:    "mockString",
-			UpdatedBy:    "mockString",
-			ApiSecretKey: "mockString",
-			Page:         1,
-			PageSize:     10,
+			ID:        0,
+			Name:      "mockString",
+			Status:    "active",
+			CreatedBy: "mockString",
+			UpdatedBy: "mockString",
+			Page:      1,
+			PageSize:  10,
 		}
 		companies []models.Company
 	)
@@ -161,13 +155,11 @@ func (s *CompanyHandlerTestSuite) TestCount_Success() {
 	var (
 		ctx    = context.Background()
 		params = arguments.CompanyCount{
-			ID:           1,
-			Name:         "mockString",
-			CompanyCode:  "mockString",
-			Status:       "active",
-			CreatedBy:    "mockString",
-			UpdatedBy:    "mockString",
-			ApiSecretKey: "mockString",
+			ID:        1,
+			Name:      "mockString",
+			Status:    "active",
+			CreatedBy: "mockString",
+			UpdatedBy: "mockString",
 		}
 		count int64
 	)
@@ -181,13 +173,11 @@ func (s *CompanyHandlerTestSuite) TestCount_Fail() {
 	var (
 		ctx    = context.Background()
 		params = arguments.CompanyCount{
-			ID:           1,
-			Name:         "mockString",
-			CompanyCode:  "mockString",
-			Status:       "active",
-			CreatedBy:    "mockString",
-			UpdatedBy:    "mockString",
-			ApiSecretKey: "mockString",
+			ID:        1,
+			Name:      "mockString",
+			Status:    "active",
+			CreatedBy: "mockString",
+			UpdatedBy: "mockString",
 		}
 		count int64
 	)
@@ -201,13 +191,11 @@ func (s *CompanyHandlerTestSuite) TestCount_Fail1() {
 	var (
 		ctx    = context.Background()
 		params = arguments.CompanyCount{
-			ID:           0,
-			Name:         "mockString",
-			CompanyCode:  "mockString",
-			Status:       "active",
-			CreatedBy:    "mockString",
-			UpdatedBy:    "mockString",
-			ApiSecretKey: "mockString",
+			ID:        0,
+			Name:      "mockString",
+			Status:    "active",
+			CreatedBy: "mockString",
+			UpdatedBy: "mockString",
 		}
 		count int64
 	)
@@ -222,22 +210,18 @@ func (s *CompanyHandlerTestSuite) TestInsert_Success() {
 		ctx            = context.Background()
 		sampleID int64 = 1
 		params         = arguments.CompanyInsert{
-			Name:         "mockString",
-			CompanyCode:  "mockString",
-			Status:       "active",
-			CreatedBy:    "mockString",
-			UpdatedBy:    "mockString",
-			ApiSecretKey: "mockString",
+			Name:      "mockString",
+			Status:    "active",
+			CreatedBy: "mockString",
+			UpdatedBy: "mockString",
 		}
 	)
 	company := models.Company{
-		ID:           sampleID,
-		Name:         params.Name,
-		CompanyCode:  params.CompanyCode,
-		Status:       params.Status,
-		CreatedBy:    params.CreatedBy,
-		UpdatedBy:    params.UpdatedBy,
-		ApiSecretKey: params.ApiSecretKey,
+		ID:        sampleID,
+		Name:      params.Name,
+		Status:    params.Status,
+		CreatedBy: params.CreatedBy,
+		UpdatedBy: params.UpdatedBy,
 	}
 	// Mock Insert
 	s.MockICompany.On("Insert", ctx, params).Return(company, nil)
@@ -253,12 +237,10 @@ func (s *CompanyHandlerTestSuite) TestInsert_Fail() {
 	var (
 		ctx    = context.Background()
 		params = arguments.CompanyInsert{
-			Name:         "mockString",
-			CompanyCode:  "mockString",
-			Status:       "active",
-			CreatedBy:    "mockString",
-			UpdatedBy:    "mockString",
-			ApiSecretKey: "mockString",
+			Name:      "mockString",
+			Status:    "active",
+			CreatedBy: "mockString",
+			UpdatedBy: "mockString",
 		}
 		company = models.Company{}
 	)
@@ -272,12 +254,10 @@ func (s *CompanyHandlerTestSuite) TestInsert_Fail1() {
 	var (
 		ctx    = context.Background()
 		params = arguments.CompanyInsert{
-			Name:         "mockString",
-			CompanyCode:  "mockString",
-			Status:       "active",
-			CreatedBy:    "mockString",
-			UpdatedBy:    "mockString",
-			ApiSecretKey: "mockString",
+			Name:      "mockString",
+			Status:    "active",
+			CreatedBy: "mockString",
+			UpdatedBy: "mockString",
 		}
 		company = models.Company{}
 	)
@@ -294,23 +274,19 @@ func (s *CompanyHandlerTestSuite) TestUpdate_Success() {
 		mockString       = "mockString"
 		status           = "active"
 		params           = arguments.CompanyUpdate{
-			ID:           &sampleID,
-			Name:         &mockString,
-			CompanyCode:  &mockString,
-			Status:       &status,
-			CreatedBy:    &mockString,
-			UpdatedBy:    &mockString,
-			ApiSecretKey: &mockString,
+			ID:        &sampleID,
+			Name:      &mockString,
+			Status:    &status,
+			CreatedBy: &mockString,
+			UpdatedBy: &mockString,
 		}
 	)
 	company := models.Company{
-		ID:           *params.ID,
-		Name:         *params.Name,
-		CompanyCode:  *params.CompanyCode,
-		Status:       *params.Status,
-		CreatedBy:    *params.CreatedBy,
-		UpdatedBy:    *params.UpdatedBy,
-		ApiSecretKey: *params.ApiSecretKey,
+		ID:        *params.ID,
+		Name:      *params.Name,
+		Status:    *params.Status,
+		CreatedBy: *params.CreatedBy,
+		UpdatedBy: *params.UpdatedBy,
 	}
 	// Mock Insert
 	s.MockICompany.On("Update", ctx, params).Return(company, nil)
@@ -329,13 +305,11 @@ func (s *CompanyHandlerTestSuite) TestUpdate_Fail() {
 		mockString       = "mockString"
 		status           = "active"
 		params           = arguments.CompanyUpdate{
-			ID:           &sampleID,
-			Name:         &mockString,
-			CompanyCode:  &mockString,
-			Status:       &status,
-			CreatedBy:    &mockString,
-			UpdatedBy:    &mockString,
-			ApiSecretKey: &mockString,
+			ID:        &sampleID,
+			Name:      &mockString,
+			Status:    &status,
+			CreatedBy: &mockString,
+			UpdatedBy: &mockString,
 		}
 		company = models.Company{}
 	)
@@ -352,13 +326,11 @@ func (s *CompanyHandlerTestSuite) TestUpdate_Fail1() {
 		mockString = "mockString"
 		status     = "active"
 		params     = arguments.CompanyUpdate{
-			ID:           &sampleID,
-			Name:         &mockString,
-			CompanyCode:  &mockString,
-			Status:       &status,
-			CreatedBy:    &mockString,
-			UpdatedBy:    &mockString,
-			ApiSecretKey: &mockString,
+			ID:        &sampleID,
+			Name:      &mockString,
+			Status:    &status,
+			CreatedBy: &mockString,
+			UpdatedBy: &mockString,
 		}
 		company = models.Company{}
 	)
