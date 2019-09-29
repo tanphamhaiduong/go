@@ -31,6 +31,9 @@ const (
 	// ClaimsKey
 	ClaimsKey  models.ContextKey = "claims"
 	TraceIDKey models.ContextKey = "traceId"
+
+	// DBServices
+	DBServices = "DBServices"
 )
 
 // Parse map to struct for graphql

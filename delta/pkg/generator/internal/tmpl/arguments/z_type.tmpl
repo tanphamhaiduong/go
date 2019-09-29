@@ -36,7 +36,7 @@ type {{ $Name }}List struct {
 			{{ $field.Name }} {{ $field.GoType }} `graphql:"{{ $field.Name | ToLowerCamelCase }}" {{ $field.Validate }}`
 		{{- end }}
 	{{- end }}
-	Page int64 `graphql:"page" validate:"required,min=1"`
+	LastID int64 `graphql:"lastId"`
 	PageSize int64 `graphql:"pageSize" validate:"required,min=1,max=40"`
 }
 

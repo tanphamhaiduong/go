@@ -4,6 +4,7 @@ import (
 	"context"
 
 	sq "github.com/Masterminds/squirrel"
+	"github.com/afex/hystrix-go/hystrix"
 	"github.com/tanphamhaiduong/go/common/logger"
 	"github.com/tanphamhaiduong/go/delta/internal/database"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
@@ -71,22 +72,51 @@ func (r *RepositoryImpl) GetByUsername(ctx context.Context, username string) (mo
 		}).Errorf("Repository GetByUsername selectBuilder error of user")
 		return user, err
 	}
-	stmt, err := r.db.PrepareContext(ctx, sql)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository GetByUsername PrepareContext error of user")
+	output := make(chan models.User, 1)
+	errors := hystrix.Go(utils.DBServices, func() error {
+		stmt, err := r.db.PrepareContext(ctx, sql)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository GetByUsername PrepareContext error of user")
+			return err
+		}
+		row := stmt.QueryRowContext(ctx, args...)
+		err = r.scanUser(row, &user)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository GetByUsername Scan error of user")
+			return err
+		}
+		output <- user
+		return nil
+	}, nil)
+
+	select {
+	case err := <-errors:
 		return user, err
+	case out := <-output:
+		return out, nil
 	}
-	row := stmt.QueryRowContext(ctx, args...)
-	err = r.scanUser(row, &user)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository GetByUsername Scan error of user")
-		return user, err
-	}
-	return user, nil
+	// stmt, err := r.db.PrepareContext(ctx, sql)
+	// if err != nil {
+	// 	logger.WithFields(logger.Fields{
+	// 		"traceId": ctx.Value(utils.TraceIDKey),
+	// 		"Error":   err,
+	// 	}).Errorf("Repository GetByUsername PrepareContext error of user")
+	// 	return user, err
+	// }
+	// row := stmt.QueryRowContext(ctx, args...)
+	// err = r.scanUser(row, &user)
+	// if err != nil {
+	// 	logger.WithFields(logger.Fields{
+	// 		"traceId": ctx.Value(utils.TraceIDKey),
+	// 		"Error":   err,
+	// 	}).Errorf("Repository GetByUsername Scan error of user")
+	// 	return user, err
+	// }
+	// return user, nil
 }

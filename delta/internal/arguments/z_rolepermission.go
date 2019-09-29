@@ -27,7 +27,7 @@ type RolePermissionList struct {
 	PermissionID int64  `graphql:"permissionId" validate:"omitempty,min=1"`
 	CreatedBy    string `graphql:"createdBy" validate:"omitempty"`
 	UpdatedBy    string `graphql:"updatedBy" validate:"omitempty"`
-	Page         int64  `graphql:"page" validate:"required,min=1"`
+	LastID       int64  `graphql:"lastId"`
 	PageSize     int64  `graphql:"pageSize" validate:"required,min=1,max=40"`
 }
 

@@ -165,10 +165,7 @@ func (r *RepositoryImpl) setArgsToListSelectBuilder(ctx context.Context, selectB
 	if params.PageSize != 0 {
 		selectBuilder = selectBuilder.Limit(uint64(params.PageSize))
 	}
-	if params.Page != 0 {
-		offset := utils.CalculateOffsetForPage(params.Page, params.PageSize)
-		selectBuilder = selectBuilder.Where(sq.Gt{"id": uint64(offset)})
-	}
+	selectBuilder = selectBuilder.Where(sq.Gt{"id": params.LastID})
 	return selectBuilder
 }
 

@@ -175,10 +175,10 @@ var (
 			Type:        graphql.String,
 			Description: "This is user's updatedBy",
 		},
-		"page": &graphql.ArgumentConfig{
+		"lastId": &graphql.ArgumentConfig{
 			Type:         graphql.Int,
 			Description:  "This is feature page",
-			DefaultValue: 1,
+			DefaultValue: 0,
 		},
 		"pageSize": &graphql.ArgumentConfig{
 			Type:         graphql.Int,
@@ -449,7 +449,7 @@ func (r *ResolverImpl) List(params graphql.ResolveParams) (interface{}, error) {
 	}
 	// parse params
 	args := arguments.UserList{}
-	err := utils.Parse(params.Source.(map[string]interface{}), &args)
+	err := utils.Parse(params.Args, &args)
 	if err != nil {
 		logger.WithFields(logger.Fields{
 			"traceId": params.Context.Value(utils.TraceIDKey),

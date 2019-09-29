@@ -11,6 +11,7 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/afex/hystrix-go/hystrix"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
 	"github.com/graphql-go/handler"
@@ -23,6 +24,7 @@ import (
 	"github.com/tanphamhaiduong/go/delta/internal/modules/role"
 	"github.com/tanphamhaiduong/go/delta/internal/modules/rolepermission"
 	"github.com/tanphamhaiduong/go/delta/internal/modules/user"
+	"github.com/tanphamhaiduong/go/delta/internal/utils"
 	"google.golang.org/grpc"
 )
 
@@ -216,6 +218,15 @@ func main() {
 		FileJSONFormat:    true,
 		FileLocation:      logFileName(),
 	}
+
+	hystrix.ConfigureCommand(utils.DBServices, hystrix.CommandConfig{
+		Timeout:                500,
+		MaxConcurrentRequests:  100,
+		ErrorPercentThreshold:  50,
+		RequestVolumeThreshold: 3,
+		SleepWindow:            1000,
+	})
+
 	err = logger.NewLogger(logConfig, logger.InstanceZapLogger)
 	if err != nil {
 		log.Fatalf("Could not instantiate log %s", err.Error())
