@@ -73,7 +73,7 @@ func (r *RepositoryImpl) GetByUsername(ctx context.Context, username string) (mo
 		return user, err
 	}
 	output := make(chan models.User, 1)
-	errors := hystrix.Go(utils.DBServices, func() error {
+	errors := hystrix.Go("userGetByUsername", func() error {
 		stmt, err := r.db.PrepareContext(ctx, sql)
 		if err != nil {
 			logger.WithFields(logger.Fields{
@@ -101,22 +101,4 @@ func (r *RepositoryImpl) GetByUsername(ctx context.Context, username string) (mo
 	case out := <-output:
 		return out, nil
 	}
-	// stmt, err := r.db.PrepareContext(ctx, sql)
-	// if err != nil {
-	// 	logger.WithFields(logger.Fields{
-	// 		"traceId": ctx.Value(utils.TraceIDKey),
-	// 		"Error":   err,
-	// 	}).Errorf("Repository GetByUsername PrepareContext error of user")
-	// 	return user, err
-	// }
-	// row := stmt.QueryRowContext(ctx, args...)
-	// err = r.scanUser(row, &user)
-	// if err != nil {
-	// 	logger.WithFields(logger.Fields{
-	// 		"traceId": ctx.Value(utils.TraceIDKey),
-	// 		"Error":   err,
-	// 	}).Errorf("Repository GetByUsername Scan error of user")
-	// 	return user, err
-	// }
-	// return user, nil
 }

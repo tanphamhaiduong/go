@@ -150,10 +150,10 @@ func (s *CompanyResolverTestSuite) TestList_Success() {
 			},
 		}
 		ctx       = context.WithValue(context.Background(), utils.ClaimsKey, claims)
-		params    = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
+		params    = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{"lastId": 1, "pageSize": 10}}
 		companies []models.Company
 		args      = arguments.CompanyList{
-			Page:     1,
+			LastID:   1,
 			PageSize: 10,
 		}
 	)
@@ -174,10 +174,10 @@ func (s *CompanyResolverTestSuite) TestList_Fail() {
 			},
 		}
 		ctx       = context.WithValue(context.Background(), utils.ClaimsKey, claims)
-		params    = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
+		params    = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{"lastId": 1, "pageSize": 10}}
 		companies []models.Company
 		args      = arguments.CompanyList{
-			Page:     1,
+			LastID:   1,
 			PageSize: 10,
 		}
 	)
@@ -198,10 +198,10 @@ func (s *CompanyResolverTestSuite) TestList_Fail1() {
 			},
 		}
 		ctx       = context.WithValue(context.Background(), utils.ClaimsKey, claims)
-		params    = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
+		params    = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{"lastId": 1, "pageSize": 10}}
 		companies []models.Company
 		args      = arguments.CompanyList{
-			Page:     1,
+			LastID:   1,
 			PageSize: 10,
 		}
 	)
@@ -222,10 +222,10 @@ func (s *CompanyResolverTestSuite) TestList_Fail2() {
 			},
 		}
 		ctx       = context.WithValue(context.Background(), utils.ClaimsKey, claims)
-		params    = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
+		params    = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{"lastId": 1, "pageSize": 10}}
 		companies []models.Company
 		args      = arguments.CompanyList{
-			Page:     1,
+			LastID:   1,
 			PageSize: 10,
 		}
 	)

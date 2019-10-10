@@ -100,7 +100,7 @@ func (s *CompanyHandlerTestSuite) TestList_Success() {
 			Status:    "active",
 			CreatedBy: "mockString",
 			UpdatedBy: "mockString",
-			Page:      1,
+			LastID:    1,
 			PageSize:  10,
 		}
 		companies []models.Company
@@ -120,7 +120,7 @@ func (s *CompanyHandlerTestSuite) TestList_Fail() {
 			Status:    "active",
 			CreatedBy: "mockString",
 			UpdatedBy: "mockString",
-			Page:      1,
+			LastID:    1,
 			PageSize:  10,
 		}
 		companies []models.Company
@@ -140,7 +140,7 @@ func (s *CompanyHandlerTestSuite) TestList_Fail1() {
 			Status:    "active",
 			CreatedBy: "mockString",
 			UpdatedBy: "mockString",
-			Page:      1,
+			LastID:    1,
 			PageSize:  10,
 		}
 		companies []models.Company

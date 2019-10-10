@@ -150,10 +150,10 @@ func (s *RoleResolverTestSuite) TestList_Success() {
 			},
 		}
 		ctx    = context.WithValue(context.Background(), utils.ClaimsKey, claims)
-		params = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
+		params = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{"lastId": 1, "pageSize": 10}}
 		roles  []models.Role
 		args   = arguments.RoleList{
-			Page:     1,
+			LastID:   1,
 			PageSize: 10,
 		}
 	)
@@ -174,10 +174,10 @@ func (s *RoleResolverTestSuite) TestList_Fail() {
 			},
 		}
 		ctx    = context.WithValue(context.Background(), utils.ClaimsKey, claims)
-		params = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
+		params = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{"lastId": 1, "pageSize": 10}}
 		roles  []models.Role
 		args   = arguments.RoleList{
-			Page:     1,
+			LastID:   1,
 			PageSize: 10,
 		}
 	)
@@ -198,10 +198,10 @@ func (s *RoleResolverTestSuite) TestList_Fail1() {
 			},
 		}
 		ctx    = context.WithValue(context.Background(), utils.ClaimsKey, claims)
-		params = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
+		params = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{"lastId": 1, "pageSize": 10}}
 		roles  []models.Role
 		args   = arguments.RoleList{
-			Page:     1,
+			LastID:   1,
 			PageSize: 10,
 		}
 	)
@@ -222,10 +222,10 @@ func (s *RoleResolverTestSuite) TestList_Fail2() {
 			},
 		}
 		ctx    = context.WithValue(context.Background(), utils.ClaimsKey, claims)
-		params = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{"page": 1, "pageSize": 10}, Args: map[string]interface{}{}}
+		params = graphql.ResolveParams{Context: ctx, Source: map[string]interface{}{}, Args: map[string]interface{}{"lastId": 1, "pageSize": 10}}
 		roles  []models.Role
 		args   = arguments.RoleList{
-			Page:     1,
+			LastID:   1,
 			PageSize: 10,
 		}
 	)

@@ -8,8 +8,10 @@ package {{ $name }}
 
 import (
 	"context"
+	"fmt"
 
 	sq "github.com/Masterminds/squirrel"
+	"github.com/afex/hystrix-go/hystrix"
 	"github.com/tanphamhaiduong/go/common/logger"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/database"
@@ -54,24 +56,35 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.{{ $Name 
 		}).Errorf("Repository GetByID selectBuilder error of {{ $name }}")
 		return {{ $name }}, err
 	}
-	stmt, err := r.db.PrepareContext(ctx, sql)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error": err,
-		}).Errorf("Repository GetByID PrepareContext error of {{ $name }}")
+	output := make(chan models.{{ $Name }}, 1)
+	errors := hystrix.Go("{{ $name }}GetByID", func() error {
+		stmt, err := r.db.PrepareContext(ctx, sql)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error": err,
+			}).Errorf("Repository GetByID PrepareContext error of {{ $name }}")
+			return err
+		}
+		row := stmt.QueryRowContext(ctx, args...)
+		err = r.scan{{ $Name }}(row, &{{ $name }})
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error": err,
+			}).Errorf("Repository GetByID Scan error of {{ $name }}")
+			return err
+		}
+		output <- {{ $name }}
+		return nil
+	}, nil)
+
+	select {
+	case err := <-errors:
 		return {{ $name }}, err
+	case out := <-output:
+		return out, nil
 	}
-	row := stmt.QueryRowContext(ctx, args...)
-	err = r.scan{{ $Name }}(row, &{{ $name }})
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error": err,
-		}).Errorf("Repository GetByID Scan error of {{ $name }}")
-		return {{ $name }}, err
-	}
-	return {{ $name }}, nil
 }
 
 // GetByIDs ...
@@ -101,36 +114,47 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.{{ $Name
 		}).Errorf("Repository GetByIDs selectBuilder error of {{ $name }}")
 		return {{ $names }}, err
 	}
-	stmt, err := r.db.PrepareContext(ctx, sql)
-	if err != nil {
-	  logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error": err,
-		}).Errorf("Repository GetByIDs PrepareContext error of {{ $name }}")
-		return {{ $names }}, err
-	}
-	rows, err := stmt.QueryContext(ctx, args...)
-	defer rows.Close()
-	if err != nil {
-	  logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error": err,
-		}).Errorf("Repository GetByIDs QueryContext error of {{ $name }}")
-		return {{ $names }}, err
-	}
-	for rows.Next() {
-		{{ $name }} := models.{{ $Name }}{}
-		err := r.scan{{ $Name }}(rows, &{{ $name }})
+	output := make(chan []models.{{ $Name }}, 1)
+	errors := hystrix.Go("{{ $name }}GetByIDs", func() error {
+		stmt, err := r.db.PrepareContext(ctx, sql)
 		if err != nil {
-	    logger.WithFields(logger.Fields{
+			logger.WithFields(logger.Fields{
 				"traceId": ctx.Value(utils.TraceIDKey),
 				"Error": err,
-			}).Errorf("Repository GetByIDs Scan error of {{ $name }}")
-			return {{ $names }}, err
+			}).Errorf("Repository GetByIDs PrepareContext error of {{ $name }}")
+			return err
 		}
-		{{ $names }} = append({{ $names }}, {{ $name }})
+		rows, err := stmt.QueryContext(ctx, args...)
+		defer rows.Close()
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error": err,
+			}).Errorf("Repository GetByIDs QueryContext error of {{ $name }}")
+			return err
+		}
+		for rows.Next() {
+			{{ $name }} := models.{{ $Name }}{}
+			err := r.scan{{ $Name }}(rows, &{{ $name }})
+			if err != nil {
+				logger.WithFields(logger.Fields{
+					"traceId": ctx.Value(utils.TraceIDKey),
+					"Error": err,
+				}).Errorf("Repository GetByIDs Scan error of {{ $name }}")
+				return err
+			}
+			{{ $names }} = append({{ $names }}, {{ $name }})
+		}
+		output <- {{ $names }}
+		return nil
+	}, nil)
+
+	select {
+		case err := <-errors:
+			return {{ $names }}, err
+		case out := <-output:
+			return out, nil
 	}
-	return {{ $names }}, nil
 }
 
 // setArgsToListSelectBuilder ...
@@ -155,7 +179,9 @@ func (r *RepositoryImpl) setArgsToListSelectBuilder(ctx context.Context,selectBu
 	if params.PageSize != 0 {
 		selectBuilder = selectBuilder.Limit(uint64(params.PageSize))
 	}
-	selectBuilder = selectBuilder.Where(sq.Gt{"id": params.LastID})
+	if params.LastID != 0 {
+		selectBuilder = selectBuilder.Where(sq.Gt{"id": params.LastID})
+	}
 	return selectBuilder
 }
 
@@ -187,36 +213,48 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.{{- $Name }}
 		}).Errorf("Repository List selectBuilderWithArgs error of {{ $name }}")
 		return {{ $names }}, err
 	}
-	stmt, err := r.db.PrepareContext(ctx, sql)
-	if err != nil {
-    logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error": err,
-		}).Errorf("Repository List PrepareContext error of {{ $name }}")
-		return {{ $names }}, err
-	}
-	rows, err := stmt.QueryContext(ctx, args...)
-	if err != nil {
-    logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error": err,
-		}).Errorf("Repository List QueryContext error of {{ $name }}")
-		return {{ $names }}, err
-	}
-	defer rows.Close()
-	for rows.Next() {
-		{{ $name }} := models.{{ $Name }}{}
-		err := r.scan{{ $Name }}(rows, &{{ $name }})
+	output := make(chan []models.{{ $Name }}, 1)
+	errors := hystrix.Go("{{ $name }}List", func() error {
+		stmt, err := r.db.PrepareContext(ctx, sql)
 		if err != nil {
-      logger.WithFields(logger.Fields{
+			logger.WithFields(logger.Fields{
 				"traceId": ctx.Value(utils.TraceIDKey),
 				"Error": err,
-			}).Errorf("Repository List Scan error of {{ $name }}")
-			return {{ $names }}, err
+			}).Errorf("Repository List PrepareContext error of {{ $name }}")
+			return err
 		}
-		{{ $names }} = append({{ $names }}, {{ $name }})
+		rows, err := stmt.QueryContext(ctx, args...)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error": err,
+			}).Errorf("Repository List QueryContext error of {{ $name }}")
+			return err
+		}
+		defer rows.Close()
+		for rows.Next() {
+			{{ $name }} := models.{{ $Name }}{}
+			err := r.scan{{ $Name }}(rows, &{{ $name }})
+			if err != nil {
+				logger.WithFields(logger.Fields{
+					"traceId": ctx.Value(utils.TraceIDKey),
+					"Error": err,
+				}).Errorf("Repository List Scan error of {{ $name }}")
+				return err
+			}
+			{{ $names }} = append({{ $names }}, {{ $name }})
+		}
+		output <- {{ $names }}
+		return nil
+	}, nil)
+
+
+	select {
+		case err := <-errors:
+			return {{ $names }}, err
+		case out := <-output:
+			return out, nil
 	}
-	return {{ $names }}, nil
 }
 
 // setArgsToCountSelectBuilder ...
@@ -265,24 +303,36 @@ func (r *RepositoryImpl) Count(ctx context.Context, params arguments.{{- $Name }
 		}).Errorf("Repository Count selectBuilderWithArgs error of {{ $name }}")
 		return count, err
 	}
-	stmt, err := r.db.PrepareContext(ctx, sql)
-	if err != nil {
-    logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error": err,
-		}).Errorf("Repository Count PrepareContext error of {{ $name }}")
-		return count, err
+	output := make(chan int64, 1)
+	errors := hystrix.Go("{{ $name }}Count", func() error {
+		stmt, err := r.db.PrepareContext(ctx, sql)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error": err,
+			}).Errorf("Repository Count PrepareContext error of {{ $name }}")
+			return err
+		}
+		row := stmt.QueryRowContext(ctx, args...)
+		err = row.Scan(&count)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error": err,
+			}).Errorf("Repository Count Scan error of {{ $name }}")
+			return err
+		}
+		output <- count
+		return nil
+	}, nil)
+
+
+	select {
+		case err := <-errors:
+			return count, err
+		case out := <-output:
+			return out, nil
 	}
-	row := stmt.QueryRowContext(ctx, args...)
-	err = row.Scan(&count)
-	if err != nil {
-    logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error": err,
-		}).Errorf("Repository Count Scan error of {{ $name }}")
-		return count, err
-	}
-	return count, nil
 }
 
 // Insert ...
@@ -320,39 +370,50 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.{{ $Name }
 		}).Errorf("Repository Insert insertBuilder error of {{ $name }}")
 		return {{ $name }}, err
 	}
-	stmt, err := r.db.PrepareContext(ctx, sql)
-	if err != nil {
-    logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error": err,
-		}).Errorf("Repository Insert PrepareContext error of {{ $name }}")
+	output := make(chan models.{{ $Name }}, 1)
+	errors := hystrix.Go("{{ $name }}Insert", func() error {
+		stmt, err := r.db.PrepareContext(ctx, sql)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error": err,
+			}).Errorf("Repository Insert PrepareContext error of {{ $name }}")
+			return err
+		}
+		row, err := stmt.ExecContext(ctx, args...)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error": err,
+			}).Errorf("Repository Insert ExecContext error of {{ $name }}")
+			return err
+		}
+		id, err := row.LastInsertId()
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error": err,
+			}).Errorf("Repository Insert LastInsertId error of {{ $name }}")
+			return err
+		}
+		new{{ $Name }}, err := r.GetByID(ctx, arguments.{{ $Name }}GetByID{ID: id})
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error": err,
+			}).Errorf("Repository Insert GetByID error of {{ $name }}")
+			return err
+		}
+		output <- new{{ $Name }}
+		return nil
+	}, nil)
+
+	select {
+	case err := <-errors:
 		return {{ $name }}, err
+	case out := <-output:
+		return out, nil
 	}
-	row, err := stmt.ExecContext(ctx, args...)
-	if err != nil {
-    logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error": err,
-		}).Errorf("Repository Insert ExecContext error of {{ $name }}")
-		return {{ $name }}, err
-	}
-	id, err := row.LastInsertId()
-	if err != nil {
-    logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error": err,
-		}).Errorf("Repository Insert LastInsertId error of {{ $name }}")
-		return {{ $name }}, err
-	}
-	new{{ $Name }}, err := r.GetByID(ctx, arguments.{{ $Name }}GetByID{ID: id})
-	if err != nil {
-    logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error": err,
-		}).Errorf("Repository Insert GetByID error of {{ $name }}")
-		return {{ $name }}, err
-	}
-	return new{{ $Name }}, nil
 }
 
 // setArgsToUpdateBuilder ...
@@ -400,46 +461,57 @@ func (r *RepositoryImpl) Update(ctx context.Context, params arguments.{{ $Name }
 		}).Errorf("Repository Update updateBuilderWithArgs error of {{ $name }}")
 		return {{ $name }}, err
 	}
-	stmt, err := r.db.PrepareContext(ctx, sql)
-	if err != nil {
-    logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error": err,
-		}).Errorf("Repository Update PrepareContext error of {{ $name }}")
+	output := make(chan models.{{ $Name }}, 1)
+	errors := hystrix.Go("{{ $name }}Update", func() error {
+		stmt, err := r.db.PrepareContext(ctx, sql)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error": err,
+			}).Errorf("Repository Update PrepareContext error of {{ $name }}")
+			return err
+		}
+			result, err := stmt.ExecContext(ctx, args...)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error": err,
+			}).Errorf("Repository Update ExecContext error of {{ $name }}")
+			return err
+		}
+		rowAffected, err := result.RowsAffected()
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error": err,
+			}).Errorf("Repository Update RowsAffected error of {{ $name }}")
+			return err
+		}
+		if rowAffected <= 0 {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error": fmt.Errorf("error when update record id %d", *params.ID),
+			}).Errorf("Repository Update rowAffected <= 0 of {{ $name }}")
+			return fmt.Errorf("error when update record id %d", *params.ID)
+		}
+		new{{ $Name }}, err := r.GetByID(ctx, arguments.{{ $Name }}GetByID{ID: *params.ID})
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error": err,
+			}).Errorf("Repository Update GetByID error of {{ $name }}")
+			return err
+		}
+		output <- new{{ $Name }}
+		return nil
+	}, nil)
+
+	select {
+	case err := <-errors:
 		return {{ $name }}, err
+	case out := <-output:
+		return out, nil
 	}
-		result, err := stmt.ExecContext(ctx, args...)
-	if err != nil {
-    logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error": err,
-		}).Errorf("Repository Update ExecContext error of {{ $name }}")
-		return {{ $name }}, err
-	}
-	rowAffected, err := result.RowsAffected()
-	if err != nil {
-    logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error": err,
-		}).Errorf("Repository Update RowsAffected error of {{ $name }}")
-		return {{ $name }}, err
-	}
-	if rowAffected <= 0 {
-    logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error": fmt.Errorf("error when update record id %d", *params.ID),
-		}).Errorf("Repository Update rowAffected <= 0 of {{ $name }}")
-		return {{ $name }}, fmt.Errorf("error when update record id %d", *params.ID)
-	}
-	new{{ $Name }}, err := r.GetByID(ctx, arguments.{{ $Name }}GetByID{ID: *params.ID})
-	if err != nil {
-    logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error": err,
-		}).Errorf("Repository Update GetByID error of {{ $name }}")
-		return {{ $name }}, err
-	}
-	return new{{ $Name }}, nil
 }
 
 // Delete ...
@@ -465,38 +537,50 @@ func (r *RepositoryImpl) Delete(ctx context.Context, params arguments.{{ $Name }
 		}).Errorf("Repository Delete deleteBuilder error of {{ $name }}")
 		return id, err
 	}
-	stmt, err := r.db.PrepareContext(ctx, sql)
-	if err != nil {
-    logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error": err,
-		}).Errorf("Repository Delete PrepareContext error of {{ $name }}")
-		return id, err
+	output := make(chan int64, 1)
+	errors := hystrix.Go("{{ $name }}Delete", func() error {
+		stmt, err := r.db.PrepareContext(ctx, sql)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error": err,
+			}).Errorf("Repository Delete PrepareContext error of {{ $name }}")
+			return err
+		}
+		result, err := stmt.ExecContext(ctx, args...)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error": err,
+			}).Errorf("Repository Delete ExecContext error of {{ $name }}")
+			return err
+		}
+		rowAffected, err := result.RowsAffected()
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error": err,
+			}).Errorf("Repository Delete RowsAffected error of {{ $name }}")
+			return err
+		}
+		if rowAffected <= 0 {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error": fmt.Errorf("not found record by id %d", params.ID),
+			}).Errorf("Repository Update rowAffected <= 0 of {{ $name }}")
+			return fmt.Errorf("not found record by id %d", params.ID)
+		}
+		output <- params.ID
+		return nil
+	}, nil)
+
+
+	select {
+		case err := <-errors:
+			return id, err
+		case out := <-output:
+			return out, nil
 	}
-	result, err := stmt.ExecContext(ctx, args...)
-	if err != nil {
-    logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error": err,
-		}).Errorf("Repository Delete ExecContext error of {{ $name }}")
-		return id, err
-	}
-	rowAffected, err := result.RowsAffected()
-	if err != nil {
-    logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error": err,
-		}).Errorf("Repository Delete RowsAffected error of {{ $name }}")
-    return id, err
-  }
-	if rowAffected <= 0 {
-    logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error": fmt.Errorf("not found record by id %d", params.ID),
-		}).Errorf("Repository Update rowAffected <= 0 of {{ $name }}")
-		return id, fmt.Errorf("not found record by id %d", params.ID)
-	}
-	return params.ID, nil
 }
 
 //go:generate mockery -name=IDatabase -output=mocks -case=underscore

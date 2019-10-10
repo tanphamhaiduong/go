@@ -9,7 +9,6 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
-	"github.com/tanphamhaiduong/go/delta/internal/utils"
 )
 
 func (s *RolePermissionRepositoryTestSuite) TestGetByID_Success() {
@@ -183,13 +182,12 @@ func (s *RolePermissionRepositoryTestSuite) TestSetArgsToListSelectBuilder_Succe
 			PermissionID: 1,
 			CreatedBy:    "mockString",
 			UpdatedBy:    "mockString",
-			Page:         1,
+			LastID:       1,
 			PageSize:     10,
 		}
 		selectBuilder = sq.Select("*").From("rolepermission")
 	)
-	offset := utils.CalculateOffsetForPage(params.Page, params.PageSize)
-	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Eq{"role_id": params.RoleID}).Where(sq.Eq{"permission_id": params.PermissionID}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy}).Limit(uint64(params.PageSize)).Where(sq.Gt{"id": uint64(offset)})
+	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Eq{"role_id": params.RoleID}).Where(sq.Eq{"permission_id": params.PermissionID}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy}).Limit(uint64(params.PageSize)).Where(sq.Gt{"id": params.LastID})
 	expectSQL, expectArgs, expectErr := expectedSelectBuilder.ToSql()
 	// Actual
 	actual := s.Repository.setArgsToListSelectBuilder(ctx, selectBuilder, params)
@@ -209,7 +207,6 @@ func (s *RolePermissionRepositoryTestSuite) TestList_Success() {
 			PermissionID: 1,
 			CreatedBy:    "mockString",
 			UpdatedBy:    "mockString",
-			Page:         1,
 			PageSize:     10,
 		}
 		rolepermissions []models.RolePermission
@@ -247,7 +244,6 @@ func (s *RolePermissionRepositoryTestSuite) TestList_Fail() {
 			PermissionID: 1,
 			CreatedBy:    "mockString",
 			UpdatedBy:    "mockString",
-			Page:         1,
 			PageSize:     10,
 		}
 		rolepermissions []models.RolePermission
@@ -285,7 +281,6 @@ func (s *RolePermissionRepositoryTestSuite) TestList_Fail1() {
 			PermissionID: 1,
 			CreatedBy:    "mockString",
 			UpdatedBy:    "mockString",
-			Page:         1,
 			PageSize:     10,
 		}
 		rolepermissions []models.RolePermission
@@ -323,8 +318,6 @@ func (s *RolePermissionRepositoryTestSuite) TestList_Fail2() {
 			PermissionID: 1,
 			CreatedBy:    "mockString",
 			UpdatedBy:    "mockString",
-			Page:         1,
-			PageSize:     10,
 		}
 		rolepermissions []models.RolePermission
 	)

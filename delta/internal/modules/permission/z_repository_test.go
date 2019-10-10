@@ -9,7 +9,6 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
-	"github.com/tanphamhaiduong/go/delta/internal/utils"
 )
 
 func (s *PermissionRepositoryTestSuite) TestGetByID_Success() {
@@ -191,13 +190,12 @@ func (s *PermissionRepositoryTestSuite) TestSetArgsToListSelectBuilder_Success()
 			Status:      "active",
 			CreatedBy:   "mockString",
 			UpdatedBy:   "mockString",
-			Page:        1,
+			LastID:      1,
 			PageSize:    10,
 		}
 		selectBuilder = sq.Select("*").From("permission")
 	)
-	offset := utils.CalculateOffsetForPage(params.Page, params.PageSize)
-	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Eq{"name": params.Name}).Where(sq.Eq{"description": params.Description}).Where(sq.Eq{"status": params.Status}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy}).Limit(uint64(params.PageSize)).Where(sq.Gt{"id": uint64(offset)})
+	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Eq{"name": params.Name}).Where(sq.Eq{"description": params.Description}).Where(sq.Eq{"status": params.Status}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy}).Limit(uint64(params.PageSize)).Where(sq.Gt{"id": params.LastID})
 	expectSQL, expectArgs, expectErr := expectedSelectBuilder.ToSql()
 	// Actual
 	actual := s.Repository.setArgsToListSelectBuilder(ctx, selectBuilder, params)
@@ -218,7 +216,6 @@ func (s *PermissionRepositoryTestSuite) TestList_Success() {
 			Status:      "active",
 			CreatedBy:   "mockString",
 			UpdatedBy:   "mockString",
-			Page:        1,
 			PageSize:    10,
 		}
 		permissions []models.Permission
@@ -259,7 +256,6 @@ func (s *PermissionRepositoryTestSuite) TestList_Fail() {
 			Status:      "active",
 			CreatedBy:   "mockString",
 			UpdatedBy:   "mockString",
-			Page:        1,
 			PageSize:    10,
 		}
 		permissions []models.Permission
@@ -300,7 +296,6 @@ func (s *PermissionRepositoryTestSuite) TestList_Fail1() {
 			Status:      "active",
 			CreatedBy:   "mockString",
 			UpdatedBy:   "mockString",
-			Page:        1,
 			PageSize:    10,
 		}
 		permissions []models.Permission
@@ -341,8 +336,6 @@ func (s *PermissionRepositoryTestSuite) TestList_Fail2() {
 			Status:      "active",
 			CreatedBy:   "mockString",
 			UpdatedBy:   "mockString",
-			Page:        1,
-			PageSize:    10,
 		}
 		permissions []models.Permission
 	)

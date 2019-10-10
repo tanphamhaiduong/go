@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	sq "github.com/Masterminds/squirrel"
+	"github.com/afex/hystrix-go/hystrix"
 	"github.com/tanphamhaiduong/go/common/logger"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/database"
@@ -56,24 +57,35 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.RoleGetBy
 		}).Errorf("Repository GetByID selectBuilder error of role")
 		return role, err
 	}
-	stmt, err := r.db.PrepareContext(ctx, sql)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository GetByID PrepareContext error of role")
+	output := make(chan models.Role, 1)
+	errors := hystrix.Go("roleGetByID", func() error {
+		stmt, err := r.db.PrepareContext(ctx, sql)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository GetByID PrepareContext error of role")
+			return err
+		}
+		row := stmt.QueryRowContext(ctx, args...)
+		err = r.scanRole(row, &role)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository GetByID Scan error of role")
+			return err
+		}
+		output <- role
+		return nil
+	}, nil)
+
+	select {
+	case err := <-errors:
 		return role, err
+	case out := <-output:
+		return out, nil
 	}
-	row := stmt.QueryRowContext(ctx, args...)
-	err = r.scanRole(row, &role)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository GetByID Scan error of role")
-		return role, err
-	}
-	return role, nil
 }
 
 // GetByIDs ...
@@ -106,36 +118,47 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.RoleGetB
 		}).Errorf("Repository GetByIDs selectBuilder error of role")
 		return roles, err
 	}
-	stmt, err := r.db.PrepareContext(ctx, sql)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository GetByIDs PrepareContext error of role")
-		return roles, err
-	}
-	rows, err := stmt.QueryContext(ctx, args...)
-	defer rows.Close()
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository GetByIDs QueryContext error of role")
-		return roles, err
-	}
-	for rows.Next() {
-		role := models.Role{}
-		err := r.scanRole(rows, &role)
+	output := make(chan []models.Role, 1)
+	errors := hystrix.Go("roleGetByIDs", func() error {
+		stmt, err := r.db.PrepareContext(ctx, sql)
 		if err != nil {
 			logger.WithFields(logger.Fields{
 				"traceId": ctx.Value(utils.TraceIDKey),
 				"Error":   err,
-			}).Errorf("Repository GetByIDs Scan error of role")
-			return roles, err
+			}).Errorf("Repository GetByIDs PrepareContext error of role")
+			return err
 		}
-		roles = append(roles, role)
+		rows, err := stmt.QueryContext(ctx, args...)
+		defer rows.Close()
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository GetByIDs QueryContext error of role")
+			return err
+		}
+		for rows.Next() {
+			role := models.Role{}
+			err := r.scanRole(rows, &role)
+			if err != nil {
+				logger.WithFields(logger.Fields{
+					"traceId": ctx.Value(utils.TraceIDKey),
+					"Error":   err,
+				}).Errorf("Repository GetByIDs Scan error of role")
+				return err
+			}
+			roles = append(roles, role)
+		}
+		output <- roles
+		return nil
+	}, nil)
+
+	select {
+	case err := <-errors:
+		return roles, err
+	case out := <-output:
+		return out, nil
 	}
-	return roles, nil
 }
 
 // setArgsToListSelectBuilder ...
@@ -165,7 +188,9 @@ func (r *RepositoryImpl) setArgsToListSelectBuilder(ctx context.Context, selectB
 	if params.PageSize != 0 {
 		selectBuilder = selectBuilder.Limit(uint64(params.PageSize))
 	}
-	selectBuilder = selectBuilder.Where(sq.Gt{"id": params.LastID})
+	if params.LastID != 0 {
+		selectBuilder = selectBuilder.Where(sq.Gt{"id": params.LastID})
+	}
 	return selectBuilder
 }
 
@@ -200,36 +225,47 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.RoleList) ([
 		}).Errorf("Repository List selectBuilderWithArgs error of role")
 		return roles, err
 	}
-	stmt, err := r.db.PrepareContext(ctx, sql)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository List PrepareContext error of role")
-		return roles, err
-	}
-	rows, err := stmt.QueryContext(ctx, args...)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository List QueryContext error of role")
-		return roles, err
-	}
-	defer rows.Close()
-	for rows.Next() {
-		role := models.Role{}
-		err := r.scanRole(rows, &role)
+	output := make(chan []models.Role, 1)
+	errors := hystrix.Go("roleList", func() error {
+		stmt, err := r.db.PrepareContext(ctx, sql)
 		if err != nil {
 			logger.WithFields(logger.Fields{
 				"traceId": ctx.Value(utils.TraceIDKey),
 				"Error":   err,
-			}).Errorf("Repository List Scan error of role")
-			return roles, err
+			}).Errorf("Repository List PrepareContext error of role")
+			return err
 		}
-		roles = append(roles, role)
+		rows, err := stmt.QueryContext(ctx, args...)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository List QueryContext error of role")
+			return err
+		}
+		defer rows.Close()
+		for rows.Next() {
+			role := models.Role{}
+			err := r.scanRole(rows, &role)
+			if err != nil {
+				logger.WithFields(logger.Fields{
+					"traceId": ctx.Value(utils.TraceIDKey),
+					"Error":   err,
+				}).Errorf("Repository List Scan error of role")
+				return err
+			}
+			roles = append(roles, role)
+		}
+		output <- roles
+		return nil
+	}, nil)
+
+	select {
+	case err := <-errors:
+		return roles, err
+	case out := <-output:
+		return out, nil
 	}
-	return roles, nil
 }
 
 // setArgsToCountSelectBuilder ...
@@ -283,24 +319,35 @@ func (r *RepositoryImpl) Count(ctx context.Context, params arguments.RoleCount) 
 		}).Errorf("Repository Count selectBuilderWithArgs error of role")
 		return count, err
 	}
-	stmt, err := r.db.PrepareContext(ctx, sql)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository Count PrepareContext error of role")
+	output := make(chan int64, 1)
+	errors := hystrix.Go("roleCount", func() error {
+		stmt, err := r.db.PrepareContext(ctx, sql)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository Count PrepareContext error of role")
+			return err
+		}
+		row := stmt.QueryRowContext(ctx, args...)
+		err = row.Scan(&count)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository Count Scan error of role")
+			return err
+		}
+		output <- count
+		return nil
+	}, nil)
+
+	select {
+	case err := <-errors:
 		return count, err
+	case out := <-output:
+		return out, nil
 	}
-	row := stmt.QueryRowContext(ctx, args...)
-	err = row.Scan(&count)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository Count Scan error of role")
-		return count, err
-	}
-	return count, nil
 }
 
 // Insert ...
@@ -338,39 +385,50 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.RoleInsert
 		}).Errorf("Repository Insert insertBuilder error of role")
 		return role, err
 	}
-	stmt, err := r.db.PrepareContext(ctx, sql)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository Insert PrepareContext error of role")
+	output := make(chan models.Role, 1)
+	errors := hystrix.Go("roleInsert", func() error {
+		stmt, err := r.db.PrepareContext(ctx, sql)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository Insert PrepareContext error of role")
+			return err
+		}
+		row, err := stmt.ExecContext(ctx, args...)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository Insert ExecContext error of role")
+			return err
+		}
+		id, err := row.LastInsertId()
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository Insert LastInsertId error of role")
+			return err
+		}
+		newRole, err := r.GetByID(ctx, arguments.RoleGetByID{ID: id})
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository Insert GetByID error of role")
+			return err
+		}
+		output <- newRole
+		return nil
+	}, nil)
+
+	select {
+	case err := <-errors:
 		return role, err
+	case out := <-output:
+		return out, nil
 	}
-	row, err := stmt.ExecContext(ctx, args...)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository Insert ExecContext error of role")
-		return role, err
-	}
-	id, err := row.LastInsertId()
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository Insert LastInsertId error of role")
-		return role, err
-	}
-	newRole, err := r.GetByID(ctx, arguments.RoleGetByID{ID: id})
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository Insert GetByID error of role")
-		return role, err
-	}
-	return newRole, nil
 }
 
 // setArgsToUpdateBuilder ...
@@ -421,46 +479,57 @@ func (r *RepositoryImpl) Update(ctx context.Context, params arguments.RoleUpdate
 		}).Errorf("Repository Update updateBuilderWithArgs error of role")
 		return role, err
 	}
-	stmt, err := r.db.PrepareContext(ctx, sql)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository Update PrepareContext error of role")
+	output := make(chan models.Role, 1)
+	errors := hystrix.Go("roleUpdate", func() error {
+		stmt, err := r.db.PrepareContext(ctx, sql)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository Update PrepareContext error of role")
+			return err
+		}
+		result, err := stmt.ExecContext(ctx, args...)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository Update ExecContext error of role")
+			return err
+		}
+		rowAffected, err := result.RowsAffected()
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository Update RowsAffected error of role")
+			return err
+		}
+		if rowAffected <= 0 {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   fmt.Errorf("error when update record id %d", *params.ID),
+			}).Errorf("Repository Update rowAffected <= 0 of role")
+			return fmt.Errorf("error when update record id %d", *params.ID)
+		}
+		newRole, err := r.GetByID(ctx, arguments.RoleGetByID{ID: *params.ID})
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository Update GetByID error of role")
+			return err
+		}
+		output <- newRole
+		return nil
+	}, nil)
+
+	select {
+	case err := <-errors:
 		return role, err
+	case out := <-output:
+		return out, nil
 	}
-	result, err := stmt.ExecContext(ctx, args...)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository Update ExecContext error of role")
-		return role, err
-	}
-	rowAffected, err := result.RowsAffected()
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository Update RowsAffected error of role")
-		return role, err
-	}
-	if rowAffected <= 0 {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   fmt.Errorf("error when update record id %d", *params.ID),
-		}).Errorf("Repository Update rowAffected <= 0 of role")
-		return role, fmt.Errorf("error when update record id %d", *params.ID)
-	}
-	newRole, err := r.GetByID(ctx, arguments.RoleGetByID{ID: *params.ID})
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository Update GetByID error of role")
-		return role, err
-	}
-	return newRole, nil
 }
 
 // Delete ...
@@ -486,38 +555,49 @@ func (r *RepositoryImpl) Delete(ctx context.Context, params arguments.RoleDelete
 		}).Errorf("Repository Delete deleteBuilder error of role")
 		return id, err
 	}
-	stmt, err := r.db.PrepareContext(ctx, sql)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository Delete PrepareContext error of role")
+	output := make(chan int64, 1)
+	errors := hystrix.Go("roleDelete", func() error {
+		stmt, err := r.db.PrepareContext(ctx, sql)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository Delete PrepareContext error of role")
+			return err
+		}
+		result, err := stmt.ExecContext(ctx, args...)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository Delete ExecContext error of role")
+			return err
+		}
+		rowAffected, err := result.RowsAffected()
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository Delete RowsAffected error of role")
+			return err
+		}
+		if rowAffected <= 0 {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   fmt.Errorf("not found record by id %d", params.ID),
+			}).Errorf("Repository Update rowAffected <= 0 of role")
+			return fmt.Errorf("not found record by id %d", params.ID)
+		}
+		output <- params.ID
+		return nil
+	}, nil)
+
+	select {
+	case err := <-errors:
 		return id, err
+	case out := <-output:
+		return out, nil
 	}
-	result, err := stmt.ExecContext(ctx, args...)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository Delete ExecContext error of role")
-		return id, err
-	}
-	rowAffected, err := result.RowsAffected()
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository Delete RowsAffected error of role")
-		return id, err
-	}
-	if rowAffected <= 0 {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   fmt.Errorf("not found record by id %d", params.ID),
-		}).Errorf("Repository Update rowAffected <= 0 of role")
-		return id, fmt.Errorf("not found record by id %d", params.ID)
-	}
-	return params.ID, nil
 }
 
 //go:generate mockery -name=IDatabase -output=mocks -case=underscore

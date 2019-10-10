@@ -9,7 +9,6 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
-	"github.com/tanphamhaiduong/go/delta/internal/utils"
 )
 
 func (s *RoleRepositoryTestSuite) TestGetByID_Success() {
@@ -191,13 +190,12 @@ func (s *RoleRepositoryTestSuite) TestSetArgsToListSelectBuilder_Success() {
 			Status:    "active",
 			CreatedBy: "mockString",
 			UpdatedBy: "mockString",
-			Page:      1,
+			LastID:    1,
 			PageSize:  10,
 		}
 		selectBuilder = sq.Select("*").From("role")
 	)
-	offset := utils.CalculateOffsetForPage(params.Page, params.PageSize)
-	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Eq{"name": params.Name}).Where(sq.Eq{"company_id": params.CompanyID}).Where(sq.Eq{"status": params.Status}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy}).Limit(uint64(params.PageSize)).Where(sq.Gt{"id": uint64(offset)})
+	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Eq{"name": params.Name}).Where(sq.Eq{"company_id": params.CompanyID}).Where(sq.Eq{"status": params.Status}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy}).Limit(uint64(params.PageSize)).Where(sq.Gt{"id": params.LastID})
 	expectSQL, expectArgs, expectErr := expectedSelectBuilder.ToSql()
 	// Actual
 	actual := s.Repository.setArgsToListSelectBuilder(ctx, selectBuilder, params)
@@ -218,7 +216,6 @@ func (s *RoleRepositoryTestSuite) TestList_Success() {
 			Status:    "active",
 			CreatedBy: "mockString",
 			UpdatedBy: "mockString",
-			Page:      1,
 			PageSize:  10,
 		}
 		roles []models.Role
@@ -259,7 +256,6 @@ func (s *RoleRepositoryTestSuite) TestList_Fail() {
 			Status:    "active",
 			CreatedBy: "mockString",
 			UpdatedBy: "mockString",
-			Page:      1,
 			PageSize:  10,
 		}
 		roles []models.Role
@@ -300,7 +296,6 @@ func (s *RoleRepositoryTestSuite) TestList_Fail1() {
 			Status:    "active",
 			CreatedBy: "mockString",
 			UpdatedBy: "mockString",
-			Page:      1,
 			PageSize:  10,
 		}
 		roles []models.Role
@@ -341,8 +336,6 @@ func (s *RoleRepositoryTestSuite) TestList_Fail2() {
 			Status:    "active",
 			CreatedBy: "mockString",
 			UpdatedBy: "mockString",
-			Page:      1,
-			PageSize:  10,
 		}
 		roles []models.Role
 	)

@@ -179,13 +179,12 @@ func (s *{{ $Name }}RepositoryTestSuite) TestSetArgsToListSelectBuilder_Success(
 				{{- else }}"mockString"
 				{{- end }},
 			{{- end }}
-			Page:     1,
+			LastID: 1,
 			PageSize: 10,
 		}
 		selectBuilder = sq.Select("*").From("{{ $name }}")
 	)
-	offset := utils.CalculateOffsetForPage(params.Page, params.PageSize)
-	expectedSelectBuilder := selectBuilder{{ range $field := $fields }}.Where(sq.{{ $field.QueryType }}{ "{{ $field.Name | ToSnakeCase }}": params.{{ $field.Name }} }){{ end }}.Limit(uint64(params.PageSize)).Where(sq.Gt{"id": uint64(offset)})
+	expectedSelectBuilder := selectBuilder{{ range $field := $fields }}.Where(sq.{{ $field.QueryType }}{ "{{ $field.Name | ToSnakeCase }}": params.{{ $field.Name }} }){{ end }}.Limit(uint64(params.PageSize)).Where(sq.Gt{"id": params.LastID})
 	expectSQL, expectArgs, expectErr := expectedSelectBuilder.ToSql()
 	// Actual
 	actual := s.Repository.setArgsToListSelectBuilder(ctx, selectBuilder, params)
@@ -211,7 +210,6 @@ func (s *{{ $Name }}RepositoryTestSuite) TestList_Success() {
 				{{- else }}"mockString"
 				{{- end }},
 			{{- end }}
-			Page:     1,
 			PageSize: 10,
 		}
 		{{ $names }} []models.{{ $Name }}
@@ -255,7 +253,6 @@ func (s *{{ $Name }}RepositoryTestSuite) TestList_Fail() {
 				{{- else }}"mockString"
 				{{- end }},
 			{{- end }}
-			Page:     1,
 			PageSize: 10,
 		}
 		{{ $names }} []models.{{ $Name }}
@@ -299,7 +296,6 @@ func (s *{{ $Name }}RepositoryTestSuite) TestList_Fail1() {
 				{{- else }}"mockString"
 				{{- end }},
 			{{- end }}
-			Page:     1,
 			PageSize: 10,
 		}
 		{{ $names }} []models.{{ $Name }}
@@ -343,8 +339,6 @@ func (s *{{ $Name }}RepositoryTestSuite) TestList_Fail2() {
 				{{- else }}"mockString"
 				{{- end }},
 			{{- end }}
-			Page:     1,
-			PageSize: 10,
 		}
 		{{ $names }} []models.{{ $Name }}
 	)

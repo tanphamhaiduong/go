@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	sq "github.com/Masterminds/squirrel"
+	"github.com/afex/hystrix-go/hystrix"
 	"github.com/tanphamhaiduong/go/common/logger"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/database"
@@ -80,24 +81,35 @@ func (r *RepositoryImpl) GetByID(ctx context.Context, params arguments.UserGetBy
 		}).Errorf("Repository GetByID selectBuilder error of user")
 		return user, err
 	}
-	stmt, err := r.db.PrepareContext(ctx, sql)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository GetByID PrepareContext error of user")
+	output := make(chan models.User, 1)
+	errors := hystrix.Go("userGetByID", func() error {
+		stmt, err := r.db.PrepareContext(ctx, sql)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository GetByID PrepareContext error of user")
+			return err
+		}
+		row := stmt.QueryRowContext(ctx, args...)
+		err = r.scanUser(row, &user)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository GetByID Scan error of user")
+			return err
+		}
+		output <- user
+		return nil
+	}, nil)
+
+	select {
+	case err := <-errors:
 		return user, err
+	case out := <-output:
+		return out, nil
 	}
-	row := stmt.QueryRowContext(ctx, args...)
-	err = r.scanUser(row, &user)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository GetByID Scan error of user")
-		return user, err
-	}
-	return user, nil
 }
 
 // GetByIDs ...
@@ -142,36 +154,47 @@ func (r *RepositoryImpl) GetByIDs(ctx context.Context, params arguments.UserGetB
 		}).Errorf("Repository GetByIDs selectBuilder error of user")
 		return users, err
 	}
-	stmt, err := r.db.PrepareContext(ctx, sql)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository GetByIDs PrepareContext error of user")
-		return users, err
-	}
-	rows, err := stmt.QueryContext(ctx, args...)
-	defer rows.Close()
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository GetByIDs QueryContext error of user")
-		return users, err
-	}
-	for rows.Next() {
-		user := models.User{}
-		err := r.scanUser(rows, &user)
+	output := make(chan []models.User, 1)
+	errors := hystrix.Go("userGetByIDs", func() error {
+		stmt, err := r.db.PrepareContext(ctx, sql)
 		if err != nil {
 			logger.WithFields(logger.Fields{
 				"traceId": ctx.Value(utils.TraceIDKey),
 				"Error":   err,
-			}).Errorf("Repository GetByIDs Scan error of user")
-			return users, err
+			}).Errorf("Repository GetByIDs PrepareContext error of user")
+			return err
 		}
-		users = append(users, user)
+		rows, err := stmt.QueryContext(ctx, args...)
+		defer rows.Close()
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository GetByIDs QueryContext error of user")
+			return err
+		}
+		for rows.Next() {
+			user := models.User{}
+			err := r.scanUser(rows, &user)
+			if err != nil {
+				logger.WithFields(logger.Fields{
+					"traceId": ctx.Value(utils.TraceIDKey),
+					"Error":   err,
+				}).Errorf("Repository GetByIDs Scan error of user")
+				return err
+			}
+			users = append(users, user)
+		}
+		output <- users
+		return nil
+	}, nil)
+
+	select {
+	case err := <-errors:
+		return users, err
+	case out := <-output:
+		return out, nil
 	}
-	return users, nil
 }
 
 // setArgsToListSelectBuilder ...
@@ -237,7 +260,9 @@ func (r *RepositoryImpl) setArgsToListSelectBuilder(ctx context.Context, selectB
 	if params.PageSize != 0 {
 		selectBuilder = selectBuilder.Limit(uint64(params.PageSize))
 	}
-	selectBuilder = selectBuilder.Where(sq.Gt{"id": params.LastID})
+	if params.LastID != 0 {
+		selectBuilder = selectBuilder.Where(sq.Gt{"id": params.LastID})
+	}
 	return selectBuilder
 }
 
@@ -284,36 +309,47 @@ func (r *RepositoryImpl) List(ctx context.Context, params arguments.UserList) ([
 		}).Errorf("Repository List selectBuilderWithArgs error of user")
 		return users, err
 	}
-	stmt, err := r.db.PrepareContext(ctx, sql)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository List PrepareContext error of user")
-		return users, err
-	}
-	rows, err := stmt.QueryContext(ctx, args...)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository List QueryContext error of user")
-		return users, err
-	}
-	defer rows.Close()
-	for rows.Next() {
-		user := models.User{}
-		err := r.scanUser(rows, &user)
+	output := make(chan []models.User, 1)
+	errors := hystrix.Go("userList", func() error {
+		stmt, err := r.db.PrepareContext(ctx, sql)
 		if err != nil {
 			logger.WithFields(logger.Fields{
 				"traceId": ctx.Value(utils.TraceIDKey),
 				"Error":   err,
-			}).Errorf("Repository List Scan error of user")
-			return users, err
+			}).Errorf("Repository List PrepareContext error of user")
+			return err
 		}
-		users = append(users, user)
+		rows, err := stmt.QueryContext(ctx, args...)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository List QueryContext error of user")
+			return err
+		}
+		defer rows.Close()
+		for rows.Next() {
+			user := models.User{}
+			err := r.scanUser(rows, &user)
+			if err != nil {
+				logger.WithFields(logger.Fields{
+					"traceId": ctx.Value(utils.TraceIDKey),
+					"Error":   err,
+				}).Errorf("Repository List Scan error of user")
+				return err
+			}
+			users = append(users, user)
+		}
+		output <- users
+		return nil
+	}, nil)
+
+	select {
+	case err := <-errors:
+		return users, err
+	case out := <-output:
+		return out, nil
 	}
-	return users, nil
 }
 
 // setArgsToCountSelectBuilder ...
@@ -403,24 +439,35 @@ func (r *RepositoryImpl) Count(ctx context.Context, params arguments.UserCount) 
 		}).Errorf("Repository Count selectBuilderWithArgs error of user")
 		return count, err
 	}
-	stmt, err := r.db.PrepareContext(ctx, sql)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository Count PrepareContext error of user")
+	output := make(chan int64, 1)
+	errors := hystrix.Go("userCount", func() error {
+		stmt, err := r.db.PrepareContext(ctx, sql)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository Count PrepareContext error of user")
+			return err
+		}
+		row := stmt.QueryRowContext(ctx, args...)
+		err = row.Scan(&count)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository Count Scan error of user")
+			return err
+		}
+		output <- count
+		return nil
+	}, nil)
+
+	select {
+	case err := <-errors:
 		return count, err
+	case out := <-output:
+		return out, nil
 	}
-	row := stmt.QueryRowContext(ctx, args...)
-	err = row.Scan(&count)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository Count Scan error of user")
-		return count, err
-	}
-	return count, nil
 }
 
 // Insert ...
@@ -482,39 +529,50 @@ func (r *RepositoryImpl) Insert(ctx context.Context, params arguments.UserInsert
 		}).Errorf("Repository Insert insertBuilder error of user")
 		return user, err
 	}
-	stmt, err := r.db.PrepareContext(ctx, sql)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository Insert PrepareContext error of user")
+	output := make(chan models.User, 1)
+	errors := hystrix.Go("userInsert", func() error {
+		stmt, err := r.db.PrepareContext(ctx, sql)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository Insert PrepareContext error of user")
+			return err
+		}
+		row, err := stmt.ExecContext(ctx, args...)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository Insert ExecContext error of user")
+			return err
+		}
+		id, err := row.LastInsertId()
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository Insert LastInsertId error of user")
+			return err
+		}
+		newUser, err := r.GetByID(ctx, arguments.UserGetByID{ID: id})
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository Insert GetByID error of user")
+			return err
+		}
+		output <- newUser
+		return nil
+	}, nil)
+
+	select {
+	case err := <-errors:
 		return user, err
+	case out := <-output:
+		return out, nil
 	}
-	row, err := stmt.ExecContext(ctx, args...)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository Insert ExecContext error of user")
-		return user, err
-	}
-	id, err := row.LastInsertId()
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository Insert LastInsertId error of user")
-		return user, err
-	}
-	newUser, err := r.GetByID(ctx, arguments.UserGetByID{ID: id})
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository Insert GetByID error of user")
-		return user, err
-	}
-	return newUser, nil
 }
 
 // setArgsToUpdateBuilder ...
@@ -601,46 +659,57 @@ func (r *RepositoryImpl) Update(ctx context.Context, params arguments.UserUpdate
 		}).Errorf("Repository Update updateBuilderWithArgs error of user")
 		return user, err
 	}
-	stmt, err := r.db.PrepareContext(ctx, sql)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository Update PrepareContext error of user")
+	output := make(chan models.User, 1)
+	errors := hystrix.Go("userUpdate", func() error {
+		stmt, err := r.db.PrepareContext(ctx, sql)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository Update PrepareContext error of user")
+			return err
+		}
+		result, err := stmt.ExecContext(ctx, args...)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository Update ExecContext error of user")
+			return err
+		}
+		rowAffected, err := result.RowsAffected()
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository Update RowsAffected error of user")
+			return err
+		}
+		if rowAffected <= 0 {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   fmt.Errorf("error when update record id %d", *params.ID),
+			}).Errorf("Repository Update rowAffected <= 0 of user")
+			return fmt.Errorf("error when update record id %d", *params.ID)
+		}
+		newUser, err := r.GetByID(ctx, arguments.UserGetByID{ID: *params.ID})
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository Update GetByID error of user")
+			return err
+		}
+		output <- newUser
+		return nil
+	}, nil)
+
+	select {
+	case err := <-errors:
 		return user, err
+	case out := <-output:
+		return out, nil
 	}
-	result, err := stmt.ExecContext(ctx, args...)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository Update ExecContext error of user")
-		return user, err
-	}
-	rowAffected, err := result.RowsAffected()
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository Update RowsAffected error of user")
-		return user, err
-	}
-	if rowAffected <= 0 {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   fmt.Errorf("error when update record id %d", *params.ID),
-		}).Errorf("Repository Update rowAffected <= 0 of user")
-		return user, fmt.Errorf("error when update record id %d", *params.ID)
-	}
-	newUser, err := r.GetByID(ctx, arguments.UserGetByID{ID: *params.ID})
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository Update GetByID error of user")
-		return user, err
-	}
-	return newUser, nil
 }
 
 // Delete ...
@@ -666,38 +735,49 @@ func (r *RepositoryImpl) Delete(ctx context.Context, params arguments.UserDelete
 		}).Errorf("Repository Delete deleteBuilder error of user")
 		return id, err
 	}
-	stmt, err := r.db.PrepareContext(ctx, sql)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository Delete PrepareContext error of user")
+	output := make(chan int64, 1)
+	errors := hystrix.Go("userDelete", func() error {
+		stmt, err := r.db.PrepareContext(ctx, sql)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository Delete PrepareContext error of user")
+			return err
+		}
+		result, err := stmt.ExecContext(ctx, args...)
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository Delete ExecContext error of user")
+			return err
+		}
+		rowAffected, err := result.RowsAffected()
+		if err != nil {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   err,
+			}).Errorf("Repository Delete RowsAffected error of user")
+			return err
+		}
+		if rowAffected <= 0 {
+			logger.WithFields(logger.Fields{
+				"traceId": ctx.Value(utils.TraceIDKey),
+				"Error":   fmt.Errorf("not found record by id %d", params.ID),
+			}).Errorf("Repository Update rowAffected <= 0 of user")
+			return fmt.Errorf("not found record by id %d", params.ID)
+		}
+		output <- params.ID
+		return nil
+	}, nil)
+
+	select {
+	case err := <-errors:
 		return id, err
+	case out := <-output:
+		return out, nil
 	}
-	result, err := stmt.ExecContext(ctx, args...)
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository Delete ExecContext error of user")
-		return id, err
-	}
-	rowAffected, err := result.RowsAffected()
-	if err != nil {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   err,
-		}).Errorf("Repository Delete RowsAffected error of user")
-		return id, err
-	}
-	if rowAffected <= 0 {
-		logger.WithFields(logger.Fields{
-			"traceId": ctx.Value(utils.TraceIDKey),
-			"Error":   fmt.Errorf("not found record by id %d", params.ID),
-		}).Errorf("Repository Update rowAffected <= 0 of user")
-		return id, fmt.Errorf("not found record by id %d", params.ID)
-	}
-	return params.ID, nil
 }
 
 //go:generate mockery -name=IDatabase -output=mocks -case=underscore

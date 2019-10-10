@@ -11,7 +11,6 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/tanphamhaiduong/go/delta/internal/arguments"
 	"github.com/tanphamhaiduong/go/delta/internal/models"
-	"github.com/tanphamhaiduong/go/delta/internal/utils"
 )
 
 func (s *UserRepositoryTestSuite) TestGetByID_Success() {
@@ -292,13 +291,12 @@ func (s *UserRepositoryTestSuite) TestSetArgsToListSelectBuilder_Success() {
 			Status:        "active",
 			CreatedBy:     "mockString",
 			UpdatedBy:     "mockString",
-			Page:          1,
+			LastID:        1,
 			PageSize:      10,
 		}
 		selectBuilder = sq.Select("*").From("user")
 	)
-	offset := utils.CalculateOffsetForPage(params.Page, params.PageSize)
-	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Eq{"username": params.Username}).Where(sq.Eq{"password": params.Password}).Where(sq.Eq{"name": params.Name}).Where(sq.Eq{"date_of_birth": params.DateOfBirth}).Where(sq.Eq{"reference": params.Reference}).Where(sq.Eq{"avatar_url": params.AvatarUrl}).Where(sq.Eq{"license_number": params.LicenseNumber}).Where(sq.Eq{"phone_number": params.PhoneNumber}).Where(sq.Eq{"extension": params.Extension}).Where(sq.Eq{"tel_provider": params.TelProvider}).Where(sq.Eq{"tel_api": params.TelApi}).Where(sq.Eq{"supervisor_id": params.SupervisorID}).Where(sq.Eq{"role_id": params.RoleID}).Where(sq.Eq{"company_id": params.CompanyID}).Where(sq.Eq{"status": params.Status}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy}).Limit(uint64(params.PageSize)).Where(sq.Gt{"id": uint64(offset)})
+	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Eq{"username": params.Username}).Where(sq.Eq{"password": params.Password}).Where(sq.Eq{"name": params.Name}).Where(sq.Eq{"date_of_birth": params.DateOfBirth}).Where(sq.Eq{"reference": params.Reference}).Where(sq.Eq{"avatar_url": params.AvatarUrl}).Where(sq.Eq{"license_number": params.LicenseNumber}).Where(sq.Eq{"phone_number": params.PhoneNumber}).Where(sq.Eq{"extension": params.Extension}).Where(sq.Eq{"tel_provider": params.TelProvider}).Where(sq.Eq{"tel_api": params.TelApi}).Where(sq.Eq{"supervisor_id": params.SupervisorID}).Where(sq.Eq{"role_id": params.RoleID}).Where(sq.Eq{"company_id": params.CompanyID}).Where(sq.Eq{"status": params.Status}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy}).Limit(uint64(params.PageSize)).Where(sq.Gt{"id": params.LastID})
 	expectSQL, expectArgs, expectErr := expectedSelectBuilder.ToSql()
 	// Actual
 	actual := s.Repository.setArgsToListSelectBuilder(ctx, selectBuilder, params)
@@ -334,7 +332,6 @@ func (s *UserRepositoryTestSuite) TestList_Success() {
 			Status:        "active",
 			CreatedBy:     "mockString",
 			UpdatedBy:     "mockString",
-			Page:          1,
 			PageSize:      10,
 		}
 		users []models.User
@@ -414,7 +411,6 @@ func (s *UserRepositoryTestSuite) TestList_Fail() {
 			Status:        "active",
 			CreatedBy:     "mockString",
 			UpdatedBy:     "mockString",
-			Page:          1,
 			PageSize:      10,
 		}
 		users []models.User
@@ -494,7 +490,6 @@ func (s *UserRepositoryTestSuite) TestList_Fail1() {
 			Status:        "active",
 			CreatedBy:     "mockString",
 			UpdatedBy:     "mockString",
-			Page:          1,
 			PageSize:      10,
 		}
 		users []models.User
@@ -574,8 +569,6 @@ func (s *UserRepositoryTestSuite) TestList_Fail2() {
 			Status:        "active",
 			CreatedBy:     "mockString",
 			UpdatedBy:     "mockString",
-			Page:          1,
-			PageSize:      10,
 		}
 		users []models.User
 	)

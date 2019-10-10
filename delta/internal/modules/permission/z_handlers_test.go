@@ -101,7 +101,7 @@ func (s *PermissionHandlerTestSuite) TestList_Success() {
 			Status:      "active",
 			CreatedBy:   "mockString",
 			UpdatedBy:   "mockString",
-			Page:        1,
+			LastID:      1,
 			PageSize:    10,
 		}
 		permissions []models.Permission
@@ -122,7 +122,7 @@ func (s *PermissionHandlerTestSuite) TestList_Fail() {
 			Status:      "active",
 			CreatedBy:   "mockString",
 			UpdatedBy:   "mockString",
-			Page:        1,
+			LastID:      1,
 			PageSize:    10,
 		}
 		permissions []models.Permission
@@ -143,7 +143,7 @@ func (s *PermissionHandlerTestSuite) TestList_Fail1() {
 			Status:      "active",
 			CreatedBy:   "mockString",
 			UpdatedBy:   "mockString",
-			Page:        1,
+			LastID:      1,
 			PageSize:    10,
 		}
 		permissions []models.Permission
