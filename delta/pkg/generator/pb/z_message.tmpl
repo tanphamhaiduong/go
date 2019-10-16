@@ -9,6 +9,8 @@ option go_package = "pb";
 {{- $name := $Module.Name | ToLowerCamelCase }}
 {{- $fields := $Module.Fields }}
 {{- $one := 1 }}
+{{- $two := 2 }}
+
 message {{ $Name }} {
 {{- range $index, $field := $fields }}
 {{- if $field.IsNullTimeField }}
@@ -35,6 +37,7 @@ message {{ $Name }}ListRequest {
   {{ $field.GoType }} {{ $field.Name | ToLowerCamelCase }} = {{ Add $index $one }};
 {{- end }}
 {{- end }}
+  int64 pageSize = {{ Add $fields.GetTotalFields $one }};
 }
 message {{ $Name }}ListResponse {
   repeated {{ $Name }} {{ $name }} = 1;

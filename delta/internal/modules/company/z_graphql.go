@@ -70,9 +70,14 @@ var (
 			Type:        graphql.String,
 			Description: "This is company's updatedBy",
 		},
-		"lastId": &graphql.ArgumentConfig{
+		"beginId": &graphql.ArgumentConfig{
 			Type:         graphql.Int,
-			Description:  "This is feature page",
+			Description:  "This is ID greater than",
+			DefaultValue: 0,
+		},
+		"endId": &graphql.ArgumentConfig{
+			Type:         graphql.Int,
+			Description:  "This is ID less than",
 			DefaultValue: 0,
 		},
 		"pageSize": &graphql.ArgumentConfig{

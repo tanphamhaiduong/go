@@ -182,8 +182,11 @@ func (r *RepositoryImpl) setArgsToListSelectBuilder(ctx context.Context, selectB
 	if params.PageSize != 0 {
 		selectBuilder = selectBuilder.Limit(uint64(params.PageSize))
 	}
-	if params.LastID != 0 {
-		selectBuilder = selectBuilder.Where(sq.Gt{"id": params.LastID})
+	if params.EndID != 0 {
+		selectBuilder = selectBuilder.Where(sq.Lt{"id": params.EndID})
+	}
+	if params.BeginID != 0 {
+		selectBuilder = selectBuilder.Where(sq.Gt{"id": params.BeginID})
 	}
 	return selectBuilder
 }

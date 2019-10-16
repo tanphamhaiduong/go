@@ -18,6 +18,7 @@ func (d *DeltaServiceImpl) CompanyList(ctx context.Context, req *pb.CompanyListR
 		Status:    req.Status,
 		CreatedBy: req.CreatedBy,
 		UpdatedBy: req.UpdatedBy,
+		PageSize:  req.PageSize,
 	}
 	companies, err := d.handlers.Company.List(ctx, params)
 	if err != nil {
@@ -115,6 +116,7 @@ func (d *DeltaServiceImpl) PermissionList(ctx context.Context, req *pb.Permissio
 		Status:      req.Status,
 		CreatedBy:   req.CreatedBy,
 		UpdatedBy:   req.UpdatedBy,
+		PageSize:    req.PageSize,
 	}
 	permissions, err := d.handlers.Permission.List(ctx, params)
 	if err != nil {
@@ -191,6 +193,7 @@ func (d *DeltaServiceImpl) RoleList(ctx context.Context, req *pb.RoleListRequest
 		Status:    req.Status,
 		CreatedBy: req.CreatedBy,
 		UpdatedBy: req.UpdatedBy,
+		PageSize:  req.PageSize,
 	}
 	roles, err := d.handlers.Role.List(ctx, params)
 	if err != nil {
@@ -313,6 +316,7 @@ func (d *DeltaServiceImpl) UserList(ctx context.Context, req *pb.UserListRequest
 		Status:        req.Status,
 		CreatedBy:     req.CreatedBy,
 		UpdatedBy:     req.UpdatedBy,
+		PageSize:      req.PageSize,
 	}
 	users, err := d.handlers.User.List(ctx, params)
 	if err != nil {

@@ -31,12 +31,31 @@ func main() {
 	switch *option {
 	case 1:
 		CompanyList(client)
+		return
+	case 2:
+		CompanyCreate(client)
+		return
 	}
+
 }
 
 // CompanyList ...
 func CompanyList(client pb.DeltaServiceClient) {
-	res, err := client.CompanyList(context.Background(), &pb.CompanyListRequest{})
+	res, err := client.CompanyList(context.Background(), &pb.CompanyListRequest{
+		PageSize: 10,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(res.Company)
+}
+
+// CompanyCreate ...
+func CompanyCreate(client pb.DeltaServiceClient) {
+	res, err := client.CompanyInsert(context.Background(), &pb.CompanyInsertRequest{
+		Name:   "Test company card",
+		Status: "active",
+	})
 	if err != nil {
 		log.Fatal(err)
 	}

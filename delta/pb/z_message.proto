@@ -2,6 +2,7 @@
 syntax = "proto3";
 
 option go_package = "pb";
+
 message Company {
   int64 id = 1;
   string name = 2;
@@ -24,6 +25,7 @@ message CompanyListRequest {
   string status = 3;
   string createdBy = 4;
   string updatedBy = 5;
+  int64 pageSize = 6;
 }
 message CompanyListResponse {
   repeated Company company = 1;
@@ -59,6 +61,7 @@ message CompanyDeleteRequest {
 message CompanyDeleteResponse {
   int64 id = 1;
 }
+
 message Permission {
   int64 id = 1;
   string name = 2;
@@ -83,6 +86,7 @@ message PermissionListRequest {
   string status = 4;
   string createdBy = 5;
   string updatedBy = 6;
+  int64 pageSize = 7;
 }
 message PermissionListResponse {
   repeated Permission permission = 1;
@@ -120,6 +124,7 @@ message PermissionDeleteRequest {
 message PermissionDeleteResponse {
   int64 id = 1;
 }
+
 message Role {
   int64 id = 1;
   string name = 2;
@@ -144,6 +149,7 @@ message RoleListRequest {
   string status = 4;
   string createdBy = 5;
   string updatedBy = 6;
+  int64 pageSize = 7;
 }
 message RoleListResponse {
   repeated Role role = 1;
@@ -181,6 +187,7 @@ message RoleDeleteRequest {
 message RoleDeleteResponse {
   int64 id = 1;
 }
+
 message RolePermission {
   int64 id = 1;
   int64 roleId = 2;
@@ -203,6 +210,7 @@ message RolePermissionListRequest {
   int64 permissionId = 3;
   string createdBy = 4;
   string updatedBy = 5;
+  int64 pageSize = 6;
 }
 message RolePermissionListResponse {
   repeated RolePermission rolePermission = 1;
@@ -238,6 +246,7 @@ message RolePermissionDeleteRequest {
 message RolePermissionDeleteResponse {
   int64 id = 1;
 }
+
 message User {
   int64 id = 1;
   string username = 2;
@@ -286,6 +295,7 @@ message UserListRequest {
   string status = 16;
   string createdBy = 17;
   string updatedBy = 18;
+  int64 pageSize = 19;
 }
 message UserListResponse {
   repeated User user = 1;

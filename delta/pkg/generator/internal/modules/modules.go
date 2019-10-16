@@ -18,6 +18,11 @@ type Field struct {
 // Fields list of Field
 type Fields []Field
 
+// GetTotalFields ...
+func (fs *Fields) GetTotalFields() int {
+	return len(*fs)
+}
+
 // IsInt64 ...
 func (f *Field) IsInt64() bool {
 	return f.GoType == gotype.Int64

@@ -37,6 +37,7 @@ func (d *DeltaServiceImpl) {{ $Name }}List(ctx context.Context, req *pb.{{ $Name
 				{{ $field.Name }}: req.{{ $field.Name | ToCamelCaseExceptID }},
 			{{- end }}
 		{{- end }}
+		PageSize: req.PageSize,
 	}
 	{{ $name | ToPlural }}, err := d.handlers.{{ $Name }}.List(ctx, params)
 	if err != nil {
