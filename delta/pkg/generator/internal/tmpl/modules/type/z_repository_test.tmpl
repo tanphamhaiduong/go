@@ -179,12 +179,13 @@ func (s *{{ $Name }}RepositoryTestSuite) TestSetArgsToListSelectBuilder_Success(
 				{{- else }}"mockString"
 				{{- end }},
 			{{- end }}
-			LastID: 1,
+			BeginID: 1,
+			EndID: 10,
 			PageSize: 10,
 		}
 		selectBuilder = sq.Select("*").From("{{ $name }}")
 	)
-	expectedSelectBuilder := selectBuilder{{ range $field := $fields }}.Where(sq.{{ $field.QueryType }}{ "{{ $field.Name | ToSnakeCase }}": params.{{ $field.Name }} }){{ end }}.Limit(uint64(params.PageSize)).Where(sq.Gt{"id": params.LastID})
+	expectedSelectBuilder := selectBuilder{{ range $field := $fields }}.Where(sq.{{ $field.QueryType }}{ "{{ $field.Name | ToSnakeCase }}": params.{{ $field.Name }} }){{ end }}.Where(sq.Gt{"id": params.BeginID}).Where(sq.Lt{"id": params.EndID}).Limit(uint64(params.PageSize))
 	expectSQL, expectArgs, expectErr := expectedSelectBuilder.ToSql()
 	// Actual
 	actual := s.Repository.setArgsToListSelectBuilder(ctx, selectBuilder, params)

@@ -112,7 +112,8 @@ func (s *{{ $Name }}HandlerTestSuite) TestList_Success() {
 				{{- else }}"mockString"
 				{{- end }},
 			{{- end }}
-			LastID:     1,
+			BeginID: 1,
+			EndID: 10,
 			PageSize: 10,
 		}
 		{{ $names }} []models.{{ $Name }}
@@ -138,7 +139,8 @@ func (s *{{ $Name }}HandlerTestSuite) TestList_Fail() {
 				{{- else }}"mockString"
 				{{- end }},
 			{{- end }}
-			LastID:     1,
+			BeginID: 1,
+			EndID: 10,
 			PageSize: 10,
 		}
 		{{ $names }} []models.{{ $Name }}
@@ -164,7 +166,8 @@ func (s *{{ $Name }}HandlerTestSuite) TestList_Fail1() {
 				{{- else }}"mockString"
 				{{- end }},
 			{{- end }}
-			LastID:     1,
+			BeginID: 1,
+			EndID: 10,
 			PageSize: 10,
 		}
 		{{ $names }} []models.{{ $Name }}

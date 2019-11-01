@@ -291,12 +291,13 @@ func (s *UserRepositoryTestSuite) TestSetArgsToListSelectBuilder_Success() {
 			Status:        "active",
 			CreatedBy:     "mockString",
 			UpdatedBy:     "mockString",
-			LastID:        1,
+			BeginID:       1,
+			EndID:         10,
 			PageSize:      10,
 		}
 		selectBuilder = sq.Select("*").From("user")
 	)
-	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Eq{"username": params.Username}).Where(sq.Eq{"password": params.Password}).Where(sq.Eq{"name": params.Name}).Where(sq.Eq{"date_of_birth": params.DateOfBirth}).Where(sq.Eq{"reference": params.Reference}).Where(sq.Eq{"avatar_url": params.AvatarUrl}).Where(sq.Eq{"license_number": params.LicenseNumber}).Where(sq.Eq{"phone_number": params.PhoneNumber}).Where(sq.Eq{"extension": params.Extension}).Where(sq.Eq{"tel_provider": params.TelProvider}).Where(sq.Eq{"tel_api": params.TelApi}).Where(sq.Eq{"supervisor_id": params.SupervisorID}).Where(sq.Eq{"role_id": params.RoleID}).Where(sq.Eq{"company_id": params.CompanyID}).Where(sq.Eq{"status": params.Status}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy}).Limit(uint64(params.PageSize)).Where(sq.Gt{"id": params.LastID})
+	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Eq{"username": params.Username}).Where(sq.Eq{"password": params.Password}).Where(sq.Eq{"name": params.Name}).Where(sq.Eq{"date_of_birth": params.DateOfBirth}).Where(sq.Eq{"reference": params.Reference}).Where(sq.Eq{"avatar_url": params.AvatarUrl}).Where(sq.Eq{"license_number": params.LicenseNumber}).Where(sq.Eq{"phone_number": params.PhoneNumber}).Where(sq.Eq{"extension": params.Extension}).Where(sq.Eq{"tel_provider": params.TelProvider}).Where(sq.Eq{"tel_api": params.TelApi}).Where(sq.Eq{"supervisor_id": params.SupervisorID}).Where(sq.Eq{"role_id": params.RoleID}).Where(sq.Eq{"company_id": params.CompanyID}).Where(sq.Eq{"status": params.Status}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy}).Where(sq.Gt{"id": params.BeginID}).Where(sq.Lt{"id": params.EndID}).Limit(uint64(params.PageSize))
 	expectSQL, expectArgs, expectErr := expectedSelectBuilder.ToSql()
 	// Actual
 	actual := s.Repository.setArgsToListSelectBuilder(ctx, selectBuilder, params)

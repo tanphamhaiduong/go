@@ -190,12 +190,13 @@ func (s *RoleRepositoryTestSuite) TestSetArgsToListSelectBuilder_Success() {
 			Status:    "active",
 			CreatedBy: "mockString",
 			UpdatedBy: "mockString",
-			LastID:    1,
+			BeginID:   1,
+			EndID:     10,
 			PageSize:  10,
 		}
 		selectBuilder = sq.Select("*").From("role")
 	)
-	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Eq{"name": params.Name}).Where(sq.Eq{"company_id": params.CompanyID}).Where(sq.Eq{"status": params.Status}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy}).Limit(uint64(params.PageSize)).Where(sq.Gt{"id": params.LastID})
+	expectedSelectBuilder := selectBuilder.Where(sq.Eq{"id": params.ID}).Where(sq.Eq{"name": params.Name}).Where(sq.Eq{"company_id": params.CompanyID}).Where(sq.Eq{"status": params.Status}).Where(sq.Eq{"created_by": params.CreatedBy}).Where(sq.Eq{"updated_by": params.UpdatedBy}).Where(sq.Gt{"id": params.BeginID}).Where(sq.Lt{"id": params.EndID}).Limit(uint64(params.PageSize))
 	expectSQL, expectArgs, expectErr := expectedSelectBuilder.ToSql()
 	// Actual
 	actual := s.Repository.setArgsToListSelectBuilder(ctx, selectBuilder, params)

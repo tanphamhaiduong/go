@@ -101,7 +101,8 @@ func (s *RoleHandlerTestSuite) TestList_Success() {
 			Status:    "active",
 			CreatedBy: "mockString",
 			UpdatedBy: "mockString",
-			LastID:    1,
+			BeginID:   1,
+			EndID:     10,
 			PageSize:  10,
 		}
 		roles []models.Role
@@ -122,7 +123,8 @@ func (s *RoleHandlerTestSuite) TestList_Fail() {
 			Status:    "active",
 			CreatedBy: "mockString",
 			UpdatedBy: "mockString",
-			LastID:    1,
+			BeginID:   1,
+			EndID:     10,
 			PageSize:  10,
 		}
 		roles []models.Role
@@ -143,7 +145,8 @@ func (s *RoleHandlerTestSuite) TestList_Fail1() {
 			Status:    "active",
 			CreatedBy: "mockString",
 			UpdatedBy: "mockString",
-			LastID:    1,
+			BeginID:   1,
+			EndID:     10,
 			PageSize:  10,
 		}
 		roles []models.Role

@@ -52,12 +52,13 @@ require (
 	golang.org/x/oauth2 v0.0.0-20190523182746-aaccbc9213b0 // indirect
 	golang.org/x/sys v0.0.0-20190804053845-51ab0e2deafa // indirect
 	golang.org/x/time v0.0.0-20190308202827-9d24e82272b4 // indirect
-	golang.org/x/tools v0.0.0-20190929041059-e7abfedfabcf // indirect
-	google.golang.org/appengine v1.6.4 // indirect
+	golang.org/x/tools v0.0.0-20191031220737-6d8f1af9ccc0 // indirect
+	google.golang.org/appengine v1.6.5 // indirect
 	google.golang.org/genproto v0.0.0-20190522204451-c2c4e71fbf69 // indirect
 	google.golang.org/grpc v1.21.0
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/go-playground/validator.v9 v9.29.0
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
+	gopkg.in/yaml.v2 v2.2.4 // indirect
 	honnef.co/go/tools v0.0.0-20190530170028-a1efa522b896 // indirect
 )

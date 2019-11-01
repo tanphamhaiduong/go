@@ -118,7 +118,8 @@ func (s *UserHandlerTestSuite) TestList_Success() {
 			Status:        "active",
 			CreatedBy:     "mockString",
 			UpdatedBy:     "mockString",
-			LastID:        1,
+			BeginID:       1,
+			EndID:         10,
 			PageSize:      10,
 		}
 		users []models.User
@@ -154,7 +155,8 @@ func (s *UserHandlerTestSuite) TestList_Fail() {
 			Status:        "active",
 			CreatedBy:     "mockString",
 			UpdatedBy:     "mockString",
-			LastID:        1,
+			BeginID:       1,
+			EndID:         10,
 			PageSize:      10,
 		}
 		users []models.User
@@ -190,7 +192,8 @@ func (s *UserHandlerTestSuite) TestList_Fail1() {
 			Status:        "active",
 			CreatedBy:     "mockString",
 			UpdatedBy:     "mockString",
-			LastID:        1,
+			BeginID:       1,
+			EndID:         10,
 			PageSize:      10,
 		}
 		users []models.User

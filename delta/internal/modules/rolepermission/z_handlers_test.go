@@ -100,7 +100,8 @@ func (s *RolePermissionHandlerTestSuite) TestList_Success() {
 			PermissionID: 1,
 			CreatedBy:    "mockString",
 			UpdatedBy:    "mockString",
-			LastID:       1,
+			BeginID:      1,
+			EndID:        10,
 			PageSize:     10,
 		}
 		rolepermissions []models.RolePermission
@@ -120,7 +121,8 @@ func (s *RolePermissionHandlerTestSuite) TestList_Fail() {
 			PermissionID: 1,
 			CreatedBy:    "mockString",
 			UpdatedBy:    "mockString",
-			LastID:       1,
+			BeginID:      1,
+			EndID:        10,
 			PageSize:     10,
 		}
 		rolepermissions []models.RolePermission
@@ -140,7 +142,8 @@ func (s *RolePermissionHandlerTestSuite) TestList_Fail1() {
 			PermissionID: 0,
 			CreatedBy:    "mockString",
 			UpdatedBy:    "mockString",
-			LastID:       1,
+			BeginID:      1,
+			EndID:        10,
 			PageSize:     10,
 		}
 		rolepermissions []models.RolePermission
