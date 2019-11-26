@@ -1,0 +1,59 @@
+# use the latest ubuntu environment (18.04) available on travis
+dist: bionic
+
+language: go
+
+# Force-enable Go modules. Also force go to use the code in vendor/
+# These will both be unnecessary when Go 1.14 lands.
+env: GO111MODULE=on GOFLAGS='-mod vendor'
+
+# You don't need to test on very old versions of the Go compiler. It's the user's
+# responsibility to keep their compiler up to date.
+go:
+  - 1.13.x
+
+# Only clone the most recent commit.
+git:
+  depth: 1
+
+# Skip the install step. Don't `go get` dependencies. Only build with the code
+# in vendor/
+install: true
+
+# Don't email me the results of the test runs.
+notifications:
+  email: false
+
+# Anything in before_script that returns a nonzero exit code will flunk the
+# build and immediately stop. It's sorta like having set -e enabled in bash.
+# Make sure you've pinned the version of golangci-lint by running this command
+# in your project directory:
+#   GO111MODULE=on go get github.com/golangci/golangci-lint@v1.21.0
+# You should see this line in your go.mod file:
+#   github.com/golangci/golangci-lint v1.21.0
+before_script:
+  - go install github.com/golangci/golangci-lint/cmd/golangci-lint
+
+# script always runs to completion (set +e). If we have linter issues AND a
+# failing test, we want to see both. Configure golangci-lint with a
+# .golangci.yml file at the top level of your repo.
+addons:
+  sonarcloud:
+    organization: "tanphamhaiduong"
+    token:
+      secure: "FWueX6EuN8AhlenpzHggTTfOhjYefsACS51YlZ9SPQ04t6My5D9NOUmwKIN4dRwyWBNqHngRvSOoM5mz8UJRABWNmA0LzTT4n6i8U6oJaqa9sw9a1zQ+5AdgHXi52/thaqN+QEtFHYSlTtGJclsWnzxjUH6hZSQkjBSn1JB/PR4/DGY1OjLkwJpQXq6RTbE4vpOoi5IZ+cbJzqf3wApcjGMklVmvNObe2y/0nn7evmTnOMCj+pxlNWXPoMteJlyDTSz38aoXz5+zuUgOgUOL9wIofdb/wcoqzVXOd6zuTVeqvdH0Ai8zw/wBGbzsPJGbTlMVND+WBkRtNexWIywMsNRiZhS/HNX37niY5a2D/nZolZlbbi6+Mv/iWg/VImJaGgFY3f3BspmoiITgkzk+IoT6LiVZVy1+R0vk+LYve40eBdga8oOs4aw9mnnKpx45RXnDrFecnv34Nj0Ug9nnFNbrk+wkMhAtTuoIx2McLEALIRfRd7l7JIlghwtA33Jv+NVG7o8F/6pDTDJetfK/W1Rk9nhIwWJvcZHcZtqkKmgYUfYDWTUxmSabUuORg3gGFSwNfTSAkoC0EClWwzoYhRQ9HCOvCmcQ3X3ibsBHqLeACTL3ctt4I5Fk/BdqbD3FfxuUloYeYVm4AE2lqV91Lrl+36tZWMP3IMuByBmTsks=" # encrypted value of your token
+
+script:
+  - cd delta # go to root directory
+  - golangci-lint run       # run a bunch of code checkers/linters in parallel
+  - go test -v -race ./...  # Run all the tests with the race detector enabled
+  - make build
+  - make clean
+  # Wraps the compilation with the Build Wrapper to generate configuration (used
+  # later by the SonarQube Scanner) into the "bw-output" folder
+  - build-wrapper-linux-x86-64 --out-dir bw-output make all
+  # Execute some tests
+  - make test
+  # And finally run the SonarQube analysis - read the "sonar-project.properties"
+  # file to see the specific configuration
+  - sonar-scanner

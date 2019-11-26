@@ -13,3 +13,9 @@ gen:
 	@go run pkg/generator/cmd/*.go
 	@goimports -w ./
 	@gofmt -s -w ./
+build:
+	@go build cmd/*.go
+clean:
+	@rm -rf main
+test:
+	@go test -v -race ./...
