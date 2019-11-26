@@ -46,14 +46,9 @@ addons:
 script:
   - cd delta # go to root directory
   - golangci-lint run       # run a bunch of code checkers/linters in parallel
-  - go test -v -race ./...  # Run all the tests with the race detector enabled
-  - make build
   - make clean
-  # Wraps the compilation with the Build Wrapper to generate configuration (used
-  # later by the SonarQube Scanner) into the "bw-output" folder
-  - build-wrapper-linux-x86-64 --out-dir bw-output make all
-  # Execute some tests
-  - make test
+  - make build
+  - go test -v -race ./...  # Run all the tests with the race detector enabled
   # And finally run the SonarQube analysis - read the "sonar-project.properties"
   # file to see the specific configuration
   - sonar-scanner
