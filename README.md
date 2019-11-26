@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/tanphamhaiduong/go.svg?branch=master)](https://travis-ci.org/tanphamhaiduong/go)
 # GraphQL Go Services boiler plate
 ## Why we need boilerplate
 For every project need CRUD, we need to build crud for many entities in your project and it cause lot of time for it. So this boilerplate help you to generate all CRUD for project in 5 minutes by define models
